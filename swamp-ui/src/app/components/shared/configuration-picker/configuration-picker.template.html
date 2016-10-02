@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-md-12">
+        <div ng-show="configurationPicker.editable">
+            <div class="form-group">
+                <label for="configuration-type">Container type: </label>
+                <select id="configuration-type" class="form-control" ng-model="configurationPicker.configuration.type">
+                    <option value="IMAGE">Image</option>
+                </select>
+            </div>
+        </div>
+        <section ng-show="configurationPicker.configuration.type === 'IMAGE'">
+            <div class="form-group">
+                <label for="name">Container image: </label>
+                <input type="text" class="form-control" id="name" ng-model="configurationPicker.configuration.name"
+                       ng-disabled="!configurationPicker.editable"/>
+            </div>
+        </section>
+    </div>
+</div>

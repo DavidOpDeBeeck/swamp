@@ -1,0 +1,40 @@
+group 'de.daxu'
+version '1.0'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.boxfuse.client:flyway-release:4.0"
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo1.maven.org/maven2" }
+}
+
+apply plugin: 'java'
+apply plugin: "org.flywaydb.flyway"
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306/swamp'
+    user = 'root'
+    password = '1234'
+    locations = ['filesystem:flyway/migration']
+}
+
+ext {
+    mysqlVersion = "5.1.38"
+}
+
+dependencies {
+    compile "mysql:mysql-connector-java:$mysqlVersion"
+}

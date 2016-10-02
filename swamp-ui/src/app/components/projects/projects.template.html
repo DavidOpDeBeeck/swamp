@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="input-group margin-sm-bottom">
+            <input type="text" class="form-control" placeholder="Search" ng-model="projects.filter"/>
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" ui-sref="projects.create">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+        <div class="panel panel-default" ng-repeat="project in projects.list | filter: projects.filter"
+             ui-sref-active="panel-primary">
+            <div class="panel-heading" ng-bind="project.name"></div>
+            <div class="panel-body">
+                <p ng-bind="project.description"></p>
+            </div>
+            <div class="panel-footer clearfix">
+                <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="projects.delete(project)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-default"
+                        ui-sref="projects.containers({projectId: project.id})">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div ui-view></div>
+    </div>
+</div>

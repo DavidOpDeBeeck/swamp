@@ -1,0 +1,5 @@
+rootProject.name = 'swamp'
+include 'swamp-domain'
+include 'swamp-api'
+include 'swamp-ui'
+
