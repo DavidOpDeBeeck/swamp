@@ -2,6 +2,7 @@ package de.daxu.swamp.api.endpoint.location;
 
 import de.daxu.swamp.api.converter.location.*;
 import de.daxu.swamp.api.dto.location.*;
+import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.location.Continent;
 import de.daxu.swamp.core.location.Datacenter;
 import de.daxu.swamp.core.location.Server;
@@ -58,6 +59,17 @@ public class ContinentEndpoint {
     @RequestMapping( value = "/{id}", method = RequestMethod.GET )
     public ResponseEntity<ContinentDTO> get( @PathVariable( "id" ) String id ) {
         return new ResponseEntity<>( continentConverter.toDTO( locationService.getContinent( id ) ), HttpStatus.OK );
+    }
+
+    @RequestMapping( value = "/{id}", method = RequestMethod.PUT )
+    public ResponseEntity<ContinentDTO> put( @PathVariable( "id" ) String id, @RequestBody ContinentCreateDTO dto ) {
+        Continent oldContinent = locationService.getContinent( id );
+        Continent newContinent = continentCreateConverter.toDomain( dto );
+
+        BeanUtils.copyProperties( newContinent, oldContinent );
+        locationService.updateContinent( oldContinent );
+
+        return new ResponseEntity<>( continentConverter.toDTO( oldContinent ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{id}", method = RequestMethod.DELETE )

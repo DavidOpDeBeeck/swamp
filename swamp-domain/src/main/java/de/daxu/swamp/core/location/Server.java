@@ -39,6 +39,22 @@ public class Server extends Location {
         this.key = key;
     }
 
+    public void setIp( String ip ) {
+        this.ip = ip;
+    }
+
+    public void setCACertificate( String CACertificate ) {
+        this.CACertificate = CACertificate;
+    }
+
+    public void setCertificate( String certificate ) {
+        this.certificate = certificate;
+    }
+
+    public void setKey( String key ) {
+        this.key = key;
+    }
+
     public String getIp() {
         return ip;
     }

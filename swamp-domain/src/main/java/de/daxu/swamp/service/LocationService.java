@@ -33,4 +33,6 @@ public interface LocationService {
     Location getLocation( String id );
 
     List<Location> getAllLocation();
+
+    Continent updateContinent( Continent continent );
 }
