@@ -15,10 +15,13 @@
                 <p ng-bind="project.description"></p>
             </div>
             <div class="panel-footer clearfix">
+                <button type="button" class="btn btn-sm btn-primary">
+                    Deploy
+                </button>
                 <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="projects.delete(project)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-sm btn-default"
+                <button type="button" class="btn btn-sm btn-default pull-right"
                         ui-sref="projects.containers({projectId: project.id})">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                 </button>
