@@ -1,4 +1,4 @@
-class ProjectsEditController {
+class ProjectEditController {
     constructor(ProjectService, project, $state, $scope) {
         this.$state = $state;
         this.$scope = $scope;
@@ -29,4 +29,4 @@ class ProjectsEditController {
     }
 }
 
-export default ['ProjectService', 'project', '$state', '$scope', ProjectsEditController]
+export default ['ProjectService', 'project', '$state', '$scope', ProjectEditController]

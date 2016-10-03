@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="input-group margin-sm-bottom">
+        <input type="text" class="form-control" placeholder="Search" ng-model="containers.filter"/>
+        <span class="input-group-btn">
+            <button class="btn btn-primary" type="button" ui-sref="projects.containers.create">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </span>
+    </div>
+    <div class="panel panel-default" ng-repeat="container in containers.list | filter: containers.filter">
+        <div class="panel-heading" ng-bind="container.id"></div>
+        <div class="panel-body">
+            <configuration-picker configuration="container.runConfiguration" editable="false"></configuration-picker>
+            <location-picker locations="container.potentialLocations" editable="false"></location-picker>
+        </div>
+        <div class="panel-footer clearfix">
+            <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="containers.delete(container)">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</div>
