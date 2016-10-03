@@ -4,6 +4,9 @@ class ProjectService {
             create: {
                 method: 'POST'
             },
+            update: {
+                method: 'PUT'
+            }
         });
         this.containerResource = $resource('/api/projects/:projectId/containers/:containerId', {
             projectId: '@projectId',
@@ -12,11 +15,18 @@ class ProjectService {
             create: {
                 method: 'POST'
             },
+            update: {
+                method: 'PUT'
+            }
         });
     }
 
     createProject(project) {
         return this.projectResource.create(project).$promise;
+    }
+
+    updateProject(project) {
+        return this.projectResource.update(project).$promise;
     }
 
     createContainer(container) {
