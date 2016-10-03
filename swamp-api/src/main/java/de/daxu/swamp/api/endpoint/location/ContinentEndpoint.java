@@ -99,6 +99,17 @@ public class ContinentEndpoint {
         return new ResponseEntity<>( datacenterConverter.toDTO( locationService.getDatacenter( datacenterId ) ), HttpStatus.OK );
     }
 
+    @RequestMapping( value = "/{id}/datacenters/{datacenterId}", method = RequestMethod.PUT )
+    public ResponseEntity<DatacenterDTO> putDatacenter( @PathVariable( "id" ) String id, @PathVariable( "datacenterId" ) String datacenterId, @RequestBody DatacenterCreateDTO dto ) {
+        Datacenter oldDatacenter = locationService.getDatacenter( datacenterId );
+        Datacenter newDatacenter = datacenterCreateConverter.toDomain( dto );
+
+        BeanUtils.copyProperties( newDatacenter, oldDatacenter );
+        locationService.updateDatacenter( oldDatacenter );
+
+        return new ResponseEntity<>( datacenterConverter.toDTO( oldDatacenter ), HttpStatus.OK );
+    }
+
     @RequestMapping( value = "/{id}/datacenters/{datacenterId}", method = RequestMethod.DELETE )
     public ResponseEntity deleteDatacenter( @PathVariable( "id" ) String id, @PathVariable( "datacenterId" ) String datacenterId ) {
         Continent continent = locationService.getContinent( id );

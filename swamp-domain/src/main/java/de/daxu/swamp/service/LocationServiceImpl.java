@@ -87,6 +87,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public Datacenter updateDatacenter( Datacenter datacenter ) {
+        return datacenterRepository.save( datacenter );
+    }
+
+    @Override
     public Continent getContinent( String id ) {
         return continentRepository.findOne( id );
     }
