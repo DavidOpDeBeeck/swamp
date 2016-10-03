@@ -22,7 +22,6 @@ ext {
     mysqlVersion = "5.1.38"
     springVersion = "4.2.5.RELEASE"
     springDataVersion = "1.9.2.RELEASE"
-    beanUtilsVersion = "1.9.3"
 }
 
 bootRepackage {
@@ -36,5 +35,4 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.data:spring-data-jpa:$springDataVersion"
-    compile "commons-beanutils:commons-beanutils:$beanUtilsVersion"
 }
