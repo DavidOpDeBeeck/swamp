@@ -22,4 +22,6 @@ public interface ProjectService {
     void removeContainerFromProject( Project project, Container container );
 
     Container updateContainer( Container container );
+
+    Project updateProject( Project project );
 }

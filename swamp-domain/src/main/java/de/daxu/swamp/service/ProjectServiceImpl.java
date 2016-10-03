@@ -56,6 +56,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Project updateProject( Project project ) {
+        return projectRepository.save( project );
+    }
+
+    @Override
     public Container getContainer( String id ) {
         return containerRepository.findOne( id );
     }

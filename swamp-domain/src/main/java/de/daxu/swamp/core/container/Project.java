@@ -34,6 +34,14 @@ public class Project extends Identifiable {
             inverseJoinColumns = { @JoinColumn( name = "container_id", referencedColumnName = "id" ) } )
     private List<Container> containers;
 
+    public void setName( String name ) {
+        this.name = name;
+    }
+
+    public void setDescription( String description ) {
+        this.description = description;
+    }
+
     public Project() {
     }
 
