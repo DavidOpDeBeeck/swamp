@@ -30,6 +30,14 @@ public class Container extends Identifiable {
         this.potentialLocations = potentialLocations;
     }
 
+    public void setRunConfiguration( RunConfiguration runConfiguration ) {
+        this.runConfiguration = runConfiguration;
+    }
+
+    public void setPotentialLocations( List<Location> potentialLocations ) {
+        this.potentialLocations = potentialLocations;
+    }
+
     public RunConfiguration getRunConfiguration() {
         return runConfiguration;
     }

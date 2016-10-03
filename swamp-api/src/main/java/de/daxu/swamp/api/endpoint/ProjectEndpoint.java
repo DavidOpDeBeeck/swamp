@@ -11,6 +11,7 @@ import de.daxu.swamp.api.dto.container.ProjectDTO;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
 import de.daxu.swamp.service.ProjectService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +78,17 @@ public class ProjectEndpoint {
         Project project = projectService.getProject( id );
         Container container = projectService.addContainerToProject( project, containerCreateConverter.toDomain( dto ) );
         return new ResponseEntity<>( containerConverter.toDTO( container ), HttpStatus.OK );
+    }
+
+    @RequestMapping( value = "/{id}/containers/{containerId}", method = RequestMethod.PUT )
+    public ResponseEntity<ContainerDTO> putContainer( @PathVariable( "id" ) String id, @PathVariable( "containerId" ) String containerId, @RequestBody ContainerCreateDTO dto ) {
+        Container oldContainer = projectService.getContainer( containerId );
+        Container newContainer = containerCreateConverter.toDomain( dto );
+
+        BeanUtils.copyProperties( newContainer, oldContainer );
+        projectService.updateContainer( oldContainer );
+
+        return new ResponseEntity<>( containerConverter.toDTO( oldContainer ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{id}/containers/{containerId}", method = RequestMethod.DELETE )
