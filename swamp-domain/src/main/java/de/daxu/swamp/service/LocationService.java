@@ -37,4 +37,6 @@ public interface LocationService {
     Continent updateContinent( Continent continent );
 
     Datacenter updateDatacenter( Datacenter datacenter );
+
+    Server updateServer( Server server );
 }

@@ -92,6 +92,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public Server updateServer( Server server ) {
+        return serverRepository.save( server );
+    }
+
+    @Override
     public Continent getContinent( String id ) {
         return continentRepository.findOne( id );
     }
