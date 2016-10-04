@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-md-4">
         <div class="input-group margin-sm-bottom">
-            <input type="text" class="form-control" placeholder="Search" ng-model="projects.filter"/>
+            <input type="text" class="form-control" placeholder="Search" ng-model="ProjectCtrl.filter"/>
             <span class="input-group-btn">
                 <button class="btn btn-primary" type="button" ui-sref="projects.create">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
         </div>
-        <div class="panel panel-default" ng-repeat="project in projects.list | filter: projects.filter"
+        <div class="panel panel-default" ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter"
              ui-sref-active="panel-primary">
             <div class="panel-heading" ng-bind="project.name"></div>
             <div class="panel-body">
@@ -18,7 +18,7 @@
                 <button type="button" class="btn btn-sm btn-primary">
                     Deploy
                 </button>
-                <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="projects.delete(project)">
+                <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="ProjectCtrl.delete(project)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-sm btn-warning pull-right margin-xs-right"

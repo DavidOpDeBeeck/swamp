@@ -54,4 +54,4 @@ class ProjectService {
     }
 }
 
-export default ProjectService
+export default  ['$resource', ProjectService]

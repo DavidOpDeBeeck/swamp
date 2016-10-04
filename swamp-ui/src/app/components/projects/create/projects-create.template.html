@@ -4,14 +4,15 @@
 <div class="modal-body">
     <div class="form-group">
         <label for="name">Project name: </label>
-        <input type="text" class="form-control" id="name" ng-model="project.name"/>
+        <input type="text" class="form-control" id="name" ng-model="ProjectsCreateCtrl.project.name"/>
     </div>
     <div class="form-group">
         <label for="description">Project description: </label>
-        <textarea rows="5" class="form-control" id="description" ng-model="project.description"></textarea>
+        <textarea rows="5" class="form-control" id="description"
+                  ng-model="ProjectsCreateCtrl.project.description"></textarea>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="project.cancel()">Cancel</button>
-    <button class="btn btn-primary" type="button" ng-click="project.create()">Create</button>
+    <button class="btn btn-default" type="button" ng-click="ProjectsCreateCtrl.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ProjectsCreateCtrl.create()">Create</button>
 </div>

@@ -20,3 +20,12 @@ const app = angular.module('swamp', [
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => $urlRouterProvider.otherwise("/")]);
+
+app.run(['$rootScope', ($rootScope) => {
+    $rootScope.$on('$stateChangeSuccess', (event, to, toParams, from, fromParams) => {
+        $rootScope.$previousState = {
+            name: from.name,
+            params: fromParams
+        };
+    });
+}]);

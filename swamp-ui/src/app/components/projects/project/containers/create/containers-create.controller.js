@@ -11,7 +11,7 @@ class ContainersCreateController {
 
     cancel() {
         this.$scope.$dismiss();
-        this.$state.go('projects.containers');
+        this.$state.go('projects.project.containers');
     }
 
     create() {

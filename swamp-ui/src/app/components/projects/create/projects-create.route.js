@@ -5,7 +5,7 @@ export default ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRou
             $uibModal.open({
                 templateUrl: "/app/components/projects/create/projects-create.template.html",
                 controller: 'ProjectsCreateController',
-                controllerAs: 'project',
+                controllerAs: 'ProjectsCreateCtrl',
                 backdrop: 'static'
             });
         }]

@@ -85,4 +85,4 @@ class LocationService {
     }
 }
 
-export default LocationService
+export default  ['$resource', LocationService]

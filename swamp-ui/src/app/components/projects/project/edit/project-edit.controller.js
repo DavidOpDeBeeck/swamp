@@ -1,32 +1,23 @@
 class ProjectEditController {
-    constructor(ProjectService, project, $state, $scope) {
-        this.$state = $state;
+    constructor(ProjectService, NavigationService, project, $scope) {
         this.$scope = $scope;
         this.project = project;
+        this.navigationService = NavigationService;
         this.projectService = ProjectService;
-        this.initialise();
-    }
-
-    initialise() {
-        this.name = this.project.name;
-        this.description = this.project.description;
     }
 
     cancel() {
         this.$scope.$dismiss();
-        this.$state.go('projects');
+        this.navigationService.goBack('projects');
     }
 
     create() {
-        this.projectService.updateProject({
-            'id': this.project.id,
-            'name': this.name,
-            'description': this.description
-        }).then((project) => {
-            this.$scope.$close(true);
-            this.$state.go('projects', {projectId: project.id}, {reload: true});
-        });
+        this.projectService.updateProject(this.project)
+            .then((project) => {
+                this.$scope.$close(true);
+                this.navigationService.goTo('projects.project.containers', {projectId: project.id});
+            });
     }
 }
 
-export default ['ProjectService', 'project', '$state', '$scope', ProjectEditController]
+export default ['ProjectService', 'NavigationService', 'project', '$scope', ProjectEditController]
