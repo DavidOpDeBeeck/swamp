@@ -1,10 +1,10 @@
-export default ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
-    $stateProvider.state('continents.datacenters', {
-        url: "/:continentId/datacenters",
+import DatacentersController from "./datacenters.controller";
+
+export default ['$stateProvider', ($stateProvider) => {
+    $stateProvider.state('continents.continent.datacenters', {
+        url: "/datacenters",
         templateUrl: '/app/components/locations/datacenters/datacenters.template.html',
-        controller: 'DatacentersController as datacenters',
-        resolve: {
-            continent: ['LocationService', '$stateParams', (LocationService, $stateParams) => LocationService.getContinent($stateParams['continentId'])]
-        }
+        controller: DatacentersController,
+        controllerAs: 'DatacentersCtrl'
     });
 }];

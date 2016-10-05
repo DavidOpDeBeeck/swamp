@@ -2,16 +2,16 @@ class DatacentersController {
     constructor(LocationService, continent) {
         this.continent = continent;
         this.locationService = LocationService;
-        this.refresh();
+        this.getAllDatacenters();
     }
 
-    refresh() {
+    getAllDatacenters() {
         this.locationService.getAllDatacenters(this.continent.id)
-            .then((datacenters) => this.list = datacenters);
+            .then((datacenters) => this.datacenters = datacenters);
     }
 
     delete(datacenter) {
-        datacenter.$delete().then(() => this.refresh());
+        datacenter.$delete().then(() => this.getAllDatacenters());
     }
 }
 

@@ -1,23 +1,23 @@
 class ContinentsCreateController {
-    constructor(LocationService, $state, $scope) {
-        this.$state = $state;
+    constructor(LocationService, NavigationService, $scope) {
         this.$scope = $scope;
+        this.continent = {};
         this.locationService = LocationService;
+        this.navigationService = NavigationService;
     }
 
     cancel() {
         this.$scope.$dismiss();
-        this.$state.go('continents');
+        this.navigationService.goBack('continents');
     }
 
     create() {
-        this.locationService.createContinent({
-            'name': this.name
-        }).then((continent) => {
-            this.$scope.$close(true);
-            this.$state.go('continents.datacenters', {continentId: continent.id}, {reload: true});
-        });
+        this.locationService.createContinent(this.continent)
+            .then((continent) => {
+                this.$scope.$close(true);
+                this.navigationService.goTo('continents.continent.datacenters', {continentId: continent.id});
+            });
     }
 }
 
-export default ['LocationService', '$state', '$scope', ContinentsCreateController]
+export default ['LocationService', 'NavigationService', '$scope', ContinentsCreateController]

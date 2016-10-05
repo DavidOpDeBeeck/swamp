@@ -41,9 +41,11 @@ class LocationService {
 
     getDatacenter(continentId, datacenterId) {
         return this.datacentersResource.get({
-            continentId: continentId,
-            datacenterId: datacenterId
-        }).$promise;
+                continentId: continentId,
+                datacenterId: datacenterId
+            })
+            .$promise
+            .then((datacenter) => this.mapDatacenter(continentId, datacenter));
     }
 
     createServer(server) {
@@ -57,13 +59,13 @@ class LocationService {
     getAllDatacenters(continentId) {
         return this.datacentersResource.query({
             continentId: continentId
-        }).$promise.then((datacenters) => {
-            return datacenters.map((datacenter) => {
-                datacenter['continentId'] = continentId;
-                datacenter['datacenterId'] = datacenter.id;
-                return datacenter;
-            });
-        });
+        }).$promise.then((datacenters) => datacenters.map((datacenter) => this.mapDatacenter(continentId, datacenter)));
+    }
+
+    mapDatacenter(continentId, datacenter) {
+        datacenter['continentId'] = continentId;
+        datacenter['datacenterId'] = datacenter.id;
+        return datacenter;
     }
 
     getAllServers(continentId, datacenterId) {

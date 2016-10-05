@@ -1,16 +1,16 @@
 class ContinentsController {
     constructor(LocationService) {
         this.locationService = LocationService;
-        this.refresh();
+        this.getAllContinents();
     }
 
-    refresh() {
+    getAllContinents() {
         this.locationService.getAllContinents()
-            .then((continents) => this.list = continents);
+            .then((continents) => this.continents = continents);
     }
 
     delete(continent) {
-        continent.$delete().then(() => this.refresh());
+        continent.$delete().then(() => this.getAllContinents());
     }
 }
 
