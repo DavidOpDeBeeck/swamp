@@ -8,12 +8,15 @@
                 </select>
             </div>
         </div>
-        <section ng-show="configurationPicker.configuration.type === 'IMAGE'">
+        <div ng-show="configurationPicker.configuration.type === 'IMAGE'">
             <div class="form-group">
                 <label for="name">Container image: </label>
                 <input type="text" class="form-control" id="name" ng-model="configurationPicker.configuration.name"
-                       ng-disabled="!configurationPicker.editable"/>
+                       ng-show="configurationPicker.editable"/>
+                <div class="well well-sm margin-xs-bottom" ng-hide="configurationPicker.editable">
+                    {{ configurationPicker.configuration.name }}
+                </div>
             </div>
-        </section>
+        </div>
     </div>
 </div>

@@ -1,12 +1,11 @@
 import angular from "angular";
+import uiBootstrap from "angular-ui-bootstrap";
+import services from "../../../../services/services.module";
+import Container from "./container/container.module";
 import ContainersRoute from "./containers.route";
 import ContainersCreateRoute from "./create/containers-create.route";
-import ContainersController from "./containers.controller";
-import ContainersCreateController from "./create/containers-create.controller";
 
-const module = angular.module('swamp.containers', ['swamp.services', 'ui.bootstrap'])
-    .controller('ContainersController', ContainersController)
-    .controller('ContainersCreateController', ContainersCreateController)
+const module = angular.module('swamp.containers', [services, uiBootstrap, Container])
     .config(ContainersRoute)
     .config(ContainersCreateRoute);
 

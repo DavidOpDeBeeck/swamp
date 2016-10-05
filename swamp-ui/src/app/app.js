@@ -1,5 +1,5 @@
 import angular from "angular";
-import angularBootstrap from "angular-ui-bootstrap";
+import uiBootstrap from "angular-ui-bootstrap";
 import uiRouter from "angular-ui-router";
 import services from "./services/services.module";
 import layout from "./components/layout/layout.module";
@@ -10,7 +10,7 @@ import locations from "./components/locations/locations.module";
 
 const app = angular.module('swamp', [
     uiRouter,
-    angularBootstrap,
+    uiBootstrap,
     services,
     layout,
     shared,

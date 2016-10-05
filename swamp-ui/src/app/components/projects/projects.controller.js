@@ -2,17 +2,17 @@ class ProjectsController {
     constructor(ProjectService) {
         this.projectService = ProjectService;
         this.projects = [];
-        this.refresh();
+        this.getAllProjects();
     }
 
-    refresh() {
+    getAllProjects() {
         this.projectService.getAllProjects()
             .then((projects) => this.projects = projects);
     }
 
     delete(project) {
         project.$delete()
-            .then(() => this.refresh());
+            .then(() => this.getAllProjects());
     }
 }
 

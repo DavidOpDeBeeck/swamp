@@ -1,16 +1,12 @@
-class ContainersCreateController {
-    constructor(ProjectService, LocationService, NavigationService, project, $scope) {
+class ContainerEditController {
+    constructor(ProjectService, LocationService, NavigationService, project, container, $scope) {
         this.$scope = $scope;
         this.project = project;
+        this.container = container;
         this.projectService = ProjectService;
         this.locationService = LocationService;
         this.navigationService = NavigationService;
         this.availableLocations = [];
-        this.container = {
-            'projectId': this.project.id,
-            'runConfiguration': {},
-            'potentialLocations': [undefined]
-        };
         this.getAvailableLocations();
     }
 
@@ -23,8 +19,8 @@ class ContainersCreateController {
         this.navigationService.goBack('projects.project.containers');
     }
 
-    create() {
-        this.projectService.createContainer(this.container)
+    edit() {
+        this.projectService.updateContainer(this.container)
             .then((container) => {
                 this.$scope.$close(true);
                 this.navigationService.goTo('projects.project.containers', {projectId: this.project.id});
@@ -32,4 +28,4 @@ class ContainersCreateController {
     }
 }
 
-export default ['ProjectService', 'LocationService', 'NavigationService', 'project', '$scope', ContainersCreateController]
+export default ['ProjectService', 'LocationService', 'NavigationService', 'project', 'container', '$scope', ContainerEditController]

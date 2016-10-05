@@ -1,13 +1,11 @@
 import angular from "angular";
+import uiBootstrap from "angular-ui-bootstrap";
+import services from "../../services/services.module";
 import Project from "./project/project.module";
 import ProjectsRoute from "./projects.route";
 import ProjectsCreateRoute from "./create/projects-create.route";
-import ProjectsController from "./projects.controller";
-import ProjectsCreateController from "./create/projects-create.controller";
 
-const module = angular.module('swamp.projects', ['swamp.services', 'ui.bootstrap', Project])
-    .controller('ProjectsController', ProjectsController)
-    .controller('ProjectsCreateController', ProjectsCreateController)
+const module = angular.module('swamp.projects', [services, uiBootstrap, Project])
     .config(ProjectsRoute)
     .config(ProjectsCreateRoute);
 

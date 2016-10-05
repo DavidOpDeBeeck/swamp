@@ -11,7 +11,7 @@ class ProjectEditController {
         this.navigationService.goBack('projects');
     }
 
-    create() {
+    edit() {
         this.projectService.updateProject(this.project)
             .then((project) => {
                 this.$scope.$close(true);

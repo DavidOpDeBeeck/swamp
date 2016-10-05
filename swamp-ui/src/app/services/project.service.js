@@ -29,24 +29,34 @@ class ProjectService {
         return this.projectResource.update(project).$promise;
     }
 
+    getProject(id) {
+        return this.projectResource.get({id: id}).$promise;
+    }
+
     createContainer(container) {
         return this.containerResource.create(container).$promise;
     }
 
-    getProject(id) {
-        return this.projectResource.get({id: id}).$promise;
+    updateContainer(container) {
+        return this.containerResource.update(container).$promise;
+    }
+
+    getContainer(projectId, containerId) {
+        return this.containerResource.get({projectId: projectId, containerId: containerId})
+            .$promise
+            .then((container) => this.mapContainer(projectId, container));
     }
 
     getProjectContainers(projectId) {
         return this.containerResource.query({projectId: projectId})
             .$promise
-            .then((containers) => {
-                return containers.map((container) => {
-                    container['projectId'] = projectId;
-                    container['containerId'] = container.id;
-                    return container;
-                });
-            });
+            .then((containers) => containers.map((container) => this.mapContainer(projectId, container)));
+    }
+
+    mapContainer(projectId, container) {
+        container['projectId'] = projectId;
+        container['containerId'] = container.id;
+        return container;
     }
 
     getAllProjects() {

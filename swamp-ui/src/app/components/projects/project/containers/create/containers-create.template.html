@@ -2,10 +2,11 @@
     <h3 class="modal-title">Create a new Container</h3>
 </div>
 <div class="modal-body">
-    <configuration-picker configuration="container.runConfiguration" editable="true"></configuration-picker>
-    <location-picker locations="container.potentialLocations" editable="true"></location-picker>
+    <configuration-picker configuration="ContainersCreateCtrl.container.runConfiguration"
+                          editable="true"></configuration-picker>
+    <location-picker locations="ContainersCreateCtrl.container.potentialLocations" editable="true"></location-picker>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="container.cancel()">Cancel</button>
-    <button class="btn btn-primary" type="button" ng-click="container.create()">Create</button>
+    <button class="btn btn-default" type="button" ng-click="ContainersCreateCtrl.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ContainersCreateCtrl.create()">Create</button>
 </div>

@@ -91,6 +91,11 @@ public class ProjectEndpoint {
         return new ResponseEntity<>( containerConverter.toDTO( container ), HttpStatus.OK );
     }
 
+    @RequestMapping( value = "/{id}/containers/{containerId}", method = RequestMethod.GET )
+    public ResponseEntity<ContainerDTO> getContainer( @PathVariable( "id" ) String id, @PathVariable( "containerId" ) String containerId ) {
+        return new ResponseEntity<>( containerConverter.toDTO( projectService.getContainer( containerId ) ), HttpStatus.OK );
+    }
+
     @RequestMapping( value = "/{id}/containers/{containerId}", method = RequestMethod.PUT )
     public ResponseEntity<ContainerDTO> putContainer( @PathVariable( "id" ) String id, @PathVariable( "containerId" ) String containerId, @RequestBody ContainerCreateDTO dto ) {
         Container oldContainer = projectService.getContainer( containerId );
