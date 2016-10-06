@@ -4,27 +4,29 @@
 <div class="modal-body">
     <div class="form-group">
         <label for="name">Server name: </label>
-        <input type="text" class="form-control" id="name" ng-model="server.name"/>
+        <input type="text" class="form-control" id="name" ng-model="ServerCreateCtrl.server.name"/>
     </div>
     <div class="form-group">
         <label for="ip">Server ip: </label>
-        <input type="text" class="form-control" id="ip" ng-model="server.ip"/>
+        <input type="text" class="form-control" id="ip" ng-model="ServerCreateCtrl.server.ip"/>
     </div>
     <div class="form-group">
         <label for="ca-certificate">Server CA certificate: </label>
-        <textarea rows="5" class="form-control" id="ca-certificate" ng-model="server.CAcertificate"></textarea>
+        <textarea rows="5" class="form-control" id="ca-certificate"
+                  ng-model="ServerCreateCtrl.server.CAcertificate"></textarea>
     </div>
     <div class="form-group">
         <label for="certificate">Server certificate: </label>
-        <textarea rows="5" class="form-control" id="certificate" ng-model="server.certificate"></textarea>
+        <textarea rows="5" class="form-control" id="certificate"
+                  ng-model="ServerCreateCtrl.server.certificate"></textarea>
     </div>
     <div class="form-group">
         <label for="key">Server key: </label>
-        <textarea rows="5" class="form-control" id="key" ng-model="server.key"></textarea>
+        <textarea rows="5" class="form-control" id="key" ng-model="ServerCreateCtrl.server.key"></textarea>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="server.cancel()">Cancel</button>
-    <button class="btn btn-primary" type="button" ng-click="server.create()">Create</button>
+    <button class="btn btn-default" type="button" ng-click="ServerCreateCtrl.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ServerCreateCtrl.create()">Create</button>
 </div>
 

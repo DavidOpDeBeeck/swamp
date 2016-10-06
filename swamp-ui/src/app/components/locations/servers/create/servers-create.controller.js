@@ -1,38 +1,32 @@
 class ServersCreateController {
-    constructor(LocationService, continent, datacenter, $state, $scope) {
+    constructor(LocationService, NavigationService, continent, datacenter, $state, $scope) {
         this.$state = $state;
         this.$scope = $scope;
         this.continent = continent;
         this.datacenter = datacenter;
+        this.server = {
+            'continentId': this.continent.id,
+            'datacenterId': this.datacenter.id,
+        };
         this.locationService = LocationService;
+        this.navigationService = NavigationService;
     }
 
     cancel() {
         this.$scope.$dismiss();
-        this.$state.go('continents.datacenters.servers', {
-            continentId: this.continent.id,
-            datacenterId: this.datacenter.id
-        });
+        this.navigationService.goBack('continents.continent.datacenters.datacenter.servers');
     }
 
     create() {
-        console.log(this.CAcertificate);
-        this.locationService.createServer({
-            'name': this.name,
-            'ip': this.ip,
-            'CAcertificate': this.CAcertificate,
-            'certificate': this.certificate,
-            'key': this.key,
-            'continentId': this.continent.id,
-            'datacenterId': this.datacenter.id
-        }).then((server) => {
-            this.$scope.$close(true);
-            this.$state.go('continents.datacenters.servers', {
-                continentId: this.continent.id,
-                datacenterId: this.datacenter.id
-            }, {reload: true});
-        });
+        this.locationService.createServer(this.server)
+            .then((server) => {
+                this.$scope.$close(true);
+                this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {
+                    continentId: this.continent.id,
+                    datacenterId: this.datacenter.id
+                });
+            });
     }
 }
 
-export default ['LocationService', 'continent', 'datacenter', '$state', '$scope', ServersCreateController]
+export default ['LocationService', 'NavigationService', 'continent', 'datacenter', '$state', '$scope', ServersCreateController]

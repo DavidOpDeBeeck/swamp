@@ -1,6 +1,6 @@
 import ProjectEditController from "./project-edit.controller";
 
-export default ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
+export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('projects.project.edit', {
         url: "/edit",
         onEnter: ['$uibModal', 'project', ($uibModal, project) => {

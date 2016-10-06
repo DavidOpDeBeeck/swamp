@@ -3,16 +3,16 @@ class ServersController {
         this.continent = continent;
         this.datacenter = datacenter;
         this.locationService = LocationService;
-        this.refresh();
+        this.getAllServers();
     }
 
-    refresh() {
+    getAllServers() {
         this.locationService.getAllServers(this.continent.id, this.datacenter.id)
-            .then((servers) => this.list = servers);
+            .then((servers) => this.servers = servers);
     }
 
     delete(server) {
-        server.$delete().then(() => this.refresh());
+        server.$delete().then(() => this.getAllServers());
     }
 }
 

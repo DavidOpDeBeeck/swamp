@@ -1,15 +1,13 @@
-export default ($stateProvider, $urlRouterProvider) => {
-    $stateProvider.state('continents.datacenters.servers.create', {
+import ServersCreateController from "./servers-create.controller";
+
+export default ['$stateProvider', ($stateProvider) => {
+    $stateProvider.state('continents.continent.datacenters.datacenter.servers.create', {
         url: "/create",
-        resolve: {
-            continent: ['LocationService', '$stateParams', (LocationService, $stateParams) => LocationService.getContinent($stateParams['continentId'])],
-            datacenter: ['LocationService', '$stateParams', (LocationService, $stateParams) => LocationService.getDatacenter($stateParams['continentId'], $stateParams['datacenterId'])]
-        },
         onEnter: ['$uibModal', 'continent', 'datacenter', ($uibModal, continent, datacenter) => {
             $uibModal.open({
                 templateUrl: '/app/components/locations/servers/create/servers-create.template.html',
-                controller: 'ServersCreateController',
-                controllerAs: 'server',
+                controller: ServersCreateController,
+                controllerAs: 'ServerCreateCtrl',
                 backdrop: 'static',
                 resolve: {
                     continent: continent,
@@ -18,4 +16,4 @@ export default ($stateProvider, $urlRouterProvider) => {
             });
         }]
     });
-};
+}];

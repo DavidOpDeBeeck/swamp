@@ -5,13 +5,13 @@ class DatacentersCreateController {
         this.datacenter = {
             'continentId': this.continent.id,
         };
-        this.navigationService = NavigationService;
         this.locationService = LocationService;
+        this.navigationService = NavigationService;
     }
 
     cancel() {
         this.$scope.$dismiss();
-        this.navigationService.goBack('continents.datacenters');
+        this.navigationService.goBack('continents.continent.datacenters');
     }
 
     create() {
