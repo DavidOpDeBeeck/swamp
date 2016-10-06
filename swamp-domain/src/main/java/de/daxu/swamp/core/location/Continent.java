@@ -9,7 +9,7 @@ import java.util.List;
 @DiscriminatorValue( "continent" )
 public class Continent extends Location {
 
-    @OneToMany( orphanRemoval = true )
+    @OneToMany( orphanRemoval = true, cascade = CascadeType.REMOVE )
     @JoinTable(
             name = "continent_datacenter",
             joinColumns = { @JoinColumn( name = "continent_id", referencedColumnName = "id" ) },

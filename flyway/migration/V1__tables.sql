@@ -60,12 +60,12 @@ CREATE TABLE IF NOT EXISTS `container_location` (
   CONSTRAINT `fk_container_has_location_container1`
     FOREIGN KEY (`container_id`)
     REFERENCES `container` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_container_has_location_location1`
     FOREIGN KEY (`location_id`)
     REFERENCES `location` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

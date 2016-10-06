@@ -9,7 +9,7 @@ import java.util.List;
 @DiscriminatorValue( "datacenter" )
 public class Datacenter extends Location {
 
-    @OneToMany( orphanRemoval = true )
+    @OneToMany( orphanRemoval = true, cascade = CascadeType.REMOVE )
     @JoinTable(
             name = "datacenter_server",
             joinColumns = { @JoinColumn( name = "datacenter_id", referencedColumnName = "id" ) },
