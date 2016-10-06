@@ -136,7 +136,7 @@ public class ContinentEndpoint {
 
     @RequestMapping( value = "/{id}/datacenters/{datacenterId}/servers/{serverId}", method = RequestMethod.GET )
     public ResponseEntity<ServerDTO> getServer( @PathVariable( "id" ) String id, @PathVariable( "datacenterId" ) String datacenterId, @PathVariable( "serverId" ) String serverId ) {
-        return new ResponseEntity<>( serverConverter.toDTO( locationService.getServer( id ) ), HttpStatus.OK );
+        return new ResponseEntity<>( serverConverter.toDTO( locationService.getServer( serverId ) ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{id}/datacenters/{datacenterId}/servers/{serverId}", method = RequestMethod.PUT )

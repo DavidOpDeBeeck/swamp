@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h3 class="modal-title" ng-bind="ServerEditCtrl.server.name"></h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label for="name">Server name: </label>
+        <input type="text" class="form-control" id="name" ng-model="ServerEditCtrl.server.name"/>
+    </div>
+    <div class="form-group">
+        <label for="ip">Server ip: </label>
+        <input type="text" class="form-control" id="ip" ng-model="ServerEditCtrl.server.ip"/>
+    </div>
+    <div class="form-group">
+        <label for="ca-certificate">Server CA certificate: </label>
+        <textarea rows="5" class="form-control" id="ca-certificate"
+                  ng-model="ServerEditCtrl.server.CAcertificate"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="certificate">Server certificate: </label>
+        <textarea rows="5" class="form-control" id="certificate"
+                  ng-model="ServerEditCtrl.server.certificate"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="key">Server key: </label>
+        <textarea rows="5" class="form-control" id="key" ng-model="ServerEditCtrl.server.key"></textarea>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="ServerEditCtrl.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ServerEditCtrl.edit()">Update</button>
+</div>

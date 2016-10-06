@@ -16,6 +16,10 @@
                         ng-click="ServersCtrl.delete(server)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
+                <button type="button" class="btn btn-sm btn-warning pull-right margin-xs-right"
+                        ui-sref="continents.continent.datacenters.datacenter.servers.server.edit({continentId: ServersCtrl.continent.id, datacenterId: ServersCtrl.datacenter.id, serverId: server.id})">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </button>
             </div>
         </div>
     </div>

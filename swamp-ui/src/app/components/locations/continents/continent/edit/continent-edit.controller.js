@@ -12,7 +12,6 @@ class ContinentEditController {
     }
 
     edit() {
-        console.log(this.continent);
         this.locationService.updateContinent(this.continent)
             .then((continent) => {
                 this.$scope.$close(true);
