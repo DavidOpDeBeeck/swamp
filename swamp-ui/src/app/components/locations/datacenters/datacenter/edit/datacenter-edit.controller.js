@@ -1,12 +1,10 @@
-class DatacentersCreateController {
-    constructor(LocationService, NavigationService, continent, $scope) {
+class DatacenterEditController {
+    constructor(LocationService, NavigationService, continent, datacenter, $scope) {
         this.$scope = $scope;
         this.continent = continent;
-        this.datacenter = {
-            'continentId': this.continent.id,
-        };
-        this.locationService = LocationService;
+        this.datacenter = datacenter;
         this.navigationService = NavigationService;
+        this.locationService = LocationService;
     }
 
     cancel() {
@@ -14,8 +12,8 @@ class DatacentersCreateController {
         this.navigationService.goBack('continents.continent.datacenters');
     }
 
-    create() {
-        this.locationService.createDatacenter(this.datacenter)
+    edit() {
+        this.locationService.updateDatacenter(this.datacenter)
             .then((datacenter) => {
                 this.$scope.$close(true);
                 this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {
@@ -26,4 +24,4 @@ class DatacentersCreateController {
     }
 }
 
-export default ['LocationService', 'NavigationService', 'continent', '$scope', DatacentersCreateController]
+export default ['LocationService', 'NavigationService', 'continent', 'datacenter', '$scope', DatacenterEditController]
