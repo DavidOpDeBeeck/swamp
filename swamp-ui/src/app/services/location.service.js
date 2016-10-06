@@ -4,6 +4,9 @@ class LocationService {
         this.continentResource = $resource('/api/continents/:id', {id: '@id'}, {
             create: {
                 method: 'POST'
+            },
+            update: {
+                method: 'PUT'
             }
         });
         this.datacentersResource = $resource('/api/continents/:continentId/datacenters/:datacenterId', {
@@ -27,6 +30,10 @@ class LocationService {
 
     createContinent(continent) {
         return this.continentResource.create(continent).$promise;
+    }
+
+    updateContinent(continent) {
+        return this.continentResource.update(continent).$promise;
     }
 
     getContinent(continentId) {
