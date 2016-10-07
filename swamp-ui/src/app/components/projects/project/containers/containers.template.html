@@ -1,8 +1,12 @@
 <div class="row">
     <div class="input-group margin-sm-bottom">
-        <input type="text" class="form-control" placeholder="Search" ng-model="ContainersCtrl.filter"/>
+        <span class="input-group-addon" id="containers-search-icon">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </span>
+        <input type="text" class="form-control" placeholder="Search" ng-model="ContainersCtrl.filter"
+               aria-describedby="containers-search-icon"/>
         <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ui-sref="projects.project.containers.create">
+            <button class="btn btn-default" type="button" ui-sref="projects.project.containers.create">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
         </span>

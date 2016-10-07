@@ -1,9 +1,13 @@
 <div class="row">
     <div class="col-md-4">
         <div class="input-group margin-sm-bottom">
-            <input type="text" class="form-control" placeholder="Search" ng-model="ProjectCtrl.filter"/>
+            <span class="input-group-addon" id="projects-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="ProjectCtrl.filter"
+                   aria-describedby="projects-search-icon"/>
             <span class="input-group-btn">
-                <button class="btn btn-primary" type="button" ui-sref="projects.create">
+                <button class="btn btn-default" type="button" ui-sref="projects.create">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
@@ -11,9 +15,6 @@
         <div class="panel panel-default" ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter"
              ui-sref-active="panel-primary">
             <div class="panel-heading" ng-bind="project.name"></div>
-            <div class="panel-body">
-                <p ng-bind="project.description"></p>
-            </div>
             <div class="panel-footer clearfix">
                 <button type="button" class="btn btn-sm btn-primary">
                     Deploy

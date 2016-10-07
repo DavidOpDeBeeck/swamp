@@ -1,9 +1,13 @@
 <div class="row">
     <div class="col-md-12">
         <div class="input-group margin-sm-bottom">
-            <input type="text" class="form-control" placeholder="Search" ng-model="ServersCtrl.filter"/>
+            <span class="input-group-addon" id="servers-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="ServersCtrl.filter"
+                   aria-describedby="servers-search-icon"/>
             <span class="input-group-btn">
-                <button class="btn btn-primary" type="button"
+                <button class="btn btn-default" type="button"
                         ui-sref="continents.continent.datacenters.datacenter.servers.create">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
