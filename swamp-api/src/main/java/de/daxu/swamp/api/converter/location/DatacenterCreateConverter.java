@@ -6,7 +6,7 @@ import de.daxu.swamp.core.location.Datacenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.location.Datacenter.DatacenterBuilder.datacenterBuilder;
+import static de.daxu.swamp.core.location.Datacenter.DatacenterBuilder.aDatacenter;
 
 @Component
 public class DatacenterCreateConverter implements DomainConverter<DatacenterCreateDTO, Datacenter> {
@@ -16,7 +16,7 @@ public class DatacenterCreateConverter implements DomainConverter<DatacenterCrea
 
     @Override
     public Datacenter toDomain( DatacenterCreateDTO dto ) {
-        return datacenterBuilder()
+        return aDatacenter()
                 .withName( dto.name )
                 .build();
     }

@@ -8,6 +8,7 @@ import java.util.Collection;
 public class ContainerDTO {
 
     public String id;
+    public String arguments;
     public RunConfigurationDTO runConfiguration;
     public Collection<LocationDTO> potentialLocations;
 

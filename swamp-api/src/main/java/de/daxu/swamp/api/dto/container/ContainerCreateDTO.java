@@ -7,6 +7,7 @@ import java.util.List;
 
 public class ContainerCreateDTO {
 
+    public String arguments;
     public RunConfigurationDTO runConfiguration;
     public List<LocationDTO> potentialLocations;
 

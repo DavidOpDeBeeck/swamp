@@ -1,7 +1,13 @@
 package de.daxu.swamp.core.scheduler;
 
-import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.container.Project;
+import de.daxu.swamp.core.scheduler.strategy.SchedulingStrategy;
+
+import java.util.Collection;
 
 public interface Scheduler {
-    ContainerInstance schedule( Container container );
+
+    void schedule( Project project, SchedulingStrategy strategy );
+
+    Collection<ContainerInstance> getInstances( Project project );
 }

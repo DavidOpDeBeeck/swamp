@@ -15,6 +15,12 @@
         <div class="panel-heading" ng-bind="container.id"></div>
         <div class="panel-body">
             <configuration-picker configuration="container.runConfiguration" editable="false"></configuration-picker>
+            <div class="form-group">
+                <label for="arguments">Container arguments: </label>
+                <div class="well well-sm margin-xs-bottom" id="arguments" ng-hide="configurationPicker.editable">
+                    {{ container.arguments }}
+                </div>
+            </div>
             <location-picker locations="container.potentialLocations" editable="false"></location-picker>
         </div>
         <div class="panel-footer clearfix">

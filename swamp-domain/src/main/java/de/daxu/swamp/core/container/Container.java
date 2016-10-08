@@ -15,6 +15,9 @@ public class Container extends Identifiable {
     @JoinColumn( name = "run_configuration_id" )
     private RunConfiguration runConfiguration;
 
+    @Column( name = "arguments", unique = true )
+    private String arguments;
+
     @ManyToMany
     @JoinTable(
             name = "container_location",
@@ -22,12 +25,17 @@ public class Container extends Identifiable {
             inverseJoinColumns = @JoinColumn( name = "location_id", referencedColumnName = "id" ) )
     private List<Location> potentialLocations;
 
-    public Container() {
+    private Container() {
     }
 
-    public Container( RunConfiguration runConfiguration, List<Location> potentialLocations ) {
+    Container( String arguments, RunConfiguration runConfiguration, List<Location> potentialLocations ) {
+        this.arguments = arguments;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
+    }
+
+    public void setArguments( String arguments ) {
+        this.arguments = arguments;
     }
 
     public void setRunConfiguration( RunConfiguration runConfiguration ) {
@@ -36,6 +44,10 @@ public class Container extends Identifiable {
 
     public void setPotentialLocations( List<Location> potentialLocations ) {
         this.potentialLocations = potentialLocations;
+    }
+
+    public String getArguments() {
+        return arguments;
     }
 
     public RunConfiguration getRunConfiguration() {
@@ -48,11 +60,17 @@ public class Container extends Identifiable {
 
     public static class ContainerBuilder {
 
+        private String arguments;
         private RunConfiguration runConfiguration;
         private List<Location> potentialLocations;
 
-        public static ContainerBuilder containerBuilder() {
+        public static ContainerBuilder aContainer() {
             return new ContainerBuilder();
+        }
+
+        public ContainerBuilder withArguments( String arguments ) {
+            this.arguments = arguments;
+            return this;
         }
 
         public ContainerBuilder withRunConfiguration( RunConfiguration runConfiguration ) {
@@ -66,7 +84,7 @@ public class Container extends Identifiable {
         }
 
         public Container build() {
-            return new Container( runConfiguration, potentialLocations );
+            return new Container( arguments, runConfiguration, potentialLocations );
         }
     }
 }

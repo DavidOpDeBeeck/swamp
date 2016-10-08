@@ -15,10 +15,10 @@ public abstract class Location extends Identifiable {
     @Column( name = "name", unique = true )
     private String name;
 
-    public Location() {
+    Location() {
     }
 
-    public Location( String id, String name ) {
+    Location( String id, String name ) {
         this.id = id;
         this.name = name;
     }

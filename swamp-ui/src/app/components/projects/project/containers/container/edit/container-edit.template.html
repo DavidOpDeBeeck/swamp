@@ -4,6 +4,10 @@
 <div class="modal-body">
     <configuration-picker configuration="ContainerEditCtrl.container.runConfiguration"
                           editable="true"></configuration-picker>
+    <div class="form-group">
+        <label for="arguments">Container arguments: </label>
+        <input type="text" class="form-control" id="arguments" ng-model="ContainerEditCtrl.container.arguments"/>
+    </div>
     <location-picker locations="ContainerEditCtrl.container.potentialLocations" editable="true"></location-picker>
 </div>
 <div class="modal-footer">

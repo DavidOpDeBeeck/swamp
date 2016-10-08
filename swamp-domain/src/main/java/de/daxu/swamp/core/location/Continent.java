@@ -16,10 +16,10 @@ public class Continent extends Location {
             inverseJoinColumns = { @JoinColumn( name = "datacenter_id", referencedColumnName = "id" ) } )
     private List<Datacenter> datacenters;
 
-    public Continent() {
+    private Continent() {
     }
 
-    public Continent( String id, String name, List<Datacenter> datacenters ) {
+    Continent( String id, String name, List<Datacenter> datacenters ) {
         super( id, name );
         this.datacenters = datacenters;
     }
@@ -47,7 +47,7 @@ public class Continent extends Location {
 
         private List<Datacenter> datacenters;
 
-        public static ContinentBuilder continentBuilder() {
+        public static ContinentBuilder aContinent() {
             return new ContinentBuilder();
         }
 

@@ -6,7 +6,7 @@ import de.daxu.swamp.core.location.Continent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.location.Continent.ContinentBuilder.continentBuilder;
+import static de.daxu.swamp.core.location.Continent.ContinentBuilder.aContinent;
 
 @Component
 public class ContinentCreateConverter implements DomainConverter<ContinentCreateDTO, Continent> {
@@ -16,7 +16,7 @@ public class ContinentCreateConverter implements DomainConverter<ContinentCreate
 
     @Override
     public Continent toDomain( ContinentCreateDTO dto ) {
-        return continentBuilder()
+        return aContinent()
                 .withName( dto.name )
                 .build();
     }

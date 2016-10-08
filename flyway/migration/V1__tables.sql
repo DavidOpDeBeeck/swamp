@@ -25,6 +25,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `container` (
   `id` VARCHAR(255) NOT NULL,
+  `arguments` VARCHAR(255),
   `run_configuration_id` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_container_run_configuration1_idx` (`run_configuration_id` ASC),

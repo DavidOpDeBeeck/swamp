@@ -28,10 +28,10 @@ public class Server extends Location {
     @Column( name = "`key`" )
     private String key;
 
-    public Server() {
+    private Server() {
     }
 
-    public Server( String id, String name, String ip, String CACertificate, String certificate, String key ) {
+    Server( String id, String name, String ip, String CACertificate, String certificate, String key ) {
         super( id, name );
         this.ip = ip;
         this.CACertificate = CACertificate;
@@ -83,7 +83,7 @@ public class Server extends Location {
         private String certificate;
         private String key;
 
-        public static ServerBuilder serverBuilder() {
+        public static ServerBuilder aServer() {
             return new ServerBuilder();
         }
 

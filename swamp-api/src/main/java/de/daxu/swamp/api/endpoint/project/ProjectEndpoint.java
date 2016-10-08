@@ -1,4 +1,4 @@
-package de.daxu.swamp.api.endpoint;
+package de.daxu.swamp.api.endpoint.project;
 
 import de.daxu.swamp.api.converter.container.ContainerConverter;
 import de.daxu.swamp.api.converter.container.ContainerCreateConverter;
@@ -114,16 +114,4 @@ public class ProjectEndpoint {
         projectService.removeContainerFromProject( project, container );
         return new ResponseEntity<>( HttpStatus.OK );
     }
-
-    /*
-        @Autowired
-        Scheduler scheduler;
-
-        @RequestMapping( value = "/{id}", method = RequestMethod.POST )
-        public ResponseEntity run( @PathVariable( "id" ) String id ) {
-            Collection<Container> containers = projectService.getContainers( id );
-            containers.stream().forEach( scheduler::schedule );
-            return new ResponseEntity<>( HttpStatus.OK );
-        }
-    */
 }

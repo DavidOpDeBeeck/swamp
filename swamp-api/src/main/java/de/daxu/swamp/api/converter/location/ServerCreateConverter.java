@@ -5,14 +5,14 @@ import de.daxu.swamp.api.dto.location.ServerCreateDTO;
 import de.daxu.swamp.core.location.Server;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.location.Server.ServerBuilder.serverBuilder;
+import static de.daxu.swamp.core.location.Server.ServerBuilder.aServer;
 
 @Component
 public class ServerCreateConverter implements DomainConverter<ServerCreateDTO, Server> {
 
     @Override
     public Server toDomain( ServerCreateDTO dto ) {
-        return serverBuilder()
+        return aServer()
                 .withName( dto.name )
                 .withIp( dto.ip )
                 .withCACertificate( dto.CAcertificate )

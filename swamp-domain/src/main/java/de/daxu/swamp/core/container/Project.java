@@ -42,10 +42,10 @@ public class Project extends Identifiable {
         this.description = description;
     }
 
-    public Project() {
+    private Project() {
     }
 
-    public Project( String name, String description, Date created, List<Container> containers ) {
+    Project( String name, String description, Date created, List<Container> containers ) {
         this.name = name;
         this.description = description;
         this.created = created;
@@ -85,7 +85,7 @@ public class Project extends Identifiable {
         private Date created;
         private List<Container> containers;
 
-        public static ProjectBuilder projectBuilder() {
+        public static ProjectBuilder aProject() {
             return new ProjectBuilder();
         }
 

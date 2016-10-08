@@ -16,10 +16,10 @@ public class Datacenter extends Location {
             inverseJoinColumns = { @JoinColumn( name = "server_id", referencedColumnName = "id" ) } )
     private List<Server> servers;
 
-    public Datacenter() {
+    private Datacenter() {
     }
 
-    public Datacenter( String id, String name, List<Server> servers ) {
+    Datacenter( String id, String name, List<Server> servers ) {
         super( id, name );
         this.servers = servers;
     }
@@ -47,7 +47,7 @@ public class Datacenter extends Location {
 
         private List<Server> servers;
 
-        public static DatacenterBuilder datacenterBuilder() {
+        public static DatacenterBuilder aDatacenter() {
             return new DatacenterBuilder();
         }
 

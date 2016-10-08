@@ -27,6 +27,7 @@ public class LocationConverter implements DTOConverter<Location, LocationDTO>, D
 
     @Override
     public LocationDTO toDTO( Location location ) {
+        if ( location == null || location.getType() == null ) return null;
         switch ( location.getType() ) {
             case CONTINENT:
                 return continentConverter.toDTO( ( Continent ) location );
@@ -41,6 +42,7 @@ public class LocationConverter implements DTOConverter<Location, LocationDTO>, D
 
     @Override
     public Location toDomain( LocationDTO dto ) {
+        if ( dto == null || dto.type == null ) return null;
         switch ( dto.type ) {
             case CONTINENT:
                 return continentConverter.toDomain( ( ContinentDTO ) dto );
