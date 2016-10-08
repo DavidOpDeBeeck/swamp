@@ -1,18 +1,22 @@
 package de.daxu.swamp.core.scheduler;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
 import de.daxu.swamp.core.location.Server;
 import de.daxu.swamp.core.scheduler.config.ServerSSLConfig;
 import de.daxu.swamp.core.scheduler.strategy.SchedulingStrategy;
+import de.daxu.swamp.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,63 +28,57 @@ import static de.daxu.swamp.core.scheduler.ContainerInstance.ContainerInstanceBu
 @Component
 public class SchedulerImpl implements Scheduler {
 
+    @Autowired
+    LocationService locationService;
+
     private Map<String, ContainerInstance> containersMap = new HashMap<>();
 
     @Override
     public void schedule( Project project, SchedulingStrategy strategy ) {
-        List<ContainerInstance> instances = new ArrayList<>();
-
-        project.getContainers()
-                .stream()
-                .forEach( container -> {
-                    Server server = getServerFromContainer( container );
-
-                    if ( server == null )
-                        return;
-
-                    DockerClient dockerClient = createDockerClient( server );
-
-                    clearRunningContainers( dockerClient );
-
-                    List<String> containerIds = container.getRunConfiguration().execute( dockerClient );
-                    dockerClient.startContainerCmd( containerIds.get( 0 ) ).exec();
-
-                    instances.addAll( containerIds.stream().map( id -> aContainerInstance()
-                            .withInternalContainerId( id )
-                            .withProject( project )
-                            .withContainer( container )
-                            .withStartDate( new Date() )
-                            .build() )
-                            .collect( Collectors.toList() ) );
-
-                    instances
-                            .stream()
-                            .forEach( instance -> containersMap.put( instance.getInternalContainerId(), instance ) );
-                } );
+        Map<Container, Server> schedule = strategy.createSchedule( project.getContainers() );
+        schedule.entrySet().stream().forEach( entry -> startContainer( project, entry.getKey(), entry.getValue() ) );
     }
 
     @Override
     public Collection<ContainerInstance> getInstances( Project project ) {
-        return containersMap.values();
+        return containersMap.values()
+                .stream()
+                .filter( containerInstance -> containerInstance.getProject().getId().equals( project.getId() ) )
+                .collect( Collectors.toList() );
+    }
+
+    private void startContainer( Project project, Container container, Server server ) {
+        DockerClient dockerClient = createDockerClient( server );
+
+        CreateContainerCmd createContainerCmd = container.getRunConfiguration().execute( dockerClient );
+        // TODO: set ports or something else
+        CreateContainerResponse response = createContainerCmd.exec();
+
+        dockerClient.startContainerCmd( response.getId() ).exec();
+        dockerClient.logContainerCmd( response.getId() )
+                .withStdErr( true )
+                .withStdOut( true )
+                .withFollowStream( true )
+                .exec( new LogSyncCallback( response.getId() ) );
+
+        ContainerInstance instance = aContainerInstance()
+                .withInternalContainerId( response.getId() )
+                .withServer( server )
+                .withProject( project )
+                .withContainer( container )
+                .withStartDate( new Date() )
+                .build();
+
+        containersMap.put( instance.getInternalContainerId(), instance );
     }
 
     @Scheduled( fixedRate = 10000 )
     public void syncContainerInstanceStatus() {
         containersMap.values().forEach( instance -> {
-            DockerClient dockerClient = createDockerClient( getServerFromContainer( instance.getContainer() ) );
+            DockerClient dockerClient = createDockerClient( instance.getServer() );
 
             InspectContainerResponse response = dockerClient.inspectContainerCmd( instance.getInternalContainerId() ).exec();
             InspectContainerResponse.ContainerState state = response.getState();
-
-            dockerClient.logContainerCmd( instance.getInternalContainerId() )
-                    .withStdErr( true )
-                    .withStdOut( true )
-                    .exec( new ResultCallbackTemplate<ResultCallback<Frame>, Frame>() {
-                        @Override
-                        public void onNext( Frame frame ) {
-                            instance.addLog( frame.toString().replaceAll( "STDOUT:", "\n" ) );
-                        }
-                    } );
 
             if ( state.getRunning() )
                 instance.setStatus( ContainerInstance.Status.RUNNING );
@@ -97,27 +95,28 @@ public class SchedulerImpl implements Scheduler {
         } );
     }
 
-    private Server getServerFromContainer( Container container ) {
-        return ( Server ) container.getPotentialLocations()
-                .stream()
-                .filter( l -> l instanceof Server )
-                .findFirst()
-                .orElse( null );
-    }
+    @Scheduled( fixedRate = 10000 )
+    private void clearNotManagedContainers() {
+        List<Server> servers = locationService.getAllServers();
 
-    private void clearRunningContainers( DockerClient dockerClient ) {
-        List<com.github.dockerjava.api.model.Container> runningContainers = dockerClient.listContainersCmd().withShowAll( true ).exec();
-        runningContainers.forEach( runningContainer -> {
-            if ( runningContainer.getImage().equalsIgnoreCase( "swarm" ) ) return;
-            if ( runningContainer.getStatus().contains( "Up" ) )
-                dockerClient.killContainerCmd( runningContainer.getId() ).exec();
-            dockerClient.removeContainerCmd( runningContainer.getId() ).exec();
+        servers.forEach( server -> {
+            DockerClient dockerClient = createDockerClient( server );
+
+            List<com.github.dockerjava.api.model.Container> runningContainers = dockerClient.listContainersCmd().withShowAll( true ).exec();
+            runningContainers.forEach( runningContainer -> {
+                if ( runningContainer.getImage().equalsIgnoreCase( "swarm" ) ) return;
+                if ( containersMap.get( runningContainer.getId() ) == null ) {
+                    if ( runningContainer.getStatus().contains( "Up" ) )
+                        dockerClient.killContainerCmd( runningContainer.getId() ).exec();
+                    dockerClient.removeContainerCmd( runningContainer.getId() ).exec();
+                }
+            } );
         } );
     }
 
     private DockerClient createDockerClient( Server server ) {
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost( "tcp://docker.daxu.de:3376" )
+                .withDockerHost( server.getIp() )
                 .withDockerTlsVerify( true )
                 .withCustomSslConfig( new ServerSSLConfig( server ) )
                 .withApiVersion( "1.24" )
@@ -125,4 +124,19 @@ public class SchedulerImpl implements Scheduler {
         return DockerClientBuilder.getInstance( config ).build();
     }
 
+    private class LogSyncCallback extends ResultCallbackTemplate<LogContainerResultCallback, Frame> {
+
+        private String internalContainerId;
+
+        LogSyncCallback( String internalContainerId ) {
+            this.internalContainerId = internalContainerId;
+        }
+
+        @Override
+        public void onNext( Frame object ) {
+            ContainerInstance instance = containersMap.get( internalContainerId );
+            instance.addLog( object.toString().replaceAll( "STDOUT: ", "\n" ) );
+            containersMap.put( internalContainerId, instance );
+        }
+    }
 }

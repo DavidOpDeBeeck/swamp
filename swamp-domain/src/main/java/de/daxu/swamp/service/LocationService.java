@@ -34,6 +34,8 @@ public interface LocationService {
 
     List<Location> getAllLocation();
 
+    List<Server> getAllServers();
+
     Continent updateContinent( Continent continent );
 
     Datacenter updateDatacenter( Datacenter datacenter );

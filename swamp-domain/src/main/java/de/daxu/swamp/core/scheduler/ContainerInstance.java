@@ -2,6 +2,7 @@ package de.daxu.swamp.core.scheduler;
 
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
+import de.daxu.swamp.core.location.Server;
 
 import java.util.Date;
 
@@ -9,6 +10,7 @@ public class ContainerInstance {
 
     private Project project;
     private Container container;
+    private Server server;
 
     private String internalContainerId;
     private Status status;
@@ -18,9 +20,10 @@ public class ContainerInstance {
 
     private StringBuilder logs;
 
-    ContainerInstance( Project project, Container container, String internalContainerId, Status status, Date startedAt ) {
+    ContainerInstance( Project project, Container container, Server server, String internalContainerId, Status status, Date startedAt ) {
         this.project = project;
         this.container = container;
+        this.server = server;
         this.internalContainerId = internalContainerId;
         this.status = status;
         this.startedAt = startedAt;
@@ -47,6 +50,10 @@ public class ContainerInstance {
         return container;
     }
 
+    public Server getServer() {
+        return server;
+    }
+
     public String getInternalContainerId() {
         return internalContainerId;
     }
@@ -71,6 +78,7 @@ public class ContainerInstance {
 
         private Container container;
         private Project project;
+        private Server server;
         private String internalContainerId;
         private Date startDate;
 
@@ -93,13 +101,18 @@ public class ContainerInstance {
             return this;
         }
 
+        public ContainerInstanceBuilder withServer( Server server ) {
+            this.server = server;
+            return this;
+        }
+
         public ContainerInstanceBuilder withStartDate( Date startDate ) {
             this.startDate = startDate;
             return this;
         }
 
         public ContainerInstance build() {
-            return new ContainerInstance( project, container, internalContainerId, Status.STARTED, startDate );
+            return new ContainerInstance( project, container, server, internalContainerId, Status.STARTED, startDate );
         }
     }
 

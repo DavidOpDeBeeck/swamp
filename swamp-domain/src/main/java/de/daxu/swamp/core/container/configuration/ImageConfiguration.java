@@ -1,15 +1,13 @@
 package de.daxu.swamp.core.container.configuration;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table( name = "image_configuration" )
@@ -32,11 +30,8 @@ public class ImageConfiguration extends RunConfiguration {
     }
 
     @Override
-    public List<String> execute( DockerClient client ) {
-        CreateContainerResponse response = client.createContainerCmd( name ).exec();
-        return new ArrayList<String>() {{
-            add( response.getId() );
-        }};
+    public CreateContainerCmd execute( DockerClient client ) {
+        return client.createContainerCmd( name );
     }
 
     @Override

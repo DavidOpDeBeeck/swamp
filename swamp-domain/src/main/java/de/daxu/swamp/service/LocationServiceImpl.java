@@ -82,6 +82,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public List<Server> getAllServers() {
+        return serverRepository.findAll();
+    }
+
+    @Override
     public Continent updateContinent( Continent continent ) {
         return continentRepository.save( continent );
     }
