@@ -8,21 +8,23 @@ class SchedulerContainersController {
 
     getProjectContainers() {
         this.schedulerService.getProjectContainers(this.project.id)
-            .then((instances) => this.instances = instances.map((instance) => {
-                instance.startedAt = new Date(instance.startedAt).toISOString().replace("T", " ").replace("Z", "");
-                instance.finishedAt = (instance.finishedAt == null) ? "not yet finished" : new Date(instance.finishedAt).toISOString().replace("T", " ").replace("Z", "");
-                instance.logs = this.sce.trustAsHtml(instance.logs.replace(/\n/g, "<br />"));
-                return instance;
-            }));
+            .then((instances) => this.instances = instances.map((instance) => this.mapInstance(instance)));
     }
 
     refresh(instance) {
         this.schedulerService.getContainer(this.project.id, instance.container.id)
-            .then((response) => {
-                instance.startedAt = new Date(response.startedAt).toISOString().replace("T", " ").replace("Z", "");
-                instance.finishedAt = (response.finishedAt == null) ? "not yet finished" : new Date(response.finishedAt).toISOString().replace("T", " ").replace("Z", "");
-                instance.logs = this.sce.trustAsHtml(response.logs.replace(/\n/g, "<br />"));
-            });
+            .then((instance) => this.mapInstance(instance));
+    }
+
+    mapInstance(instance) {
+        instance.startedAt = this.formatDate(instance.startedAt);
+        instance.finishedAt = (instance.finishedAt == null) ? "not yet finished" : this.formatDate(instance.finishedAt);
+        instance.logs = this.sce.trustAsHtml(instance.logs.replace(/\n/g, "<br />"));
+        return instance;
+    }
+
+    formatDate(milis) {
+        return new Date(milis).toISOString().replace("T", " ").replace("Z", "");
     }
 }
 

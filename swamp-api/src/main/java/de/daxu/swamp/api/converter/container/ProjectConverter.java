@@ -15,6 +15,7 @@ public class ProjectConverter implements DTOConverter<Project, ProjectDTO> {
         dto.name = project.getName();
         dto.description = project.getDescription();
         dto.created = project.getCreated();
+        dto.containers = project.getContainers().size();
         return dto;
     }
 }

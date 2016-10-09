@@ -8,5 +8,6 @@ public class ProjectDTO {
     public String name;
     public String description;
     public Date created;
+    public int containers;
 
 }

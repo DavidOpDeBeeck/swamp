@@ -8,7 +8,10 @@
 </head>
 <body ng-app="swamp">
 <layout-header></layout-header>
-<div class="container" ui-view></div>
+<div class="container">
+    <ui-breadcrumbs displayname-property="data.displayName"></ui-breadcrumbs>
+    <ui-view></ui-view>
+</div>
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="app.js"></script>

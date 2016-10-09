@@ -1,4 +1,4 @@
-class LocationPickerController {
+class LocationPickerDirective {
     constructor() {
         this.restrict = 'E';
         this.scope = {
@@ -13,4 +13,4 @@ class LocationPickerController {
     }
 }
 
-export default LocationPickerController
+export default LocationPickerDirective
