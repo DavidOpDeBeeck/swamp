@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group margin-sm-bottom">
+            <span class="input-group-addon" id="projects-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="SchedulerContainersCtrl.filter"
+                   aria-describedby="projects-search-icon"/>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ui-sref="projects.create">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+        <uib-accordion>
+            <div uib-accordion-group class="panel-default" heading="{{ instance.container.id }}"
+                 ng-repeat="instance in SchedulerContainersCtrl.instances | filter: SchedulerContainersCtrl.filter">
+                <div class="row">
+                    <div class="col-md-12">
+                        <configuration-picker configuration="instance.container.runConfiguration"
+                                              editable="false"></configuration-picker>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="status">Container status: </label>
+                            <div class="well well-sm margin-xs-bottom" id="status" ng-bind="instance.status"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="started">Container started: </label>
+                            <div class="well well-sm margin-xs-bottom" id="started" ng-bind="instance.startedAt"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="finished">Container finished: </label>
+                            <div class="well well-sm margin-xs-bottom" id="finished"
+                                 ng-bind="instance.finishedAt"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="logs">Container logs: </label>
+                            <div class="well well-sm margin-xs-bottom" id="logs" ng-bind-html="instance.logs"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-default margin-xs-bottom pull-right"
+                                ng-click="SchedulerContainersCtrl.refresh(instance)">
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </uib-accordion>
+    </div>
+</div>

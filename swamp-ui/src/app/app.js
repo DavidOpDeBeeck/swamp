@@ -7,6 +7,7 @@ import shared from "./components/shared/shared.module";
 import home from "./components/home/home.module";
 import projects from "./components/projects/projects.module";
 import locations from "./components/locations/locations.module";
+import scheduler from "./components/scheduler/scheduler.module";
 
 const app = angular.module('swamp', [
     uiRouter,
@@ -16,7 +17,8 @@ const app = angular.module('swamp', [
     shared,
     home,
     projects,
-    locations
+    locations,
+    scheduler
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => $urlRouterProvider.otherwise("/")]);

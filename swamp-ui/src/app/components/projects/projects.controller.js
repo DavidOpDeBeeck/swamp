@@ -10,6 +10,11 @@ class ProjectsController {
             .then((projects) => this.projects = projects);
     }
 
+    deploy(project) {
+        project.$deploy()
+            .then(() => this.getAllProjects());
+    }
+
     delete(project) {
         project.$delete()
             .then(() => this.getAllProjects());

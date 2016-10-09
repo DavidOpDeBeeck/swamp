@@ -38,10 +38,6 @@ class LocationService {
         return this.continentResource.create(continent).$promise;
     }
 
-    updateContinent(continent) {
-        return this.continentResource.update(continent).$promise;
-    }
-
     getContinent(continentId) {
         return this.continentResource.get({
             id: continentId
@@ -50,10 +46,6 @@ class LocationService {
 
     createDatacenter(datacenter) {
         return this.datacentersResource.create(datacenter).$promise;
-    }
-
-    updateDatacenter(datacenter) {
-        return this.datacentersResource.update(datacenter).$promise;
     }
 
     getDatacenter(continentId, datacenterId) {
@@ -67,10 +59,6 @@ class LocationService {
 
     createServer(server) {
         return this.serversResource.create(server).$promise;
-    }
-
-    updateServer(server) {
-        return this.serversResource.update(server).$promise;
     }
 
     getServer(continentId, datacenterId, serverId) {
@@ -93,6 +81,17 @@ class LocationService {
         }).$promise.then((datacenters) => datacenters.map((datacenter) => this.mapDatacenter(continentId, datacenter)));
     }
 
+    getAllServers(continentId, datacenterId) {
+        return this.serversResource.query({
+            continentId: continentId,
+            datacenterId: datacenterId
+        }).$promise.then((datacenters) => datacenters.map((server) => this.mapServer(continentId, datacenterId, server)));
+    }
+
+    getAllLocations() {
+        return this.locationResource.query().$promise;
+    }
+
     mapDatacenter(continentId, datacenter) {
         datacenter['continentId'] = continentId;
         datacenter['datacenterId'] = datacenter.id;
@@ -104,17 +103,6 @@ class LocationService {
         server['datacenterId'] = datacenterId;
         server['serverId'] = server.id;
         return server;
-    }
-
-    getAllServers(continentId, datacenterId) {
-        return this.serversResource.query({
-            continentId: continentId,
-            datacenterId: datacenterId
-        }).$promise.then((datacenters) => datacenters.map((server) => this.mapServer(continentId, datacenterId, server)));
-    }
-
-    getAllLocations() {
-        return this.locationResource.query().$promise;
     }
 }
 

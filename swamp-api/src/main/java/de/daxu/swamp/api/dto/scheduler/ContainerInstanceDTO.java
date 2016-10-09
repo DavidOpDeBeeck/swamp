@@ -12,7 +12,7 @@ public class ContainerInstanceDTO {
     public Date startedAt;
     public Date finishedAt;
     public ServerDTO server;
-    public ContainerDTO containerId;
+    public ContainerDTO container;
     public String logs;
 
 }

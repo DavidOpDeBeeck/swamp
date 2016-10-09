@@ -13,7 +13,7 @@ class DatacenterEditController {
     }
 
     edit() {
-        this.locationService.updateDatacenter(this.datacenter)
+        this.datacenter.$update()
             .then((datacenter) => {
                 this.$scope.$close(true);
                 this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {

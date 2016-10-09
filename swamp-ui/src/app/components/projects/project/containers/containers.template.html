@@ -11,26 +11,35 @@
             </button>
         </span>
     </div>
-    <div class="panel panel-default" ng-repeat="container in ContainersCtrl.containers | filter: ContainersCtrl.filter">
-        <div class="panel-heading" ng-bind="container.id"></div>
-        <div class="panel-body">
-            <configuration-picker configuration="container.runConfiguration" editable="false"></configuration-picker>
-            <div class="form-group">
-                <label for="arguments">Container arguments: </label>
-                <div class="well well-sm margin-xs-bottom" id="arguments" ng-hide="configurationPicker.editable">
-                    {{ container.arguments }}
+    <uib-accordion>
+        <div uib-accordion-group class="panel-default" heading="{{ container.id }}"
+             ng-repeat="container in ContainersCtrl.containers | filter: ContainersCtrl.filter">
+            <div class="row">
+                <div class="col-md-12">
+                    <configuration-picker configuration="container.runConfiguration"
+                                          editable="false"></configuration-picker>
+                </div>
+                <div class="col-md-12" ng-show="container.arguments">
+                    <div class="form-group">
+                        <label for="arguments">Container arguments: </label>
+                        <div class="well well-sm margin-xs-bottom" id="arguments" ng-bind="container.arguments"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <location-picker locations="container.potentialLocations" editable="false"></location-picker>
+                </div>
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-sm btn-danger pull-right"
+                            ng-click="ContainersCtrl.delete(container)">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-warning pull-right margin-xs-right"
+                            ui-sref="projects.project.containers.container.edit({projectId: ContainersCtrl.project.id, containerId: container.id})">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
-            <location-picker locations="container.potentialLocations" editable="false"></location-picker>
         </div>
-        <div class="panel-footer clearfix">
-            <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="ContainersCtrl.delete(container)">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="btn btn-sm btn-warning pull-right margin-xs-right"
-                    ui-sref="projects.project.containers.container.edit({projectId: ContainersCtrl.project.id, containerId: container.id})">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            </button>
-        </div>
-    </div>
+</div>
+</uib-accordion>
 </div>

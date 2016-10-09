@@ -14,7 +14,7 @@ class ServerEditController {
     }
 
     edit() {
-        this.locationService.updateServer(this.server)
+        this.server.$update()
             .then((server) => {
                 this.$scope.$close(true);
                 this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {

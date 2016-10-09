@@ -11,6 +11,8 @@ import de.daxu.swamp.api.dto.container.ProjectDTO;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
+import de.daxu.swamp.core.scheduler.Scheduler;
+import de.daxu.swamp.core.scheduler.strategy.FairStrategy;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping( value = "/projects" )
 public class ProjectEndpoint {
+
+    @Autowired
+    Scheduler scheduler;
 
     @Autowired
     ProjectService projectService;
@@ -67,6 +72,13 @@ public class ProjectEndpoint {
         projectService.updateProject( oldProject );
 
         return new ResponseEntity<>( projectConverter.toDTO( oldProject ), HttpStatus.OK );
+    }
+
+    @RequestMapping( value = "/{id}", params = { "action=deploy" }, method = RequestMethod.POST )
+    public ResponseEntity deployProject( @PathVariable( "id" ) String id ) {
+        Project project = projectService.getProject( id );
+        scheduler.schedule( project, new FairStrategy() );
+        return new ResponseEntity( HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{id}", method = RequestMethod.DELETE )

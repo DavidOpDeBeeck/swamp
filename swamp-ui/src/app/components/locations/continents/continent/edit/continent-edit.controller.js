@@ -12,7 +12,7 @@ class ContinentEditController {
     }
 
     edit() {
-        this.locationService.updateContinent(this.continent)
+        this.continent.$update()
             .then((continent) => {
                 this.$scope.$close(true);
                 this.navigationService.goTo('continents.continent.datacenters', {continentId: continent.id});

@@ -20,7 +20,7 @@ class ContainerEditController {
     }
 
     edit() {
-        this.projectService.updateContainer(this.container)
+        this.container.$update()
             .then((container) => {
                 this.$scope.$close(true);
                 this.navigationService.goTo('projects.project.containers', {projectId: this.project.id});

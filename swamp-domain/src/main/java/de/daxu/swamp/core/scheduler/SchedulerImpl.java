@@ -40,6 +40,14 @@ public class SchedulerImpl implements Scheduler {
     }
 
     @Override
+    public Collection<Project> getProjects() {
+        return containersMap.values()
+                .stream()
+                .map( ContainerInstance::getProject )
+                .collect( Collectors.toSet() );
+    }
+
+    @Override
     public Collection<ContainerInstance> getInstances( Project project ) {
         return containersMap.values()
                 .stream()
@@ -135,7 +143,7 @@ public class SchedulerImpl implements Scheduler {
         @Override
         public void onNext( Frame object ) {
             ContainerInstance instance = containersMap.get( internalContainerId );
-            instance.addLog( object.toString().replaceAll( "STDOUT: ", "\n" ) );
+            instance.addLog( object.toString().replaceAll( "STDOUT: ", "\n" ).replaceAll( "STDERR: ", "\n" ) );
             containersMap.put( internalContainerId, instance );
         }
     }

@@ -15,8 +15,9 @@
         <div class="panel panel-default" ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter"
              ui-sref-active="panel-primary">
             <div class="panel-heading" ng-bind="project.name"></div>
+            <div class="panel-body" ng-bind="project.description"></div>
             <div class="panel-footer clearfix">
-                <button type="button" class="btn btn-sm btn-primary">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="ProjectCtrl.deploy(project)">
                     Deploy
                 </button>
                 <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="ProjectCtrl.delete(project)">
