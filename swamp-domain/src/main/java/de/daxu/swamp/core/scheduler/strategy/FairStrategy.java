@@ -33,6 +33,7 @@ public class FairStrategy implements SchedulingStrategy {
         if ( potentialLocations == null )
             return null;
 
+        // TODO: when datacenter ior continent is given we need to add the servers of that continent or datacenter
         return potentialLocations.stream()
                 .filter( location -> location.getType() == LocationType.SERVER )
                 .map( Server.class::cast )

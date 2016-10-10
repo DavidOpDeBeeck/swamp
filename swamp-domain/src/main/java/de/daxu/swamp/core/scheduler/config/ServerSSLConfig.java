@@ -21,7 +21,6 @@ public class ServerSSLConfig implements SSLConfig {
     @Override
     public SSLContext getSSLContext() throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
         try {
-
             Security.addProvider( new BouncyCastleProvider() );
 
             String httpProtocols = System.getProperty( "https.protocols" );
