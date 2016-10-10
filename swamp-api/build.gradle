@@ -1,6 +1,3 @@
-group "de.daxu"
-version "1.0"
-
 buildscript {
     repositories {
         jcenter()

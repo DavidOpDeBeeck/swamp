@@ -21,3 +21,7 @@ Swamp allows for a fast and easy deployment of all your projects.
 ## Production
 
 Swamp is currently not production ready.
+
+## Versions
+
+- [v0.1-alpha](https://github.com/DavidOpDeBeeck/swamp/releases/tag/v0.1-alpha)
