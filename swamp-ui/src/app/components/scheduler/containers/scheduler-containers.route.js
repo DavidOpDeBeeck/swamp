@@ -3,6 +3,9 @@ import SchedulerContainersController from "./scheduler-containers.controller";
 export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('scheduler.containers', {
         url: "/:projectId/containers",
+        data: {
+            displayName: '{{ project.id }}',
+        },
         templateUrl: '/app/components/scheduler/containers/scheduler-containers.template.html',
         controller: SchedulerContainersController,
         controllerAs: 'SchedulerContainersCtrl',

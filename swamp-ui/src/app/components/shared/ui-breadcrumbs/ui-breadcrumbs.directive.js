@@ -1,3 +1,6 @@
+/**
+ * @author: https://github.com/michaelbromley/angularUtils/tree/master/src/directives/uiBreadcrumbs
+ */
 class BreadcrumbsDirective {
     constructor($interpolate, $state) {
         this.restrict = 'E';

@@ -4,7 +4,7 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('projects', {
         url: "/projects",
         data: {
-            displayName: 'Projects',
+            displayName: 'projects',
         },
         templateUrl: '/app/components/projects/projects.template.html',
         controller: ProjectsController,

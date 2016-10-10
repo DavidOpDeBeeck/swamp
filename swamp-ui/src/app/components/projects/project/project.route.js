@@ -3,7 +3,7 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/{projectId:.{36}}",
         template: '<ui-view />',
         data: {
-            displayName: false
+            displayName: '{{ project.id }}'
         },
         resolve: {
             project: ['ProjectService', '$stateParams', (ProjectService, $stateParams) => ProjectService.getProject($stateParams['projectId'])]
