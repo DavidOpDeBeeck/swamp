@@ -1,6 +1,7 @@
 class ContinentsController {
-    constructor(LocationService) {
+    constructor(LocationService, NavigationService) {
         this.locationService = LocationService;
+        this.navigationService = NavigationService;
         this.getAllContinents();
     }
 
@@ -10,8 +11,10 @@ class ContinentsController {
     }
 
     delete(continent) {
-        continent.$delete().then(() => this.getAllContinents());
+        continent.$delete()
+            .then(() => this.getAllContinents())
+            .then(() => this.navigationService.goTo('continents'));
     }
 }
 
-export default ['LocationService', ContinentsController]
+export default ['LocationService', 'NavigationService', ContinentsController]

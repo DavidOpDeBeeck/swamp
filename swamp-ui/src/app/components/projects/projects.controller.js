@@ -1,7 +1,7 @@
 class ProjectsController {
-    constructor(ProjectService) {
+    constructor(ProjectService, NavigationService) {
+        this.navigationService = NavigationService;
         this.projectService = ProjectService;
-        this.projects = [];
         this.getAllProjects();
     }
 
@@ -17,8 +17,9 @@ class ProjectsController {
 
     delete(project) {
         project.$delete()
-            .then(() => this.getAllProjects());
+            .then(() => this.getAllProjects())
+            .then(() => this.navigationService.goTo('projects'));
     }
 }
 
-export default ['ProjectService', ProjectsController]
+export default ['ProjectService', 'NavigationService', ProjectsController]

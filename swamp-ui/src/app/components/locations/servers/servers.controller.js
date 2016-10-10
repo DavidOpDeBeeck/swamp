@@ -1,8 +1,9 @@
 class ServersController {
-    constructor(LocationService, continent, datacenter) {
+    constructor(LocationService, NavigationService, continent, datacenter) {
         this.continent = continent;
         this.datacenter = datacenter;
         this.locationService = LocationService;
+        this.navigationService = NavigationService;
         this.getAllServers();
     }
 
@@ -12,8 +13,13 @@ class ServersController {
     }
 
     delete(server) {
-        server.$delete().then(() => this.getAllServers());
+        server.$delete()
+            .then(() => this.getAllServers())
+            .then(() => this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {
+                continentId: this.continent.id,
+                datacenterId: this.datacenter.id
+            }));
     }
 }
 
-export default ['LocationService', 'continent', 'datacenter', ServersController]
+export default ['LocationService', 'NavigationService', 'continent', 'datacenter', ServersController]
