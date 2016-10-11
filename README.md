@@ -11,6 +11,7 @@ Swamp allows for a fast and easy deployment of all your projects.
 
 #### Installation
 ```
+> (./gradlew|gradlew.bat) flywayMigrate
 > (./gradlew|gradlew.bat) :swamp-api:bootRun
 ```
 ```
