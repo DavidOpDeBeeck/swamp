@@ -13,4 +13,4 @@ class LocationPickerDirective {
     }
 }
 
-export default LocationPickerDirective
+export default () => new LocationPickerDirective()

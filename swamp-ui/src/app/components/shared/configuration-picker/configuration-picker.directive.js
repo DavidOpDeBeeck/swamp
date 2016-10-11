@@ -13,4 +13,4 @@ class RunConfigurationDirective {
     }
 }
 
-export default RunConfigurationDirective
+export default () => new RunConfigurationDirective()

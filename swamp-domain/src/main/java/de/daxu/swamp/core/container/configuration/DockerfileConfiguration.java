@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class DockerfileConfiguration extends RunConfiguration {
 
     @NotBlank( message = "{NotBlank.DockerfileConfiguration.dockerfile}" )
-    @Column( name = "name" )
+    @Column( name = "dockerfile" )
     private String dockerfile;
 
     private DockerfileConfiguration() {

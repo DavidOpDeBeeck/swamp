@@ -150,4 +150,4 @@ class BreadcrumbsDirective {
     }
 }
 
-export default BreadcrumbsDirective;
+export default ['$interpolate', '$state', ($interpolate, $state) => new BreadcrumbsDirective($interpolate, $state)];

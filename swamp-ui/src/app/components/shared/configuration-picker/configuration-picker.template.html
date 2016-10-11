@@ -10,12 +10,8 @@
         </div>
         <div ng-show="configurationPicker.configuration.type === 'IMAGE'">
             <div class="form-group">
-                <label for="name">Container image: </label>
-                <input type="text" class="form-control" id="name" ng-model="configurationPicker.configuration.name"
-                       ng-show="configurationPicker.editable"/>
-                <div class="well well-sm margin-xs-bottom" ng-hide="configurationPicker.editable">
-                    {{ configurationPicker.configuration.name }}
-                </div>
+                <label>Container image: </label>
+                <field value="configurationPicker.configuration.name" editable="configurationPicker.editable"></field>
             </div>
         </div>
     </div>

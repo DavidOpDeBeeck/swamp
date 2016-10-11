@@ -3,6 +3,9 @@ import ServerEditController from "./server-edit.controller";
 export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('continents.continent.datacenters.datacenter.servers.server.edit', {
         url: "/edit",
+        data: {
+            displayName: 'edit',
+        },
         onEnter: ['$uibModal', 'continent', 'datacenter', 'server', ($uibModal, continent, datacenter, server) => {
             $uibModal.open({
                 templateUrl: "/app/components/locations/servers/server/edit/server-edit.template.html",
