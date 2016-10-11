@@ -6,7 +6,7 @@ import de.daxu.swamp.api.dto.container.configuration.ImageConfigurationDTO;
 import de.daxu.swamp.core.container.configuration.ImageConfiguration;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.container.configuration.ImageConfiguration.ImageConfigurationBuilder.imageConfigurationBuilder;
+import static de.daxu.swamp.core.container.configuration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
 
 @Component
 public class ImageConfigurationConverter implements DTOConverter<ImageConfiguration, ImageConfigurationDTO>, DomainConverter<ImageConfigurationDTO, ImageConfiguration> {
@@ -21,7 +21,7 @@ public class ImageConfigurationConverter implements DTOConverter<ImageConfigurat
 
     @Override
     public ImageConfiguration toDomain( ImageConfigurationDTO imageConfigurationDTO ) {
-        return imageConfigurationBuilder()
+        return anImageConfiguration()
                 .withName( imageConfigurationDTO.name )
                 .build();
     }

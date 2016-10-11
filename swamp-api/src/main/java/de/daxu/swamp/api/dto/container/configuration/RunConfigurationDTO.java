@@ -6,7 +6,9 @@ import de.daxu.swamp.core.container.configuration.RunConfigurationType;
 
 @JsonTypeInfo( use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true )
 @JsonSubTypes( {
-        @JsonSubTypes.Type( value = ImageConfigurationDTO.class, name = "IMAGE" )
+        @JsonSubTypes.Type( value = ImageConfigurationDTO.class, name = "IMAGE" ),
+        @JsonSubTypes.Type( value = GitConfigurationDTO.class, name = "GIT" ),
+        @JsonSubTypes.Type( value = DockerfileConfigurationDTO.class, name = "DOCKERFILE" )
 } )
 public abstract class RunConfigurationDTO {
 

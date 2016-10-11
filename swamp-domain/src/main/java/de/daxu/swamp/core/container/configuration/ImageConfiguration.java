@@ -18,10 +18,10 @@ public class ImageConfiguration extends RunConfiguration {
     @Column( name = "name" )
     private String name;
 
-    public ImageConfiguration() {
+    private ImageConfiguration() {
     }
 
-    public ImageConfiguration( String name ) {
+    private ImageConfiguration( String name ) {
         this.name = name;
     }
 
@@ -43,7 +43,7 @@ public class ImageConfiguration extends RunConfiguration {
 
         private String name;
 
-        public static ImageConfigurationBuilder imageConfigurationBuilder() {
+        public static ImageConfigurationBuilder anImageConfiguration() {
             return new ImageConfigurationBuilder();
         }
 

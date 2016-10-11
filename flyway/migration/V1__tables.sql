@@ -1,3 +1,4 @@
+
 -- -----------------------------------------------------
 -- Table `project`
 -- -----------------------------------------------------
@@ -25,8 +26,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `container` (
   `id` VARCHAR(255) NOT NULL,
-  `arguments` VARCHAR(255),
   `run_configuration_id` VARCHAR(255) NOT NULL,
+  `arguments` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_container_run_configuration1_idx` (`run_configuration_id` ASC),
   CONSTRAINT `fk_container_run_configuration1`
@@ -61,12 +62,12 @@ CREATE TABLE IF NOT EXISTS `container_location` (
   CONSTRAINT `fk_container_has_location_container1`
     FOREIGN KEY (`container_id`)
     REFERENCES `container` (`id`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_container_has_location_location1`
     FOREIGN KEY (`location_id`)
     REFERENCES `location` (`id`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -197,6 +198,42 @@ CREATE TABLE IF NOT EXISTS `datacenter_server` (
   CONSTRAINT `fk_datacenter_has_server_server1`
     FOREIGN KEY (`server_id`)
     REFERENCES `server` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `git_configuration`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `git_configuration` (
+  `id` VARCHAR(255) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `username` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NULL,
+  `branch` VARCHAR(45) NOT NULL,
+  `path` VARCHAR(45) NOT NULL,
+  INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_image_configuration_run_configuration10`
+    FOREIGN KEY (`id`)
+    REFERENCES `run_configuration` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `dockerfile_configuration`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dockerfile_configuration` (
+  `id` VARCHAR(255) NOT NULL,
+  `dockerfile` TEXT NOT NULL,
+  INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_image_configuration_run_configuration11`
+    FOREIGN KEY (`id`)
+    REFERENCES `run_configuration` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

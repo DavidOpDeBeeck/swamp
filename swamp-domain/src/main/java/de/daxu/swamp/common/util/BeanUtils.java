@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class BeanUtils {
 
-    public static String[] getNullPropertyNames( Object source ) {
+    private static String[] getNullPropertyNames( Object source ) {
         final BeanWrapper wrappedSource = new BeanWrapperImpl( source );
         return Stream.of( wrappedSource.getPropertyDescriptors() )
                 .map( FeatureDescriptor::getName )
