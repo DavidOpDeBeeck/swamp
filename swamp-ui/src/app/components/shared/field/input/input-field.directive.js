@@ -1,3 +1,5 @@
+import InputFieldController from "./input-field.controller";
+
 class InputFieldDirective {
     constructor() {
         this.restrict = 'E';
@@ -8,11 +10,7 @@ class InputFieldDirective {
         };
         this.bindToController = true;
         this.replace = true;
-        this.controller = class Controller {
-            constructor() {
-                this.id = this.label.toLowerCase().replace(" ", "-");
-            }
-        };
+        this.controller = InputFieldController;
         this.controllerAs = 'field';
         this.templateUrl = '/app/components/shared/field/input/input-field.template.html';
     }

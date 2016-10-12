@@ -1,3 +1,5 @@
+import LocationPickerController from "./location-picker.controller";
+
 class LocationPickerDirective {
     constructor() {
         this.restrict = 'E';
@@ -7,7 +9,7 @@ class LocationPickerDirective {
         };
         this.bindToController = true;
         this.replace = true;
-        this.controller = 'LocationPickerController';
+        this.controller = LocationPickerController;
         this.controllerAs = 'locationPicker';
         this.templateUrl = '/app/components/shared/location-picker/location-picker.template.html';
     }

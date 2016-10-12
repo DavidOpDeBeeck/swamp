@@ -1,4 +1,6 @@
-class RunConfigurationDirective {
+import ConfigurationPickerController from "./configuration-picker.controller";
+
+class ConfigurationPickerDirective {
     constructor() {
         this.restrict = 'E';
         this.scope = {
@@ -7,10 +9,10 @@ class RunConfigurationDirective {
         };
         this.bindToController = true;
         this.replace = true;
-        this.controller = 'ConfigurationPickerController';
+        this.controller = ConfigurationPickerController;
         this.controllerAs = 'configurationPicker';
         this.templateUrl = '/app/components/shared/configuration-picker/configuration-picker.template.html';
     }
 }
 
-export default () => new RunConfigurationDirective()
+export default () => new ConfigurationPickerDirective()
