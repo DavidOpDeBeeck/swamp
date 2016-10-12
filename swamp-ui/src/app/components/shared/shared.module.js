@@ -4,7 +4,7 @@ import LocationPickerController from "./location-picker/location-picker.controll
 import ConfigurationPickerDirective from "./configuration-picker/configuration-picker.directive";
 import LocationPickerDirective from "./location-picker/location-picker.directive";
 import BreadcrumbsDirective from "./ui-breadcrumbs/ui-breadcrumbs.directive";
-import FieldDirective from "./field/field.directive";
+import InputFieldDirective from "./field/input/input-field.directive";
 
 const module = angular.module('swamp.shared', ['swamp.services', 'ui.bootstrap'])
     .controller('ConfigurationPickerController', ConfigurationPickerController)
@@ -12,6 +12,6 @@ const module = angular.module('swamp.shared', ['swamp.services', 'ui.bootstrap']
     .directive('configurationPicker', ConfigurationPickerDirective)
     .directive('locationPicker', LocationPickerDirective)
     .directive('uiBreadcrumbs', BreadcrumbsDirective)
-    .directive('field', FieldDirective);
+    .directive('inputField', InputFieldDirective);
 
 export default module.name;

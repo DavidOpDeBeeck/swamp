@@ -1,74 +1,70 @@
-<div class="row">
-    <div class="col-md-12">
-        <div ng-show="configurationPicker.editable">
+<div class="configuration-picker">
+    <div class="row">
+        <div class="col-md-12">
+            <div ng-show="configurationPicker.editable">
+                <div class="form-group">
+                    <label for="configuration-type">Container type: </label>
+                    <select id="configuration-type" class="form-control"
+                            ng-model="configurationPicker.configuration.type">
+                        <option value="" disabled>Select a configuration</option>
+                        <option value="IMAGE">Image</option>
+                        <option value="GIT">Git</option>
+                        <option value="DOCKERFILE">Dockerfile</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="configurationPicker.configuration.type === 'IMAGE'">
+        <div class="col-md-12">
+            <input-field label="Image name" value="configurationPicker.configuration.name"
+                         editable="configurationPicker.editable"></input-field>
+        </div>
+    </div>
+    <div ng-show="configurationPicker.configuration.type === 'GIT'">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input-field label="Git url" value="configurationPicker.configuration.url"
+                                 editable="configurationPicker.editable"></input-field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input-field label="Git branch" value="configurationPicker.configuration.branch"
+                                 editable="configurationPicker.editable"></input-field>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input-field label="Git path" value="configurationPicker.configuration.path"
+                                 editable="configurationPicker.editable"></input-field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input-field label="Git username" value="configurationPicker.configuration.username"
+                                 editable="configurationPicker.editable"></input-field>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input-field label="Git password" value="configurationPicker.configuration.password"
+                                 editable="configurationPicker.editable"></input-field>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="configurationPicker.configuration.type === 'DOCKERFILE'">
+        <div class="col-md-12">
             <div class="form-group">
-                <label for="configuration-type">Container type: </label>
-                <select id="configuration-type" class="form-control" ng-model="configurationPicker.configuration.type">
-                    <option value="IMAGE">Image</option>
-                    <option value="GIT">Git</option>
-                    <option value="DOCKERFILE">Dockerfile</option>
-                </select>
-            </div>
-        </div>
-        <div ng-show="configurationPicker.configuration.type === 'IMAGE'">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Image name: </label>
-                        <field value="configurationPicker.configuration.name"
-                               editable="configurationPicker.editable"></field>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div ng-show="configurationPicker.configuration.type === 'GIT'">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Git url: </label>
-                        <field value="configurationPicker.configuration.url"
-                               editable="configurationPicker.editable"></field>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Git branch: </label>
-                        <field value="configurationPicker.configuration.branch"
-                               editable="configurationPicker.editable"></field>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Git path: </label>
-                        <field value="configurationPicker.configuration.path"
-                               editable="configurationPicker.editable"></field>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Git username: </label>
-                        <field value="configurationPicker.configuration.username"
-                               editable="configurationPicker.editable"></field>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Git password: </label>
-                        <field value="configurationPicker.configuration.password"
-                               editable="configurationPicker.editable"></field>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div ng-show="configurationPicker.configuration.type === 'DOCKERFILE'">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Dockerfile: </label>
-                        <textarea rows="10" class="form-control"
-                                  ng-model="configurationPicker.configuration.dockerfile"></textarea>
-                    </div>
-                </div>
+                <label for="dockerfile">Dockerfile: </label>
+                <textarea id="dockerfile" rows="10" class="form-control"
+                          ng-model="configurationPicker.configuration.dockerfile"></textarea>
             </div>
         </div>
     </div>

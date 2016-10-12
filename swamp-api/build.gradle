@@ -26,7 +26,7 @@ bootRepackage {
 }
 
 dependencies {
-    compile project(":swamp-domain")
+    compile project(":swamp-core")
     compile "mysql:mysql-connector-java:$mysqlVersion"
     compile "org.springframework:spring-jdbc:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-web"

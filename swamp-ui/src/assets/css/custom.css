@@ -3,3 +3,7 @@
     color: #ccc;
     content: "/\00a0";
 }
+
+textarea {
+    resize: vertical;
+}
