@@ -1,19 +1,20 @@
 <!doctype html>
 <html>
-<head>
-    <title>Swamp</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/css/bootstrap-spacing.css"/>
-    <link rel="stylesheet" href="assets/css/custom.css"/>
-</head>
-<body ng-app="swamp">
-<layout-header></layout-header>
-<div class="container">
-    <ui-breadcrumbs displayname-property="data.displayName"></ui-breadcrumbs>
-    <ui-view></ui-view>
-</div>
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="app.js"></script>
-</body>
+    <head>
+        <title>Swamp</title>
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="assets/css/bootstrap-spacing.css"/>
+        <link rel="stylesheet" href="assets/css/custom.css"/>
+    </head>
+    <body ng-app="swamp">
+        <layout-header></layout-header>
+        <div class="container">
+            <ui-breadcrumbs displayname-property="data.displayName"></ui-breadcrumbs>
+            <ui-view></ui-view>
+        </div>
+        <layout-footer></layout-footer>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="app.js"></script>
+    </body>
 </html>

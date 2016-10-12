@@ -7,3 +7,17 @@
 textarea {
     resize: vertical;
 }
+
+footer > p {
+    text-transform: uppercase;
+}
+
+footer > p > a:hover {
+    text-decoration: none;
+}
+
+footer > p > .divider:after {
+    padding: 0 3px;
+    color: #ccc;
+    content: "/\00a0";
+}
