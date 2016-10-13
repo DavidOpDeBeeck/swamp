@@ -4,6 +4,10 @@
     content: "/\00a0";
 }
 
+.well.textarea {
+    white-space: pre-line
+}
+
 textarea {
     resize: vertical;
 }

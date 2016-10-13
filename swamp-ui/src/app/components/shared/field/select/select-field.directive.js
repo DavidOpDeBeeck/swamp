@@ -1,4 +1,4 @@
-import SelectFieldController from "./select-field.controller";
+import FieldController from "./../field.controller";
 
 class SelectFieldDirective {
     constructor() {
@@ -10,7 +10,7 @@ class SelectFieldDirective {
         };
         this.bindToController = true;
         this.replace = true;
-        this.controller = SelectFieldController;
+        this.controller = FieldController;
         this.controllerAs = 'field';
         this.templateUrl = '/app/components/shared/field/select/select-field.template.html';
     }

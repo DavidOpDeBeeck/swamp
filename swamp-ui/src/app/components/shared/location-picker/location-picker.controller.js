@@ -1,6 +1,6 @@
 class LocationPickerController {
     constructor(LocationService) {
-        this.availableLocations = [];
+        this.locations = this.editable && (!this.locations || this.locations.length == 0) ? [undefined] : this.locations;
         this.locationService = LocationService;
         this.getAllLocations();
     }

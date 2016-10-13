@@ -1,6 +1,5 @@
 class RunConfigurationController {
-    constructor() {
-    }
+    constructor() {}
 }
 
 export default RunConfigurationController

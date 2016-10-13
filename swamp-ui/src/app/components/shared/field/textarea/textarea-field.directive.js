@@ -1,6 +1,6 @@
 import FieldController from "./../field.controller";
 
-class InputFieldDirective {
+class TextareaFieldDirective {
     constructor() {
         this.restrict = 'E';
         this.scope = {
@@ -12,8 +12,8 @@ class InputFieldDirective {
         this.replace = true;
         this.controller = FieldController;
         this.controllerAs = 'field';
-        this.templateUrl = '/app/components/shared/field/input/input-field.template.html';
+        this.templateUrl = '/app/components/shared/field/textarea/textarea-field.template.html';
     }
 }
 
-export default () => new InputFieldDirective()
+export default () => new TextareaFieldDirective()

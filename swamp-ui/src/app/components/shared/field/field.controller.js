@@ -1,7 +1,7 @@
-class InputFieldController {
+class FieldController {
     constructor() {
         this.id = this.label.toLowerCase().replace(" ", "-");
     }
 }
 
-export default InputFieldController
+export default FieldController
