@@ -12,9 +12,9 @@
                 </button>
             </span>
         </div>
-        <uib-accordion>
+        <uib-accordion close-others="false">
             <div uib-accordion-group class="panel-default" heading="{{ instance.container.id }}"
-                 ng-repeat="instance in SchedulerContainersCtrl.instances | filter: SchedulerContainersCtrl.filter">
+                 ng-repeat="instance in SchedulerContainersCtrl.instances | filter: SchedulerContainersCtrl.filter" is-open="true">
                 <div class="row">
                     <div class="col-md-12">
                         <configuration-picker configuration="instance.container.runConfiguration"

@@ -4,6 +4,10 @@
     content: "/\00a0";
 }
 
+.panel-default > .panel-footer {
+    background-color: #ffffff;
+}
+
 .well.textarea {
     white-space: pre-line
 }
