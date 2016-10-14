@@ -4,7 +4,8 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('projects.project.containers', {
         url: "/containers",
         data: {
-            displayName: 'containers'
+            displayName: 'containers',
+            disabled: false
         },
         templateUrl: '/app/components/projects/project/containers/containers.template.html',
         controller: ContainersController,

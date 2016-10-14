@@ -3,7 +3,8 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/{continentId:.{36}}",
         template: '<ui-view />',
         data: {
-            displayName: "{{ continent.id }}"
+            displayName: "{{ continent.name }}",
+            disabled: true
         },
         resolve: {
             continent: ['LocationService', '$stateParams', (LocationService, $stateParams) => LocationService.getContinent($stateParams['continentId'])]

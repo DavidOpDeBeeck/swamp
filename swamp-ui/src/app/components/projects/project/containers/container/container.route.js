@@ -4,6 +4,7 @@ export default ['$stateProvider', ($stateProvider) => {
         template: '<ui-view />',
         data: {
             displayName: '{{ container.id }}',
+            disabled: true
         },
         resolve: {
             container: ['ProjectService', 'project', '$stateParams', (ProjectService, project, $stateParams) => ProjectService.getContainer(project.id, $stateParams['containerId'])]

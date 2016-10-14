@@ -3,10 +3,10 @@
         <ol class="breadcrumb">
             <li ng-repeat="crumb in breadcrumbs"
                 ng-class="{ active: $last }">
-                <a ui-sref="{{ crumb.route }}" ng-if="!$last">
+                <a ui-sref="{{ crumb.route }}" ng-hide="$last || crumb.disabled">
                     {{ crumb.displayName}}&nbsp;
                 </a>
-                <span ng-show="$last">{{ crumb.displayName }}</span>
+                <span ng-show="$last || crumb.disabled">{{ crumb.displayName }}<span ng-hide="$last">&nbsp;</span></span>
             </li>
         </ol>
     </div>

@@ -5,6 +5,7 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/edit",
         data: {
             displayName: 'edit',
+            disabled: true
         },
         onEnter: ['$uibModal', 'continent', 'datacenter', ($uibModal, continent, datacenter) => {
             $uibModal.open({

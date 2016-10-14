@@ -7,7 +7,7 @@ class BreadcrumbsDirective {
         this.templateUrl = '/app/components/shared/ui-breadcrumbs/ui-breadcrumbs.template.html';
         this.scope = {
             displaynameProperty: '@',
-            abstractProxyProperty: '@?'
+            disabledProperty: '@?'
         };
         this.state = $state;
         this.interpolate = $interpolate;
@@ -30,6 +30,7 @@ class BreadcrumbsDirective {
         function updateBreadcrumbsArray() {
             var workingState;
             var displayName;
+            var disabled;
             var breadcrumbs = [];
             var currentState = state.$current;
 
@@ -37,10 +38,12 @@ class BreadcrumbsDirective {
                 workingState = getWorkingState(currentState);
                 if (workingState) {
                     displayName = getDisplayName(workingState);
+                    disabled = getDisabled(workingState);
 
                     if (displayName !== false && !stateAlreadyInBreadcrumbs(workingState, breadcrumbs)) {
                         breadcrumbs.push({
                             displayName: displayName,
+                            disabled: disabled,
                             route: workingState.name
                         });
                     }
@@ -103,6 +106,31 @@ class BreadcrumbsDirective {
                 interpolationContext = (typeof currentState.locals !== 'undefined') ? currentState.locals.globals : currentState;
                 displayName = interpolate(propertyReference)(interpolationContext);
                 return displayName;
+            }
+        }
+
+        /**
+         * @Author David Op de Beeck (only doing this because other code isnt mine)
+         */
+        function getDisabled(currentState) {
+            var interpolationContext;
+            var propertyReference;
+            var disabled;
+
+            if (!scope.disabledProperty) {
+                return false;
+            }
+
+            propertyReference = getObjectValue(scope.disabledProperty, currentState);
+
+            if (propertyReference === false) {
+                return false;
+            } else if (typeof propertyReference === 'undefined') {
+                return false;
+            } else {
+                interpolationContext = (typeof currentState.locals !== 'undefined') ? currentState.locals.globals : currentState;
+                disabled = interpolate('' + propertyReference)(interpolationContext);
+                return disabled;
             }
         }
 

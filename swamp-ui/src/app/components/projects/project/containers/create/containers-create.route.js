@@ -5,6 +5,7 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/create",
         data: {
             displayName: 'create',
+            disabled: true
         },
         onEnter: ['$uibModal', 'project', ($uibModal, project) => {
             $uibModal.open({

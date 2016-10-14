@@ -5,6 +5,7 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/:projectId/containers",
         data: {
             displayName: '{{ project.id }}',
+            disabled: true
         },
         templateUrl: '/app/components/scheduler/containers/scheduler-containers.template.html',
         controller: SchedulerContainersController,

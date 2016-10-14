@@ -17,17 +17,17 @@
              ui-sref-active="panel-primary">
             <div class="panel-heading" ng-bind="continent.name"></div>
             <div class="panel-footer clearfix">
-                <button type="button" class="btn btn-sm btn-danger pull-right"
+                <button type="button" class="btn btn-xs btn-default pull-right"
                         ng-click="ContinentsCtrl.delete(continent)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-sm btn-warning pull-right margin-xs-right"
+                <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
                         ui-sref="continents.continent.edit({continentId: continent.id})">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-sm btn-info pull-right margin-xs-right"
+                <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
                         ui-sref="continents.continent.datacenters({continentId: continent.id})">
-                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    {{ continent.datacenters }} datacenters
                 </button>
             </div>
         </div>

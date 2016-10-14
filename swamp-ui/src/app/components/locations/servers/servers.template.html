@@ -14,13 +14,14 @@
             </span>
         </div>
         <div class="panel panel-default" ng-repeat="server in ServersCtrl.servers | filter: ServersCtrl.filter">
-            <div class="panel-heading">{{server.name}} @ {{server.ip}}</div>
+            <div class="panel-heading" ng-bind="server.name"></div>
+            <div class="panel-body" ng-bind="server.ip"></div>
             <div class="panel-footer clearfix">
-                <button type="button" class="btn btn-sm btn-danger pull-right"
+                <button type="button" class="btn btn-xs btn-default pull-right"
                         ng-click="ServersCtrl.delete(server)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-sm btn-warning pull-right margin-xs-right"
+                <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
                         ui-sref="continents.continent.datacenters.datacenter.servers.server.edit({continentId: ServersCtrl.continent.id, datacenterId: ServersCtrl.datacenter.id, serverId: server.id})">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>

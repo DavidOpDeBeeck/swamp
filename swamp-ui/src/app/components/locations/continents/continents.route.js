@@ -4,7 +4,8 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('continents', {
         url: "/continents",
         data: {
-            displayName: "continents"
+            displayName: "continents",
+            disabled: false
         },
         templateUrl: '/app/components/locations/continents/continents.template.html',
         controller: ContinentsController,

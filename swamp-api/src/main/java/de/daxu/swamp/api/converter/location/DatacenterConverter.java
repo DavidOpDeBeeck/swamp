@@ -20,6 +20,7 @@ public class DatacenterConverter implements DTOConverter<Datacenter, DatacenterD
         DatacenterDTO dto = new DatacenterDTO();
         dto.id = datacenter.getId();
         dto.name = datacenter.getName();
+        dto.servers = datacenter.getServers().size();
         dto.type = datacenter.getType();
         return dto;
     }

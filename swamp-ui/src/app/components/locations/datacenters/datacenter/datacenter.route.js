@@ -3,7 +3,8 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/{datacenterId:.{36}}",
         template: '<ui-view />',
         data: {
-            displayName: "{{ datacenter.id }}"
+            displayName: "{{ datacenter.name }}",
+            disabled: true
         },
         resolve: {
             datacenter: ['LocationService', 'continent', '$stateParams', (LocationService, continent, $stateParams) => LocationService.getDatacenter(continent.id, $stateParams['datacenterId'])]
