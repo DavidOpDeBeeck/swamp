@@ -2,8 +2,9 @@ import FieldDirective from "./../field.directive";
 
 class SelectFieldDirective extends FieldDirective {
     constructor() {
-        super();
-        this.templateUrl = '/app/field/select/select-field.template.html';
+        super({
+            templateUrl: '/app/field/select/select-field.template.html'
+        });
     }
 }
 

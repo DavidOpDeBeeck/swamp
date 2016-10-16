@@ -1,7 +1,12 @@
 import MultipleFieldController from "./multiple.field.controller";
 
 class MultipleFieldDirective {
-    constructor() {
+    constructor({
+        extraScope = {},
+        controller = MultipleFieldController,
+        controllerAs = 'multiple',
+        templateUrl = ''
+    }) {
         this.restrict = 'E';
         this.scope = {
             'label': '@',
@@ -11,8 +16,10 @@ class MultipleFieldDirective {
         };
         this.bindToController = true;
         this.replace = true;
-        this.controller = MultipleFieldController;
-        this.controllerAs = 'multiple';
+        this.controller = controller;
+        this.controllerAs = controllerAs;
+        this.templateUrl = templateUrl;
+        angular.extend(this.scope, extraScope);
     }
 }
 
