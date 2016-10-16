@@ -1,0 +1,9 @@
+<div class="form-group margin-xs-bottom">
+    <label for="{{ field.id }}" ng-show="field.label">{{ field.label }}: </label>
+    <input id="{{ field.id }}" type="text" class="form-control input-half" placeholder="{{ field.nameField }}" ng-model="field.value[field.nameField]" ng-show="field.editable"/>
+    <input type="text" class="form-control input-half" placeholder="{{ field.valueField }}" ng-model="field.value[field.valueField]" ng-show="field.editable"/>
+    <div class="well well-sm col-md-6" ng-hide="field.editable">{{ field.value[field.nameField] }}
+    </div>
+    <div class="well well-sm col-md-6" ng-hide="field.editable">{{ field.value[field.valueField] }}
+    </div>
+</div>

@@ -237,3 +237,35 @@ CREATE TABLE IF NOT EXISTS `dockerfile_configuration` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`port_mapping`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `port_mapping` (
+  `id` VARCHAR(255) NOT NULL,
+  `internal` INT(5) NULL,
+  `external` INT(5) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `container_has_port_mapping`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `container_port_mapping` (
+  `container_id` VARCHAR(255) NOT NULL,
+  `port_mapping_id` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`container_id`, `port_mapping_id`),
+  INDEX `fk_container_has_port_mapping_port_mapping1_idx` (`port_mapping_id` ASC),
+  INDEX `fk_container_has_port_mapping_container1_idx` (`container_id` ASC),
+  CONSTRAINT `fk_container_has_port_mapping_container1`
+    FOREIGN KEY (`container_id`)
+    REFERENCES `container` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_container_has_port_mapping_port_mapping1`
+    FOREIGN KEY (`port_mapping_id`)
+    REFERENCES `port_mapping` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

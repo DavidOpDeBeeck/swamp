@@ -2,10 +2,7 @@
     <h3 class="modal-title">Create a new Datacenter</h3>
 </div>
 <div class="modal-body">
-    <div class="form-group">
-        <label for="name">Datacenter name: </label>
-        <input type="text" class="form-control" id="name" ng-model="DatacentersCreateCtrl.datacenter.name"/>
-    </div>
+    <input-field label="Datacenter name" value="DatacentersCreateCtrl.datacenter.name" editable="true"></input-field>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" type="button" ng-click="DatacentersCreateCtrl.cancel()">Cancel</button>

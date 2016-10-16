@@ -30,6 +30,26 @@
     white-space: pre-line
 }
 
+.input-group input {
+    width: calc(100% - 5px) !important;
+    margin-right: 5px !important;
+}
+
+.input-group input.input-half {
+    display: inline-block;
+    width: calc(50% - 5px) !important;
+    margin-right: 5px !important;
+}
+
+.well.input-half:first-child {
+    margin-right: 10px !important;
+}
+
+.well.input-half {
+    display: inline-block;
+    width: calc(50% - 5px) !important;
+}
+
 textarea {
     resize: vertical;
 }

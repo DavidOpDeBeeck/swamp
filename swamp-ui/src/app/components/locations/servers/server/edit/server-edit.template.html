@@ -4,39 +4,19 @@
 <div class="modal-body">
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="name">Server name: </label>
-                <input type="text" class="form-control" id="name"
-                       ng-model="ServerEditCtrl.server.name"/>
-            </div>
+            <input-field label="Server name" value="ServerEditCtrl.server.name" editable="true"></input-field>
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="ip">Server ip: </label>
-                <input type="text" class="form-control" id="ip"
-                       ng-model="ServerEditCtrl.server.ip"/>
-            </div>
+            <input-field label="Server ip" value="ServerEditCtrl.server.ip" editable="true"></input-field>
         </div>
         <div class="col-md-12">
-            <div class="form-group">
-                <label for="ca-certificate">Server CA certificate: </label>
-                <textarea rows="5" class="form-control" id="ca-certificate"
-                          ng-model="ServerEditCtrl.server.CAcertificate"></textarea>
-            </div>
+            <textarea-field label="Server CA certificate" value="ServerEditCtrl.server.CAcertificate" editable="true"></textarea-field>
         </div>
         <div class="col-md-12">
-            <div class="form-group">
-                <label for="certificate">Server certificate: </label>
-                <textarea rows="5" class="form-control" id="certificate"
-                          ng-model="ServerEditCtrl.server.certificate"></textarea>
-            </div>
+            <textarea-field label="Server certificate" value="ServerEditCtrl.server.certificate" editable="true"></textarea-field>
         </div>
         <div class="col-md-12">
-            <div class="form-group">
-                <label for="key">Server key: </label>
-                <textarea rows="5" class="form-control" id="key"
-                          ng-model="ServerEditCtrl.server.key"></textarea>
-            </div>
+            <textarea-field label="Server key" value="ServerEditCtrl.server.key" editable="true"></textarea-field>
         </div>
     </div>
 </div>

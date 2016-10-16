@@ -5,6 +5,12 @@
     <configuration-picker configuration="ContainersCreateCtrl.container.runConfiguration" editable="true"></configuration-picker>
     <input-field label="Container arguments" value="ContainersCreateCtrl.container.arguments" editable="true"></input-field>
     <location-picker locations="ContainersCreateCtrl.container.potentialLocations" editable="true"></location-picker>
+    <multiple-property-field label="Port mappings"
+                             list="ContainersCreateCtrl.container.portMappings"
+                             entity="Port mapping"
+                             name-field="internal"
+                             value-field="external"
+                             editable="true"></multiple-property-field>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" type="button" ng-click="ContainersCreateCtrl.cancel()">Cancel</button>

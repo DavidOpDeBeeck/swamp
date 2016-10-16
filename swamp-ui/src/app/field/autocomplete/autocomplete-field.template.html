@@ -1,0 +1,7 @@
+<div class="form-group">
+    <label for="{{ field.id }}" ng-show="field.label">{{ field.label }}: </label>
+    <input id="{{ field.id }}" type="text" ng-model="field.value"
+           uib-typeahead="item as item.name for item in field.autocompleteList | filter:$viewValue"
+           class="form-control" ng-show="field.editable">
+    <div class="well well-sm margin-xs-bottom" ng-hide="field.editable">{{ field.value.name }}</div>
+</div>

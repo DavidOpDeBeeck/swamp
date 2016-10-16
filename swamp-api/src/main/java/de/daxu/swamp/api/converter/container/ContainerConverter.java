@@ -19,6 +19,9 @@ public class ContainerConverter implements DTOConverter<Container, ContainerDTO>
     @Autowired
     LocationConverter locationConverter;
 
+    @Autowired
+    PortMappingConverter portMappingConverter;
+
     @Override
     public ContainerDTO toDTO( Container container ) {
         ContainerDTO dto = new ContainerDTO();
@@ -26,6 +29,7 @@ public class ContainerConverter implements DTOConverter<Container, ContainerDTO>
         dto.arguments = container.getArguments();
         dto.runConfiguration = configurationConverter.toDTO( container.getRunConfiguration() );
         dto.potentialLocations = container.getPotentialLocations().stream().map( locationConverter::toDTO ).collect( Collectors.toList() );
+        dto.portMappings = container.getPortMappings().stream().map( portMappingConverter::toDTO ).collect( Collectors.toList() );
         return dto;
     }
 }

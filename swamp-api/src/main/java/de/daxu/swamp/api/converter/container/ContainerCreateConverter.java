@@ -21,6 +21,9 @@ public class ContainerCreateConverter implements DomainConverter<ContainerCreate
     @Autowired
     RunConfigurationConverter configurationConverter;
 
+    @Autowired
+    PortMappingConverter portMappingConverter;
+
     @Override
     public Container toDomain( ContainerCreateDTO dto ) {
         return aContainer()
@@ -28,6 +31,9 @@ public class ContainerCreateConverter implements DomainConverter<ContainerCreate
                 .withRunConfiguration( configurationConverter.toDomain( dto.runConfiguration ) )
                 .withPotentialLocations( dto.potentialLocations.stream()
                         .map( locationConverter::toDomain )
+                        .collect( Collectors.toList() ) )
+                .withPortMappings( dto.portMappings.stream()
+                        .map( portMappingConverter::toDomain )
                         .collect( Collectors.toList() ) )
                 .build();
     }

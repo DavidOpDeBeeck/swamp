@@ -2,10 +2,7 @@
     <h3 class="modal-title">Create a new Continent</h3>
 </div>
 <div class="modal-body">
-    <div class="form-group">
-        <label for="name">Continent name: </label>
-        <input type="text" class="form-control" id="name" ng-model="ContinentsCreateCtrl.continent.name"/>
-    </div>
+    <input-field label="Continent name" value="ContinentsCreateCtrl.continent.name" editable="true"></input-field>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" type="button" ng-click="ContinentsCreateCtrl.cancel()">Cancel</button>

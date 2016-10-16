@@ -5,6 +5,7 @@ import de.daxu.swamp.core.container.configuration.RunConfiguration;
 import de.daxu.swamp.core.location.Location;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,13 +26,21 @@ public class Container extends Identifiable {
             inverseJoinColumns = @JoinColumn( name = "location_id", referencedColumnName = "id" ) )
     private List<Location> potentialLocations;
 
+    @OneToMany( cascade = CascadeType.ALL )
+    @JoinTable(
+            name = "container_port_mapping",
+            joinColumns = @JoinColumn( name = "container_id", referencedColumnName = "id" ),
+            inverseJoinColumns = @JoinColumn( name = "port_mapping_id", referencedColumnName = "id" ) )
+    private List<PortMapping> portMappings;
+
     private Container() {
     }
 
-    Container( String arguments, RunConfiguration runConfiguration, List<Location> potentialLocations ) {
+    private Container( String arguments, RunConfiguration runConfiguration, List<Location> potentialLocations, List<PortMapping> portMappings ) {
         this.arguments = arguments;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
+        this.portMappings = portMappings;
     }
 
     public void setArguments( String arguments ) {
@@ -46,6 +55,10 @@ public class Container extends Identifiable {
         this.potentialLocations = potentialLocations;
     }
 
+    public void setPortMappings( List<PortMapping> portMappings ) {
+        this.portMappings = portMappings;
+    }
+
     public String getArguments() {
         return arguments;
     }
@@ -58,14 +71,24 @@ public class Container extends Identifiable {
         return potentialLocations;
     }
 
+    public List<PortMapping> getPortMappings() {
+        return portMappings;
+    }
+
     public static class ContainerBuilder {
 
         private String arguments;
         private RunConfiguration runConfiguration;
         private List<Location> potentialLocations;
+        private List<PortMapping> portMappings;
 
         public static ContainerBuilder aContainer() {
             return new ContainerBuilder();
+        }
+
+        private ContainerBuilder() {
+            this.potentialLocations = new ArrayList<>();
+            this.portMappings = new ArrayList<>();
         }
 
         public ContainerBuilder withArguments( String arguments ) {
@@ -83,8 +106,13 @@ public class Container extends Identifiable {
             return this;
         }
 
+        public ContainerBuilder withPortMappings( List<PortMapping> portMappings ) {
+            this.portMappings = portMappings;
+            return this;
+        }
+
         public Container build() {
-            return new Container( arguments, runConfiguration, potentialLocations );
+            return new Container( arguments, runConfiguration, potentialLocations, portMappings );
         }
     }
 }

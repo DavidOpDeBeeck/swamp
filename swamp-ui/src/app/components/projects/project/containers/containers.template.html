@@ -31,6 +31,14 @@
                         <location-picker locations="container.potentialLocations" editable="false"></location-picker>
                     </div>
                     <div class="col-md-12">
+                        <multiple-property-field label="Port mappings"
+                                                 list="container.portMappings"
+                                                 entity="Port mapping"
+                                                 name-field="internal"
+                                                 value-field="external"
+                                                 editable="false"></multiple-property-field>
+                    </div>
+                    <div class="col-md-12">
                         <button type="button" class="btn btn-xs btn-default pull-right"
                                 ng-click="ContainersCtrl.delete(container)">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

@@ -1,29 +1,9 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="form-group">
-            <label for="potential-location">Potential Locations: </label>
-            <div class="form-group" ng-repeat="location in locationPicker.locations track by $index">
-                <div class="input-group" ng-show="locationPicker.editable">
-                    <input id="potential-location" type="text" ng-model="locationPicker.locations[$index]"
-                           uib-typeahead="location as location.name for location in locationPicker.availableLocations | filter:$viewValue"
-                           class="form-control" ng-disabled="!locationPicker.editable">
-                    <span class="input-group-btn" ng-show="locationPicker.editable">
-                        <button class="btn btn-default" type="button" ng-click="locationPicker.removeLocation($index)">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        </button>
-                    </span>
-                </div>
-                <div class="well well-sm margin-xs-bottom" ng-hide="locationPicker.editable">
-                    {{ location.type + ' ' + location.name }}
-                </div>
-            </div>
-            <div class="well well-sm margin-xs-bottom" ng-show="locationPicker.locations.length == 0">
-                No locations specified.
-            </div>
-        </div>
-        <button class="btn btn-sm btn-success" type="button" ng-click="locationPicker.addLocation()" ng-show="locationPicker.editable">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            Add location
-        </button>
+        <multiple-autocomplete-field label="Potential Locations"
+                                     entity="location"
+                                     list="locationPicker.locations"
+                                     autocomplete-list="locationPicker.availableLocations"
+                                     editable="locationPicker.editable"></multiple-autocomplete-field>
     </div>
 </div>

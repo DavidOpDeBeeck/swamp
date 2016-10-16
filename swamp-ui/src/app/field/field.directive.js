@@ -1,6 +1,6 @@
-import FieldController from "./../field.controller";
+import FieldController from "./field.controller.js";
 
-class InputFieldDirective {
+class FieldDirective {
     constructor() {
         this.restrict = 'E';
         this.scope = {
@@ -12,8 +12,7 @@ class InputFieldDirective {
         this.replace = true;
         this.controller = FieldController;
         this.controllerAs = 'field';
-        this.templateUrl = '/app/components/shared/field/input/input-field.template.html';
     }
 }
 
-export default () => new InputFieldDirective()
+export default FieldDirective

@@ -45,7 +45,7 @@ public class Project extends Identifiable {
     private Project() {
     }
 
-    Project( String name, String description, Date created, List<Container> containers ) {
+    private Project( String name, String description, Date created, List<Container> containers ) {
         this.name = name;
         this.description = description;
         this.created = created;

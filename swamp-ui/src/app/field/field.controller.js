@@ -1,6 +1,6 @@
 class FieldController {
     constructor() {
-        this.id = this.label.toLowerCase().replace(" ", "-");
+        this.id = this.label ? this.label.toLowerCase().replace(" ", "-") : "";
     }
 }
 
