@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-12">
+        <configuration-picker configuration="ContainerCtrl.container.runConfiguration"
+                              editable="ContainerCtrl.editable"></configuration-picker>
+    </div>
+    <div class="col-md-12" ng-show="ContainerCtrl.container.arguments">
+        <div class="form-group">
+            <label for="arguments">Container arguments: </label>
+            <div class="well well-sm margin-xs-bottom" id="arguments"
+                 ng-bind="container.arguments"></div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <location-picker locations="ContainerCtrl.container.potentialLocations" editable="ContainerCtrl.editable"></location-picker>
+    </div>
+    <div class="col-md-12">
+        <multiple-property-field label="Port mappings"
+                                 list="ContainerCtrl.container.portMappings"
+                                 entity="Port mapping"
+                                 name-field="internal"
+                                 value-field="external"
+                                 editable="ContainerCtrl.editable"></multiple-property-field>
+    </div>
+</div>

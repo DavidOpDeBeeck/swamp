@@ -1,43 +1,22 @@
 <div class="row">
     <div class="col-md-12">
         <div class="input-group margin-sm-bottom">
-        <span class="input-group-addon" id="containers-search-icon">
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-        </span>
+            <span class="input-group-addon" id="containers-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
             <input type="text" class="form-control" placeholder="Search" ng-model="ContainersCtrl.filter"
                    aria-describedby="containers-search-icon"/>
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ui-sref="projects.project.containers.create">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button>
-        </span>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ui-sref="projects.project.containers.create">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </span>
         </div>
         <uib-accordion close-others="false">
             <div uib-accordion-group class="panel-default" heading="{{ container.id }}"
                  ng-repeat="container in ContainersCtrl.containers | filter: ContainersCtrl.filter" is-open="true">
+                <container container="container" editable="false"></container>
                 <div class="row">
-                    <div class="col-md-12">
-                        <configuration-picker configuration="container.runConfiguration"
-                                              editable="false"></configuration-picker>
-                    </div>
-                    <div class="col-md-12" ng-show="container.arguments">
-                        <div class="form-group">
-                            <label for="arguments">Container arguments: </label>
-                            <div class="well well-sm margin-xs-bottom" id="arguments"
-                                 ng-bind="container.arguments"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <location-picker locations="container.potentialLocations" editable="false"></location-picker>
-                    </div>
-                    <div class="col-md-12">
-                        <multiple-property-field label="Port mappings"
-                                                 list="container.portMappings"
-                                                 entity="Port mapping"
-                                                 name-field="internal"
-                                                 value-field="external"
-                                                 editable="false"></multiple-property-field>
-                    </div>
                     <div class="col-md-12">
                         <button type="button" class="btn btn-xs btn-default pull-right"
                                 ng-click="ContainersCtrl.delete(container)">

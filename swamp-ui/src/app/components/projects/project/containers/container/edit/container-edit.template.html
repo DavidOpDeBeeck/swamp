@@ -2,15 +2,7 @@
     <h3 class="modal-title" ng-bind="ContainerEditCtrl.container.id"></h3>
 </div>
 <div class="modal-body">
-    <configuration-picker configuration="ContainerEditCtrl.container.runConfiguration" editable="true"></configuration-picker>
-    <input-field label="Container arguments" value="ContainerEditCtrl.container.arguments" editable="true"></input-field>
-    <location-picker locations="ContainerEditCtrl.container.potentialLocations" editable="true"></location-picker>
-    <multiple-property-field label="Port mappings"
-                             list="ContainerEditCtrl.container.portMappings"
-                             entity="Port mapping"
-                             name-field="internal"
-                             value-field="external"
-                             editable="true"></multiple-property-field>
+    <container container="ContainerEditCtrl.container" editable="true"></container>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" type="button" ng-click="ContainerEditCtrl.cancel()">Cancel</button>
