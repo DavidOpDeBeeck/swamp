@@ -1,4 +1,4 @@
-import FieldController from "./field.controller";
+import FieldController from "./../field.controller";
 
 class MultipleFieldsController extends FieldController {
     constructor() {

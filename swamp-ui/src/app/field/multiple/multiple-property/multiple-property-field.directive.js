@@ -1,5 +1,5 @@
-import MultipleFieldDirective from "./../multiple-field.directive";
-import MultiplePropertyFieldController from "./multiple-property-field.controller";
+import MultipleFieldDirective from "./../multiple-field.directive.js";
+import MultiplePropertyFieldController from "./multiple-property-field.controller.js";
 
 class MultiplePropertyFieldDirective extends MultipleFieldDirective {
     constructor() {
@@ -9,7 +9,7 @@ class MultiplePropertyFieldDirective extends MultipleFieldDirective {
                 'valueField': '@'
             },
             controller: MultiplePropertyFieldController,
-            templateUrl: '/app/field/multiple-property/multiple-property-field.template.html'
+            templateUrl: '/app/field/multiple/multiple-property/multiple-property-field.template.html'
         });
     }
 }

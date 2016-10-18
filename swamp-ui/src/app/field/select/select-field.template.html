@@ -1,5 +1,4 @@
 <div class="form-group">
     <label for="{{ field.id }}">{{ field.label }}: </label>
-    <input type="text" id="{{ field.id }}" class="form-control" ng-model="field.value" ng-show="field.editable"/>
-    <div class="well well-sm margin-xs-bottom" ng-hide="field.editable">{{ field.value }}</div>
+    <div id="{{ field.id }}" class="well well-sm margin-xs-bottom">{{ field.value }}</div>
 </div>

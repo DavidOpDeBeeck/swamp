@@ -1,11 +1,7 @@
 <div class="form-group">
-    <label for="{{ field.id }}" ng-show="field.label">{{ field.label }}: </label>
-    <div class="input-half" ng-show="field.editable">
-        <input id="{{ field.id }}" type="text" class="form-control" placeholder="{{ field.nameField }}" ng-model="field.value[field.nameField]"/>
-        <input type="text" class="form-control" placeholder="{{ field.valueField }}" ng-model="field.value[field.valueField]"/>
-    </div>
-    <div class="well-half" ng-hide="field.editable">
-        <div class="well well-sm">{{ field.value[field.nameField] }}</div>
-        <div class="well well-sm">{{ field.value[field.valueField] }}</div>
+    <label ng-show="field.label">{{ field.label }}: </label>
+    <div class="well-half">
+        <div class="well well-sm margin-off-bottom">{{ field.value[field.nameField] }}</div>
+        <div class="well well-sm margin-off-bottom">{{ field.value[field.valueField] }}</div>
     </div>
 </div>

@@ -6,8 +6,9 @@ class FieldDirective {
         extraScope = {},
         controller = FieldController,
         controllerAs = 'field',
-        templateUrl = ''
+        templateUrl = templateUrl
     }) {
+        this.url = templateUrl;
         this.restrict = 'E';
         this.scope = {
             'label': '@',
@@ -18,8 +19,15 @@ class FieldDirective {
         this.replace = true;
         this.controller = controller;
         this.controllerAs = controllerAs;
-        this.templateUrl = templateUrl;
+        this.template = '<div ng-include="templateUrl" include-replace></div>';
         angular.extend(this.scope, extraScope);
+    }
+
+    link($scope) {
+        let url = this.url;
+        if ($scope[this.controllerAs].editable)
+            url = url.replace("field.template.html", "editable-field.template.html");
+        $scope.templateUrl = url;
     }
 }
 

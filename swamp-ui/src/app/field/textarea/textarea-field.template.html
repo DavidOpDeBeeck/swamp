@@ -1,5 +1,4 @@
 <div class="form-group">
     <label for="{{ field.id }}">{{ field.label }}: </label>
-    <textarea rows="5" class="form-control" id="{{ field.id }}" ng-model="field.value" ng-show="field.editable"></textarea>
-    <div class="well well-sm margin-xs-bottom textarea" ng-hide="field.editable">{{ field.value }}</div>
+    <div id="{{ field.id }}" class="well well-sm margin-xs-bottom textarea">{{ field.value }}</div>
 </div>

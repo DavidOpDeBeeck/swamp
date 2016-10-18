@@ -1,11 +1,11 @@
-import MultipleFieldController from "./multiple.field.controller";
+import MultipleFieldController from "./multiple.field.controller.js";
 
 class MultipleFieldDirective {
     constructor({
         extraScope = {},
         controller = MultipleFieldController,
         controllerAs = 'multiple',
-        templateUrl = ''
+        templateUrl = undefined
     }) {
         this.restrict = 'E';
         this.scope = {
