@@ -27,11 +27,8 @@ public class Project extends Identifiable {
     @Column( name = "created" )
     private Date created;
 
-    @OneToMany
-    @JoinTable(
-            name = "project_container",
-            joinColumns = { @JoinColumn( name = "project_id", referencedColumnName = "id" ) },
-            inverseJoinColumns = { @JoinColumn( name = "container_id", referencedColumnName = "id" ) } )
+    @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
+    @JoinColumn( name = "project_id", referencedColumnName = "id" )
     private List<Container> containers;
 
     public void setName( String name ) {

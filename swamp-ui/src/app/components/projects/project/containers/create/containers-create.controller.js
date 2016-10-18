@@ -9,7 +9,7 @@ class ContainersCreateController {
         this.container = {
             'projectId': this.project.id,
             'runConfiguration': {},
-            'potentialLocations': [undefined]
+            'potentialLocations': []
         };
         this.getAvailableLocations();
     }

@@ -9,14 +9,12 @@ import java.util.List;
 @DiscriminatorValue( "continent" )
 public class Continent extends Location {
 
-    @OneToMany( orphanRemoval = true, cascade = CascadeType.REMOVE )
-    @JoinTable(
-            name = "continent_datacenter",
-            joinColumns = { @JoinColumn( name = "continent_id", referencedColumnName = "id" ) },
-            inverseJoinColumns = { @JoinColumn( name = "datacenter_id", referencedColumnName = "id" ) } )
+    @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
+    @JoinColumn( name = "continent_id", referencedColumnName = "id", nullable = false )
     private List<Datacenter> datacenters;
 
     private Continent() {
+        datacenters = new ArrayList<>();
     }
 
     Continent( String id, String name, List<Datacenter> datacenters ) {

@@ -5,7 +5,7 @@ repositories {
 }
 
 ext {
-    mysqlVersion = '5.1.38'
+    mysqlVersion = '6.0.4'
     hibernatCoreVersion = '5.2.3.Final'
     hibernateValidationVersion = '5.2.4.Final'
     springDataVersion = '1.10.4.RELEASE'

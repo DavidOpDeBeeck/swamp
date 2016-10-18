@@ -46,7 +46,7 @@ public class LocationServiceImpl implements LocationService {
         datacenterRepository.save( datacenter );
         continent.addDatacenter( datacenter );
         continentRepository.save( continent );
-        return datacenter;
+        return datacenterRepository.findByName( datacenter.getName() );
     }
 
     @Override

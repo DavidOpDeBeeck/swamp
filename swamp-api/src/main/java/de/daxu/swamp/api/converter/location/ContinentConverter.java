@@ -20,7 +20,7 @@ public class ContinentConverter implements DTOConverter<Continent, ContinentDTO>
         ContinentDTO dto = new ContinentDTO();
         dto.id = continent.getId();
         dto.name = continent.getName();
-        dto.datacenters = continent.getDatacenters().size();
+        dto.datacenters = continent.getDatacenters() != null ? continent.getDatacenters().size() : 0;
         dto.type = continent.getType();
         return dto;
     }

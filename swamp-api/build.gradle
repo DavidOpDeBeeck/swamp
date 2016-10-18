@@ -16,9 +16,8 @@ repositories {
 }
 
 ext {
-    mysqlVersion = "5.1.38"
+    mysqlVersion = "6.0.4"
     springVersion = "4.2.5.RELEASE"
-    springDataVersion = "1.9.2.RELEASE"
 }
 
 bootRepackage {
@@ -28,8 +27,6 @@ bootRepackage {
 dependencies {
     compile project(":swamp-core")
     compile "mysql:mysql-connector-java:$mysqlVersion"
-    compile "org.springframework:spring-jdbc:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.data:spring-data-jpa:$springDataVersion"
 }
