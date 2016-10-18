@@ -35,6 +35,26 @@ public class PortMapping extends Identifiable {
         return external;
     }
 
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
+        if ( !super.equals( o ) ) return false;
+
+        PortMapping that = ( PortMapping ) o;
+
+        if ( !internal.equals( that.internal ) ) return false;
+        return external.equals( that.external );
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + internal.hashCode();
+        result = 31 * result + external.hashCode();
+        return result;
+    }
+
     public static class PortMappingBuilder {
 
         private Integer internal;

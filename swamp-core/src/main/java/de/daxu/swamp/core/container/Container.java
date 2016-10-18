@@ -26,11 +26,8 @@ public class Container extends Identifiable {
             inverseJoinColumns = @JoinColumn( name = "location_id", referencedColumnName = "id" ) )
     private List<Location> potentialLocations;
 
-    @OneToMany( cascade = CascadeType.ALL )
-    @JoinTable(
-            name = "container_port_mapping",
-            joinColumns = @JoinColumn( name = "container_id", referencedColumnName = "id" ),
-            inverseJoinColumns = @JoinColumn( name = "port_mapping_id", referencedColumnName = "id" ) )
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    @JoinColumn( name = "container_id", referencedColumnName = "id", nullable = false )
     private List<PortMapping> portMappings;
 
     private Container() {
@@ -56,7 +53,8 @@ public class Container extends Identifiable {
     }
 
     public void setPortMappings( List<PortMapping> portMappings ) {
-        this.portMappings = portMappings;
+        this.portMappings.clear();
+        this.portMappings.addAll( portMappings );
     }
 
     public String getArguments() {

@@ -6,16 +6,16 @@ repositories {
 
 ext {
     mysqlVersion = '5.1.38'
-    hibernatEMVersion = '5.1.0.Final'
+    hibernatCoreVersion = '5.2.3.Final'
     hibernateValidationVersion = '5.2.4.Final'
-    springDataVersion = '1.9.2.RELEASE'
+    springDataVersion = '1.10.4.RELEASE'
     dockerJavaVersion = '3.0.5'
 }
 
 dependencies {
     compile "mysql:mysql-connector-java:$mysqlVersion"
     compile "com.github.docker-java:docker-java:$dockerJavaVersion"
-    compile "org.hibernate:hibernate-entitymanager:$hibernatEMVersion"
+    compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
     compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
     compile "org.springframework.data:spring-data-jpa:$springDataVersion"
 }
