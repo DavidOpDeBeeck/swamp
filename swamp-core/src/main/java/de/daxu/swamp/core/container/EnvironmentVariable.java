@@ -35,6 +35,10 @@ public class EnvironmentVariable extends Identifiable {
         return value;
     }
 
+    public String toString() {
+        return String.format( "%s=%s", name, value );
+    }
+
     public static class EnvironmentVariableBuilder {
 
         private String name;

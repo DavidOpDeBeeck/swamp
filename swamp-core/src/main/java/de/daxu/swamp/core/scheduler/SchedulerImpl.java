@@ -3,10 +3,14 @@ package de.daxu.swamp.core.scheduler;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.container.Project;
 import de.daxu.swamp.core.location.Server;
 import de.daxu.swamp.core.scheduler.action.SchedulerAction;
@@ -74,7 +78,18 @@ public class SchedulerImpl implements Scheduler {
         DockerClient dockerClient = DockerClientFactory.createClient( server );
 
         CreateContainerCmd createContainerCmd = container.getRunConfiguration().execute( dockerClient );
-        // TODO: set ports or something else
+
+        createContainerCmd.withPortBindings( container.getPortMappings().stream()
+                .map( portMapping -> {
+                    Ports.Binding internal = Ports.Binding.bindPort( portMapping.getInternal() );
+                    ExposedPort external = new ExposedPort( portMapping.getExternal() );
+                    return new PortBinding( internal, external );
+                } ).collect( Collectors.toList() ) );
+
+        createContainerCmd.withEnv( container.getEnvironmentVariables().stream()
+                .map( EnvironmentVariable::toString )
+                .collect( Collectors.toList() ) );
+
         CreateContainerResponse response = createContainerCmd.exec();
 
         dockerClient.startContainerCmd( response.getId() ).exec();
