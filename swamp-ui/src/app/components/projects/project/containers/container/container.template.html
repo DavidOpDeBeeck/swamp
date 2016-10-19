@@ -13,6 +13,16 @@
     </div>
     <div class="col-md-12">
         <multiple-property-field
+                label="Environment Variables"
+                list="ContainerCtrl.container.environmentVariables"
+                entity="Environment Variable"
+                name-field="name"
+                value-field="value"
+                editable="ContainerCtrl.editable">
+        </multiple-property-field>
+    </div>
+    <div class="col-md-12">
+        <multiple-property-field
                 label="Port mappings"
                 list="ContainerCtrl.container.portMappings"
                 entity="Port mapping"

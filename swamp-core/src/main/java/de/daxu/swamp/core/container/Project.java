@@ -5,13 +5,14 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table( name = "project" )
+@SuppressWarnings( "unused" )
 public class Project extends Identifiable {
 
     @NotBlank( message = "{NotBlank.Project.name}" )
@@ -29,7 +30,7 @@ public class Project extends Identifiable {
 
     @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
     @JoinColumn( name = "project_id", referencedColumnName = "id" )
-    private List<Container> containers;
+    private Set<Container> containers;
 
     public void setName( String name ) {
         this.name = name;
@@ -42,7 +43,7 @@ public class Project extends Identifiable {
     private Project() {
     }
 
-    private Project( String name, String description, Date created, List<Container> containers ) {
+    private Project( String name, String description, Date created, Set<Container> containers ) {
         this.name = name;
         this.description = description;
         this.created = created;
@@ -61,13 +62,13 @@ public class Project extends Identifiable {
         return created;
     }
 
-    public List<Container> getContainers() {
+    public Set<Container> getContainers() {
         return containers;
     }
 
     public boolean addContainer( Container container ) {
         if ( this.containers == null )
-            this.containers = new ArrayList<>();
+            this.containers = new HashSet<>();
         return this.containers.add( container );
     }
 
@@ -80,14 +81,14 @@ public class Project extends Identifiable {
         private String name;
         private String description;
         private Date created;
-        private List<Container> containers;
+        private Set<Container> containers;
 
         public static ProjectBuilder aProject() {
             return new ProjectBuilder();
         }
 
         ProjectBuilder() {
-            this.containers = new ArrayList<>();
+            this.containers = new HashSet<>();
         }
 
         public ProjectBuilder withName( String name ) {

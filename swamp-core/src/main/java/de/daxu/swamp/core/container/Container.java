@@ -5,11 +5,12 @@ import de.daxu.swamp.core.container.configuration.RunConfiguration;
 import de.daxu.swamp.core.location.Location;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table( name = "container" )
+@SuppressWarnings( "unused" )
 public class Container extends Identifiable {
 
     @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
@@ -24,20 +25,25 @@ public class Container extends Identifiable {
             name = "container_location",
             joinColumns = @JoinColumn( name = "container_id", referencedColumnName = "id" ),
             inverseJoinColumns = @JoinColumn( name = "location_id", referencedColumnName = "id" ) )
-    private List<Location> potentialLocations;
+    private Set<Location> potentialLocations;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     @JoinColumn( name = "container_id", referencedColumnName = "id", nullable = false )
-    private List<PortMapping> portMappings;
+    private Set<PortMapping> portMappings;
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    @JoinColumn( name = "container_id", referencedColumnName = "id", nullable = false )
+    private Set<EnvironmentVariable> environmentVariables;
 
     private Container() {
     }
 
-    private Container( String arguments, RunConfiguration runConfiguration, List<Location> potentialLocations, List<PortMapping> portMappings ) {
+    private Container( String arguments, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
         this.arguments = arguments;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
         this.portMappings = portMappings;
+        this.environmentVariables = environmentVariables;
     }
 
     public void setArguments( String arguments ) {
@@ -48,13 +54,19 @@ public class Container extends Identifiable {
         this.runConfiguration = runConfiguration;
     }
 
-    public void setPotentialLocations( List<Location> potentialLocations ) {
-        this.potentialLocations = potentialLocations;
+    public void setPotentialLocations( Set<Location> potentialLocations ) {
+        this.potentialLocations.clear();
+        this.potentialLocations.addAll( potentialLocations );
     }
 
-    public void setPortMappings( List<PortMapping> portMappings ) {
+    public void setPortMappings( Set<PortMapping> portMappings ) {
         this.portMappings.clear();
         this.portMappings.addAll( portMappings );
+    }
+
+    public void setEnvironmentVariables( Set<EnvironmentVariable> environmentVariables ) {
+        this.environmentVariables.clear();
+        this.environmentVariables.addAll( environmentVariables );
     }
 
     public String getArguments() {
@@ -65,28 +77,28 @@ public class Container extends Identifiable {
         return runConfiguration;
     }
 
-    public List<Location> getPotentialLocations() {
+    public Set<Location> getPotentialLocations() {
         return potentialLocations;
     }
 
-    public List<PortMapping> getPortMappings() {
+    public Set<PortMapping> getPortMappings() {
         return portMappings;
+    }
+
+    public Set<EnvironmentVariable> getEnvironmentVariables() {
+        return environmentVariables;
     }
 
     public static class ContainerBuilder {
 
         private String arguments;
         private RunConfiguration runConfiguration;
-        private List<Location> potentialLocations;
-        private List<PortMapping> portMappings;
+        private Set<Location> potentialLocations = new HashSet<>();
+        private Set<PortMapping> portMappings = new HashSet<>();
+        private Set<EnvironmentVariable> environmentVariables = new HashSet<>();
 
         public static ContainerBuilder aContainer() {
             return new ContainerBuilder();
-        }
-
-        private ContainerBuilder() {
-            this.potentialLocations = new ArrayList<>();
-            this.portMappings = new ArrayList<>();
         }
 
         public ContainerBuilder withArguments( String arguments ) {
@@ -99,18 +111,23 @@ public class Container extends Identifiable {
             return this;
         }
 
-        public ContainerBuilder withPotentialLocations( List<Location> potentialLocations ) {
+        public ContainerBuilder withPotentialLocations( Set<Location> potentialLocations ) {
             this.potentialLocations = potentialLocations;
             return this;
         }
 
-        public ContainerBuilder withPortMappings( List<PortMapping> portMappings ) {
+        public ContainerBuilder withPortMappings( Set<PortMapping> portMappings ) {
             this.portMappings = portMappings;
             return this;
         }
 
+        public ContainerBuilder withEnvironmentVariables( Set<EnvironmentVariable> environmentVariables ) {
+            this.environmentVariables = environmentVariables;
+            return this;
+        }
+
         public Container build() {
-            return new Container( arguments, runConfiguration, potentialLocations, portMappings );
+            return new Container( arguments, runConfiguration, potentialLocations, portMappings, environmentVariables );
         }
     }
 }

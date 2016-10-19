@@ -22,14 +22,18 @@ public class ContainerConverter implements DTOConverter<Container, ContainerDTO>
     @Autowired
     PortMappingConverter portMappingConverter;
 
+    @Autowired
+    EnvironmentVariableConverter environmentVariableConverter;
+
     @Override
     public ContainerDTO toDTO( Container container ) {
         ContainerDTO dto = new ContainerDTO();
         dto.id = container.getId();
         dto.arguments = container.getArguments();
         dto.runConfiguration = configurationConverter.toDTO( container.getRunConfiguration() );
-        dto.potentialLocations = container.getPotentialLocations().stream().map( locationConverter::toDTO ).collect( Collectors.toList() );
-        dto.portMappings = container.getPortMappings().stream().map( portMappingConverter::toDTO ).collect( Collectors.toList() );
+        dto.potentialLocations = container.getPotentialLocations().stream().map( locationConverter::toDTO ).collect( Collectors.toSet() );
+        dto.portMappings = container.getPortMappings().stream().map( portMappingConverter::toDTO ).collect( Collectors.toSet() );
+        dto.environmentVariables = container.getEnvironmentVariables().stream().map( environmentVariableConverter::toDTO ).collect( Collectors.toSet() );
         return dto;
     }
 }

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class FairStrategy implements SchedulingStrategy {
 
     @Override
-    public Map<Container, Server> createSchedule( List<Container> containers ) {
+    public Map<Container, Server> createSchedule( Set<Container> containers ) {
         Map<Container, Server> schedule = new HashMap<>();
         //TODO: this isn't a fair strategy
         containers.stream()
@@ -28,7 +28,7 @@ public class FairStrategy implements SchedulingStrategy {
     }
 
     private Set<Server> getPotentialServers( Container container ) {
-        List<Location> potentialLocations = container.getPotentialLocations();
+        Set<Location> potentialLocations = container.getPotentialLocations();
 
         if ( potentialLocations == null )
             return null;

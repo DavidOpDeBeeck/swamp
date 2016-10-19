@@ -5,8 +5,9 @@ import de.daxu.swamp.core.location.Server;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface SchedulingStrategy {
 
-    Map<Container, Server> createSchedule( List<Container> containers );
+    Map<Container, Server> createSchedule( Set<Container> containers );
 }
