@@ -6,7 +6,7 @@ import de.daxu.swamp.core.location.Server;
 
 import java.util.Date;
 
-public class ContainerInstance {
+public class ContainerInstance implements Schedulable {
 
     private Project project;
     private Container container;

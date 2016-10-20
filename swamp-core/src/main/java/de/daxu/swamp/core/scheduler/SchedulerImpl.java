@@ -3,6 +3,7 @@ package de.daxu.swamp.core.scheduler;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.PortBinding;
@@ -44,6 +45,25 @@ public class SchedulerImpl implements Scheduler {
     }
 
     @Override
+    public void start( ContainerInstance instance ) {
+        startContainer( instance.getProject(), instance.getContainer(), instance.getServer() );
+    }
+
+    @Override
+    public void stop( ContainerInstance instance ) {
+        DockerClient dockerClient = DockerClientFactory.createClient( instance.getServer() );
+
+        StopContainerCmd stopContainerCmd = dockerClient.stopContainerCmd( instance.getInternalContainerId() );
+        stopContainerCmd.exec();
+    }
+
+    @Override
+    public void restart( ContainerInstance instance ) {
+        stop(instance);
+        start( instance );
+    }
+
+    @Override
     public Collection<Project> getProjects() {
         return containersMap.values()
                 .stream()
@@ -74,7 +94,7 @@ public class SchedulerImpl implements Scheduler {
         actions.forEach( a -> a.execute( this ) );
     }
 
-    private void startContainer( Project project, Container container, Server server ) {
+    private ContainerInstance startContainer( Project project, Container container, Server server ) {
         DockerClient dockerClient = DockerClientFactory.createClient( server );
 
         CreateContainerCmd createContainerCmd = container.getRunConfiguration().execute( dockerClient );
@@ -108,7 +128,10 @@ public class SchedulerImpl implements Scheduler {
                 .build();
 
         containersMap.put( instance.getInternalContainerId(), instance );
+
+        return instance;
     }
+
 
     private class LogSyncCallback extends ResultCallbackTemplate<LogContainerResultCallback, Frame> {
 

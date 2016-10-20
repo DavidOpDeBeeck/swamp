@@ -10,8 +10,16 @@ public interface Scheduler {
 
     void schedule( Project project, SchedulingStrategy strategy );
 
+    void start( ContainerInstance instance );
+
+    void stop( ContainerInstance instance );
+
+    void restart( ContainerInstance instance );
+
+    // TODO: SchedulerManager
     Collection<Project> getProjects();
 
+    // TODO: SchedulerManager
     Collection<ContainerInstance> getInstances( Project project );
 
     void updateInternalMap( Map<String, ContainerInstance> map );
