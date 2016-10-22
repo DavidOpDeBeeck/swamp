@@ -2,25 +2,16 @@ package de.daxu.swamp.api.resource.project;
 
 import de.daxu.swamp.api.converter.container.ContainerConverter;
 import de.daxu.swamp.api.converter.container.ContainerCreateConverter;
-import de.daxu.swamp.api.converter.container.ProjectConverter;
-import de.daxu.swamp.api.converter.container.ProjectCreateConverter;
 import de.daxu.swamp.api.dto.container.ContainerCreateDTO;
 import de.daxu.swamp.api.dto.container.ContainerDTO;
-import de.daxu.swamp.api.dto.container.ProjectCreateDTO;
-import de.daxu.swamp.api.dto.container.ProjectDTO;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
-import de.daxu.swamp.core.scheduler.Scheduler;
-import de.daxu.swamp.core.scheduler.strategy.FairStrategy;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping( value = "/projects/{projectId}/containers/{containerId}" )
