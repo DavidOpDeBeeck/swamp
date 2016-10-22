@@ -12,6 +12,8 @@ import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
 import de.daxu.swamp.core.scheduler.Scheduler;
+import de.daxu.swamp.core.scheduler.SchedulerImpl;
+import de.daxu.swamp.core.scheduler.manager.SchedulingManager;
 import de.daxu.swamp.core.scheduler.strategy.FairStrategy;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
 public class ProjectResource {
 
     @Autowired
-    Scheduler scheduler;
+    SchedulingManager schedulingManager;
 
     @Autowired
     ProjectService projectService;
@@ -85,7 +87,7 @@ public class ProjectResource {
     @RequestMapping( value = "/{projectId}", params = { "action=deploy" }, method = RequestMethod.POST )
     public ResponseEntity deploy( @PathVariable( "projectId" ) String id ) {
         Project project = projectService.getProject( id );
-        scheduler.schedule( project, new FairStrategy() );
+        schedulingManager.schedule( project, new FairStrategy() );
         return new ResponseEntity( HttpStatus.OK );
     }
 

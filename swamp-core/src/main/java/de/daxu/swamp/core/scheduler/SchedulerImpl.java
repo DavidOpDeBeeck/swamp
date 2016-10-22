@@ -3,6 +3,7 @@ package de.daxu.swamp.core.scheduler;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 
 import static de.daxu.swamp.core.scheduler.ContainerInstance.ContainerInstanceBuilder.aContainerInstance;
 
-@Component
 public class SchedulerImpl implements Scheduler {
 
     @Autowired
@@ -39,44 +39,8 @@ public class SchedulerImpl implements Scheduler {
     private Map<String, ContainerInstance> containersMap = new HashMap<>();
 
     @Override
-    public void schedule( Project project, SchedulingStrategy strategy ) {
-        Map<Container, Server> schedule = strategy.createSchedule( project.getContainers() );
-        schedule.entrySet().stream().forEach( entry -> startContainer( project, entry.getKey(), entry.getValue() ) );
-    }
-
-    @Override
-    public void start( ContainerInstance instance ) {
-        startContainer( instance.getProject(), instance.getContainer(), instance.getServer() );
-    }
-
-    @Override
-    public void stop( ContainerInstance instance ) {
-        DockerClient dockerClient = DockerClientFactory.createClient( instance.getServer() );
-
-        StopContainerCmd stopContainerCmd = dockerClient.stopContainerCmd( instance.getInternalContainerId() );
-        stopContainerCmd.exec();
-    }
-
-    @Override
-    public void restart( ContainerInstance instance ) {
-        stop(instance);
-        start( instance );
-    }
-
-    @Override
-    public Collection<Project> getProjects() {
-        return containersMap.values()
-                .stream()
-                .map( ContainerInstance::getProject )
-                .collect( Collectors.toSet() );
-    }
-
-    @Override
-    public Collection<ContainerInstance> getInstances( Project project ) {
-        return containersMap.values()
-                .stream()
-                .filter( containerInstance -> containerInstance.getProject().getId().equals( project.getId() ) )
-                .collect( Collectors.toList() );
+    public ContainerInstance schedule( Container container, Server server ) {
+        return startContainer(container, server);
     }
 
     @Override
@@ -94,16 +58,16 @@ public class SchedulerImpl implements Scheduler {
         actions.forEach( a -> a.execute( this ) );
     }
 
-    private ContainerInstance startContainer( Project project, Container container, Server server ) {
+    private ContainerInstance startContainer( Container container, Server server ) {
         DockerClient dockerClient = DockerClientFactory.createClient( server );
 
         CreateContainerCmd createContainerCmd = container.getRunConfiguration().execute( dockerClient );
 
         createContainerCmd.withPortBindings( container.getPortMappings().stream()
                 .map( portMapping -> {
-                    Ports.Binding internal = Ports.Binding.bindPort( portMapping.getInternal() );
-                    ExposedPort external = new ExposedPort( portMapping.getExternal() );
-                    return new PortBinding( internal, external );
+                    ExposedPort internal = new ExposedPort( portMapping.getInternal() );
+                    Ports.Binding external = Ports.Binding.bindPort( portMapping.getExternal() );
+                    return new PortBinding( external, internal );
                 } ).collect( Collectors.toList() ) );
 
         createContainerCmd.withEnv( container.getEnvironmentVariables().stream()
@@ -122,7 +86,6 @@ public class SchedulerImpl implements Scheduler {
         ContainerInstance instance = aContainerInstance()
                 .withInternalContainerId( response.getId() )
                 .withServer( server )
-                .withProject( project )
                 .withContainer( container )
                 .withStartDate( new Date() )
                 .build();

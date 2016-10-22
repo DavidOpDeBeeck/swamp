@@ -15,43 +15,7 @@
         <uib-accordion close-others="false">
             <div uib-accordion-group class="panel-default" heading="{{ instance.container.id }}"
                  ng-repeat="instance in SchedulerContainersCtrl.instances | filter: SchedulerContainersCtrl.filter" is-open="true">
-                <div class="row">
-                    <div class="col-md-12">
-                        <configuration-picker configuration="instance.container.runConfiguration"
-                                              editable="false"></configuration-picker>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="status">Container status: </label>
-                            <div class="well well-sm margin-xs-bottom" id="status" ng-bind="instance.status"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="started">Container started: </label>
-                            <div class="well well-sm margin-xs-bottom" id="started" ng-bind="instance.startedAt"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="finished">Container finished: </label>
-                            <div class="well well-sm margin-xs-bottom" id="finished"
-                                 ng-bind="instance.finishedAt"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="logs">Container logs: </label>
-                            <div class="well well-sm margin-xs-bottom" id="logs" ng-bind-html="instance.logs"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <button class="btn btn-default margin-xs-bottom pull-right"
-                                ng-click="SchedulerContainersCtrl.refresh(instance)">
-                            Refresh
-                        </button>
-                    </div>
-                </div>
+                <container-instance project="SchedulerContainersCtrl.project" container="instance.container" initial="instance"></container-instance>
             </div>
         </uib-accordion>
     </div>

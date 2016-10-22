@@ -4,6 +4,19 @@ class SchedulerService {
         this.schedulerContainerResource = $resource('/api/scheduler/projects/:projectId/containers/:containerId', {
             projectId: '@projectId',
             containerId: '@containerId'
+        }, {
+            'start' : {
+                method: 'POST',
+                params: {'action' : 'start'}
+            },
+            'stop' : {
+                method: 'POST',
+                params: {'action' : 'stop'}
+            },
+            'restart' : {
+                method: 'POST',
+                params: {'action' : 'restart'}
+            }
         });
     }
 

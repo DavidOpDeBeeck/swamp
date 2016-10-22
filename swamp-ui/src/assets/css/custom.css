@@ -82,3 +82,8 @@ footer > p > .divider:after {
 .form-group {
     margin-bottom: 10px;
 }
+
+.container-instance #container-logs {
+    overflow: auto;
+    max-height: 300px;
+}
