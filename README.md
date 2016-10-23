@@ -26,3 +26,4 @@ Swamp is currently not production ready.
 ## Versions
 
 - [v0.1-alpha](https://github.com/DavidOpDeBeeck/swamp/releases/tag/v0.1-alpha)
+- [v0.2-alpha](https://github.com/DavidOpDeBeeck/swamp/releases/tag/v0.2-alpha)
