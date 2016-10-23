@@ -1,5 +1,5 @@
 group 'de.daxu'
-version '0.2-alpha'
+version '0.3-alpha'
 
 buildscript {
     repositories {
