@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class ContainerInstanceDTO {
 
+    public String id;
     public ContainerInstance.Status status;
     public Date startedAt;
     public Date finishedAt;

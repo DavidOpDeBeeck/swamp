@@ -1,11 +1,11 @@
-package de.daxu.swamp.scheduler.repository;
+package de.daxu.swamp.scheduler.service;
 
 import de.daxu.swamp.scheduler.ContainerInstance;
 import de.daxu.swamp.scheduler.ProjectInstance;
 
 import java.util.Set;
 
-public interface SchedulingRepository {
+public interface SchedulingService {
 
     void addProjectInstance( ProjectInstance projectInstance );
 
@@ -16,4 +16,5 @@ public interface SchedulingRepository {
     Set<ProjectInstance> getAllProjectInstances();
 
     ContainerInstance getContainerInstanceByInternalId( String internalId );
+
 }

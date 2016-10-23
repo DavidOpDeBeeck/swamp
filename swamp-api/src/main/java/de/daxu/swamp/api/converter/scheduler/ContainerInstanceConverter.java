@@ -20,6 +20,7 @@ public class ContainerInstanceConverter implements DTOConverter<ContainerInstanc
     @Override
     public ContainerInstanceDTO toDTO( ContainerInstance containerInstance ) {
         ContainerInstanceDTO dto = new ContainerInstanceDTO();
+        dto.id = containerInstance.getId();
         dto.container = containerConverter.toDTO( containerInstance.getContainer() );
         dto.server = serverConverter.toDTO( containerInstance.getServer() );
         dto.status = containerInstance.getStatus();

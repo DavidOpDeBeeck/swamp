@@ -1,13 +1,11 @@
 package de.daxu.swamp.scheduler.event;
 
-import de.daxu.swamp.scheduler.ContainerInstance;
-
 public interface EventListener {
 
-    void onCreate( ContainerInstance instance );
+    void onCreate( ContainerInstanceEvent event );
 
-    void onUpdate( ContainerInstance instance );
+    void onUpdate( ContainerInstanceEvent instance );
 
-    void onDelete( ContainerInstance instance );
+    void onDelete( ContainerInstanceEvent instance );
 
 }

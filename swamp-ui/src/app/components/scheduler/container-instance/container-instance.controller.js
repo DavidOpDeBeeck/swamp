@@ -11,7 +11,7 @@ class ContainerInstanceController {
     }
 
     getInstance() {
-        this.schedulerService.getContainer(this.project.id, this.container.id)
+        this.schedulerService.getContainer(this.project.id, this.instance.id)
             .then((instance) => this.update(instance));
     }
 

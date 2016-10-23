@@ -6,6 +6,7 @@ import de.daxu.swamp.scheduler.ContainerInstance;
 import de.daxu.swamp.scheduler.client.DockerClientFactory;
 import de.daxu.swamp.scheduler.event.EventHandler;
 import de.daxu.swamp.scheduler.manager.SchedulingManager;
+import de.daxu.swamp.scheduler.service.SchedulingService;
 import de.daxu.swamp.service.LocationService;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class ClearNotManagedContainersAction extends Action {
 
     private LocationService locationService;
 
-    public ClearNotManagedContainersAction( EventHandler eventHandler, SchedulingManager schedulingManager, LocationService locationService ) {
-        super( eventHandler, schedulingManager );
+    public ClearNotManagedContainersAction( EventHandler eventHandler, SchedulingService schedulingService, LocationService locationService ) {
+        super( eventHandler, schedulingService );
         this.locationService = locationService;
     }
 
@@ -32,7 +33,7 @@ public class ClearNotManagedContainersAction extends Action {
             List<com.github.dockerjava.api.model.Container> runningContainers = dockerClient.listContainersCmd().withShowAll( true ).exec();
             runningContainers.forEach( runningContainer -> {
                 if ( runningContainer.getImage().equalsIgnoreCase( "swarm" ) ) return;
-                if ( getSchedulingManager().getInstance( runningContainer.getId() ) == null ) {
+                if ( getSchedulingService().getContainerInstanceByInternalId( runningContainer.getId() ) == null ) {
                     if ( runningContainer.getStatus().contains( "Up" ) )
                         dockerClient.killContainerCmd( runningContainer.getId() ).exec();
                     dockerClient.removeContainerCmd( runningContainer.getId() ).exec();

@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduler.action;
 
 import de.daxu.swamp.scheduler.event.EventHandler;
 import de.daxu.swamp.scheduler.manager.SchedulingManager;
+import de.daxu.swamp.scheduler.service.SchedulingService;
 import de.daxu.swamp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,13 +17,13 @@ public class ActionFactory {
     private EventHandler eventHandler;
 
     @Autowired
-    private SchedulingManager schedulingManager;
+    private SchedulingService schedulingService;
 
     public ClearNotManagedContainersAction clearNotManagedContainers() {
-        return new ClearNotManagedContainersAction( eventHandler, schedulingManager, locationService );
+        return new ClearNotManagedContainersAction( eventHandler, schedulingService, locationService );
     }
 
     public SyncContainerInstanceAction syncContainerInstanceAction() {
-        return new SyncContainerInstanceAction( eventHandler, schedulingManager );
+        return new SyncContainerInstanceAction( eventHandler, schedulingService );
     }
 }

@@ -1,6 +1,7 @@
 package de.daxu.swamp.scheduler.command;
 
 import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.scheduler.ProjectInstance;
 import de.daxu.swamp.scheduler.command.container.CreateCommand;
 import de.daxu.swamp.scheduler.command.instance.LoggingCommand;
 import de.daxu.swamp.scheduler.command.instance.RestartCommand;
@@ -16,8 +17,8 @@ public class CommandFactory {
     @Autowired
     private EventHandler eventHandler;
 
-    public CreateCommand createCommand( Server server ) {
-        return new CreateCommand( eventHandler, server );
+    public CreateCommand createCommand( ProjectInstance projectInstance, Server server ) {
+        return new CreateCommand( eventHandler, projectInstance, server );
     }
 
     public StartCommand startCommand() {

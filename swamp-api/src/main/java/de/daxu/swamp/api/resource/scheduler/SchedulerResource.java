@@ -1,14 +1,15 @@
 package de.daxu.swamp.api.resource.scheduler;
 
-import de.daxu.swamp.api.converter.container.ProjectConverter;
 import de.daxu.swamp.api.converter.scheduler.ContainerInstanceConverter;
-import de.daxu.swamp.api.dto.container.ProjectDTO;
+import de.daxu.swamp.api.converter.scheduler.ProjectInstanceConverter;
 import de.daxu.swamp.api.dto.scheduler.ContainerInstanceDTO;
+import de.daxu.swamp.api.dto.scheduler.ProjectInstanceDTO;
 import de.daxu.swamp.core.container.Container;
-import de.daxu.swamp.core.container.Project;
 import de.daxu.swamp.scheduler.ContainerInstance;
+import de.daxu.swamp.scheduler.ProjectInstance;
 import de.daxu.swamp.scheduler.command.CommandFactory;
 import de.daxu.swamp.scheduler.manager.SchedulingManager;
+import de.daxu.swamp.scheduler.service.SchedulingService;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,6 +28,9 @@ public class SchedulerResource {
 
     @Autowired
     SchedulingManager schedulingManager;
+
+    @Autowired
+    SchedulingService schedulingService;
 
     @Autowired
     CommandFactory commandFactory;
@@ -39,65 +42,108 @@ public class SchedulerResource {
     ContainerInstanceConverter containerInstanceConverter;
 
     @Autowired
-    ProjectConverter projectConverter;
+    ProjectInstanceConverter projectInstanceConverter;
 
     @RequestMapping( value = "/projects", method = RequestMethod.GET )
-    public ResponseEntity<Collection<ProjectDTO>> getProjects() {
-        return new ResponseEntity<>( schedulingManager.getProjects()
+    public ResponseEntity<Collection<ProjectInstanceDTO>> getProjects() {
+        Collection<ProjectInstanceDTO> projectInstances = schedulingService.getAllProjectInstances()
                 .stream()
-                .map( projectConverter::toDTO )
-                .collect( Collectors.toList() ), HttpStatus.OK );
+                .map( projectInstanceConverter::toDTO )
+                .collect( Collectors.toList() );
+
+        return new ResponseEntity<>( projectInstances, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/projects/{projectId}", method = RequestMethod.GET )
-    public ResponseEntity<ProjectDTO> getProject( @PathVariable( "projectId" ) String projectId ) {
-        return new ResponseEntity<>( projectConverter.toDTO( schedulingManager.getProjects().stream()
-                .filter( p -> p.getId().equals( projectId ) )
-                .findFirst().orElse( null ) ), HttpStatus.OK );
+    public ResponseEntity<ProjectInstanceDTO> getProject( @PathVariable( "projectId" ) String projectId ) {
+        ProjectInstance projectInstance = schedulingService.getProjectInstance( projectId );
+
+        if ( projectInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        ProjectInstanceDTO projectInstanceDTO = projectInstanceConverter.toDTO( projectInstance );
+
+        return new ResponseEntity<>( projectInstanceDTO, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/projects/{projectId}/containers", method = RequestMethod.GET )
     public ResponseEntity<Collection<ContainerInstanceDTO>> getContainers( @PathVariable( "projectId" ) String projectId ) {
-        Project project = projectService.getProject( projectId );
-        return new ResponseEntity<>( project.getContainers().stream()
-                .map( schedulingManager::getInstance )
-                .filter( Objects::nonNull )
+        ProjectInstance projectInstance = schedulingService.getProjectInstance( projectId );
+
+        if ( projectInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        Collection<ContainerInstanceDTO> containerInstances = projectInstance.getContainerInstances()
+                .stream()
                 .map( containerInstanceConverter::toDTO )
-                .collect( Collectors.toList() ), HttpStatus.OK );
+                .collect( Collectors.toList() );
+
+        return new ResponseEntity<>( containerInstances, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/projects/{projectId}/containers/{containerId}", method = RequestMethod.GET )
     public ResponseEntity<ContainerInstanceDTO> getContainer( @PathVariable( "projectId" ) String projectId, @PathVariable( "containerId" ) String containerId ) {
-        Container container = projectService.getContainer( containerId );
-        ContainerInstance instance = schedulingManager.getInstance( container );
+        ProjectInstance projectInstance = schedulingService.getProjectInstance( projectId );
 
-        if (instance == null)
+        if ( projectInstance == null )
             return new ResponseEntity<>( HttpStatus.NOT_FOUND );
 
-        return new ResponseEntity<>( containerInstanceConverter.toDTO( instance ), HttpStatus.OK );
+        ContainerInstance containerInstance = projectInstance.getContainerInstance( containerId );
+
+        if ( containerInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        return new ResponseEntity<>( containerInstanceConverter.toDTO( containerInstance ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/projects/{projectId}/containers/{containerId}", params = { "action=start" }, method = RequestMethod.POST )
     public ResponseEntity startContainer( @PathVariable( "projectId" ) String projectId, @PathVariable( "containerId" ) String containerId ) {
-        Container container = projectService.getContainer( containerId );
-        ContainerInstance instance = schedulingManager.getInstance( container );
-        schedulingManager.schedule( instance, commandFactory.startCommand() );
+        ProjectInstance projectInstance = schedulingService.getProjectInstance( projectId );
+
+        if ( projectInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        ContainerInstance containerInstance = projectInstance.getContainerInstance( containerId );
+
+        if ( containerInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        schedulingManager.schedule( containerInstance, commandFactory.startCommand() );
+
         return new ResponseEntity<>( HttpStatus.OK );
     }
 
     @RequestMapping( value = "/projects/{projectId}/containers/{containerId}", params = { "action=stop" }, method = RequestMethod.POST )
     public ResponseEntity stopContainer( @PathVariable( "projectId" ) String projectId, @PathVariable( "containerId" ) String containerId ) {
-        Container container = projectService.getContainer( containerId );
-        ContainerInstance instance = schedulingManager.getInstance( container );
-        schedulingManager.schedule( instance, commandFactory.stopCommand() );
+        ProjectInstance projectInstance = schedulingService.getProjectInstance( projectId );
+
+        if ( projectInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        ContainerInstance containerInstance = projectInstance.getContainerInstance( containerId );
+
+        if ( containerInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        schedulingManager.schedule( containerInstance, commandFactory.stopCommand() );
+
         return new ResponseEntity<>( HttpStatus.OK );
     }
 
     @RequestMapping( value = "/projects/{projectId}/containers/{containerId}", params = { "action=restart" }, method = RequestMethod.POST )
     public ResponseEntity restartContainer( @PathVariable( "projectId" ) String projectId, @PathVariable( "containerId" ) String containerId ) {
-        Container container = projectService.getContainer( containerId );
-        ContainerInstance instance = schedulingManager.getInstance( container );
-        schedulingManager.schedule( instance, commandFactory.restartCommand() );
+        ProjectInstance projectInstance = schedulingService.getProjectInstance( projectId );
+
+        if ( projectInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        ContainerInstance containerInstance = projectInstance.getContainerInstance( containerId );
+
+        if ( containerInstance == null )
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+
+        schedulingManager.schedule( containerInstance, commandFactory.restartCommand() );
+
         return new ResponseEntity<>( HttpStatus.OK );
     }
 }

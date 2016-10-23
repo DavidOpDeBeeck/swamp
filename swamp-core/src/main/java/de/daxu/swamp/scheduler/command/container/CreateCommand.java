@@ -9,6 +9,7 @@ import com.github.dockerjava.api.model.Ports;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.scheduler.ProjectInstance;
 import de.daxu.swamp.scheduler.command.Command;
 import de.daxu.swamp.scheduler.event.EventHandler;
 
@@ -20,10 +21,12 @@ import static de.daxu.swamp.scheduler.client.DockerClientFactory.createClient;
 
 public class CreateCommand extends Command<Container> {
 
+    private ProjectInstance projectInstance;
     private Server server;
 
-    public CreateCommand( EventHandler eventHandler, Server server ) {
+    public CreateCommand( EventHandler eventHandler, ProjectInstance projectInstance, Server server ) {
         super( eventHandler );
+        this.projectInstance = projectInstance;
         this.server = server;
     }
 
@@ -44,6 +47,7 @@ public class CreateCommand extends Command<Container> {
         CreateContainerResponse response = command.exec();
 
         getEventHandler().onCreate( aContainerInstance()
+                .withProjectInstance( projectInstance )
                 .withInternalContainerId( response.getId() )
                 .withServer( server )
                 .withContainer( container )

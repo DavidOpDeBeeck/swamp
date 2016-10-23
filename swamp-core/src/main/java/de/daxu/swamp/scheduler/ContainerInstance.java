@@ -1,11 +1,15 @@
 package de.daxu.swamp.scheduler;
 
+import de.daxu.swamp.common.Identifiable;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.location.Server;
 
 import java.util.Date;
+import java.util.UUID;
 
-public class ContainerInstance {
+public class ContainerInstance extends Identifiable {
+
+    private ProjectInstance projectInstance;
 
     private Container container;
     private Server server;
@@ -18,13 +22,19 @@ public class ContainerInstance {
 
     private StringBuilder logs;
 
-    ContainerInstance( Container container, Server server, String internalContainerId, Status status, Date startedAt ) {
+    private ContainerInstance( ProjectInstance projectInstance, Container container, Server server, String internalContainerId, Status status, Date startedAt ) {
+        this.projectInstance = projectInstance;
+        this.id = UUID.randomUUID().toString();
         this.container = container;
         this.server = server;
         this.internalContainerId = internalContainerId;
         this.status = status;
         this.startedAt = startedAt;
         this.logs = new StringBuilder();
+    }
+
+    public ProjectInstance getProjectInstance() {
+        return projectInstance;
     }
 
     public void addLog( String logs ) {
@@ -69,6 +79,7 @@ public class ContainerInstance {
 
     public static class ContainerInstanceBuilder {
 
+        private ProjectInstance projectInstance;
         private Container container;
         private Server server;
         private String internalContainerId;
@@ -76,6 +87,11 @@ public class ContainerInstance {
 
         public static ContainerInstanceBuilder aContainerInstance() {
             return new ContainerInstanceBuilder();
+        }
+
+        public ContainerInstanceBuilder withProjectInstance( ProjectInstance projectInstance ) {
+            this.projectInstance = projectInstance;
+            return this;
         }
 
         public ContainerInstanceBuilder withInternalContainerId( String internalContainerId ) {
@@ -99,7 +115,7 @@ public class ContainerInstance {
         }
 
         public ContainerInstance build() {
-            return new ContainerInstance( container, server, internalContainerId, Status.STARTED, startDate );
+            return new ContainerInstance( projectInstance, container, server, internalContainerId, Status.STARTED, startDate );
         }
     }
 

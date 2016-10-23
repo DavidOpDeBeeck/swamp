@@ -1,16 +1,16 @@
 package de.daxu.swamp.scheduler.action;
 
 import de.daxu.swamp.scheduler.event.EventHandler;
-import de.daxu.swamp.scheduler.manager.SchedulingManager;
+import de.daxu.swamp.scheduler.service.SchedulingService;
 
 public abstract class Action {
 
     private EventHandler eventHandler;
-    private SchedulingManager schedulingManager;
+    private SchedulingService schedulingService;
 
-    public Action( EventHandler eventHandler, SchedulingManager schedulingManager ) {
+    public Action( EventHandler eventHandler, SchedulingService schedulingService ) {
         this.eventHandler = eventHandler;
-        this.schedulingManager = schedulingManager;
+        this.schedulingService = schedulingService;
     }
 
     public abstract void execute();
@@ -19,7 +19,8 @@ public abstract class Action {
         return eventHandler;
     }
 
-    public SchedulingManager getSchedulingManager() {
-        return schedulingManager;
+    public SchedulingService getSchedulingService() {
+        return schedulingService;
     }
+
 }

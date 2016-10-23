@@ -5,20 +5,24 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import de.daxu.swamp.scheduler.ContainerInstance;
 import de.daxu.swamp.scheduler.client.DockerClientFactory;
 import de.daxu.swamp.scheduler.event.EventHandler;
-import de.daxu.swamp.scheduler.manager.SchedulingManager;
+import de.daxu.swamp.scheduler.service.SchedulingService;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SyncContainerInstanceAction extends Action {
 
-    public SyncContainerInstanceAction( EventHandler eventHandler, SchedulingManager schedulingManager ) {
-        super( eventHandler, schedulingManager );
+    public SyncContainerInstanceAction( EventHandler eventHandler, SchedulingService schedulingService ) {
+        super( eventHandler, schedulingService );
     }
 
     @Override
     public void execute() {
-        Set<ContainerInstance> instances = getSchedulingManager().getAllInstances();
+        Set<ContainerInstance> instances = getSchedulingService().getAllProjectInstances()
+                .stream()
+                .flatMap( p -> p.getContainerInstances().stream() )
+                .collect( Collectors.toSet() );
 
         instances.forEach( instance -> {
             DockerClient dockerClient = DockerClientFactory.createClient( instance.getServer() );
