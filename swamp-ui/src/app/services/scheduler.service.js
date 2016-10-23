@@ -42,7 +42,7 @@ class SchedulerService {
 
     mapInstance(projectId, instance) {
         instance['projectId'] = projectId;
-        instance['containerId'] = instance.container.id;
+        instance['containerId'] = instance.id;
         return instance;
     }
 }

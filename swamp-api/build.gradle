@@ -15,18 +15,13 @@ repositories {
     maven { url "http://repo1.maven.org/maven2" }
 }
 
-ext {
-    mysqlVersion = "6.0.4"
-    springVersion = "4.2.5.RELEASE"
-}
-
 bootRepackage {
     mainClass = "de.daxu.swamp.api.Application"
 }
 
 dependencies {
     compile project(":swamp-core")
-    compile "mysql:mysql-connector-java:$mysqlVersion"
+    compile project(":swamp-scheduler")
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
 }

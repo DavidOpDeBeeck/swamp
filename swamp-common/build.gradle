@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    hibernatCoreVersion = '5.2.3.Final'
+    hibernateValidationVersion = '5.2.4.Final'
+    springBeansVersion = '4.3.2.RELEASE'
+}
+
+dependencies {
+    compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
+    compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
+    compile "org.springframework:spring-beans:$springBeansVersion"
+}

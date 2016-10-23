@@ -5,7 +5,6 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import de.daxu.swamp.common.Identifiable;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table( name = "run_configuration" )
