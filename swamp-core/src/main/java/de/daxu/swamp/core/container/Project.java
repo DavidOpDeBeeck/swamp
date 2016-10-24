@@ -24,7 +24,7 @@ public class Project extends Identifiable {
     @Column( name = "description" )
     private String description;
 
-    @NotNull( message = "{NotNull.Project.created}" )
+    @NotNull( message = "{NotNull.Project.withCreated}" )
     @Column( name = "created" )
     private Date created;
 

@@ -8,6 +8,8 @@ import de.daxu.swamp.api.dto.container.ContainerCreateDTO;
 import de.daxu.swamp.api.dto.container.ContainerDTO;
 import de.daxu.swamp.api.dto.container.ProjectCreateDTO;
 import de.daxu.swamp.api.dto.container.ProjectDTO;
+import de.daxu.swamp.common.response.Meta;
+import de.daxu.swamp.common.response.Response;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
@@ -19,12 +21,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static de.daxu.swamp.api.resource.project.ProjectResource.PROJECTS_URL;
+import static de.daxu.swamp.common.response.Response.Builder.aResponse;
+
 @RestController
-@RequestMapping( value = "/projects" )
+@RequestMapping( PROJECTS_URL )
 public class ProjectResource {
+
+    public static final String PROJECTS_URL = "/projects";
 
     @Autowired
     SchedulingManager schedulingManager;
@@ -45,62 +52,141 @@ public class ProjectResource {
     ContainerCreateConverter containerCreateConverter;
 
     @RequestMapping( method = RequestMethod.GET )
-    public ResponseEntity<Collection<ProjectDTO>> getAll() {
-        return new ResponseEntity<>( projectService.getAllProjects()
+    public ResponseEntity<Response> getAll() {
+
+        List<ProjectDTO> projects = projectService.getAllProjects()
                 .stream()
                 .map( projectConverter::toDTO )
-                .collect( Collectors.toList() ), HttpStatus.OK );
+                .collect( Collectors.toList() );
+
+        Response response = aResponse()
+                .withMeta( Meta.success() )
+                .withData( projects )
+                .build();
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public ResponseEntity<ProjectDTO> post( @RequestBody ProjectCreateDTO dto ) {
-        Project project = projectService.createProject( projectCreateConverter.toDomain( dto ) );
-        return new ResponseEntity<>( projectConverter.toDTO( project ), HttpStatus.OK );
+    public ResponseEntity<Response> post( @RequestBody ProjectCreateDTO dto ) {
+
+        Project project = projectCreateConverter.toDomain( dto );
+        project = projectService.createProject( project );
+
+        Response response = aResponse()
+                .withMeta( Meta.success() )
+                .withData( project )
+                .build();
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.GET )
-    public ResponseEntity<ProjectDTO> get( @PathVariable( "projectId" ) String id ) {
-        return new ResponseEntity<>( projectConverter.toDTO( projectService.getProject( id ) ), HttpStatus.OK );
+    public ResponseEntity<Response> get( @PathVariable( "projectId" ) String id ) {
+
+        Project project = projectService.getProject( id );
+
+        if ( project == null )
+            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
+
+        ProjectDTO projectDTO = projectConverter.toDTO( project );
+
+        Response response = aResponse()
+                .withMeta( Meta.success() )
+                .withData( projectDTO )
+                .build();
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.PUT )
-    public ResponseEntity<ProjectDTO> put( @PathVariable( "projectId" ) String id,
-                                                  @RequestBody ProjectCreateDTO dto ) {
-        Project oldProject = projectService.getProject( id );
-        Project newProject = projectCreateConverter.toDomain( dto );
+    public ResponseEntity<Response> put( @PathVariable( "projectId" ) String id,
+                                         @RequestBody ProjectCreateDTO projectCreateDTO ) {
 
-        BeanUtils.copyProperties( newProject, oldProject );
-        projectService.updateProject( oldProject );
+        Project targetProject = projectService.getProject( id );
+        Project srcProject = projectCreateConverter.toDomain( projectCreateDTO );
 
-        return new ResponseEntity<>( projectConverter.toDTO( oldProject ), HttpStatus.OK );
+        if ( targetProject == null )
+            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
+
+        BeanUtils.copyProperties( srcProject, targetProject );
+        projectService.updateProject( targetProject );
+
+        ProjectDTO projectDTO = projectConverter.toDTO( targetProject );
+
+        Response response = aResponse()
+                .withMeta( Meta.success() )
+                .withData( projectDTO )
+                .build();
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.DELETE )
-    public ResponseEntity delete( @PathVariable( "projectId" ) String id ) {
+    public ResponseEntity<Response> delete( @PathVariable( "projectId" ) String id ) {
+
         Project project = projectService.getProject( id );
+
+        if ( project == null )
+            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
+
         projectService.deleteProject( project );
-        return new ResponseEntity<>( HttpStatus.OK );
+
+        return new ResponseEntity<>( Response.success(), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{projectId}", params = { "action=deploy" }, method = RequestMethod.POST )
-    public ResponseEntity deploy( @PathVariable( "projectId" ) String id ) {
+    public ResponseEntity<Response> deploy( @PathVariable( "projectId" ) String id ) {
+
         Project project = projectService.getProject( id );
+
+        if ( project == null )
+            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
+
         schedulingManager.schedule( project, new FairStrategy() );
-        return new ResponseEntity( HttpStatus.OK );
+
+        return new ResponseEntity<>( Response.success(), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{projectId}/containers", method = RequestMethod.GET )
-    public ResponseEntity<Collection<ContainerDTO>> getContainers( @PathVariable( "projectId" ) String id ) {
-        return new ResponseEntity<>( projectService.getProject( id ).getContainers()
+    public ResponseEntity<Response> getContainers( @PathVariable( "projectId" ) String id ) {
+
+        Project project = projectService.getProject( id );
+
+        if ( project == null )
+            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
+
+        List<ContainerDTO> containers = project.getContainers()
                 .stream()
                 .map( containerConverter::toDTO )
-                .collect( Collectors.toList() ), HttpStatus.OK );
+                .collect( Collectors.toList() );
+
+        Response response = aResponse()
+                .withMeta( Meta.success() )
+                .withData( containers )
+                .build();
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{projectId}/containers", method = RequestMethod.POST )
-    public ResponseEntity<ContainerDTO> postContainer( @PathVariable( "projectId" ) String id, @RequestBody ContainerCreateDTO dto ) {
+    public ResponseEntity<Response> postContainer( @PathVariable( "projectId" ) String id,
+                                                   @RequestBody ContainerCreateDTO containerCreateDTO ) {
+
         Project project = projectService.getProject( id );
-        Container container = projectService.addContainerToProject( project, containerCreateConverter.toDomain( dto ) );
-        return new ResponseEntity<>( containerConverter.toDTO( container ), HttpStatus.OK );
+
+        if ( project == null )
+            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
+
+        Container container = containerCreateConverter.toDomain( containerCreateDTO );
+        container = projectService.addContainerToProject( project, container );
+        ContainerDTO containerDTO = containerConverter.toDTO( container );
+
+        Response response = aResponse()
+                .withMeta( Meta.success() )
+                .withData( containerDTO )
+                .build();
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 }

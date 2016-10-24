@@ -8,10 +8,12 @@ ext {
     hibernatCoreVersion = '5.2.3.Final'
     hibernateValidationVersion = '5.2.4.Final'
     springBeansVersion = '4.3.2.RELEASE'
+    jacksonVersion = '2.8.4'
 }
 
 dependencies {
     compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
     compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
     compile "org.springframework:spring-beans:$springBeansVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
 }
