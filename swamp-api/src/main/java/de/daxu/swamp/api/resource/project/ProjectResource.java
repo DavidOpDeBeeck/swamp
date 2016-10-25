@@ -1,17 +1,12 @@
 package de.daxu.swamp.api.resource.project;
 
-import de.daxu.swamp.api.converter.container.ContainerConverter;
-import de.daxu.swamp.api.converter.container.ContainerCreateConverter;
 import de.daxu.swamp.api.converter.container.ProjectConverter;
 import de.daxu.swamp.api.converter.container.ProjectCreateConverter;
-import de.daxu.swamp.api.dto.container.ContainerCreateDTO;
-import de.daxu.swamp.api.dto.container.ContainerDTO;
 import de.daxu.swamp.api.dto.container.ProjectCreateDTO;
 import de.daxu.swamp.api.dto.container.ProjectDTO;
 import de.daxu.swamp.common.response.Meta;
 import de.daxu.swamp.common.response.Response;
 import de.daxu.swamp.common.util.BeanUtils;
-import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
 import de.daxu.swamp.scheduler.manager.SchedulingManager;
 import de.daxu.swamp.scheduler.strategy.FairStrategy;
@@ -45,12 +40,6 @@ public class ProjectResource {
     @Autowired
     ProjectCreateConverter projectCreateConverter;
 
-    @Autowired
-    ContainerConverter containerConverter;
-
-    @Autowired
-    ContainerCreateConverter containerCreateConverter;
-
     @RequestMapping( method = RequestMethod.GET )
     public ResponseEntity<Response> getAll() {
 
@@ -68,9 +57,9 @@ public class ProjectResource {
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public ResponseEntity<Response> post( @RequestBody ProjectCreateDTO dto ) {
+    public ResponseEntity<Response> post( @RequestBody ProjectCreateDTO projectCreateDTO ) {
 
-        Project project = projectCreateConverter.toDomain( dto );
+        Project project = projectCreateConverter.toDomain( projectCreateDTO );
         project = projectService.createProject( project );
 
         Response response = aResponse()
@@ -82,9 +71,9 @@ public class ProjectResource {
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.GET )
-    public ResponseEntity<Response> get( @PathVariable( "projectId" ) String id ) {
+    public ResponseEntity<Response> get( @PathVariable( "projectId" ) String projectId ) {
 
-        Project project = projectService.getProject( id );
+        Project project = projectService.getProject( projectId );
 
         if ( project == null )
             return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
@@ -100,10 +89,10 @@ public class ProjectResource {
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.PUT )
-    public ResponseEntity<Response> put( @PathVariable( "projectId" ) String id,
+    public ResponseEntity<Response> put( @PathVariable( "projectId" ) String projectId,
                                          @RequestBody ProjectCreateDTO projectCreateDTO ) {
 
-        Project targetProject = projectService.getProject( id );
+        Project targetProject = projectService.getProject( projectId );
         Project srcProject = projectCreateConverter.toDomain( projectCreateDTO );
 
         if ( targetProject == null )
@@ -123,9 +112,9 @@ public class ProjectResource {
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.DELETE )
-    public ResponseEntity<Response> delete( @PathVariable( "projectId" ) String id ) {
+    public ResponseEntity<Response> delete( @PathVariable( "projectId" ) String projectId ) {
 
-        Project project = projectService.getProject( id );
+        Project project = projectService.getProject( projectId );
 
         if ( project == null )
             return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
@@ -136,9 +125,9 @@ public class ProjectResource {
     }
 
     @RequestMapping( value = "/{projectId}", params = { "action=deploy" }, method = RequestMethod.POST )
-    public ResponseEntity<Response> deploy( @PathVariable( "projectId" ) String id ) {
+    public ResponseEntity<Response> deploy( @PathVariable( "projectId" ) String projectId ) {
 
-        Project project = projectService.getProject( id );
+        Project project = projectService.getProject( projectId );
 
         if ( project == null )
             return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
@@ -146,47 +135,5 @@ public class ProjectResource {
         schedulingManager.schedule( project, new FairStrategy() );
 
         return new ResponseEntity<>( Response.success(), HttpStatus.OK );
-    }
-
-    @RequestMapping( value = "/{projectId}/containers", method = RequestMethod.GET )
-    public ResponseEntity<Response> getContainers( @PathVariable( "projectId" ) String id ) {
-
-        Project project = projectService.getProject( id );
-
-        if ( project == null )
-            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
-
-        List<ContainerDTO> containers = project.getContainers()
-                .stream()
-                .map( containerConverter::toDTO )
-                .collect( Collectors.toList() );
-
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( containers )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
-    }
-
-    @RequestMapping( value = "/{projectId}/containers", method = RequestMethod.POST )
-    public ResponseEntity<Response> postContainer( @PathVariable( "projectId" ) String id,
-                                                   @RequestBody ContainerCreateDTO containerCreateDTO ) {
-
-        Project project = projectService.getProject( id );
-
-        if ( project == null )
-            return new ResponseEntity<>( Response.notFound( "Project was not found!" ), HttpStatus.OK );
-
-        Container container = containerCreateConverter.toDomain( containerCreateDTO );
-        container = projectService.addContainerToProject( project, container );
-        ContainerDTO containerDTO = containerConverter.toDTO( container );
-
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( containerDTO )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
     }
 }
