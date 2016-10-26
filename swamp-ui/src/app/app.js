@@ -1,6 +1,7 @@
 import angular from "angular";
 import uiBootstrap from "angular-ui-bootstrap";
 import uiRouter from "angular-ui-router";
+import httpInterceptor from "./interceptors/http.interceptor.module";
 import field from "./field/field.module";
 import AppRoute from "./app.route";
 import AppConfig from "./app.config";
@@ -15,6 +16,7 @@ import scheduler from "./components/scheduler/scheduler.module";
 angular.module('swamp', [
         uiRouter,
         uiBootstrap,
+        httpInterceptor,
         field,
         services,
         layout,
