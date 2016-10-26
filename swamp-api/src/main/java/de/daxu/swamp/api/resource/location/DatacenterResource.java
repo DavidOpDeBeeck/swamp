@@ -4,8 +4,8 @@ import de.daxu.swamp.api.converter.location.DatacenterConverter;
 import de.daxu.swamp.api.converter.location.DatacenterCreateConverter;
 import de.daxu.swamp.api.dto.location.DatacenterCreateDTO;
 import de.daxu.swamp.api.dto.location.DatacenterDTO;
-import de.daxu.swamp.common.response.Meta;
 import de.daxu.swamp.common.response.Response;
+import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.location.Continent;
 import de.daxu.swamp.core.location.Datacenter;
@@ -20,13 +20,15 @@ import java.util.stream.Collectors;
 
 import static de.daxu.swamp.api.resource.location.ContinentResource.CONTINENTS_URL;
 import static de.daxu.swamp.api.resource.location.DatacenterResource.DATACENTERS_URL;
-import static de.daxu.swamp.common.response.Response.Builder.aResponse;
 
 @RestController
 @RequestMapping( DATACENTERS_URL )
 public class DatacenterResource {
 
-    public static final String DATACENTERS_URL = CONTINENTS_URL + "/datacenters";
+    public static final String DATACENTERS_URL = CONTINENTS_URL + "/{continentId}/datacenters";
+
+    @Autowired
+    ResponseFactory responseFactory;
 
     @Autowired
     LocationService locationService;
@@ -43,19 +45,14 @@ public class DatacenterResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         List<DatacenterDTO> containers = continent.getDatacenters()
                 .stream()
                 .map( datacenterConverter::toDTO )
                 .collect( Collectors.toList() );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( containers )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( containers ), HttpStatus.OK );
     }
 
     @RequestMapping( method = RequestMethod.POST )
@@ -65,18 +62,13 @@ public class DatacenterResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         Datacenter datacenter = datacenterCreateConverter.toDomain( dto );
         datacenter = locationService.addDatacenterToContinent( continent, datacenter );
         DatacenterDTO datacenterDTO = datacenterConverter.toDTO( datacenter );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( datacenterDTO )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( datacenterDTO ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{datacenterId}", method = RequestMethod.GET )
@@ -86,21 +78,16 @@ public class DatacenterResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         Datacenter datacenter = locationService.getDatacenter( datacenterId );
 
         if ( datacenter == null )
-            return new ResponseEntity<>( Response.notFound( "Datacenter was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Datacenter was not found!" ), HttpStatus.OK );
 
         DatacenterDTO datacenterDTO = datacenterConverter.toDTO( datacenter );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( datacenterDTO )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( datacenterDTO ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{datacenterId}", method = RequestMethod.PUT )
@@ -111,12 +98,12 @@ public class DatacenterResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         Datacenter targetDatacenter = locationService.getDatacenter( datacenterId );
 
         if ( targetDatacenter == null )
-            return new ResponseEntity<>( Response.notFound( "Datacenter was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Datacenter was not found!" ), HttpStatus.OK );
 
         Datacenter srcDatacenter = datacenterCreateConverter.toDomain( datacenterCreateDTO );
 
@@ -125,12 +112,7 @@ public class DatacenterResource {
 
         DatacenterDTO datacenterDTO = datacenterConverter.toDTO( targetDatacenter );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( datacenterDTO )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( datacenterDTO ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{datacenterId}", method = RequestMethod.DELETE )
@@ -140,15 +122,15 @@ public class DatacenterResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         Datacenter datacenter = locationService.getDatacenter( datacenterId );
 
         if ( datacenter == null )
-            return new ResponseEntity<>( Response.notFound( "Datacenter was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Datacenter was not found!" ), HttpStatus.OK );
 
         locationService.removeDatacenterFromContinent( continent, datacenter );
 
-        return new ResponseEntity<>( Response.success(), HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
     }
 }

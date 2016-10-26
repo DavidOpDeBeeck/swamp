@@ -4,8 +4,8 @@ import de.daxu.swamp.api.converter.location.ContinentConverter;
 import de.daxu.swamp.api.converter.location.ContinentCreateConverter;
 import de.daxu.swamp.api.dto.location.ContinentCreateDTO;
 import de.daxu.swamp.api.dto.location.ContinentDTO;
-import de.daxu.swamp.common.response.Meta;
 import de.daxu.swamp.common.response.Response;
+import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.location.Continent;
 import de.daxu.swamp.service.LocationService;
@@ -18,13 +18,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static de.daxu.swamp.api.resource.location.ContinentResource.CONTINENTS_URL;
-import static de.daxu.swamp.common.response.Response.Builder.aResponse;
 
 @RestController
 @RequestMapping( CONTINENTS_URL )
 public class ContinentResource {
 
     public static final String CONTINENTS_URL = "/continents";
+
+    @Autowired
+    ResponseFactory responseFactory;
 
     @Autowired
     LocationService locationService;
@@ -45,12 +47,7 @@ public class ContinentResource {
                 .map( continentConverter::toDTO )
                 .collect( Collectors.toList() );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( continents )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( continents ), HttpStatus.OK );
     }
 
     @RequestMapping( method = RequestMethod.POST )
@@ -59,12 +56,7 @@ public class ContinentResource {
         Continent continent = continentCreateConverter.toDomain( dto );
         continent = locationService.createContinent( continent );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( continent )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( continent ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.GET )
@@ -73,16 +65,11 @@ public class ContinentResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         ContinentDTO continentDTO = continentConverter.toDTO( continent );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( continentDTO )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( continentDTO ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.PUT )
@@ -93,19 +80,14 @@ public class ContinentResource {
         Continent srcContinent = continentCreateConverter.toDomain( continentCreateDTO );
 
         if ( targetContinent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         BeanUtils.copyProperties( srcContinent, targetContinent );
         locationService.updateContinent( targetContinent );
 
         ContinentDTO continentDTO = continentConverter.toDTO( targetContinent );
 
-        Response response = aResponse()
-                .withMeta( Meta.success() )
-                .withData( continentDTO )
-                .build();
-
-        return new ResponseEntity<>( response, HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success( continentDTO ), HttpStatus.OK );
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.DELETE )
@@ -114,10 +96,10 @@ public class ContinentResource {
         Continent continent = locationService.getContinent( continentId );
 
         if ( continent == null )
-            return new ResponseEntity<>( Response.notFound( "Continent was not found!" ), HttpStatus.OK );
+            return new ResponseEntity<>( responseFactory.notFound( "Continent was not found!" ), HttpStatus.OK );
 
         locationService.deleteContinent( continent );
 
-        return new ResponseEntity<>( HttpStatus.OK );
+        return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
     }
 }

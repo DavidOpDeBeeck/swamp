@@ -25,3 +25,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
 }
+
+//noinspection GroovyAssignabilityCheck
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}

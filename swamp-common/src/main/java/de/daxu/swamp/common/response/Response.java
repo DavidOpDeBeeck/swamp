@@ -34,26 +34,6 @@ public class Response {
         return errors;
     }
 
-    public static Response notFound( String error ) {
-        return aResponse()
-                .withMeta( Meta.notFound() )
-                .withErrors( error )
-                .build();
-    }
-
-    public static Response badRequest( String error ) {
-        return aResponse()
-                .withMeta( Meta.badRequest() )
-                .withErrors( error )
-                .build();
-    }
-
-    public static Response success() {
-        return aResponse()
-                .withMeta( Meta.success() )
-                .build();
-    }
-
     public static class Builder {
 
         private Meta meta;

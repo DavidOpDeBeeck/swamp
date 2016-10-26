@@ -1,6 +1,9 @@
 class Logger {
-    static log(msg ) {
-        console.log("[ SWAMP ] ", msg);
+    static info(msg ) {
+        console.log("%c [INFO] " + msg, 'color: #337ab7;');
+    }
+    static error(msg ) {
+        console.log("%c [ERROR] " + msg, 'color: #d9534f;');
     }
 }
 
