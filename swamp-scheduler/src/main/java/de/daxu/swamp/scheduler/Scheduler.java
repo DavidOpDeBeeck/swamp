@@ -1,11 +1,11 @@
-package de.daxu.swamp.scheduler.manager;
+package de.daxu.swamp.scheduler;
 
 import de.daxu.swamp.core.container.Project;
-import de.daxu.swamp.scheduler.ContainerInstance;
+import de.daxu.swamp.scheduler.core.ContainerInstance;
 import de.daxu.swamp.scheduler.command.Command;
 import de.daxu.swamp.scheduler.strategy.SchedulingStrategy;
 
-public interface SchedulingManager {
+public interface Scheduler {
 
     void schedule( Project project, SchedulingStrategy strategy );
 

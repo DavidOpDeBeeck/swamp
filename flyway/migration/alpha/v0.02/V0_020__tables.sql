@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `port_mapping` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
 -- -----------------------------------------------------
 -- Table `environment_variable`
 -- -----------------------------------------------------

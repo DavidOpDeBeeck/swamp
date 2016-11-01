@@ -1,10 +1,10 @@
-package de.daxu.swamp.scheduler.manager;
+package de.daxu.swamp.scheduler;
 
 import de.daxu.swamp.common.util.Pair;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
-import de.daxu.swamp.scheduler.ContainerInstance;
-import de.daxu.swamp.scheduler.ProjectInstance;
+import de.daxu.swamp.scheduler.core.ContainerInstance;
+import de.daxu.swamp.scheduler.core.ProjectInstance;
 import de.daxu.swamp.scheduler.action.Action;
 import de.daxu.swamp.scheduler.action.ActionFactory;
 import de.daxu.swamp.scheduler.command.Command;
@@ -13,7 +13,7 @@ import de.daxu.swamp.scheduler.command.container.CreateCommand;
 import de.daxu.swamp.scheduler.event.ContainerInstanceEvent;
 import de.daxu.swamp.scheduler.event.EventHandler;
 import de.daxu.swamp.scheduler.event.EventListener;
-import de.daxu.swamp.scheduler.service.SchedulingService;
+import de.daxu.swamp.scheduler.scheduling.SchedulingService;
 import de.daxu.swamp.scheduler.strategy.SchedulingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,10 +25,10 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import static de.daxu.swamp.scheduler.ProjectInstance.ProjectInstanceBuilder.aProjectInstance;
+import static de.daxu.swamp.scheduler.core.ProjectInstance.ProjectInstanceBuilder.aProjectInstance;
 
 @Component
-public class SchedulingManagerImpl implements SchedulingManager, EventListener {
+public class SchedulerImpl implements Scheduler, EventListener {
 
     @Autowired
     private EventHandler eventHandler;
@@ -50,8 +50,8 @@ public class SchedulingManagerImpl implements SchedulingManager, EventListener {
     @PostConstruct
     private void setUp() {
         eventHandler.register( this );
-        actions.add( actionFactory.clearNotManagedContainers() );
-        actions.add( actionFactory.syncContainerInstanceAction() );
+        //actions.add( actionFactory.clearNotManagedContainers() );
+        //actions.add( actionFactory.syncContainerInstanceAction() );
     }
 
     @Override

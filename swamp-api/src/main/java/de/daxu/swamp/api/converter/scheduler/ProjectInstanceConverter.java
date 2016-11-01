@@ -4,7 +4,7 @@ import de.daxu.swamp.api.converter.DTOConverter;
 import de.daxu.swamp.api.converter.container.ProjectConverter;
 import de.daxu.swamp.api.converter.location.ServerConverter;
 import de.daxu.swamp.api.dto.scheduler.ProjectInstanceDTO;
-import de.daxu.swamp.scheduler.ProjectInstance;
+import de.daxu.swamp.scheduler.core.ProjectInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

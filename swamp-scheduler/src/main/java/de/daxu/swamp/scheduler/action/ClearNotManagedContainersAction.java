@@ -2,15 +2,11 @@ package de.daxu.swamp.scheduler.action;
 
 import com.github.dockerjava.api.DockerClient;
 import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduler.ContainerInstance;
-import de.daxu.swamp.scheduler.client.DockerClientFactory;
 import de.daxu.swamp.scheduler.event.EventHandler;
-import de.daxu.swamp.scheduler.manager.SchedulingManager;
-import de.daxu.swamp.scheduler.service.SchedulingService;
+import de.daxu.swamp.scheduler.scheduling.SchedulingService;
 import de.daxu.swamp.service.LocationService;
 
 import java.util.List;
-import java.util.Set;
 
 import static de.daxu.swamp.scheduler.client.DockerClientFactory.*;
 

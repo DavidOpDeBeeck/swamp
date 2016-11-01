@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: "spring-boot"
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo1.maven.org/maven2" }
+}
+
+ext {
+    axonVersion = '2.1.1'
+    dockerJavaVersion = '3.0.5'
+    elasticsearchVersion = '0.90.11'
+    hsqldbVersion = '2.3.4'
+    hibernatCoreVersion = '5.2.3.Final'
+    hibernateValidationVersion = '5.2.4.Final'
+}
+
+dependencies {
+    compile project(":swamp-core")
+    compile project(":swamp-common")
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework:spring-messaging"
+
+    compile "org.axonframework:axon-core:$axonVersion"
+    compile "org.axonframework:axon-integration:$axonVersion"
+
+    compile "org.hsqldb:hsqldb:$hsqldbVersion"
+    compile "org.elasticsearch:elasticsearch:$elasticsearchVersion"
+
+    compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
+    compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
+
+    compile "com.github.docker-java:docker-java:$dockerJavaVersion"
+}

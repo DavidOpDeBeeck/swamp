@@ -5,7 +5,6 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduler.config.ServerSSLConfig;
 
 public class DockerClientFactory {
 

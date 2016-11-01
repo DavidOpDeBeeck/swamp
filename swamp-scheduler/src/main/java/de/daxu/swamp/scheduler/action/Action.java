@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduler.action;
 
 import de.daxu.swamp.scheduler.event.EventHandler;
-import de.daxu.swamp.scheduler.service.SchedulingService;
+import de.daxu.swamp.scheduler.scheduling.SchedulingService;
 
 public abstract class Action {
 

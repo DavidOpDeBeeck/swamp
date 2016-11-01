@@ -1,7 +1,7 @@
-package de.daxu.swamp.scheduler.repository;
+package de.daxu.swamp.scheduler.scheduling;
 
-import de.daxu.swamp.scheduler.ContainerInstance;
-import de.daxu.swamp.scheduler.ProjectInstance;
+import de.daxu.swamp.scheduler.core.ContainerInstance;
+import de.daxu.swamp.scheduler.core.ProjectInstance;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

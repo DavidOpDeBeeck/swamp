@@ -3,7 +3,7 @@ package de.daxu.swamp.scheduler.command.instance;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
-import de.daxu.swamp.scheduler.ContainerInstance;
+import de.daxu.swamp.scheduler.core.ContainerInstance;
 import de.daxu.swamp.scheduler.command.Command;
 import de.daxu.swamp.scheduler.event.EventHandler;
 

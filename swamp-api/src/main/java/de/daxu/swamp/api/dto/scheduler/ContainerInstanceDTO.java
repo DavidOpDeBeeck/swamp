@@ -2,7 +2,7 @@ package de.daxu.swamp.api.dto.scheduler;
 
 import de.daxu.swamp.api.dto.container.ContainerDTO;
 import de.daxu.swamp.api.dto.location.ServerDTO;
-import de.daxu.swamp.scheduler.ContainerInstance;
+import de.daxu.swamp.scheduler.core.ContainerInstance;
 
 import java.util.Date;
 

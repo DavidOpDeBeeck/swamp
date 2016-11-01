@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduler.command;
 
 import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduler.ProjectInstance;
+import de.daxu.swamp.scheduler.core.ProjectInstance;
 import de.daxu.swamp.scheduler.command.container.CreateCommand;
 import de.daxu.swamp.scheduler.command.instance.LoggingCommand;
 import de.daxu.swamp.scheduler.command.instance.RestartCommand;

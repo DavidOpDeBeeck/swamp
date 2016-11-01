@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduler;
+package de.daxu.swamp.scheduler.core;
 
 import de.daxu.swamp.common.Identifiable;
 import de.daxu.swamp.core.container.Container;

@@ -1,8 +1,6 @@
 package de.daxu.swamp.scheduler.event;
 
-import de.daxu.swamp.scheduler.ContainerInstance;
-import de.daxu.swamp.scheduler.ProjectInstance;
-import de.daxu.swamp.scheduler.command.container.CreateCommand;
+import de.daxu.swamp.scheduler.core.ContainerInstance;
 import org.springframework.stereotype.Component;
 
 @Component

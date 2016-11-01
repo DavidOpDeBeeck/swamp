@@ -8,7 +8,7 @@ import de.daxu.swamp.common.response.Response;
 import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Project;
-import de.daxu.swamp.scheduler.manager.SchedulingManager;
+import de.daxu.swamp.scheduler.Scheduler;
 import de.daxu.swamp.scheduler.strategy.FairStrategy;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ProjectResource {
     ResponseFactory responseFactory;
 
     @Autowired
-    SchedulingManager schedulingManager;
+    Scheduler scheduler;
 
     @Autowired
     ProjectService projectService;
@@ -114,7 +114,7 @@ public class ProjectResource {
         if ( project == null )
             return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
 
-        schedulingManager.schedule( project, new FairStrategy() );
+        scheduler.schedule( project, new FairStrategy() );
 
         return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
     }

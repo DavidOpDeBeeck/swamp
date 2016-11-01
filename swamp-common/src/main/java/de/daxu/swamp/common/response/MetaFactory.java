@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetaFactory {
 
-    @Value( "${version}" )
+    @Value( "${application.version}" )
     private String version;
 
     public Meta success() {

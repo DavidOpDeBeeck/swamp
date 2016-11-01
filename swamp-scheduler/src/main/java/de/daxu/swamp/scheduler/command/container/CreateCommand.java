@@ -9,14 +9,14 @@ import com.github.dockerjava.api.model.Ports;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduler.ProjectInstance;
+import de.daxu.swamp.scheduler.core.ProjectInstance;
 import de.daxu.swamp.scheduler.command.Command;
 import de.daxu.swamp.scheduler.event.EventHandler;
 
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static de.daxu.swamp.scheduler.ContainerInstance.ContainerInstanceBuilder.aContainerInstance;
+import static de.daxu.swamp.scheduler.core.ContainerInstance.ContainerInstanceBuilder.aContainerInstance;
 import static de.daxu.swamp.scheduler.client.DockerClientFactory.createClient;
 
 public class CreateCommand extends Command<Container> {

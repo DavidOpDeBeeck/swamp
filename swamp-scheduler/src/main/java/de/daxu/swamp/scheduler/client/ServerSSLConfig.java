@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduler.config;
+package de.daxu.swamp.scheduler.client;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.SSLConfig;

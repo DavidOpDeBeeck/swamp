@@ -1,8 +1,7 @@
 package de.daxu.swamp.scheduler.action;
 
 import de.daxu.swamp.scheduler.event.EventHandler;
-import de.daxu.swamp.scheduler.manager.SchedulingManager;
-import de.daxu.swamp.scheduler.service.SchedulingService;
+import de.daxu.swamp.scheduler.scheduling.SchedulingService;
 import de.daxu.swamp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
