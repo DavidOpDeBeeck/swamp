@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduler.core;
 
-import de.daxu.swamp.common.Identifiable;
+import de.daxu.swamp.common.jpa.Identifiable;
 import de.daxu.swamp.core.container.Project;
 
 import java.util.Date;

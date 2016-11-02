@@ -2,7 +2,7 @@ package de.daxu.swamp.core.container.configuration;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
-import de.daxu.swamp.common.Identifiable;
+import de.daxu.swamp.common.jpa.Identifiable;
 
 import javax.persistence.*;
 

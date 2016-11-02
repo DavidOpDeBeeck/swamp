@@ -16,9 +16,9 @@ public class ContainerInstanceViewEventHandler {
     @EventHandler
     void on( ContainerInstanceCreated event ) {
         ContainerInstanceView view = aContainerInstanceView()
+                .withContainerInstanceId( event.getAggregateId() )
                 .withName( event.getName() )
                 .build();
         containerInstanceViewRepository.save( view );
     }
-
 }

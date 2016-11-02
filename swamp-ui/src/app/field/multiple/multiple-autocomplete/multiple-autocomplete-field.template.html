@@ -1,6 +1,6 @@
 <div class="form-group">
-    <label for="{{ multiple.id }}">{{ multiple.label }}: </label>
-    <div id="{{ multiple.id }}" class="form-group margin-xs-bottom" ng-repeat="field in multiple.list track by $index">
+    <label for="{{ multiple.value }}">{{ multiple.label }}: </label>
+    <div value="{{ multiple.value }}" class="form-group margin-xs-bottom" ng-repeat="field in multiple.list track by $index">
         <div ng-class="{ 'input-group' : multiple.editable }">
             <autocomplete-field value="multiple.list[$index]"
                                 autocomplete-list="multiple.autocompleteList"

@@ -1,6 +1,6 @@
 <div class="form-group">
-    <label for="{{ field.id }}" ng-show="field.label">{{ field.label }}: </label>
-    <input id="{{ field.id }}" type="text" ng-model="field.value"
+    <label for="{{ field.value }}" ng-show="field.label">{{ field.label }}: </label>
+    <input value="{{ field.value }}" type="text" ng-model="field.value"
            uib-typeahead="item as item.name for item in field.autocompleteList | filter:$viewValue"
            class="form-control">
 </div>

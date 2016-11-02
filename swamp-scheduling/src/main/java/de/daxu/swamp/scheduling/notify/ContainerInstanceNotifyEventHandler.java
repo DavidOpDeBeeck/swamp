@@ -1,8 +1,9 @@
 package de.daxu.swamp.scheduling.notify;
 
+import de.daxu.swamp.common.cqrs.AbstractEvent;
 import de.daxu.swamp.scheduling.view.ContainerInstanceViewRepository;
+import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreated;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -22,7 +23,7 @@ public class ContainerInstanceNotifyEventHandler {
         publish( event );
     }
 
-    private void publish( ContainerInstanceEvent event ) {
+    private void publish( AbstractEvent<ContainerInstanceId> event ) {
         this.messagingTemplate.convertAndSend( "/topic/container-updates", new ContainerInstanceNotification( event ));
     }
 }

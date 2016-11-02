@@ -1,4 +1,4 @@
-package de.daxu.swamp.common;
+package de.daxu.swamp.common.jpa;
 
 import org.hibernate.annotations.GenericGenerator;
 

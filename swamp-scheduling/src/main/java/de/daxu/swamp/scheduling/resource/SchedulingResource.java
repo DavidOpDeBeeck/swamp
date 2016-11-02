@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduling.resource;
 
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
-import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstance;
+import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.DefaultIdentifierFactory;
 import org.axonframework.domain.IdentifierFactory;
@@ -26,6 +26,6 @@ public class SchedulingResource {
     @RequestMapping(value = "/container", method = RequestMethod.GET)
     public void schedule() {
         ContainerInstanceId containerInstanceId = ContainerInstanceId.random();
-        commandGateway.send(new CreateContainerInstance( containerInstanceId, "centos" ));
+        commandGateway.send(new CreateContainerInstanceCommand( containerInstanceId, "centos" ));
     }
 }

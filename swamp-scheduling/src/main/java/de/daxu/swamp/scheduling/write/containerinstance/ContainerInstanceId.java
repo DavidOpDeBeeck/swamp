@@ -1,31 +1,21 @@
 package de.daxu.swamp.scheduling.write.containerinstance;
 
 
-import java.io.Serializable;
+import de.daxu.swamp.common.cqrs.AbstractAggregateId;
+
 import java.util.UUID;
 
-public class ContainerInstanceId implements Serializable {
+public class ContainerInstanceId extends AbstractAggregateId {
 
-    private String containerInstanceId;
-
-    private ContainerInstanceId( String containerInstanceId ) {
-        this.containerInstanceId = containerInstanceId;
+    private ContainerInstanceId( UUID containerInstanceId ) {
+        super( containerInstanceId );
     }
 
     public static ContainerInstanceId random() {
-        return new ContainerInstanceId( UUID.randomUUID().toString() );
+        return new ContainerInstanceId( UUID.randomUUID() );
     }
 
     public static ContainerInstanceId from( String id ) {
-        return new ContainerInstanceId( id );
-    }
-
-    public String getContainerInstanceId() {
-        return containerInstanceId;
-    }
-
-    @Override
-    public String toString() {
-        return containerInstanceId;
+        return new ContainerInstanceId( UUID.fromString( id ) );
     }
 }

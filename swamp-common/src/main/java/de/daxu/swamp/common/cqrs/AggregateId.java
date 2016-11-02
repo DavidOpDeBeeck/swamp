@@ -1,0 +1,9 @@
+package de.daxu.swamp.common.cqrs;
+
+import java.io.Serializable;
+
+public interface AggregateId extends Serializable {
+
+    String toString();
+
+}

@@ -22,26 +22,25 @@ ext {
     hsqldbVersion = '2.3.4'
     hibernatCoreVersion = '5.2.3.Final'
     hibernateValidationVersion = '5.2.4.Final'
+    junitVersion = '4.12'
 }
 
 dependencies {
     compile project(":swamp-core")
     compile project(":swamp-common")
 
+    compile "org.springframework:spring-messaging"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-websocket"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework:spring-messaging"
 
     compile "org.axonframework:axon-core:$axonVersion"
-    compile "org.axonframework:axon-integration:$axonVersion"
-
-    compile "org.hsqldb:hsqldb:$hsqldbVersion"
-    compile "org.elasticsearch:elasticsearch:$elasticsearchVersion"
+    testCompile "org.axonframework:axon-test:$axonVersion"
 
     compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
     compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
 
     compile "com.github.docker-java:docker-java:$dockerJavaVersion"
+
+    testCompile "junit:junit:$junitVersion"
 }

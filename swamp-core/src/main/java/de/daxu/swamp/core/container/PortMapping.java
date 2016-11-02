@@ -1,6 +1,6 @@
 package de.daxu.swamp.core.container;
 
-import de.daxu.swamp.common.Identifiable;
+import de.daxu.swamp.common.jpa.Identifiable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

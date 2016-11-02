@@ -1,13 +1,14 @@
 package de.daxu.swamp.scheduling.notify;
 
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceEvent;
+import de.daxu.swamp.common.cqrs.AbstractEvent;
+import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 
 public class ContainerInstanceNotification {
 
     private String type;
-    private ContainerInstanceEvent event;
+    private AbstractEvent<ContainerInstanceId> event;
 
-    public ContainerInstanceNotification( ContainerInstanceEvent event ) {
+    public ContainerInstanceNotification( AbstractEvent<ContainerInstanceId> event ) {
         this.type = event.getClass().getSimpleName();
         this.event = event;
     }
@@ -16,7 +17,7 @@ public class ContainerInstanceNotification {
         return type;
     }
 
-    public ContainerInstanceEvent getEvent() {
+    public AbstractEvent<ContainerInstanceId> getEvent() {
         return event;
     }
 }

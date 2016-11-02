@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="input-group margin-sm-bottom">
-            <span class="input-group-addon" id="continents-search-icon">
+            <span class="input-group-addon" value="continents-search-icon">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </span>
             <input type="text" class="form-control" placeholder="Search" ng-model="ContinentsCtrl.filter"
@@ -22,11 +22,11 @@
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                        ui-sref="continents.continent.edit({continentId: continent.id})">
+                        ui-sref="continents.continent.edit({continentId: continent.value})">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters({continentId: continent.id})">
+                        ui-sref="continents.continent.datacenters({continentId: continent.value})">
                     {{ continent.datacenters }} datacenters
                 </button>
             </div>

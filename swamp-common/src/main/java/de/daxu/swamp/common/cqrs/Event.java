@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.write;
+package de.daxu.swamp.common.cqrs;
 
 import java.io.Serializable;
 

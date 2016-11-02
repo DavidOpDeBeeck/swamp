@@ -1,6 +1,6 @@
 package de.daxu.swamp.core.location;
 
-import de.daxu.swamp.common.Identifiable;
+import de.daxu.swamp.common.jpa.Identifiable;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;

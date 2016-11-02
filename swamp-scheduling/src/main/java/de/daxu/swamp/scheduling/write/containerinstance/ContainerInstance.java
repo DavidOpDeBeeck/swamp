@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.write.containerinstance;
 
-import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstance;
+import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
 import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreated;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventhandling.annotation.EventHandler;
@@ -14,17 +14,16 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
     private ContainerInstanceId containerInstanceId;
     private String name;
 
-    ContainerInstance() {
+    private ContainerInstance() {
     }
 
     @CommandHandler
-    public ContainerInstance( CreateContainerInstance command ) {
-        apply( new ContainerInstanceCreated( command.getContainerInstanceId(), command.getName() ) );
+    public ContainerInstance( CreateContainerInstanceCommand command ) {
+        apply( new ContainerInstanceCreated( command.getAggregateId(), command.getName() ) );
     }
 
     @EventHandler
     void on( ContainerInstanceCreated event ) {
-        this.containerInstanceId = event.getContainerInstanceId();
+        this.containerInstanceId = event.getAggregateId();
     }
-
 }
