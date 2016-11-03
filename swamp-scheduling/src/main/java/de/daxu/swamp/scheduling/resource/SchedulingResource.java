@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.resource;
 
+import de.daxu.swamp.scheduling.write.WriteService;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -18,14 +19,11 @@ public class SchedulingResource {
 
     public final static String SCHEDULING_URL = "/scheduling";
 
-    private final IdentifierFactory identifierFactory = new DefaultIdentifierFactory();
-
     @Autowired
-    private CommandGateway commandGateway;
+    private WriteService writeService;
 
     @RequestMapping(value = "/container", method = RequestMethod.GET)
     public void schedule() {
-        ContainerInstanceId containerInstanceId = ContainerInstanceId.random();
-        commandGateway.send(new CreateContainerInstanceCommand( containerInstanceId, "centos" ));
+        writeService.startContainer( ContainerInstanceId.random() );
     }
 }

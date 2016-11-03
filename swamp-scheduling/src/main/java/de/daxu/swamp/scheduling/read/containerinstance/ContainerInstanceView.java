@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.view;
+package de.daxu.swamp.scheduling.view.containerinstance;
 
 import de.daxu.swamp.common.jpa.Identifiable;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;

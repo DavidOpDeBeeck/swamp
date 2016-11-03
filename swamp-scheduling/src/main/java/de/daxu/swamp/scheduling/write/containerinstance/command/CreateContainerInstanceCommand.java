@@ -1,9 +1,8 @@
 package de.daxu.swamp.scheduling.write.containerinstance.command;
 
-import de.daxu.swamp.common.cqrs.AbstractCommand;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 
-public class CreateContainerInstanceCommand extends AbstractCommand<ContainerInstanceId> {
+public class CreateContainerInstanceCommand extends ContainerInstanceCommand {
 
     private String name;
 

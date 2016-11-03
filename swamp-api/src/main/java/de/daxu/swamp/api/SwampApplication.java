@@ -12,10 +12,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan( basePackages = { "de.daxu.swamp" } )
 @EnableJpaRepositories( basePackages = { "de.daxu.swamp" } )
 @SpringBootApplication( scanBasePackages = "de.daxu.swamp.api" )
-public class Application {
+public class SwampApplication {
 
     public static void main( String[] args ) {
-        SpringApplication.run( Application.class, args );
+        SpringApplication.run( SwampApplication.class, args );
     }
 
 }

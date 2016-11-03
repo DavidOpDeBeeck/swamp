@@ -1,11 +1,11 @@
-package de.daxu.swamp.scheduling.view;
+package de.daxu.swamp.scheduling.view.containerinstance;
 
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreated;
+import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.scheduling.view.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
+import static de.daxu.swamp.scheduling.view.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
 
 @Component
 public class ContainerInstanceViewEventHandler {
@@ -14,9 +14,9 @@ public class ContainerInstanceViewEventHandler {
     private ContainerInstanceViewRepository containerInstanceViewRepository;
 
     @EventHandler
-    void on( ContainerInstanceCreated event ) {
+    void on( ContainerInstanceCreatedEvent event ) {
         ContainerInstanceView view = aContainerInstanceView()
-                .withContainerInstanceId( event.getAggregateId() )
+                .withContainerInstanceId( event.getContainerInstanceId() )
                 .withName( event.getName() )
                 .build();
         containerInstanceViewRepository.save( view );

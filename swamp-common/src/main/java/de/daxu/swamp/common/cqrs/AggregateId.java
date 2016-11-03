@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public interface AggregateId extends Serializable {
 
-    String toString();
+    String getValue();
 
 }
