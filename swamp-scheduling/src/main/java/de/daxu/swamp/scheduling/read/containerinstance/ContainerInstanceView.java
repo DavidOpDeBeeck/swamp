@@ -1,46 +1,159 @@
-package de.daxu.swamp.scheduling.view.containerinstance;
+package de.daxu.swamp.scheduling.read.containerinstance;
 
 import de.daxu.swamp.common.jpa.Identifiable;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.write.projectinstance.ProjectInstanceId;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
+@SuppressWarnings( "unused" )
 public class ContainerInstanceView extends Identifiable {
+
+    @Embedded
+    @NotNull( message = "{NotNull.ContainerInstanceView.projectInstanceId}" )
+    private ProjectInstanceId projectInstanceId;
 
     @Embedded
     @NotNull( message = "{NotNull.ContainerInstanceView.containerInstanceId}" )
     private ContainerInstanceId containerInstanceId;
 
-    @NotNull( message = "{NotNull.ContainerInstanceView.containerInstanceId}" )
-    @Column( name = "name" )
-    private String name;
+    @Column( name = "internal_container_name" )
+    private String internalContainerName;
 
-    private ContainerInstanceView() {}
+    @Column( name = "internal_container_id" )
+    private String internalContainerId;
 
-    private ContainerInstanceView( ContainerInstanceId containerInstanceId, String name ) {
+    @Temporal( TemporalType.TIMESTAMP )
+    @Column( name = "date_created" )
+    private Date dateCreated;
+
+    @Temporal( TemporalType.TIMESTAMP )
+    @Column( name = "date_started" )
+    private Date dateStarted;
+
+    @Temporal( TemporalType.TIMESTAMP )
+    @Column( name = "date_stopped" )
+    private Date dateStopped;
+
+    @Temporal( TemporalType.TIMESTAMP )
+    @Column( name = "date_removed" )
+    private Date dateRemoved;
+
+    @Lob
+    @Column( name = "log" )
+    private String log;
+
+    @Enumerated( EnumType.STRING )
+    @Column( name = "status" )
+    private Status status;
+
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    @JoinColumn( name = "server_id" )
+    private ServerView server;
+
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    @JoinColumn( name = "run_configuration_id" )
+    private RunConfigurationView runConfiguration;
+
+    private ContainerInstanceView( ProjectInstanceId projectInstanceId,
+                                   ContainerInstanceId containerInstanceId,
+                                   String internalContainerName,
+                                   String internalContainerId,
+                                   Date dateCreated,
+                                   Date dateStarted,
+                                   Date dateStopped,
+                                   Date dateRemoved,
+                                   String log,
+                                   Status status,
+                                   ServerView server,
+                                   RunConfigurationView runConfiguration ) {
+        this.projectInstanceId = projectInstanceId;
         this.containerInstanceId = containerInstanceId;
-        this.name = name;
+        this.internalContainerName = internalContainerName;
+        this.internalContainerId = internalContainerId;
+        this.dateCreated = dateCreated;
+        this.dateStarted = dateStarted;
+        this.dateStopped = dateStopped;
+        this.dateRemoved = dateRemoved;
+        this.log = log;
+        this.status = status;
+        this.server = server;
+        this.runConfiguration = runConfiguration;
     }
 
-    public ContainerInstanceId getContainerInstanceId() {
-        return containerInstanceId;
+    public void setProjectInstanceId( ProjectInstanceId projectInstanceId ) {
+        this.projectInstanceId = projectInstanceId;
     }
 
-    public String getName() {
-        return name;
+    public void setContainerInstanceId( ContainerInstanceId containerInstanceId ) {
+        this.containerInstanceId = containerInstanceId;
+    }
+
+    public void setInternalContainerName( String internalContainerName ) {
+        this.internalContainerName = internalContainerName;
+    }
+
+    public void setInternalContainerId( String internalContainerId ) {
+        this.internalContainerId = internalContainerId;
+    }
+
+    public void setDateCreated( Date dateCreated ) {
+        this.dateCreated = dateCreated;
+    }
+
+    public void setDateStarted( Date dateStarted ) {
+        this.dateStarted = dateStarted;
+    }
+
+    public void setDateStopped( Date dateStopped ) {
+        this.dateStopped = dateStopped;
+    }
+
+    public void setDateRemoved( Date dateRemoved ) {
+        this.dateRemoved = dateRemoved;
+    }
+
+    public void addLog( String log ) {
+        this.log += log;
+    }
+
+    public void setStatus( Status status ) {
+        this.status = status;
+    }
+
+    public void setServer( ServerView server ) {
+        this.server = server;
+    }
+
+    public void setRunConfiguration( RunConfigurationView runConfiguration ) {
+        this.runConfiguration = runConfiguration;
     }
 
     public static class ContainerInstanceViewBuilder {
 
+        private ProjectInstanceId projectInstanceId;
         private ContainerInstanceId containerInstanceId;
-        private String name;
+        private String internalContainerName;
+        private String internalContainerId;
+        private Date dateCreated;
+        private Date dateStarted;
+        private Date dateStopped;
+        private Date dateRemoved;
+        private String log;
+        private Status status;
+        private ServerView server;
+        private RunConfigurationView runConfiguration;
 
         public static ContainerInstanceViewBuilder aContainerInstanceView() {
             return new ContainerInstanceViewBuilder();
+        }
+
+        public ContainerInstanceViewBuilder withProjectInstanceId( ProjectInstanceId projectInstanceId ) {
+            this.projectInstanceId = projectInstanceId;
+            return this;
         }
 
         public ContainerInstanceViewBuilder withContainerInstanceId( ContainerInstanceId containerInstanceId ) {
@@ -48,14 +161,77 @@ public class ContainerInstanceView extends Identifiable {
             return this;
         }
 
-        public ContainerInstanceViewBuilder withName( String name ) {
-            this.name = name;
+        public ContainerInstanceViewBuilder withInternalContainerName( String internalContainerName ) {
+            this.internalContainerName = internalContainerName;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withInternalContainerId( String internalContainerId ) {
+            this.internalContainerId = internalContainerId;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withDateCreated( Date dateCreated ) {
+            this.dateCreated = dateCreated;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withDateStarted( Date dateStarted ) {
+            this.dateStarted = dateStarted;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withDateStopped( Date dateStopped ) {
+            this.dateStopped = dateStopped;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withDateRemoved( Date dateRemoved ) {
+            this.dateRemoved = dateRemoved;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withLog( String log ) {
+            this.log = log;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withStatus( Status status ) {
+            this.status = status;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withServer( ServerView server ) {
+            this.server = server;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withRunConfiguration( RunConfigurationView runConfiguration ) {
+            this.runConfiguration = runConfiguration;
             return this;
         }
 
         public ContainerInstanceView build() {
-            return new ContainerInstanceView( containerInstanceId, name );
+            return new ContainerInstanceView( projectInstanceId,
+                    containerInstanceId,
+                    internalContainerName,
+                    internalContainerId,
+                    dateCreated,
+                    dateStarted,
+                    dateStopped,
+                    dateRemoved,
+                    log,
+                    status,
+                    server,
+                    runConfiguration );
         }
     }
 
+    public enum Status {
+        STARTED,
+        RUNNING,
+        PAUSED,
+        RESTARTING,
+        EXITED
+    }
 }
