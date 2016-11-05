@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class StartContainerInstanceCommand extends ContainerInstanceCommand {
 
-    private Date dateStarted;
+    private final Date dateStarted;
 
     public StartContainerInstanceCommand( ContainerInstanceId containerInstanceId, Date dateStarted ) {
         super(containerInstanceId);

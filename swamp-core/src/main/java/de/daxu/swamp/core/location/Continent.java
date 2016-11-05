@@ -10,7 +10,7 @@ import java.util.List;
 public class Continent extends Location {
 
     @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "continent_id", referencedColumnName = "id", nullable = false )
+    @JoinColumn( name = "continent_id", referencedColumnName = "id" )
     private List<Datacenter> datacenters;
 
     private Continent() {

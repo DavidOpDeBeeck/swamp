@@ -15,7 +15,7 @@ public class Server extends Location {
 
     @NotBlank( message = "{NotBlank.Server.CACertificate}" )
     @Lob
-    @Column( name = "CACertificate" )
+    @Column( name = "CACertificate" ) // TODO: change to ca_certificate
     private String CACertificate;
 
     @NotBlank( message = "{NotBlank.Server.certificate}" )

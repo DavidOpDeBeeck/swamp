@@ -1,12 +1,12 @@
 package de.daxu.swamp.scheduling.resource;
 
+import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.location.Server;
 import de.daxu.swamp.scheduling.write.WriteService;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
-import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
-import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.domain.DefaultIdentifierFactory;
-import org.axonframework.domain.IdentifierFactory;
+import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +22,12 @@ public class SchedulingResource {
     @Autowired
     private WriteService writeService;
 
-    @RequestMapping(value = "/container", method = RequestMethod.GET)
-    public void schedule() {
-        writeService.startContainer( ContainerInstanceId.random() );
+    @Autowired
+    private ProjectService projectService;
+
+    @RequestMapping( value = "/container/{containerId}", method = RequestMethod.GET )
+    public void schedule( @PathVariable( value = "containerId" ) String containerId ) {
+        Container container = projectService.getContainer( containerId );
+        writeService.startContainer( ContainerInstanceId.random(), ( Server ) container.getPotentialLocations().iterator().next() );
     }
 }

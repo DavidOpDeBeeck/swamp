@@ -10,7 +10,7 @@ import java.util.List;
 public class Datacenter extends Location {
 
     @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "datacenter_id", referencedColumnName = "id", nullable = false )
+    @JoinColumn( name = "datacenter_id", referencedColumnName = "id" )
     private List<Server> servers;
 
     private Datacenter() {

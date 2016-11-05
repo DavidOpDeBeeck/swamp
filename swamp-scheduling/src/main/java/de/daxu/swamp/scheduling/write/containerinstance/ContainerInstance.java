@@ -20,7 +20,13 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
 
     @CommandHandler
     public ContainerInstance( CreateContainerInstanceCommand command ) {
-        apply( new ContainerInstanceCreatedEvent( command.getContainerInstanceId(), command.getName() ) );
+        apply( new ContainerInstanceCreatedEvent(
+                command.getContainerInstanceId(),
+                command.getInternalContainerId(),
+                command.getInternalContainerName(),
+                command.getDateCreated(),
+                command.getServer() )
+        );
     }
 
     @CommandHandler

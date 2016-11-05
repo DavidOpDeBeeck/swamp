@@ -18,8 +18,6 @@ repositories {
 ext {
     axonVersion = '2.1.1'
     dockerJavaVersion = '3.0.5'
-    elasticsearchVersion = '0.90.11'
-    hsqldbVersion = '2.3.4'
     hibernatCoreVersion = '5.2.3.Final'
     hibernateValidationVersion = '5.2.4.Final'
     junitVersion = '4.12'

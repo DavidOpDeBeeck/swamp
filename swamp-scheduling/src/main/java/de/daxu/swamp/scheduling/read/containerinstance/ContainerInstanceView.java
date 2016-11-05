@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduling.read.containerinstance;
 
 import de.daxu.swamp.common.jpa.Identifiable;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.write.projectinstance.ProjectInstanceId;
 
 import javax.persistence.*;
@@ -48,15 +49,19 @@ public class ContainerInstanceView extends Identifiable {
 
     @Enumerated( EnumType.STRING )
     @Column( name = "status" )
-    private Status status;
+    private ContainerInstanceStatus status;
 
     @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
-    @JoinColumn( name = "server_id" )
+    @JoinColumn( name = "server_view_id" )
     private ServerView server;
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
-    @JoinColumn( name = "run_configuration_id" )
+    //@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    //@JoinColumn( name = "run_configuration_view_id" )
+    @Embedded
     private RunConfigurationView runConfiguration;
+
+    private ContainerInstanceView() {
+    }
 
     private ContainerInstanceView( ProjectInstanceId projectInstanceId,
                                    ContainerInstanceId containerInstanceId,
@@ -67,7 +72,7 @@ public class ContainerInstanceView extends Identifiable {
                                    Date dateStopped,
                                    Date dateRemoved,
                                    String log,
-                                   Status status,
+                                   ContainerInstanceStatus status,
                                    ServerView server,
                                    RunConfigurationView runConfiguration ) {
         this.projectInstanceId = projectInstanceId;
@@ -120,7 +125,7 @@ public class ContainerInstanceView extends Identifiable {
         this.log += log;
     }
 
-    public void setStatus( Status status ) {
+    public void setStatus( ContainerInstanceStatus status ) {
         this.status = status;
     }
 
@@ -143,7 +148,7 @@ public class ContainerInstanceView extends Identifiable {
         private Date dateStopped;
         private Date dateRemoved;
         private String log;
-        private Status status;
+        private ContainerInstanceStatus status;
         private ServerView server;
         private RunConfigurationView runConfiguration;
 
@@ -196,7 +201,7 @@ public class ContainerInstanceView extends Identifiable {
             return this;
         }
 
-        public ContainerInstanceViewBuilder withStatus( Status status ) {
+        public ContainerInstanceViewBuilder withStatus( ContainerInstanceStatus status ) {
             this.status = status;
             return this;
         }
@@ -225,13 +230,5 @@ public class ContainerInstanceView extends Identifiable {
                     server,
                     runConfiguration );
         }
-    }
-
-    public enum Status {
-        STARTED,
-        RUNNING,
-        PAUSED,
-        RESTARTING,
-        EXITED
     }
 }
