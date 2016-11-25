@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="input-group margin-sm-bottom">
-            <span class="input-group-addon" value="projects-search-icon">
+            <span class="input-group-addon" id="projects-search-icon">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </span>
             <input type="text" class="form-control" placeholder="Search" ng-model="SchedulerCtrl.filter"
@@ -12,7 +12,7 @@
             <div class="panel-heading" ng-bind="projectInstance.project.name"></div>
             <div class="panel-footer clearfix">
                 <button type="button" class="btn btn-xs btn-default pull-right"
-                        ui-sref="scheduler.containers({projectId: projectInstance.value})">
+                        ui-sref="scheduler.containers({projectId: projectInstance.id})">
                     {{ projectInstance.containers }} containers
                 </button>
             </div>

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="input-group margin-sm-bottom">
-            <span class="input-group-addon" value="containers-search-icon">
+            <span class="input-group-addon" id="containers-search-icon">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </span>
             <input type="text" class="form-control" placeholder="Search" ng-model="ContainersCtrl.filter"
@@ -13,7 +13,7 @@
             </span>
         </div>
         <uib-accordion close-others="false">
-            <div uib-accordion-group class="panel-default" heading="{{ container.value }}"
+            <div uib-accordion-group class="panel-default" heading="{{ container.id }}"
                  ng-repeat="container in ContainersCtrl.containers | filter: ContainersCtrl.filter" is-open="true">
                 <container container="container" editable="false"></container>
                 <div class="row">
@@ -23,7 +23,7 @@
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                         </button>
                         <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                                ui-sref="projects.project.containers.container.edit({projectId: ContainersCtrl.project.value, containerId: container.value})">
+                                ui-sref="projects.project.containers.container.edit({projectId: ContainersCtrl.project.id, containerId: container.id})">
                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         </button>
                     </div>
