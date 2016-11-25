@@ -1,6 +1,5 @@
 package de.daxu.swamp.scheduling.write.containerinstance.command;
 
-import de.daxu.swamp.core.location.Server;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 
 import java.util.Date;

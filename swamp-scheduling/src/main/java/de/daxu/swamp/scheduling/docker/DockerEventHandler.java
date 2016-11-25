@@ -28,6 +28,7 @@ public class DockerEventHandler {
     @Autowired
     private ContainerInstanceWriteService containerInstanceWriteService;
 
+    @Autowired
     private EventSourcingRepository<ContainerInstance> containerInstanceRepository;
 
     @EventHandler
@@ -45,7 +46,6 @@ public class DockerEventHandler {
                 .map( EnvironmentVariable::toString )
                 .collect( Collectors.toList() ) );
 
-        command.withAliases( event.getName() );
         command.withName( event.getContainerInstanceId().getValue() );
 
         CreateContainerResponse response = command.exec();

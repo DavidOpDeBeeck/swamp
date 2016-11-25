@@ -17,7 +17,7 @@ ENGINE=InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `container_instance_view` (
   `id` varchar(255) NOT NULL,
-  `value` varchar(255) NULL,
+  `container_instance_id` varchar(255) NULL,
   `date_scheduled` datetime NULL,
   `date_created` datetime NULL,
   `date_removed` datetime NULL,
