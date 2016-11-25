@@ -13,12 +13,12 @@ import java.util.Set;
 @SuppressWarnings( "unused" )
 public class Container extends Identifiable {
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL , orphanRemoval = true )
     @JoinColumn( name = "run_configuration_id" )
     private RunConfiguration runConfiguration;
 
-    @Column( name = "arguments", unique = true )
-    private String arguments;
+    @Column( name = "name" )
+    private String name;
 
     @ManyToMany
     @JoinTable(
@@ -28,26 +28,26 @@ public class Container extends Identifiable {
     private Set<Location> potentialLocations;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "container_id", referencedColumnName = "id", nullable = false )
+    @JoinColumn( name = "container_id", referencedColumnName = "id" )
     private Set<PortMapping> portMappings;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "container_id", referencedColumnName = "id", nullable = false )
+    @JoinColumn( name = "container_id", referencedColumnName = "id" )
     private Set<EnvironmentVariable> environmentVariables;
 
     private Container() {
     }
 
-    private Container( String arguments, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
-        this.arguments = arguments;
+    private Container( String name, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
+        this.name = name;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
         this.portMappings = portMappings;
         this.environmentVariables = environmentVariables;
     }
 
-    public void setArguments( String arguments ) {
-        this.arguments = arguments;
+    public void setName( String name ) {
+        this.name = name;
     }
 
     public void setRunConfiguration( RunConfiguration runConfiguration ) {
@@ -69,8 +69,8 @@ public class Container extends Identifiable {
         this.environmentVariables.addAll( environmentVariables );
     }
 
-    public String getArguments() {
-        return arguments;
+    public String getName() {
+        return name;
     }
 
     public RunConfiguration getRunConfiguration() {
@@ -91,7 +91,7 @@ public class Container extends Identifiable {
 
     public static class ContainerBuilder {
 
-        private String arguments;
+        private String name;
         private RunConfiguration runConfiguration;
         private Set<Location> potentialLocations = new HashSet<>();
         private Set<PortMapping> portMappings = new HashSet<>();
@@ -101,8 +101,8 @@ public class Container extends Identifiable {
             return new ContainerBuilder();
         }
 
-        public ContainerBuilder withArguments( String arguments ) {
-            this.arguments = arguments;
+        public ContainerBuilder withName( String name ) {
+            this.name = name;
             return this;
         }
 
@@ -127,7 +127,7 @@ public class Container extends Identifiable {
         }
 
         public Container build() {
-            return new Container( arguments, runConfiguration, potentialLocations, portMappings, environmentVariables );
+            return new Container( name, runConfiguration, potentialLocations, portMappings, environmentVariables );
         }
     }
 }

@@ -1,45 +1,40 @@
 package de.daxu.swamp.scheduling.write.containerinstance;
 
-import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
-import de.daxu.swamp.scheduling.write.containerinstance.command.StartContainerInstanceCommand;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceStartedEvent;
-import org.axonframework.test.FixtureConfiguration;
-import org.axonframework.test.Fixtures;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
-
-import static de.daxu.swamp.core.location.Server.ServerBuilder.aServer;
+import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.CONTAINER_INSTANCE_ID;
+import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Events.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContainerInstanceTest {
 
-    private FixtureConfiguration fixture;
-
-    private static final ContainerInstanceId CONTAINER_INSTANCE_ID = ContainerInstanceId.random();
-    private static final String INTERNAL_CONTAINER_NAME = "name";
-    private static final String INTERNAL_CONTAINER_ID = "id";
-    private static final Date DATE = new Date();
-    private static final Server SERVER = aServer().build();
+    private ContainerInstance containerInstance;
 
     @Before
-    public void setUp() {
-        fixture = Fixtures.newGivenWhenThenFixture( ContainerInstance.class );
+    public void init() {
+        this.containerInstance = new ContainerInstance();
     }
 
     @Test
-    public void onCreate() {
-        fixture.given()
-                .when( new CreateContainerInstanceCommand( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE, SERVER ) )
-                .expectEvents( new ContainerInstanceCreatedEvent( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE, SERVER ) );
+    public void onScheduledEvent() throws Exception {
+        containerInstance.on( SCHEDULED_EVENT );
+
+        assertThat( containerInstance.getContainerInstanceId() ).isEqualTo( CONTAINER_INSTANCE_ID );
+        assertThat( containerInstance.getStatus() ).isEqualTo( ContainerInstanceStatus.SCHEDULED );
     }
 
     @Test
-    public void onStart() {
-        fixture.given( new ContainerInstanceCreatedEvent( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE, SERVER ) )
-                .when( new StartContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE ) )
-                .expectEvents( new ContainerInstanceStartedEvent( CONTAINER_INSTANCE_ID, DATE ) );
+    public void onCreatedEvent() throws Exception {
+        containerInstance.on( CREATED_EVENT );
+
+        assertThat( containerInstance.getStatus() ).isEqualTo( ContainerInstanceStatus.CREATED );
+    }
+
+    @Test
+    public void onStartedEvent() throws Exception {
+        containerInstance.on( STARTED_EVENT );
+
+        assertThat( containerInstance.getStatus() ).isEqualTo( ContainerInstanceStatus.STARTED );
     }
 }

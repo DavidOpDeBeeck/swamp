@@ -29,7 +29,7 @@ public class ContainerConverter implements DTOConverter<Container, ContainerDTO>
     public ContainerDTO toDTO( Container container ) {
         ContainerDTO dto = new ContainerDTO();
         dto.id = container.getId();
-        dto.arguments = container.getArguments();
+        dto.name = container.getName();
         dto.runConfiguration = configurationConverter.toDTO( container.getRunConfiguration() );
         dto.potentialLocations = container.getPotentialLocations().stream().map( locationConverter::toDTO ).collect( Collectors.toSet() );
         dto.portMappings = container.getPortMappings().stream().map( portMappingConverter::toDTO ).collect( Collectors.toSet() );

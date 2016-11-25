@@ -21,6 +21,8 @@ ext {
     hibernatCoreVersion = '5.2.3.Final'
     hibernateValidationVersion = '5.2.4.Final'
     junitVersion = '4.12'
+    mockitoVersion = '2.0.2-beta'
+    assertJVersion = '3.5.2'
 }
 
 dependencies {
@@ -41,4 +43,6 @@ dependencies {
     compile "com.github.docker-java:docker-java:$dockerJavaVersion"
 
     testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-all:$mockitoVersion"
+    testCompile "org.assertj:assertj-core:$assertJVersion"
 }

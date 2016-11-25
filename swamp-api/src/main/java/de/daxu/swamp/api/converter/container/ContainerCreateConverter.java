@@ -30,7 +30,7 @@ public class ContainerCreateConverter implements DomainConverter<ContainerCreate
     @Override
     public Container toDomain( ContainerCreateDTO dto ) {
         return aContainer()
-                .withArguments( dto.arguments )
+                .withName( dto.name )
                 .withRunConfiguration( configurationConverter.toDomain( dto.runConfiguration ) )
                 .withPotentialLocations( dto.potentialLocations.stream()
                         .map( locationConverter::toDomain )
