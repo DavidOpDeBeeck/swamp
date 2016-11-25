@@ -18,7 +18,7 @@ repositories {
 }
 
 bootRepackage {
-    mainClass = "de.daxu.swamp.api.Application"
+    mainClass = "de.daxu.swamp.api.SwampApplication"
 }
 
 dependencies {
