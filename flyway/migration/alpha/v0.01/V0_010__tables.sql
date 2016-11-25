@@ -25,7 +25,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `container` (
   `id` VARCHAR(255) NOT NULL,
-  `arguments` VARCHAR(255) NULL,
+  `name` VARCHAR(255) NULL,
   `project_id` VARCHAR(255) NULL,
   `run_configuration_id` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -121,9 +121,9 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `server` (
   `id` VARCHAR(255) NOT NULL,
   `ip` VARCHAR(45) NOT NULL,
-  `CACertificate` TEXT NULL,
-  `certificate` TEXT NULL,
-  `key` TEXT NULL,
+  `ca_certificate` TEXT NOT NULL,
+  `certificate` TEXT NOT NULL,
+  `key` TEXT NOT NULL,
   `datacenter_id` VARCHAR(255) NULL,
   INDEX `fk_server_location1_idx` (`id` ASC),
   PRIMARY KEY (`id`),
@@ -146,7 +146,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `image_configuration` (
   `id` VARCHAR(255) NOT NULL,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL,
   INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_image_configuration_run_configuration1`
@@ -163,8 +163,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `git_configuration` (
   `id` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  `username` VARCHAR(45) NULL,
-  `password` VARCHAR(45) NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
   `branch` VARCHAR(45) NOT NULL,
   `path` VARCHAR(45) NOT NULL,
   INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
