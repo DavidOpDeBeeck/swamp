@@ -1,13 +1,18 @@
 package de.daxu.swamp.common.cqrs;
 
+import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
+@MappedSuperclass
 public abstract class EntityId implements AggregateId {
 
-    private UUID value;
+    protected String value;
+
+    protected EntityId() {
+    }
 
     protected EntityId( UUID value ) {
-        this.value = value;
+        this.value = value.toString();
     }
 
     @Override
@@ -27,7 +32,7 @@ public abstract class EntityId implements AggregateId {
 
     @Override
     public String getValue() {
-        return value.toString();
+        return value;
     }
 
     @Override

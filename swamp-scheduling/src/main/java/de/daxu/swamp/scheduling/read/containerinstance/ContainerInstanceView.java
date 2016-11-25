@@ -10,12 +10,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
+@Table( name = "container_instance_view" )
 @SuppressWarnings( "unused" )
 public class ContainerInstanceView extends Identifiable {
-
-    @Embedded
-    @NotNull( message = "{NotNull.ContainerInstanceView.projectInstanceId}" )
-    private ProjectInstanceId projectInstanceId;
 
     @Embedded
     @NotNull( message = "{NotNull.ContainerInstanceView.containerInstanceId}" )
@@ -26,6 +23,10 @@ public class ContainerInstanceView extends Identifiable {
 
     @Column( name = "internal_container_id" )
     private String internalContainerId;
+
+    @Temporal( TemporalType.TIMESTAMP )
+    @Column( name = "date_scheduled" )
+    private Date dateScheduled;
 
     @Temporal( TemporalType.TIMESTAMP )
     @Column( name = "date_created" )
@@ -67,6 +68,7 @@ public class ContainerInstanceView extends Identifiable {
                                    ContainerInstanceId containerInstanceId,
                                    String internalContainerName,
                                    String internalContainerId,
+                                   Date dateScheduled,
                                    Date dateCreated,
                                    Date dateStarted,
                                    Date dateStopped,
@@ -75,10 +77,11 @@ public class ContainerInstanceView extends Identifiable {
                                    ContainerInstanceStatus status,
                                    ServerView server,
                                    RunConfigurationView runConfiguration ) {
-        this.projectInstanceId = projectInstanceId;
+        //this.projectInstanceId = projectInstanceId;
         this.containerInstanceId = containerInstanceId;
         this.internalContainerName = internalContainerName;
         this.internalContainerId = internalContainerId;
+        this.dateScheduled = dateScheduled;
         this.dateCreated = dateCreated;
         this.dateStarted = dateStarted;
         this.dateStopped = dateStopped;
@@ -90,7 +93,7 @@ public class ContainerInstanceView extends Identifiable {
     }
 
     public void setProjectInstanceId( ProjectInstanceId projectInstanceId ) {
-        this.projectInstanceId = projectInstanceId;
+        //this.projectInstanceId = projectInstanceId;
     }
 
     public void setContainerInstanceId( ContainerInstanceId containerInstanceId ) {
@@ -103,6 +106,10 @@ public class ContainerInstanceView extends Identifiable {
 
     public void setInternalContainerId( String internalContainerId ) {
         this.internalContainerId = internalContainerId;
+    }
+
+    public void setDateScheduled( Date dateScheduled ) {
+        this.dateScheduled = dateScheduled;
     }
 
     public void setDateCreated( Date dateCreated ) {
@@ -143,6 +150,7 @@ public class ContainerInstanceView extends Identifiable {
         private ContainerInstanceId containerInstanceId;
         private String internalContainerName;
         private String internalContainerId;
+        private Date dateScheduled;
         private Date dateCreated;
         private Date dateStarted;
         private Date dateStopped;
@@ -173,6 +181,11 @@ public class ContainerInstanceView extends Identifiable {
 
         public ContainerInstanceViewBuilder withInternalContainerId( String internalContainerId ) {
             this.internalContainerId = internalContainerId;
+            return this;
+        }
+
+        public ContainerInstanceViewBuilder withDateScheduled( Date dateScheduled ) {
+            this.dateScheduled = dateScheduled;
             return this;
         }
 
@@ -221,6 +234,7 @@ public class ContainerInstanceView extends Identifiable {
                     containerInstanceId,
                     internalContainerName,
                     internalContainerId,
+                    dateScheduled,
                     dateCreated,
                     dateStarted,
                     dateStopped,

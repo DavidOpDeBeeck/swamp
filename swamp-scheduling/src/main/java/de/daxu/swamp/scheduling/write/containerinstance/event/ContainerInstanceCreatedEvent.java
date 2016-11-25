@@ -1,6 +1,5 @@
 package de.daxu.swamp.scheduling.write.containerinstance.event;
 
-import de.daxu.swamp.core.location.Server;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 
 import java.util.Date;
@@ -10,14 +9,12 @@ public class ContainerInstanceCreatedEvent extends ContainerInstanceEvent {
     private final String internalContainerId;
     private final String internalContainerName;
     private final Date dateCreated;
-    private final Server server;
 
-    public ContainerInstanceCreatedEvent( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName, Date dateCreated, Server server ) {
+    public ContainerInstanceCreatedEvent( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName, Date dateCreated ) {
         super(containerInstanceId);
         this.internalContainerId = internalContainerId;
         this.internalContainerName = internalContainerName;
         this.dateCreated = dateCreated;
-        this.server = server;
     }
 
     public String getInternalContainerId() {
@@ -30,9 +27,5 @@ public class ContainerInstanceCreatedEvent extends ContainerInstanceEvent {
 
     public Date getDateCreated() {
         return dateCreated;
-    }
-
-    public Server getServer() {
-        return server;
     }
 }

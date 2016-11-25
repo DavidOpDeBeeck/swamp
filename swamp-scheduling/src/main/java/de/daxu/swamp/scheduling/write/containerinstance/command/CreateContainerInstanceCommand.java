@@ -10,14 +10,12 @@ public class CreateContainerInstanceCommand extends ContainerInstanceCommand {
     private final String internalContainerId;
     private final String internalContainerName;
     private final Date dateCreated;
-    private final Server server;
 
-    public CreateContainerInstanceCommand( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName, Date dateCreated, Server server ) {
+    public CreateContainerInstanceCommand( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName, Date dateCreated ) {
         super( containerInstanceId );
         this.internalContainerId = internalContainerId;
         this.internalContainerName = internalContainerName;
         this.dateCreated = dateCreated;
-        this.server = server;
     }
 
     public String getInternalContainerId() {
@@ -30,9 +28,5 @@ public class CreateContainerInstanceCommand extends ContainerInstanceCommand {
 
     public Date getDateCreated() {
         return dateCreated;
-    }
-
-    public Server getServer() {
-        return server;
     }
 }

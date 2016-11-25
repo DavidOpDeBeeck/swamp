@@ -2,8 +2,7 @@ package de.daxu.swamp.scheduling.resource;
 
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduling.write.WriteService;
-import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,7 @@ public class SchedulingResource {
     public final static String SCHEDULING_URL = "/scheduling";
 
     @Autowired
-    private WriteService writeService;
+    private ContainerInstanceWriteService containerInstanceWriteService;
 
     @Autowired
     private ProjectService projectService;
@@ -28,6 +27,6 @@ public class SchedulingResource {
     @RequestMapping( value = "/container/{containerId}", method = RequestMethod.GET )
     public void schedule( @PathVariable( value = "containerId" ) String containerId ) {
         Container container = projectService.getContainer( containerId );
-        writeService.startContainer( ContainerInstanceId.random(), ( Server ) container.getPotentialLocations().iterator().next() );
+        containerInstanceWriteService.scheduleContainerInstance( container, ( Server ) container.getPotentialLocations().iterator().next() );
     }
 }
