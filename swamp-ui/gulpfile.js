@@ -40,7 +40,7 @@ function cleanBuild() {
 }
 
 function syncBrowserAndProxy() {
-    var proxyOptions = url.parse('http://localhost:8080/');
+    var proxyOptions = url.parse('http://localhost:8081/');
     proxyOptions.route = '/api';
 
     browserSync.init({
