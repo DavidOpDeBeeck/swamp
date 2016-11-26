@@ -14,9 +14,7 @@ public class ContainerInstanceCommandFactory {
         return new ScheduleContainerInstanceCommand( ContainerInstanceId.random(), container, server, new Date() );
     }
 
-    public CreateContainerInstanceCommand createCreateCommand( ContainerInstanceId containerInstanceId,
-                                                               String internalContainerId,
-                                                               String internalContainerName ) {
+    public CreateContainerInstanceCommand createCreateCommand( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName ) {
         return new CreateContainerInstanceCommand( containerInstanceId, internalContainerId, internalContainerName, new Date() );
     }
 
@@ -24,4 +22,11 @@ public class ContainerInstanceCommandFactory {
         return new StartContainerInstanceCommand( containerInstanceId, new Date() );
     }
 
+    public StartContainerInstanceLoggingCommand createStartLoggingCommand( ContainerInstanceId containerInstanceId ) {
+        return new StartContainerInstanceLoggingCommand( containerInstanceId, new Date() );
+    }
+
+    public ReceiveContainerInstanceLogCommand createReceiveLogCommand( ContainerInstanceId containerInstanceId, String log ) {
+        return new ReceiveContainerInstanceLogCommand( containerInstanceId, log, new Date() );
+    }
 }

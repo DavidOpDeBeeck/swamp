@@ -2,12 +2,8 @@ package de.daxu.swamp.scheduling.write.containerinstance;
 
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
-import de.daxu.swamp.scheduling.write.containerinstance.command.ScheduleContainerInstanceCommand;
-import de.daxu.swamp.scheduling.write.containerinstance.command.StartContainerInstanceCommand;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceScheduledEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceStartedEvent;
+import de.daxu.swamp.scheduling.write.containerinstance.command.*;
+import de.daxu.swamp.scheduling.write.containerinstance.event.*;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -55,6 +51,23 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
         apply( new ContainerInstanceStartedEvent(
                 command.getContainerInstanceId(),
                 command.getDateStarted() )
+        );
+    }
+
+    @CommandHandler
+    public void startLogging( StartContainerInstanceLoggingCommand command ) {
+        apply( new ContainerInstanceLoggingStartedEvent(
+                command.getContainerInstanceId(),
+                command.getDateLoggingStarted() )
+        );
+    }
+
+    @CommandHandler
+    public void receiveLog( ReceiveContainerInstanceLogCommand command ) {
+        apply( new ContainerInstanceLogReceivedEvent(
+                command.getContainerInstanceId(),
+                command.getLog(),
+                command.getDateLogReceived())
         );
     }
 

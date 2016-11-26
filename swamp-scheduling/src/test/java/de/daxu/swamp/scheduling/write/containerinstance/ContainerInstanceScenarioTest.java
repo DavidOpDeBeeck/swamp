@@ -37,4 +37,18 @@ public class ContainerInstanceScenarioTest {
                 .when( START_COMMAND )
                 .expectEvents( STARTED_EVENT );
     }
+
+    @Test
+    public void onStartLogging() {
+        fixture.given( SCHEDULED_EVENT, CREATED_EVENT, START_COMMAND )
+                .when( START_LOGGING_COMMAND )
+                .expectEvents( LOGGING_STARTED_EVENT );
+    }
+
+    @Test
+    public void onLogReceived() {
+        fixture.given( SCHEDULED_EVENT, CREATED_EVENT, START_COMMAND, START_LOGGING_COMMAND )
+                .when( RECEIVE_LOG_COMMAND )
+                .expectEvents( LOG_RECEIVED_EVENT );
+    }
 }

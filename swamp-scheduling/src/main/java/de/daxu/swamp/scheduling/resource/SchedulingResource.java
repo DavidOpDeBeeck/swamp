@@ -27,6 +27,6 @@ public class SchedulingResource {
     @RequestMapping( value = "/container/{containerId}", method = RequestMethod.GET )
     public void schedule( @PathVariable( value = "containerId" ) String containerId ) {
         Container container = projectService.getContainer( containerId );
-        containerInstanceWriteService.scheduleContainerInstance( container, ( Server ) container.getPotentialLocations().iterator().next() );
+        containerInstanceWriteService.schedule( container, ( Server ) container.getPotentialLocations().iterator().next() );
     }
 }

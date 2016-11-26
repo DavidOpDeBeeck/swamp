@@ -17,17 +17,23 @@ public class ContainerInstanceWriteService {
     @Autowired
     private ContainerInstanceCommandFactory containerInstanceCommandFactory;
 
-    public void scheduleContainerInstance( Container container, Server server ) {
+    public void schedule( Container container, Server server ) {
         commandGateway.send( containerInstanceCommandFactory.createScheduleCommand( container, server ) );
     }
 
-    public void createContainerInstance( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName ) {
-        commandGateway.send( containerInstanceCommandFactory.createCreateCommand( containerInstanceId,
-                                                                            internalContainerId,
-                                                                            internalContainerName ) );
+    public void create( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName ) {
+        commandGateway.send( containerInstanceCommandFactory.createCreateCommand( containerInstanceId, internalContainerId, internalContainerName ) );
     }
 
-    public void startContainerInstance( ContainerInstanceId containerInstanceId ) {
+    public void start( ContainerInstanceId containerInstanceId ) {
         commandGateway.send( containerInstanceCommandFactory.createStartCommand( containerInstanceId ) );
+    }
+
+    public void startLogging( ContainerInstanceId containerInstanceId ) {
+        commandGateway.send( containerInstanceCommandFactory.createStartLoggingCommand( containerInstanceId ) );
+    }
+
+    public void receiveLog( ContainerInstanceId containerInstanceId, String log ) {
+        commandGateway.send( containerInstanceCommandFactory.createReceiveLogCommand( containerInstanceId, log ) );
     }
 }

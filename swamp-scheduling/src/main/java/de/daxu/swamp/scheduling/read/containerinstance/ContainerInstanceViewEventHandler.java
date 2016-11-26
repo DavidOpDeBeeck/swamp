@@ -1,10 +1,7 @@
 package de.daxu.swamp.scheduling.read.containerinstance;
 
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceScheduledEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceStartedEvent;
+import de.daxu.swamp.scheduling.write.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,6 +51,15 @@ public class ContainerInstanceViewEventHandler {
 
         view.setDateStarted( event.getDateStarted() );
         view.setStatus( ContainerInstanceStatus.STARTED );
+
+        containerInstanceViewRepository.save( view );
+    }
+
+    @EventHandler
+    void on( ContainerInstanceLogReceivedEvent event ) {
+        ContainerInstanceView view = getByContainerInstanceId( event );
+
+        view.addLog( event.getLog() );
 
         containerInstanceViewRepository.save( view );
     }
