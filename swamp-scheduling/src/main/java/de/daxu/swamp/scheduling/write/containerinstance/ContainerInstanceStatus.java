@@ -4,8 +4,6 @@ public enum ContainerInstanceStatus {
     SCHEDULED,
     CREATED,
     STARTED,
-    RUNNING,
-    PAUSED,
-    RESTARTING,
-    EXITED
+    STOPPED,
+    REMOVED
 }

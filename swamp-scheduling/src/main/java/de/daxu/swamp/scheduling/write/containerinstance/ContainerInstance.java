@@ -55,6 +55,22 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
     }
 
     @CommandHandler
+    public void stop( StopContainerInstanceCommand command ) {
+        apply( new ContainerInstanceStoppedEvent(
+                command.getContainerInstanceId(),
+                command.getDateStopped() )
+        );
+    }
+
+    @CommandHandler
+    public void remove( RemoveContainerInstanceCommand command ) {
+        apply( new ContainerInstanceRemovedEvent(
+                command.getContainerInstanceId(),
+                command.getDateRemoved() )
+        );
+    }
+
+    @CommandHandler
     public void startLogging( StartContainerInstanceLoggingCommand command ) {
         apply( new ContainerInstanceLoggingStartedEvent(
                 command.getContainerInstanceId(),
@@ -67,7 +83,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
         apply( new ContainerInstanceLogReceivedEvent(
                 command.getContainerInstanceId(),
                 command.getLog(),
-                command.getDateLogReceived())
+                command.getDateLogReceived() )
         );
     }
 

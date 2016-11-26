@@ -29,4 +29,12 @@ public class ContainerInstanceCommandFactory {
     public ReceiveContainerInstanceLogCommand createReceiveLogCommand( ContainerInstanceId containerInstanceId, String log ) {
         return new ReceiveContainerInstanceLogCommand( containerInstanceId, log, new Date() );
     }
+
+    public StopContainerInstanceCommand createStopCommand( ContainerInstanceId containerInstanceId ) {
+        return new StopContainerInstanceCommand( containerInstanceId, new Date() );
+    }
+
+    public RemoveContainerInstanceCommand createRemoveCommand( ContainerInstanceId containerInstanceId ) {
+        return new RemoveContainerInstanceCommand( containerInstanceId, new Date() );
+    }
 }

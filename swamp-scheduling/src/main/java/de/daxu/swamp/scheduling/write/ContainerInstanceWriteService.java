@@ -33,6 +33,14 @@ public class ContainerInstanceWriteService {
         commandGateway.send( containerInstanceCommandFactory.createStartCommand( containerInstanceId ) );
     }
 
+    public void stop( ContainerInstanceId containerInstanceId ) {
+        commandGateway.send( containerInstanceCommandFactory.createStopCommand( containerInstanceId ) );
+    }
+
+    public void remove( ContainerInstanceId containerInstanceId ) {
+        commandGateway.send( containerInstanceCommandFactory.createRemoveCommand( containerInstanceId ) );
+    }
+
     public void startLogging( ContainerInstanceId containerInstanceId ) {
         commandGateway.send( containerInstanceCommandFactory.createStartLoggingCommand( containerInstanceId ) );
     }
@@ -41,3 +49,5 @@ public class ContainerInstanceWriteService {
         commandGateway.send( containerInstanceCommandFactory.createReceiveLogCommand( containerInstanceId, log ) );
     }
 }
+
+
