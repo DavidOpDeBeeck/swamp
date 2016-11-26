@@ -32,6 +32,8 @@ function build() {
         }))
         .bundle()
         .pipe(source('app.js'))
+        .pipe(buffer())
+        .pipe(uglify())
         .pipe(gulp.dest(PUBLIC_FOLDER));
 }
 

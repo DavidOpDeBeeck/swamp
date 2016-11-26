@@ -1,7 +1,14 @@
 class SchedulerController {
-    constructor(SchedulerService) {
+    constructor(SchedulerService, $stomp) {
         this.schedulerService = SchedulerService;
         this.getAllProjects();
+        $stomp
+            .connect('http://localhost:8081/schedule')
+            .then(() => {
+                $stomp.subscribe('/topic/container-updates', (payload) => {
+                    console.log(payload);
+                })
+            });
     }
 
     getAllProjects() {
@@ -10,4 +17,4 @@ class SchedulerController {
     }
 }
 
-export default ['SchedulerService', SchedulerController]
+export default ['SchedulerService', '$stomp', SchedulerController]

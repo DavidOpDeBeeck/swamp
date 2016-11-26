@@ -11,6 +11,8 @@ public class WebSocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
     @Override
     public void registerStompEndpoints( StompEndpointRegistry registry ) {
-        registry.addEndpoint( "/schedule" ).withSockJS();
+        registry.addEndpoint( "/schedule" )
+                .setAllowedOrigins( "http://localhost:3000" )
+                .withSockJS();
     }
 }
