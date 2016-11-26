@@ -13,8 +13,12 @@ import static de.daxu.swamp.scheduling.read.containerinstance.ServerView.ServerV
 @SuppressWarnings( "unused" )
 public class ContainerInstanceViewEventHandler {
 
+    private final ContainerInstanceViewRepository containerInstanceViewRepository;
+
     @Autowired
-    private ContainerInstanceViewRepository containerInstanceViewRepository;
+    public ContainerInstanceViewEventHandler( ContainerInstanceViewRepository containerInstanceViewRepository ) {
+        this.containerInstanceViewRepository = containerInstanceViewRepository;
+    }
 
     @EventHandler
     void on( ContainerInstanceScheduledEvent event ) {

@@ -1,7 +1,5 @@
 package de.daxu.swamp.scheduling.notify.containerinstance;
 
-import de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceViewRepository;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
 import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +10,12 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings( "unused" )
 public class ContainerInstanceNotifyEventHandler {
 
-    @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
+    private final SimpMessageSendingOperations messagingTemplate;
 
     @Autowired
-    private ContainerInstanceViewRepository containerInstanceViewRepository;
+    public ContainerInstanceNotifyEventHandler( SimpMessageSendingOperations messagingTemplate ) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @EventHandler
     void on( ContainerInstanceEvent event ) {
@@ -24,6 +23,10 @@ public class ContainerInstanceNotifyEventHandler {
     }
 
     private void publish( ContainerInstanceEvent event ) {
-        this.messagingTemplate.convertAndSend( "/topic/container-updates", new ContainerInstanceNotification( event ) );
+        this.messagingTemplate.convertAndSend( "/topic/container-updates", createNotification( event ) );
+    }
+
+    private ContainerInstanceNotification createNotification( ContainerInstanceEvent event ) {
+        return new ContainerInstanceNotification( event );
     }
 }

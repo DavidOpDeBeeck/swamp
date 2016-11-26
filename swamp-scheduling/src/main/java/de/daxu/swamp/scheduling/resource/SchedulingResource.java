@@ -18,11 +18,15 @@ public class SchedulingResource {
 
     public final static String SCHEDULING_URL = "/scheduling";
 
-    @Autowired
-    private ContainerInstanceWriteService containerInstanceWriteService;
+    private final ContainerInstanceWriteService containerInstanceWriteService;
+    private final ProjectService projectService;
 
     @Autowired
-    private ProjectService projectService;
+    public SchedulingResource( ContainerInstanceWriteService containerInstanceWriteService,
+                               ProjectService projectService ) {
+        this.containerInstanceWriteService = containerInstanceWriteService;
+        this.projectService = projectService;
+    }
 
     @RequestMapping( value = "/container/{containerId}", method = RequestMethod.GET )
     public void schedule( @PathVariable( value = "containerId" ) String containerId ) {

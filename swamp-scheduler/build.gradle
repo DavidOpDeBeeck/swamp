@@ -7,7 +7,6 @@ repositories {
 ext {
     axonVersion = '2.1.1'
     dockerJavaVersion = '3.0.5'
-    elasticsearchVersion = '5.0.0'
     springDataVersion = '1.10.4.RELEASE'
     springDataElistacsearchVersion = '2.0.4.RELEASE'
     hsqldbVersion = '2.3.4'
@@ -21,10 +20,7 @@ dependencies {
     compile "org.axonframework:axon-core:$axonVersion"
     compile "org.axonframework:axon-integration:$axonVersion"
     compile "com.github.docker-java:docker-java:$dockerJavaVersion"
-    compile "org.elasticsearch:elasticsearch:$elasticsearchVersion"
     compile "org.springframework.data:spring-data-jpa:$springDataVersion"
-    compile "org.hsqldb:hsqldb:$hsqldbVersion"
     compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
     compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
-    compile "org.springframework.data:spring-data-elasticsearch:$springDataElistacsearchVersion"
 }

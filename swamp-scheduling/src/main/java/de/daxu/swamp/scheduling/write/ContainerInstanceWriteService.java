@@ -11,11 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContainerInstanceWriteService {
 
-    @Autowired
-    private CommandGateway commandGateway;
+    private final CommandGateway commandGateway;
+    private final ContainerInstanceCommandFactory containerInstanceCommandFactory;
 
     @Autowired
-    private ContainerInstanceCommandFactory containerInstanceCommandFactory;
+    public ContainerInstanceWriteService( CommandGateway commandGateway,
+                                          ContainerInstanceCommandFactory containerInstanceCommandFactory ) {
+        this.commandGateway = commandGateway;
+        this.containerInstanceCommandFactory = containerInstanceCommandFactory;
+    }
 
     public void schedule( Container container, Server server ) {
         commandGateway.send( containerInstanceCommandFactory.createScheduleCommand( container, server ) );
