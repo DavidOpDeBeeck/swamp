@@ -9,6 +9,9 @@ import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.Project;
+import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.core.strategy.SimpleStrategy;
+import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static de.daxu.swamp.api.resource.project.ContainerResource.CONTAINERS_URL;
@@ -27,17 +31,24 @@ public class ContainerResource {
 
     public static final String CONTAINERS_URL = PROJECTS_URL + "/{projectId}/containers";
 
-    @Autowired
-    ResponseFactory responseFactory;
+    private final ResponseFactory responseFactory;
+    private final ProjectService projectService;
+    private final ContainerConverter containerConverter;
+    private final ContainerCreateConverter containerCreateConverter;
+    private final ContainerInstanceWriteService containerInstanceWriteService;
 
     @Autowired
-    ProjectService projectService;
-
-    @Autowired
-    ContainerConverter containerConverter;
-
-    @Autowired
-    ContainerCreateConverter containerCreateConverter;
+    public ContainerResource( ResponseFactory responseFactory,
+                              ProjectService projectService,
+                              ContainerConverter containerConverter,
+                              ContainerCreateConverter containerCreateConverter,
+                              ContainerInstanceWriteService containerInstanceWriteService ) {
+        this.responseFactory = responseFactory;
+        this.projectService = projectService;
+        this.containerConverter = containerConverter;
+        this.containerCreateConverter = containerCreateConverter;
+        this.containerInstanceWriteService = containerInstanceWriteService;
+    }
 
     @RequestMapping( method = RequestMethod.GET )
     public ResponseEntity<Response> getContainers( @PathVariable( "projectId" ) String id ) {
@@ -132,5 +143,28 @@ public class ContainerResource {
         projectService.removeContainerFromProject( project, container );
 
         return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
+    }
+
+    @RequestMapping( value = "/{containerId}", params = { "action=schedule" }, method = RequestMethod.POST )
+    public ResponseEntity<Response> schedule( @PathVariable( "projectId" ) String projectId,
+                                              @PathVariable( value = "containerId" ) String containerId ) {
+
+        Project project = projectService.getProject( projectId );
+
+        if( project == null )
+            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+
+        Container container = projectService.getContainer( containerId );
+
+        if( !project.getContainers().contains( container ) )
+            return new ResponseEntity<>( responseFactory.badRequest( "Project doesn't have the container!" ), HttpStatus.OK );
+
+        Optional<Server> potentialServer = new SimpleStrategy().calculate( container );
+
+        if( potentialServer.isPresent() ){
+            containerInstanceWriteService.schedule( container, potentialServer.get() );
+            return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
+        }
+        return new ResponseEntity<>( responseFactory.badRequest( "Container has no available servers!" ), HttpStatus.OK );
     }
 }
