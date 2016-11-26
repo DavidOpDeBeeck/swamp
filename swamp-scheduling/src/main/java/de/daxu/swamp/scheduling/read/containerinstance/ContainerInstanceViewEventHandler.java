@@ -60,6 +60,26 @@ public class ContainerInstanceViewEventHandler {
     }
 
     @EventHandler
+    void on( ContainerInstanceStoppedEvent event ) {
+        ContainerInstanceView view = getByContainerInstanceId( event );
+
+        view.setDateStopped( event.getDateStopped() );
+        view.setStatus( ContainerInstanceStatus.STOPPED );
+
+        containerInstanceViewRepository.save( view );
+    }
+
+    @EventHandler
+    void on( ContainerInstanceRemovedEvent event ) {
+        ContainerInstanceView view = getByContainerInstanceId( event );
+
+        view.setDateRemoved( event.getDateRemoved() );
+        view.setStatus( ContainerInstanceStatus.REMOVED );
+
+        containerInstanceViewRepository.save( view );
+    }
+
+    @EventHandler
     void on( ContainerInstanceLogReceivedEvent event ) {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
