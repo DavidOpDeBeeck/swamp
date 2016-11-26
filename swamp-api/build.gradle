@@ -23,7 +23,6 @@ bootRepackage {
 
 dependencies {
     compile project(":swamp-core")
-    compile project(":swamp-scheduler")
     compile project(":swamp-scheduling")
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"

@@ -3,6 +3,5 @@ include 'swamp-core'
 include 'swamp-api'
 include 'swamp-ui'
 include 'swamp-common'
-include 'swamp-scheduler'
 include 'swamp-scheduling'
 
