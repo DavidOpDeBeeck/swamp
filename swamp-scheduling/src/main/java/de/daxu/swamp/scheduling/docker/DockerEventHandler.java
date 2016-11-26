@@ -14,9 +14,7 @@ import de.daxu.swamp.scheduling.docker.client.DockerClientFactory;
 import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstance;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceScheduledEvent;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceStartedEvent;
+import de.daxu.swamp.scheduling.write.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +94,30 @@ public class DockerEventHandler {
                 .exec( createLogCallback( containerInstanceId ) );
 
         containerInstanceWriteService.startLogging( containerInstanceId );
+    }
+
+    @EventHandler
+    public void on( ContainerInstanceStoppedEvent event ) {
+        ContainerInstanceId containerInstanceId = event.getContainerInstanceId();
+        ContainerInstance containerInstance = containerInstanceRepository.load( containerInstanceId );
+
+        createDockerClient( containerInstance.getServer() )
+                .stopContainerCmd( containerInstanceId.getValue() )
+                .exec();
+
+        containerInstanceWriteService.start( containerInstanceId );
+    }
+
+    @EventHandler
+    public void on( ContainerInstanceRemovedEvent event ) {
+        ContainerInstanceId containerInstanceId = event.getContainerInstanceId();
+        ContainerInstance containerInstance = containerInstanceRepository.load( containerInstanceId );
+
+        createDockerClient( containerInstance.getServer() )
+                .removeContainerCmd( containerInstanceId.getValue() )
+                .exec();
+
+        containerInstanceWriteService.start( containerInstanceId );
     }
 
     private DockerClient createDockerClient( Server server ) {
