@@ -8,8 +8,6 @@ import de.daxu.swamp.common.response.Response;
 import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Project;
-import de.daxu.swamp.scheduler.Scheduler;
-import de.daxu.swamp.scheduler.strategy.FairStrategy;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,9 +27,6 @@ public class ProjectResource {
 
     @Autowired
     ResponseFactory responseFactory;
-
-    @Autowired
-    Scheduler scheduler;
 
     @Autowired
     ProjectService projectService;
@@ -67,7 +62,7 @@ public class ProjectResource {
 
         Project project = projectService.getProject( projectId );
 
-        if ( project == null )
+        if( project == null )
             return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
 
         ProjectDTO projectDTO = projectConverter.toDTO( project );
@@ -82,7 +77,7 @@ public class ProjectResource {
         Project targetProject = projectService.getProject( projectId );
         Project srcProject = projectCreateConverter.toDomain( projectCreateDTO );
 
-        if ( targetProject == null )
+        if( targetProject == null )
             return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
 
         BeanUtils.copyProperties( srcProject, targetProject );
@@ -98,23 +93,10 @@ public class ProjectResource {
 
         Project project = projectService.getProject( projectId );
 
-        if ( project == null )
+        if( project == null )
             return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
 
         projectService.deleteProject( project );
-
-        return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
-    }
-
-    @RequestMapping( value = "/{projectId}", params = { "action=deploy" }, method = RequestMethod.POST )
-    public ResponseEntity<Response> deploy( @PathVariable( "projectId" ) String projectId ) {
-
-        Project project = projectService.getProject( projectId );
-
-        if ( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
-
-        scheduler.schedule( project, new FairStrategy() );
 
         return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
     }

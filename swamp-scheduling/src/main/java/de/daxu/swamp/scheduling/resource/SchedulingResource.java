@@ -32,7 +32,7 @@ public class SchedulingResource {
         this.projectService = projectService;
     }
 
-    @RequestMapping( value = "/container/{containerId}", params = "action=schedule", method = RequestMethod.GET )
+    @RequestMapping( value = "/container/{containerId}", params = { "action=schedule" }, method = RequestMethod.GET )
     public void schedule( @PathVariable( value = "containerId" ) String containerId ) {
         Container container = projectService.getContainer( containerId );
 
