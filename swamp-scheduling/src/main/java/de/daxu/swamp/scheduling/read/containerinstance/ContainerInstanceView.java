@@ -46,7 +46,7 @@ public class ContainerInstanceView extends Identifiable {
 
     @Lob
     @Column( name = "log" )
-    private String log;
+    private String log = "";
 
     @Enumerated( EnumType.STRING )
     @Column( name = "status" )
