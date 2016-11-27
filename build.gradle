@@ -18,13 +18,6 @@ repositories {
 apply plugin: 'java'
 apply plugin: "org.flywaydb.flyway"
 
-flyway {
-    url = 'jdbc:mysql://localhost:3306/swamp'
-    user = 'root'
-    password = '1234'
-    locations = ['filesystem:flyway/migration']
-}
-
 ext {
     mysqlVersion = "5.1.38"
 }

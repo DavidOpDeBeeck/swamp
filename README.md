@@ -1,19 +1,32 @@
 # Swamp
+
 Swamp allows for a fast and easy deployment of all your projects.
 
 ## Development
 
 #### Configuration
+
+##### REST API Database
+
 ```
 > cd swamp-api/src/main/resources
 > (vi|nano|notepad) application.properties
 ```
 
+##### Flyway Database
+
+```
+> cd .
+> (vi|nano|notepad) gradle.properties
+```
+
 #### Installation
+
 ```
 > (./gradlew|gradlew.bat) flywayMigrate
-> (./gradlew|gradlew.bat) :swamp-api:bootRun
+> (./gradlew|gradlew.bat) :swamp-api:bootRun -Dversion=0.3-alpha
 ```
+
 ```
 > cd swamp/swamp-ui
 > gulp start
