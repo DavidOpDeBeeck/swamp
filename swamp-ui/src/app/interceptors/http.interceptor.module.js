@@ -20,8 +20,6 @@ function RequestLogger() {
             let url = response.config.url;
             if (url.startsWith("/api"))
                 Logger.info("Loaded API data from " + url);
-            if (url.endsWith(".html"))
-                Logger.info("Loaded template from " + url);
             if (response.errors)
                 Logger.error(response.errors);
             return response;
