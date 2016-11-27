@@ -1,5 +1,7 @@
 package de.daxu.swamp.common.cqrs;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
@@ -30,6 +32,7 @@ public abstract class EntityId implements AggregateId {
         return value != null ? value.hashCode() : 0;
     }
 
+    @JsonValue
     @Override
     public String getValue() {
         return value;

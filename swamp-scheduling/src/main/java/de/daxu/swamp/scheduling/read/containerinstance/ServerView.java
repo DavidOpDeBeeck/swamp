@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.read.containerinstance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.daxu.swamp.common.jpa.Identifiable;
 
 import javax.persistence.Column;
@@ -61,6 +62,26 @@ public class ServerView extends Identifiable {
 
     public void setKey( String key ) {
         this.key = key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getCACertificate() {
+        return CACertificate;
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public static class ServerViewBuilder {

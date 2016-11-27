@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.read.containerinstance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.daxu.swamp.common.jpa.Identifiable;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
@@ -142,6 +143,54 @@ public class ContainerInstanceView extends Identifiable {
 
     public void setRunConfiguration( RunConfigurationView runConfiguration ) {
         this.runConfiguration = runConfiguration;
+    }
+
+    public ContainerInstanceId getContainerInstanceId() {
+        return containerInstanceId;
+    }
+
+    public String getInternalContainerName() {
+        return internalContainerName;
+    }
+
+    public String getInternalContainerId() {
+        return internalContainerId;
+    }
+
+    public Date getDateScheduled() {
+        return dateScheduled;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public Date getDateStarted() {
+        return dateStarted;
+    }
+
+    public Date getDateStopped() {
+        return dateStopped;
+    }
+
+    public Date getDateRemoved() {
+        return dateRemoved;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public ContainerInstanceStatus getStatus() {
+        return status;
+    }
+
+    public ServerView getServer() {
+        return server;
+    }
+
+    public RunConfigurationView getRunConfiguration() {
+        return runConfiguration;
     }
 
     public static class ContainerInstanceViewBuilder {

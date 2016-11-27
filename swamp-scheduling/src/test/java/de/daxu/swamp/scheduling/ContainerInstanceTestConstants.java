@@ -5,7 +5,9 @@ import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.container.PortMapping;
 import de.daxu.swamp.core.container.configuration.RunConfiguration;
 import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.write.containerinstance.command.*;
 import de.daxu.swamp.scheduling.write.containerinstance.event.*;
 
@@ -17,17 +19,30 @@ import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainer
 import static de.daxu.swamp.core.container.configuration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
 import static de.daxu.swamp.core.location.Server.ServerBuilder.aServer;
 import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Utils.DATE;
+import static de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
 
 public class ContainerInstanceTestConstants {
 
     public static final ContainerInstanceId CONTAINER_INSTANCE_ID = ContainerInstanceId.random();
+    public static final ContainerInstanceId ANOTHER_CONTAINER_INSTANCE_ID = ContainerInstanceId.random();
+
     public static final String INTERNAL_CONTAINER_NAME = "name";
     public static final String INTERNAL_CONTAINER_ID = "id";
     public static final String LOG = "log";
 
+    public static final ContainerInstanceView CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
+            .withContainerInstanceId( CONTAINER_INSTANCE_ID )
+            .withStatus( ContainerInstanceStatus.STARTED )
+            .build();
+    public static final ContainerInstanceView ANOTHER_CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
+            .withContainerInstanceId( ANOTHER_CONTAINER_INSTANCE_ID )
+            .withStatus( ContainerInstanceStatus.STARTED )
+            .build();
+
     public static final String NAME = "name";
     public static final RunConfiguration IMAGE_CONFIGURATION = anImageConfiguration().build();
     public static final Set<PortMapping> PORT_MAPPINGS = new HashSet<>();
+
     public static final Set<EnvironmentVariable> ENVIRONMENT_VARIABLES = new HashSet<>();
 
     public static final Container CONTAINER = aContainer()
