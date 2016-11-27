@@ -1,7 +1,6 @@
 package de.daxu.swamp.scheduling.read.containerinstance;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.daxu.swamp.common.jpa.Identifiable;
+import de.daxu.swamp.common.cqrs.EntityView;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,7 @@ import javax.persistence.Lob;
 
 @Entity
 @SuppressWarnings( "unused" )
-public class ServerView extends Identifiable {
+public class ServerView extends EntityView {
 
     @Column( name = "name" )
     private String name;

@@ -1,7 +1,6 @@
 package de.daxu.swamp.scheduling.read.containerinstance;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.daxu.swamp.common.jpa.Identifiable;
+import de.daxu.swamp.common.cqrs.EntityView;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.write.projectinstance.ProjectInstanceId;
@@ -13,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table( name = "container_instance_view" )
 @SuppressWarnings( "unused" )
-public class ContainerInstanceView extends Identifiable {
+public class ContainerInstanceView extends EntityView {
 
     @Embedded
     @NotNull( message = "{NotNull.ContainerInstanceView.containerInstanceId}" )
