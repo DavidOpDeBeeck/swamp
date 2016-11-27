@@ -4,23 +4,23 @@ Swamp allows for a fast and easy deployment of all your projects.
 
 ## Development
 
-#### Configuration
+### Configuration
 
-##### REST API Database
+#### REST API Database
 
 ```
 > cd swamp-api/src/main/resources
 > (vi|nano|notepad) application.properties
 ```
 
-##### Flyway Database
+#### Flyway Database
 
 ```
 > cd .
 > (vi|nano|notepad) gradle.properties
 ```
 
-#### Installation
+### Installation
 
 ```
 > (./gradlew|gradlew.bat) flywayMigrate
