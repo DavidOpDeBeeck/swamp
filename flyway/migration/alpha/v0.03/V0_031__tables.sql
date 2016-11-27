@@ -1,7 +1,7 @@
 -- -----------------------------------------------------
 -- Table `server_view`
 -- -----------------------------------------------------
-CREATE TABLE `server_view` (
+CREATE TABLE IF NOT EXISTS `server_view` (
   `id` varchar(255) NOT NULL,
   `ca_certificate` TEXT NOT NULL,
   `certificate` TEXT NOT NULL,

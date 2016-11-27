@@ -16,14 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class RunConfigurationConverter implements DTOConverter<RunConfiguration, RunConfigurationDTO>, DomainConverter<RunConfigurationDTO, RunConfiguration> {
 
-    @Autowired
-    ImageConfigurationConverter imageConfigurationConverter;
+    private final ImageConfigurationConverter imageConfigurationConverter;
+    private final GitConfigurationConverter gitConfigurationConverter;
+    private final DockerfileConfigurationConverter dockerfileConfigurationConverter;
 
     @Autowired
-    GitConfigurationConverter gitConfigurationConverter;
-
-    @Autowired
-    DockerfileConfigurationConverter dockerfileConfigurationConverter;
+    public RunConfigurationConverter( ImageConfigurationConverter imageConfigurationConverter, GitConfigurationConverter gitConfigurationConverter, DockerfileConfigurationConverter dockerfileConfigurationConverter ) {
+        this.imageConfigurationConverter = imageConfigurationConverter;
+        this.gitConfigurationConverter = gitConfigurationConverter;
+        this.dockerfileConfigurationConverter = dockerfileConfigurationConverter;
+    }
 
     @Override
     public RunConfigurationDTO toDTO( RunConfiguration configuration ) {

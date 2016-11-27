@@ -2,12 +2,10 @@ package de.daxu.swamp.core.container.configuration;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
+import de.daxu.swamp.core.credentials.UsernamePasswordCredentials;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table( name = "git_configuration" )
@@ -26,21 +24,18 @@ public class GitConfiguration extends RunConfiguration {
     @Column( name = "path" )
     private String path;
 
-    @Column( name = "username" )
-    private String username; // TODO: replace with credentials alpha v0.3?
-
-    @Column( name = "password" )
-    private String password; // TODO: replace with credentials alpha v0.3?
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true )
+    @JoinColumn( name = "credentials_id" )
+    private UsernamePasswordCredentials credentials;
 
     private GitConfiguration() {
     }
 
-    private GitConfiguration( String url, String branch, String path, String username, String password ) {
+    private GitConfiguration( String url, String branch, String path, UsernamePasswordCredentials credentials ) {
         this.url = url;
         this.branch = branch;
         this.path = path;
-        this.username = username;
-        this.password = password;
+        this.credentials = credentials;
     }
 
     public String getUrl() {
@@ -55,12 +50,8 @@ public class GitConfiguration extends RunConfiguration {
         return path;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public UsernamePasswordCredentials getCredentials() {
+        return credentials;
     }
 
     @Override
@@ -78,8 +69,7 @@ public class GitConfiguration extends RunConfiguration {
         private String url;
         private String branch;
         private String path;
-        private String username; // TODO: replace with credentials alpha v0.3?
-        private String password; // TODO: replace with credentials alpha v0.3?
+        private UsernamePasswordCredentials credentials;
 
         public static GitConfigurationBuilder aGitConfiguration() {
             return new GitConfigurationBuilder();
@@ -100,18 +90,13 @@ public class GitConfiguration extends RunConfiguration {
             return this;
         }
 
-        public GitConfigurationBuilder withUsername( String username ) {
-            this.username = username;
-            return this;
-        }
-
-        public GitConfigurationBuilder withPassword( String password ) {
-            this.password = password;
+        public GitConfigurationBuilder withCredentials( UsernamePasswordCredentials credentials ) {
+            this.credentials = credentials;
             return this;
         }
 
         public GitConfiguration build() {
-            return new GitConfiguration( url, branch, path, username, password );
+            return new GitConfiguration( url, branch, path, credentials );
         }
     }
 }
