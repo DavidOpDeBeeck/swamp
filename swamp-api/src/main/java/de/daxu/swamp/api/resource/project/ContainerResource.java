@@ -14,10 +14,10 @@ import de.daxu.swamp.core.strategy.SimpleStrategy;
 import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
 import de.daxu.swamp.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,9 +29,9 @@ import static de.daxu.swamp.api.resource.project.ProjectResource.PROJECTS_URL;
 @RequestMapping( CONTAINERS_URL )
 public class ContainerResource {
 
-    public static final String CONTAINERS_URL = PROJECTS_URL + "/{projectId}/containers";
+    static final String CONTAINERS_URL = PROJECTS_URL + "/{projectId}/containers";
 
-    private final ResponseFactory responseFactory;
+    private final ResponseFactory response;
     private final ProjectService projectService;
     private final ContainerConverter containerConverter;
     private final ContainerCreateConverter containerCreateConverter;
@@ -43,7 +43,7 @@ public class ContainerResource {
                               ContainerConverter containerConverter,
                               ContainerCreateConverter containerCreateConverter,
                               ContainerInstanceWriteService containerInstanceWriteService ) {
-        this.responseFactory = responseFactory;
+        this.response = responseFactory;
         this.projectService = projectService;
         this.containerConverter = containerConverter;
         this.containerCreateConverter = containerCreateConverter;
@@ -51,70 +51,73 @@ public class ContainerResource {
     }
 
     @RequestMapping( method = RequestMethod.GET )
-    public ResponseEntity<Response> getContainers( @PathVariable( "projectId" ) String id ) {
+    public Response getContainers( @PathVariable( "projectId" ) String id ) {
 
         Project project = projectService.getProject( id );
 
         if( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+            return response.notFound( "Project was not found!" );
 
         List<ContainerDTO> containers = project.getContainers()
                 .stream()
                 .map( containerConverter::toDTO )
                 .collect( Collectors.toList() );
 
-        return new ResponseEntity<>( responseFactory.success( containers ), HttpStatus.OK );
+        return response.success( containers );
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public ResponseEntity<Response> postContainer( @PathVariable( "projectId" ) String id,
-                                                   @RequestBody ContainerCreateDTO containerCreateDTO ) {
+    public Response postContainer( @PathVariable( "projectId" ) String id,
+                                   @RequestBody ContainerCreateDTO containerCreateDTO ) {
 
         Project project = projectService.getProject( id );
 
         if( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+            return response.notFound( "Project was not found!" );
 
         Container container = containerCreateConverter.toDomain( containerCreateDTO );
         container = projectService.addContainerToProject( project, container );
-        ContainerDTO containerDTO = containerConverter.toDTO( container );
 
-        return new ResponseEntity<>( responseFactory.success( containerDTO ), HttpStatus.OK );
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path( "/{id}" )
+                .buildAndExpand( container.getId() ).toUri();
+
+        return response.created( location );
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.GET )
-    public ResponseEntity<Response> getContainer( @PathVariable( "projectId" ) String projectId,
-                                                  @PathVariable( "containerId" ) String containerId ) {
+    public Response getContainer( @PathVariable( "projectId" ) String projectId,
+                                  @PathVariable( "containerId" ) String containerId ) {
 
         Project project = projectService.getProject( projectId );
 
         if( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+            return response.notFound( "Project was not found!" );
 
         Container container = projectService.getContainer( containerId );
 
         if( !project.getContainers().contains( container ) )
-            return new ResponseEntity<>( responseFactory.badRequest( "Project doesn't have the container!" ), HttpStatus.OK );
+            return response.notFound( "Container was not found!" );
 
         ContainerDTO containerDTO = containerConverter.toDTO( container );
 
-        return new ResponseEntity<>( responseFactory.success( containerDTO ), HttpStatus.OK );
+        return response.success( containerDTO );
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.PUT )
-    public ResponseEntity<Response> putContainer( @PathVariable( "projectId" ) String projectId,
-                                                  @PathVariable( "containerId" ) String containerId,
-                                                  @RequestBody ContainerCreateDTO dto ) {
+    public Response putContainer( @PathVariable( "projectId" ) String projectId,
+                                  @PathVariable( "containerId" ) String containerId,
+                                  @RequestBody ContainerCreateDTO dto ) {
 
         Project project = projectService.getProject( projectId );
 
         if( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+            return response.notFound( "Project was not found!" );
 
         Container targetContainer = projectService.getContainer( containerId );
 
         if( !project.getContainers().contains( targetContainer ) )
-            return new ResponseEntity<>( responseFactory.badRequest( "Project doesn't have the container!" ), HttpStatus.OK );
+            return response.notFound( "Container was not found!" );
 
         Container srcContainer = containerCreateConverter.toDomain( dto );
 
@@ -123,48 +126,48 @@ public class ContainerResource {
 
         ContainerDTO containerDTO = containerConverter.toDTO( targetContainer );
 
-        return new ResponseEntity<>( responseFactory.success( containerDTO ), HttpStatus.OK );
+        return response.success( containerDTO );
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.DELETE )
-    public ResponseEntity<Response> deleteContainer( @PathVariable( "projectId" ) String projectId,
-                                                     @PathVariable( "containerId" ) String containerId ) {
+    public Response deleteContainer( @PathVariable( "projectId" ) String projectId,
+                                     @PathVariable( "containerId" ) String containerId ) {
 
         Project project = projectService.getProject( projectId );
 
         if( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+            return response.notFound( "Project was not found!" );
 
         Container container = projectService.getContainer( containerId );
 
         if( !project.getContainers().contains( container ) )
-            return new ResponseEntity<>( responseFactory.badRequest( "Project doesn't have the container!" ), HttpStatus.OK );
+            return response.notFound( "Container was not found!" );
 
         projectService.removeContainerFromProject( project, container );
 
-        return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
+        return response.success();
     }
 
     @RequestMapping( value = "/{containerId}", params = { "action=schedule" }, method = RequestMethod.POST )
-    public ResponseEntity<Response> schedule( @PathVariable( "projectId" ) String projectId,
-                                              @PathVariable( value = "containerId" ) String containerId ) {
+    public Response schedule( @PathVariable( "projectId" ) String projectId,
+                              @PathVariable( value = "containerId" ) String containerId ) {
 
         Project project = projectService.getProject( projectId );
 
         if( project == null )
-            return new ResponseEntity<>( responseFactory.notFound( "Project was not found!" ), HttpStatus.OK );
+            return response.notFound( "Project was not found!" );
 
         Container container = projectService.getContainer( containerId );
 
         if( !project.getContainers().contains( container ) )
-            return new ResponseEntity<>( responseFactory.badRequest( "Project doesn't have the container!" ), HttpStatus.OK );
+            return response.notFound( "Container was not found!" );
 
         Optional<Server> potentialServer = new SimpleStrategy().calculate( container );
 
-        if( potentialServer.isPresent() ){
+        if( potentialServer.isPresent() ) {
             containerInstanceWriteService.schedule( container, potentialServer.get() );
-            return new ResponseEntity<>( responseFactory.success(), HttpStatus.OK );
+            return response.success();
         }
-        return new ResponseEntity<>( responseFactory.badRequest( "Container has no available servers!" ), HttpStatus.OK );
+        return response.badRequest( "Container has no available servers!" );
     }
 }

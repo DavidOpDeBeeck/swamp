@@ -5,8 +5,10 @@ import de.daxu.swamp.common.cqrs.EntityView;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.Table;
 
 @Entity
+@Table( name = "server_view" )
 @SuppressWarnings( "unused" )
 public class ServerView extends EntityView {
 

@@ -21,25 +21,29 @@ import static de.daxu.swamp.api.resource.location.LocationResource.LOCATIONS_URL
 @RequestMapping( LOCATIONS_URL )
 public class LocationResource {
 
-    public static final String LOCATIONS_URL = "/locations";
+    static final String LOCATIONS_URL = "/locations";
+
+    private final ResponseFactory responseFactory;
+    private final LocationService locationService;
+    private final LocationConverter locationConverter;
 
     @Autowired
-    ResponseFactory responseFactory;
-
-    @Autowired
-    LocationService locationService;
-
-    @Autowired
-    LocationConverter locationConverter;
+    public LocationResource( ResponseFactory responseFactory,
+                             LocationService locationService,
+                             LocationConverter locationConverter ) {
+        this.responseFactory = responseFactory;
+        this.locationService = locationService;
+        this.locationConverter = locationConverter;
+    }
 
     @RequestMapping( method = RequestMethod.GET )
-    public ResponseEntity<Response> getAll() {
+    public Response getAll() {
 
         List<LocationDTO> servers = locationService.getAllLocation()
                 .stream()
                 .map( locationConverter::toDTO )
                 .collect( Collectors.toList() );
 
-        return new ResponseEntity<>( responseFactory.success( servers ), HttpStatus.OK );
+        return responseFactory.success( servers );
     }
 }

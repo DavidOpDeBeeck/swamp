@@ -4,13 +4,19 @@ package de.daxu.swamp.common.response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+
 import static de.daxu.swamp.common.response.Response.Builder.aResponse;
 
 @Component
 public class ResponseFactory {
 
+    private final MetaFactory metaFactory;
+
     @Autowired
-    private MetaFactory metaFactory;
+    public ResponseFactory( MetaFactory metaFactory ) {
+        this.metaFactory = metaFactory;
+    }
 
     public Response notFound( String error ) {
         return aResponse()
@@ -33,8 +39,14 @@ public class ResponseFactory {
                 .build();
     }
 
+    public Response created( URI location ) {
+        return aResponse()
+                .withMeta( metaFactory.created( location ) )
+                .build();
+    }
+
     public Response success() {
-        return success(null);
+        return success( null );
     }
 
     public Response success( Object data ) {

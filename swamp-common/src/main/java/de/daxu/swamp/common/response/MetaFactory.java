@@ -4,6 +4,8 @@ package de.daxu.swamp.common.response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+
 @Component
 public class MetaFactory {
 
@@ -17,9 +19,9 @@ public class MetaFactory {
                 .build();
     }
 
-    public Meta created() {
+    public Meta created( URI location ) {
         return new Meta.Builder()
-                .withCreated()
+                .withCreated( location )
                 .withVersion( version )
                 .build();
     }
@@ -27,13 +29,6 @@ public class MetaFactory {
     public Meta badRequest() {
         return new Meta.Builder()
                 .withBadRequest()
-                .withVersion( version )
-                .build();
-    }
-
-    public Meta forbidden() {
-        return new Meta.Builder()
-                .withForbidden()
                 .withVersion( version )
                 .build();
     }

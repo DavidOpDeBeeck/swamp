@@ -2,21 +2,26 @@ package de.daxu.swamp.common.response;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.net.URI;
 import java.util.Date;
 
+@JsonInclude( JsonInclude.Include.NON_NULL )
 @SuppressWarnings( "unused" )
 public class Meta {
 
     private int status;
     private String version;
     private Date requestTimestamp;
+    private String location;
 
-    private Meta( int status, String version, Date requestTimestamp ) {
+    private Meta( int status, String version, Date requestTimestamp, String location ) {
         this.status = status;
         this.version = version;
         this.requestTimestamp = requestTimestamp;
+        this.location = location;
     }
 
     public int getStatus() {
@@ -36,11 +41,16 @@ public class Meta {
         return requestTimestamp;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     public static class Builder {
 
         private int status;
         private String version;
         private Date timestamp;
+        private String location;
 
         public Builder withSuccess() {
             this.timestamp = new Date();
@@ -48,9 +58,10 @@ public class Meta {
             return this;
         }
 
-        public Builder withCreated() {
+        public Builder withCreated( URI location ) {
             this.timestamp = new Date();
             this.status = 201;
+            this.location = location.toString();
             return this;
         }
 
@@ -84,7 +95,7 @@ public class Meta {
         }
 
         public Meta build() {
-            return new Meta( status, version, timestamp );
+            return new Meta( status, version, timestamp, location );
         }
     }
 }
