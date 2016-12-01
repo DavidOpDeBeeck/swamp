@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.docker.client;
+package de.daxu.swamp.docker.client;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.SSLConfig;
@@ -14,7 +14,7 @@ public class ServerSSLConfig implements SSLConfig {
 
     private Server server;
 
-    public ServerSSLConfig( Server server ) {
+    ServerSSLConfig( Server server ) {
         this.server = server;
     }
 

@@ -2,18 +2,22 @@ package de.daxu.swamp.scheduling.write.containerinstance;
 
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.scheduling.write.containerinstance.command.*;
 import de.daxu.swamp.scheduling.write.containerinstance.event.*;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings( "unused" )
-public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
+public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerInstanceId> {
 
     @AggregateIdentifier
     private ContainerInstanceId containerInstanceId;
+
+    private DeployFacade deployFacade;
 
     private Server server;
     private ContainerInstanceStatus status;
@@ -22,7 +26,9 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<String> {
     }
 
     @CommandHandler
-    public ContainerInstance( ScheduleContainerInstanceCommand command ) {
+    public ContainerInstance( ScheduleContainerInstanceCommand command,
+                              DeployFacade deployFacade ) {
+        this.deployFacade = deployFacade;
         Container container = command.getContainer();
         apply( new ContainerInstanceScheduledEvent(
                         command.getContainerInstanceId(),

@@ -28,6 +28,7 @@ ext {
 dependencies {
     compile project(":swamp-core")
     compile project(":swamp-common")
+    compile project(":swamp-docker")
 
     compile "org.springframework:spring-messaging"
     compile "org.springframework.boot:spring-boot-starter-web"

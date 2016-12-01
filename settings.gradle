@@ -4,4 +4,6 @@ include 'swamp-api'
 include 'swamp-ui'
 include 'swamp-common'
 include 'swamp-scheduling'
+include 'swamp-docker'
+include 'swamp-deploy'
 

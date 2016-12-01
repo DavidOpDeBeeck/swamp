@@ -5,9 +5,12 @@ import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
 import org.axonframework.commandhandling.annotation.AnnotationCommandHandlerBeanPostProcessor;
+import org.axonframework.commandhandling.annotation.AnnotationCommandTargetResolver;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean;
 import org.axonframework.commandhandling.interceptors.BeanValidationInterceptor;
+import org.axonframework.common.annotation.ParameterResolverFactory;
+import org.axonframework.common.annotation.SpringBeanParameterResolverFactory;
 import org.axonframework.common.jpa.ContainerManagedEntityManagerProvider;
 import org.axonframework.common.jpa.EntityManagerProvider;
 import org.axonframework.eventhandling.EventBus;
@@ -52,11 +55,6 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public EventBus eventBus() {
-        return new SimpleEventBus();
-    }
-
-    @Bean
     public CommandGatewayFactoryBean<CommandGateway> commandGatewayFactoryBean() {
         CommandGatewayFactoryBean<CommandGateway> factory = new CommandGatewayFactoryBean<>();
         factory.setCommandBus( commandBus() );
@@ -64,11 +62,13 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public EventSourcingRepository<ContainerInstance> containerInstanceRepository() {
-        JpaEventStore eventStore = new JpaEventStore( entityManagerProvider() );
-        EventSourcingRepository<ContainerInstance> repository = new EventSourcingRepository<>( ContainerInstance.class, eventStore );
-        repository.setEventBus( eventBus() );
-        return repository;
+    public EventBus eventBus() {
+        return new SimpleEventBus();
+    }
+
+    @Bean
+    public JpaEventStore eventStore() {
+        return new JpaEventStore( entityManagerProvider() );
     }
 
     @Bean
@@ -77,7 +77,26 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public AggregateAnnotationCommandHandler containerInstanceCommandHandler() {
-        return AggregateAnnotationCommandHandler.subscribe( ContainerInstance.class, containerInstanceRepository(), commandBus() );
+    public EventSourcingRepository<ContainerInstance> containerInstanceRepository() {
+        EventSourcingRepository<ContainerInstance> repository = new EventSourcingRepository<>( ContainerInstance.class, eventStore() );
+        repository.setEventBus( eventBus() );
+        return repository;
+    }
+
+    @Bean
+    public AggregateAnnotationCommandHandler aggregateAnnotationCommandHandler() {
+        AggregateAnnotationCommandHandler<ContainerInstance> handler = new AggregateAnnotationCommandHandler<>( ContainerInstance.class, containerInstanceRepository(), annotationCommandTargetResolver(), springBeanParameterResolverFactory() );
+        handler.supportedCommands().forEach( supportedCommand -> commandBus().subscribe( supportedCommand, handler ) );
+        return handler;
+    }
+
+    @Bean
+    public ParameterResolverFactory springBeanParameterResolverFactory() {
+        return new SpringBeanParameterResolverFactory();
+    }
+
+    @Bean
+    public AnnotationCommandTargetResolver annotationCommandTargetResolver() {
+        return new AnnotationCommandTargetResolver();
     }
 }

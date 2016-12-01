@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.docker.client;
+package de.daxu.swamp.docker.client;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @DiscriminatorColumn( name = "type" )
 public abstract class RunConfiguration extends Identifiable {
 
-    public abstract CreateContainerCmd execute( DockerClient client );
+    public abstract CreateContainerCmd execute( DockerClient client ); // TODO: rework
 
     public abstract RunConfigurationType getType();
 }
