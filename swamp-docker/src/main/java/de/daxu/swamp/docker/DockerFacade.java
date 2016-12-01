@@ -8,7 +8,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.google.common.collect.Sets;
 import de.daxu.swamp.deploy.DeployFacade;
-import de.daxu.swamp.deploy.configuration.Configuration;
+import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.deploy.configuration.CreateContainerConfiguration;
 import de.daxu.swamp.deploy.configuration.LogContainerConfiguration;
 import de.daxu.swamp.deploy.response.ContainerResponse;
@@ -63,7 +63,7 @@ public class DockerFacade implements DeployFacade {
     }
 
     @Override
-    public ContainerResponse startContainer( Configuration configuration ) {
+    public ContainerResponse startContainer( ContainerConfiguration configuration ) {
         DockerClient dockerClient = createDockerClient( configuration );
 
         Set<String> warnings = catchWarnings(
@@ -74,7 +74,7 @@ public class DockerFacade implements DeployFacade {
     }
 
     @Override
-    public ContainerResponse stopContainer( Configuration configuration ) {
+    public ContainerResponse stopContainer( ContainerConfiguration configuration ) {
         DockerClient dockerClient = createDockerClient( configuration );
 
         Set<String> warnings = catchWarnings(
@@ -85,7 +85,7 @@ public class DockerFacade implements DeployFacade {
     }
 
     @Override
-    public ContainerResponse removeContainer( Configuration configuration ) {
+    public ContainerResponse removeContainer( ContainerConfiguration configuration ) {
         DockerClient dockerClient = createDockerClient( configuration );
 
         Set<String> warnings = catchWarnings(
@@ -137,7 +137,7 @@ public class DockerFacade implements DeployFacade {
                 .collect( Collectors.toList() );
     }
 
-    private DockerClient createDockerClient( Configuration configuration ) {
+    private DockerClient createDockerClient( ContainerConfiguration configuration ) {
         return dockerClientFactory.createClient( configuration.getServer() );
     }
 

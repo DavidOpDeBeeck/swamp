@@ -6,7 +6,7 @@ import de.daxu.swamp.deploy.response.ContainerResponse;
 
 import java.util.function.Consumer;
 
-public class LogContainerConfiguration extends Configuration {
+public class LogContainerConfiguration extends ContainerConfiguration {
 
     private Consumer<String> logCallback;
 
@@ -19,7 +19,7 @@ public class LogContainerConfiguration extends Configuration {
         return logCallback;
     }
 
-    public static class Builder extends Configuration.Builder<Builder> {
+    public static class Builder extends ContainerConfiguration.Builder<Builder> {
 
         private Consumer<String> logCallback;
 
@@ -33,7 +33,7 @@ public class LogContainerConfiguration extends Configuration {
         }
 
         @Override
-        public Configuration build() {
+        public ContainerConfiguration build() {
             return new LogContainerConfiguration( containerId, server, logCallback );
         }
     }

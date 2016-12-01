@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-public class CreateContainerConfiguration extends Configuration {
+public class CreateContainerConfiguration extends ContainerConfiguration {
 
     private RunConfiguration runConfiguration;
     private Set<PortMapping> portMappings;
@@ -41,29 +41,28 @@ public class CreateContainerConfiguration extends Configuration {
         return environmentVariables;
     }
 
-    public static class Builder extends Configuration.Builder<Builder> {
+    public static class Builder extends ContainerConfiguration.Builder<Builder> {
 
         private RunConfiguration runConfiguration;
         private Set<PortMapping> portMappings = newHashSet();
         private Set<EnvironmentVariable> environmentVariables = newHashSet();
 
-        public static ContainerResponse.Builder aCreateContainerConfiguration() {
-            return new ContainerResponse.Builder();
+        public static Builder aCreateContainerConfiguration() {
+            return new Builder();
         }
-
 
         public Builder withRunConfiguration( RunConfiguration runConfiguration ) {
             this.runConfiguration = runConfiguration;
             return this;
         }
 
-        public Builder withPortMappings( PortMapping... portMappings ) {
-            Collections.addAll( this.portMappings, portMappings );
+        public Builder withPortMappings( Set<PortMapping> portMappings ) {
+            this.portMappings = portMappings;
             return this;
         }
 
-        public Builder withEnvironmentVariables( EnvironmentVariable... environmentVariables ) {
-            Collections.addAll( this.environmentVariables, environmentVariables );
+        public Builder withEnvironmentVariables(  Set<EnvironmentVariable> environmentVariables ) {
+            this.environmentVariables = environmentVariables;
             return this;
         }
 

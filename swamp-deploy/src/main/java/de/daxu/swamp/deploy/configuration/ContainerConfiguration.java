@@ -4,12 +4,12 @@ import de.daxu.swamp.core.location.Server;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.response.ContainerResponse;
 
-public class Configuration {
+public class ContainerConfiguration {
 
     private ContainerId containerId;
     private Server server;
 
-    Configuration( ContainerId containerId, Server server ) {
+    ContainerConfiguration( ContainerId containerId, Server server ) {
         this.containerId = containerId;
         this.server = server;
     }
@@ -28,8 +28,8 @@ public class Configuration {
         ContainerId containerId;
         Server server;
 
-        public static ContainerResponse.Builder aConfiguration() {
-            return new ContainerResponse.Builder();
+        public static Builder aContainerConfiguration() {
+            return new Builder();
         }
 
         public BUILDER withContainerId( String containerId ) {
@@ -47,8 +47,8 @@ public class Configuration {
             return ( BUILDER ) this;
         }
 
-        public Configuration build() {
-            return new Configuration( containerId, server );
+        public ContainerConfiguration build() {
+            return new ContainerConfiguration( containerId, server );
         }
     }
 }
