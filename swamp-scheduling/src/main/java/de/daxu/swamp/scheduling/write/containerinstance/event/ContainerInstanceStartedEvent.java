@@ -9,7 +9,7 @@ public class ContainerInstanceStartedEvent extends ContainerInstanceEvent {
     private Date dateStarted;
 
     public ContainerInstanceStartedEvent( ContainerInstanceId containerInstanceId, Date dateStarted ) {
-        super(containerInstanceId);
+        super( containerInstanceId );
         this.dateStarted = dateStarted;
     }
 

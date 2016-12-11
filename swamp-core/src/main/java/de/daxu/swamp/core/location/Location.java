@@ -1,9 +1,11 @@
 package de.daxu.swamp.core.location;
 
 import de.daxu.swamp.common.jpa.Identifiable;
+import de.daxu.swamp.core.location.server.Server;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table( name = "location" )
@@ -15,11 +17,11 @@ public abstract class Location extends Identifiable {
     @Column( name = "name", unique = true )
     private String name;
 
-    Location() {
+    protected Location() {
     }
 
-    Location( String id, String name ) {
-        this.id = id;
+    protected Location( String id, String name ) {
+        super( id );
         this.name = name;
     }
 
@@ -33,6 +35,9 @@ public abstract class Location extends Identifiable {
 
     public abstract LocationType getType();
 
+    public abstract Set<Server> getServers();
+
+    @SuppressWarnings( "unchecked" )
     public static abstract class LocationBuilder<B extends LocationBuilder<B>> {
 
         protected String id;

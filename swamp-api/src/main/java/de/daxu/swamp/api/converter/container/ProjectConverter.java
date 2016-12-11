@@ -2,7 +2,7 @@ package de.daxu.swamp.api.converter.container;
 
 import de.daxu.swamp.api.converter.DTOConverter;
 import de.daxu.swamp.api.dto.container.ProjectDTO;
-import de.daxu.swamp.core.container.Project;
+import de.daxu.swamp.core.project.Project;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,20 +1,7 @@
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-    maven { url "http://repo1.maven.org/maven2" }
-}
-
-ext {
-    junitVersion = '4.12'
-    mockitoVersion = '2.0.2-beta'
-    assertJVersion = '3.5.2'
-}
-
 dependencies {
     compile project(":swamp-core")
     compile project(":swamp-common")
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-all:$mockitoVersion"
-    testCompile "org.assertj:assertj-core:$assertJVersion"
+    testCompile "junit:junit"
+    testCompile "org.mockito:mockito-all"
+    testCompile "org.assertj:assertj-core"
 }

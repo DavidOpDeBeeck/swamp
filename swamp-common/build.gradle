@@ -1,20 +1,7 @@
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-}
-
-ext {
-    hibernatCoreVersion = '5.2.3.Final'
-    hibernateValidationVersion = '5.2.4.Final'
-    springVersion = '4.3.2.RELEASE'
-    jacksonVersion = '2.8.4'
-}
-
 dependencies {
-    compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
-    compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
-    compile "org.springframework:spring-beans:$springVersion"
-    compile "org.springframework:spring-context:$springVersion"
-    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+    compile "org.hibernate:hibernate-core"
+    compile "org.hibernate:hibernate-validator"
+    compile "org.springframework:spring-beans"
+    compile "org.springframework:spring-context"
+    compile "com.fasterxml.jackson.core:jackson-annotations"
 }

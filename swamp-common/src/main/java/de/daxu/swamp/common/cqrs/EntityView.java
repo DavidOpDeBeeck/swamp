@@ -1,15 +1,12 @@
 package de.daxu.swamp.common.cqrs;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.daxu.swamp.common.jpa.Identifiable;
 
-import javax.persistence.Entity;
+import javax.persistence.MappedSuperclass;
 
-@Entity
+@MappedSuperclass
+@JsonIgnoreProperties( value = "id" )
 public abstract class EntityView extends Identifiable {
 
-    @JsonIgnore
-    public String getId() {
-        return id;
-    }
 }

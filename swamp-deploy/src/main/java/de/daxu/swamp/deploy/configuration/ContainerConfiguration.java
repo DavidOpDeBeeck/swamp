@@ -1,54 +1,66 @@
 package de.daxu.swamp.deploy.configuration;
 
-import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.response.ContainerResponse;
+import de.daxu.swamp.core.container.EnvironmentVariable;
+import de.daxu.swamp.core.container.PortMapping;
+import de.daxu.swamp.core.runconfiguration.RunConfiguration;
+
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 public class ContainerConfiguration {
 
-    private ContainerId containerId;
-    private Server server;
+    private RunConfiguration runConfiguration;
+    private Set<PortMapping> portMappings;
+    private Set<EnvironmentVariable> environmentVariables;
 
-    ContainerConfiguration( ContainerId containerId, Server server ) {
-        this.containerId = containerId;
-        this.server = server;
+    private ContainerConfiguration( RunConfiguration runConfiguration,
+                                    Set<PortMapping> portMappings,
+                                    Set<EnvironmentVariable> environmentVariables ) {
+        this.runConfiguration = runConfiguration;
+        this.portMappings = portMappings;
+        this.environmentVariables = environmentVariables;
     }
 
-    public ContainerId getContainerId() {
-        return containerId;
+    public RunConfiguration getRunConfiguration() {
+        return runConfiguration;
     }
 
-    public Server getServer() {
-        return server;
+    public Set<PortMapping> getPortMappings() {
+        return portMappings;
     }
 
-    @SuppressWarnings( "unchecked" )
-    public static class Builder<BUILDER extends Builder<BUILDER>> {
+    public Set<EnvironmentVariable> getEnvironmentVariables() {
+        return environmentVariables;
+    }
 
-        ContainerId containerId;
-        Server server;
+    public static class Builder {
+
+        private RunConfiguration runConfiguration;
+        private Set<PortMapping> portMappings = newHashSet();
+        private Set<EnvironmentVariable> environmentVariables = newHashSet();
 
         public static Builder aContainerConfiguration() {
             return new Builder();
         }
 
-        public BUILDER withContainerId( String containerId ) {
-            this.containerId = ContainerId.of( containerId );
-            return ( BUILDER ) this;
+        public Builder withRunConfiguration( RunConfiguration runConfiguration ) {
+            this.runConfiguration = runConfiguration;
+            return this;
         }
 
-        public BUILDER withContainerId( ContainerId containerId ) {
-            this.containerId = containerId;
-            return ( BUILDER ) this;
+        public Builder withPortMappings( Set<PortMapping> portMappings ) {
+            this.portMappings = portMappings;
+            return this;
         }
 
-        public BUILDER withServer( Server server ) {
-            this.server = server;
-            return ( BUILDER ) this;
+        public Builder withEnvironmentVariables( Set<EnvironmentVariable> environmentVariables ) {
+            this.environmentVariables = environmentVariables;
+            return this;
         }
 
         public ContainerConfiguration build() {
-            return new ContainerConfiguration( containerId, server );
+            return new ContainerConfiguration( runConfiguration, portMappings, environmentVariables );
         }
     }
 }

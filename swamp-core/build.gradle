@@ -1,22 +1,8 @@
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-}
-
-ext {
-    mysqlVersion = '6.0.4'
-    hibernatCoreVersion = '5.2.3.Final'
-    hibernateValidationVersion = '5.2.4.Final'
-    springDataVersion = '1.10.4.RELEASE'
-    dockerJavaVersion = '3.0.5'
-}
-
 dependencies {
     compile project(":swamp-common")
-    compile "mysql:mysql-connector-java:$mysqlVersion"
-    compile "com.github.docker-java:docker-java:$dockerJavaVersion"
-    compile "org.hibernate:hibernate-core:$hibernatCoreVersion"
-    compile "org.hibernate:hibernate-validator:$hibernateValidationVersion"
-    compile "org.springframework.data:spring-data-jpa:$springDataVersion"
+    compile "mysql:mysql-connector-java"
+    compile "com.github.docker-java:docker-java"
+    compile "org.hibernate:hibernate-core"
+    compile "org.hibernate:hibernate-validator"
+    compile "org.springframework.data:spring-data-jpa"
 }

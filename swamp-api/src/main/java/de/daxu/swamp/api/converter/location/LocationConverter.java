@@ -6,10 +6,10 @@ import de.daxu.swamp.api.dto.location.ContinentDTO;
 import de.daxu.swamp.api.dto.location.DatacenterDTO;
 import de.daxu.swamp.api.dto.location.LocationDTO;
 import de.daxu.swamp.api.dto.location.ServerDTO;
-import de.daxu.swamp.core.location.Continent;
-import de.daxu.swamp.core.location.Datacenter;
+import de.daxu.swamp.core.location.continent.Continent;
+import de.daxu.swamp.core.location.datacenter.Datacenter;
 import de.daxu.swamp.core.location.Location;
-import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.core.location.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

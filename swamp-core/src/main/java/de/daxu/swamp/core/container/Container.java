@@ -1,7 +1,7 @@
 package de.daxu.swamp.core.container;
 
 import de.daxu.swamp.common.jpa.Identifiable;
-import de.daxu.swamp.core.container.configuration.RunConfiguration;
+import de.daxu.swamp.core.runconfiguration.RunConfiguration;
 import de.daxu.swamp.core.location.Location;
 
 import javax.persistence.*;

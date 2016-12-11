@@ -3,10 +3,10 @@ package de.daxu.swamp.api.converter.container.configuration;
 import de.daxu.swamp.api.converter.DTOConverter;
 import de.daxu.swamp.api.converter.DomainConverter;
 import de.daxu.swamp.api.dto.container.configuration.DockerfileConfigurationDTO;
-import de.daxu.swamp.core.container.configuration.DockerfileConfiguration;
+import de.daxu.swamp.core.runconfiguration.DockerfileConfiguration;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.container.configuration.DockerfileConfiguration.DockerfileConfigurationBuilder.aDockerfileConfiguration;
+import static de.daxu.swamp.core.runconfiguration.DockerfileConfiguration.DockerfileConfigurationBuilder.aDockerfileConfiguration;
 
 @Component
 public class DockerfileConfigurationConverter implements DTOConverter<DockerfileConfiguration, DockerfileConfigurationDTO>, DomainConverter<DockerfileConfigurationDTO, DockerfileConfiguration> {

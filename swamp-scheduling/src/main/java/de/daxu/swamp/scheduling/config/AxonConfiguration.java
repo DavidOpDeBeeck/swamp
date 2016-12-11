@@ -1,6 +1,7 @@
 package de.daxu.swamp.scheduling.config;
 
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstance;
+import de.daxu.swamp.scheduling.write.serverinstance.ServerInstance;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
@@ -13,11 +14,13 @@ import org.axonframework.common.annotation.ParameterResolverFactory;
 import org.axonframework.common.annotation.SpringBeanParameterResolverFactory;
 import org.axonframework.common.jpa.ContainerManagedEntityManagerProvider;
 import org.axonframework.common.jpa.EntityManagerProvider;
+import org.axonframework.domain.AggregateRoot;
 import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.SimpleEventBus;
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerBeanPostProcessor;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.axonframework.eventstore.jpa.JpaEventStore;
+import org.axonframework.repository.Repository;
 import org.axonframework.unitofwork.SpringTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -84,9 +87,25 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public AggregateAnnotationCommandHandler aggregateAnnotationCommandHandler() {
-        AggregateAnnotationCommandHandler<ContainerInstance> handler = new AggregateAnnotationCommandHandler<>( ContainerInstance.class, containerInstanceRepository(), annotationCommandTargetResolver(), springBeanParameterResolverFactory() );
-        handler.supportedCommands().forEach( supportedCommand -> commandBus().subscribe( supportedCommand, handler ) );
+    public AggregateAnnotationCommandHandler<ContainerInstance> containerInstanceCommandHandler() {
+        return createCommandHandler(ContainerInstance.class, containerInstanceRepository());
+    }
+
+    @Bean
+    public EventSourcingRepository<ServerInstance> serverInstanceRepository() {
+        EventSourcingRepository<ServerInstance> repository = new EventSourcingRepository<>( ServerInstance.class, eventStore() );
+        repository.setEventBus( eventBus() );
+        return repository;
+    }
+
+    @Bean
+    public AggregateAnnotationCommandHandler<ServerInstance> serverInstanceCommandHandler() {
+        return createCommandHandler(ServerInstance.class, serverInstanceRepository());
+    }
+
+    private <T extends AggregateRoot> AggregateAnnotationCommandHandler<T> createCommandHandler( Class<T> clazz, Repository<T> repository ) {
+        AggregateAnnotationCommandHandler<T> handler = new AggregateAnnotationCommandHandler<>( clazz, repository, annotationCommandTargetResolver(), springBeanParameterResolverFactory() );
+        handler.supportedCommands().forEach( command -> commandBus().subscribe( command, handler ) );
         return handler;
     }
 

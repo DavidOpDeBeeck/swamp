@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.write.containerinstance.event;
 
+import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 
 import java.util.Date;
@@ -7,22 +8,25 @@ import java.util.Date;
 public class ContainerInstanceCreatedEvent extends ContainerInstanceEvent {
 
     private final String internalContainerId;
-    private final String internalContainerName;
+    private final ContainerId containerId;
     private final Date dateCreated;
 
-    public ContainerInstanceCreatedEvent( ContainerInstanceId containerInstanceId, String internalContainerId, String internalContainerName, Date dateCreated ) {
-        super(containerInstanceId);
+    public ContainerInstanceCreatedEvent( ContainerInstanceId containerInstanceId,
+                                          ContainerId containerId,
+                                          String internalContainerId,
+                                          Date dateCreated ) {
+        super( containerInstanceId );
+        this.containerId = containerId;
         this.internalContainerId = internalContainerId;
-        this.internalContainerName = internalContainerName;
         this.dateCreated = dateCreated;
+    }
+
+    public ContainerId getContainerId() {
+        return containerId;
     }
 
     public String getInternalContainerId() {
         return internalContainerId;
-    }
-
-    public String getInternalContainerName() {
-        return internalContainerName;
     }
 
     public Date getDateCreated() {

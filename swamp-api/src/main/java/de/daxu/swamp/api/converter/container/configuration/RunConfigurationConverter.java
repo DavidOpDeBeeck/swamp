@@ -6,10 +6,10 @@ import de.daxu.swamp.api.dto.container.configuration.DockerfileConfigurationDTO;
 import de.daxu.swamp.api.dto.container.configuration.GitConfigurationDTO;
 import de.daxu.swamp.api.dto.container.configuration.ImageConfigurationDTO;
 import de.daxu.swamp.api.dto.container.configuration.RunConfigurationDTO;
-import de.daxu.swamp.core.container.configuration.DockerfileConfiguration;
-import de.daxu.swamp.core.container.configuration.GitConfiguration;
-import de.daxu.swamp.core.container.configuration.ImageConfiguration;
-import de.daxu.swamp.core.container.configuration.RunConfiguration;
+import de.daxu.swamp.core.runconfiguration.DockerfileConfiguration;
+import de.daxu.swamp.core.runconfiguration.GitConfiguration;
+import de.daxu.swamp.core.runconfiguration.ImageConfiguration;
+import de.daxu.swamp.core.runconfiguration.RunConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -3,10 +3,10 @@ package de.daxu.swamp.api.converter.container.configuration;
 import de.daxu.swamp.api.converter.DTOConverter;
 import de.daxu.swamp.api.converter.DomainConverter;
 import de.daxu.swamp.api.dto.container.configuration.ImageConfigurationDTO;
-import de.daxu.swamp.core.container.configuration.ImageConfiguration;
+import de.daxu.swamp.core.runconfiguration.ImageConfiguration;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.container.configuration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
+import static de.daxu.swamp.core.runconfiguration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
 
 @Component
 public class ImageConfigurationConverter implements DTOConverter<ImageConfiguration, ImageConfigurationDTO>, DomainConverter<ImageConfigurationDTO, ImageConfiguration> {

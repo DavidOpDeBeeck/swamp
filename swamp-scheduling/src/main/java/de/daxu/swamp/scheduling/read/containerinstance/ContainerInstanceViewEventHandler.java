@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.read.containerinstance;
 
+import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.write.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
@@ -21,18 +22,16 @@ public class ContainerInstanceViewEventHandler {
     }
 
     @EventHandler
-    void on( ContainerInstanceScheduledEvent event ) {
+    void on( ContainerInstanceInitializedEvent event ) {
+        ContainerConfiguration configuration = event.getConfiguration();
         ContainerInstanceView view = aContainerInstanceView()
                 .withContainerInstanceId( event.getContainerInstanceId() )
-                .withDateScheduled( event.getDateScheduled() )
+                .withDateInitialized( event.getDateInitialized() )
                 .withServer( aServerView()
-                        .withName( event.getServer().getName() )
-                        .withIp( event.getServer().getIp() )
-                        .withCACertificate( event.getServer().getCACertificate() )
-                        .withCertificate( event.getServer().getCertificate() )
-                        .withKey( event.getServer().getKey() )
+                        .withName( "" )
+                        .withIp( "" )
                         .build() )
-                .withStatus( ContainerInstanceStatus.SCHEDULED )
+                .withStatus( ContainerInstanceStatus.INITIALIZED )
                 .build();
         containerInstanceViewRepository.save( view );
     }
@@ -42,7 +41,7 @@ public class ContainerInstanceViewEventHandler {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
         view.setInternalContainerId( event.getInternalContainerId() );
-        view.setInternalContainerName( event.getInternalContainerName() );
+        //view.setInternalContainerName( event.getInternalContainerName() );
         view.setDateCreated( event.getDateCreated() );
         view.setStatus( ContainerInstanceStatus.CREATED );
 

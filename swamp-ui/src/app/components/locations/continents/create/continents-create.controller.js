@@ -13,9 +13,9 @@ class ContinentsCreateController {
 
     create() {
         this.locationService.createContinent(this.continent)
-            .then((continent) => {
+            .then(() => {
                 this.$scope.$close(true);
-                this.navigationService.goTo('continents.continent.datacenters', {continentId: continent.id});
+                this.navigationService.goTo('continents');
             });
     }
 }

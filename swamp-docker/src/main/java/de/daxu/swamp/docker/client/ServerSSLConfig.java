@@ -3,7 +3,7 @@ package de.daxu.swamp.docker.client;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.SSLConfig;
 import com.github.dockerjava.core.util.CertificateUtils;
-import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.core.location.server.Server;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
 

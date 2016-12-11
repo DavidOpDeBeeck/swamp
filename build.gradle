@@ -1,27 +1,70 @@
-group 'de.daxu'
-version '0.3-alpha'
-
-buildscript {
-    repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath "gradle.plugin.com.boxfuse.client:flyway-release:4.0"
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven { url "http://repo1.maven.org/maven2" }
-}
-
-apply plugin: 'java'
-apply plugin: "org.flywaydb.flyway"
-
-ext {
-    mysqlVersion = "5.1.38"
+plugins {
+    id 'java'
+    id 'org.flywaydb.flyway' version '4.0'
+    id 'org.springframework.boot' version '1.4.2.RELEASE'
+    id 'io.spring.dependency-management' version '0.6.1.RELEASE'
 }
 
 dependencies {
-    compile "mysql:mysql-connector-java:$mysqlVersion"
+    compile 'mysql:mysql-connector-java'
+}
+
+allprojects  {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    group swampGroup
+    version swampVersion
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    ext {
+        mysqlVersion = '5.1.38'
+        h2Version = '1.4.193'
+        hibernatCoreVersion = '5.2.3.Final'
+        hibernateValidationVersion = '5.2.4.Final'
+        springVersion = '4.3.4.RELEASE'
+        springBootVersion = '1.4.2.RELEASE'
+        springDataVersion = '1.10.4.RELEASE'
+        jacksonVersion = '2.8.4'
+        dockerJavaVersion = '3.0.5'
+        axonVersion = '2.1.1'
+        junitVersion = '4.12'
+        mockitoVersion = '2.0.2-beta'
+        assertJVersion = '3.5.2'
+    }
+
+    dependencyManagement {
+        dependencies {
+            dependency "com.h2database:h2:$h2Version"
+            dependency "mysql:mysql-connector-java:$mysqlVersion"
+
+            dependency "org.springframework:spring-messaging:$springVersion"
+            dependency "org.springframework:spring-beans:$springVersion"
+            dependency "org.springframework:spring-context:$springVersion"
+            dependency "org.springframework.data:spring-data-jpa:$springDataVersion"
+
+            dependency "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-websocket:$springBootVersion"
+
+            dependency "org.hibernate:hibernate-core:$hibernatCoreVersion"
+            dependency "org.hibernate:hibernate-validator:$hibernateValidationVersion"
+
+            dependency "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+
+            dependency "com.github.docker-java:docker-java:$dockerJavaVersion"
+
+            dependency "org.axonframework:axon-core:$axonVersion"
+            dependency "org.axonframework:axon-test:$axonVersion"
+
+            dependency "junit:junit:$junitVersion"
+            dependency "org.mockito:mockito-all:$mockitoVersion"
+            dependency "org.assertj:assertj-core:$assertJVersion"
+        }
+    }
 }

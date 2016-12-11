@@ -1,36 +1,15 @@
-version '0.3-alpha'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
-    }
-}
-
-apply plugin: "java"
-apply plugin: "spring-boot"
-
-repositories {
-    mavenCentral()
-    maven { url "http://repo1.maven.org/maven2" }
-}
-
-bootRepackage {
-    mainClass = "de.daxu.swamp.api.SwampApplication"
-}
+apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(":swamp-core")
     compile project(":swamp-scheduling")
+
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-}
 
-//noinspection GroovyAssignabilityCheck
-processResources {
-    filesMatching("**/application.properties") {
-        expand( project.properties )
-    }
+    testCompile "junit:junit"
+    testRuntime "com.h2database:h2"
+    testCompile "org.mockito:mockito-all"
+    testCompile "org.assertj:assertj-core"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 }

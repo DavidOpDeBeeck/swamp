@@ -8,11 +8,12 @@ import de.daxu.swamp.common.response.Response;
 import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
-import de.daxu.swamp.core.container.Project;
-import de.daxu.swamp.core.location.Server;
-import de.daxu.swamp.core.strategy.SimpleStrategy;
+import de.daxu.swamp.core.container.ContainerService;
+import de.daxu.swamp.core.project.Project;
+import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.strategy.FirstInLineStrategy;
 import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
-import de.daxu.swamp.service.ProjectService;
+import de.daxu.swamp.core.project.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,6 +34,7 @@ public class ContainerResource {
 
     private final ResponseFactory response;
     private final ProjectService projectService;
+    private final ContainerService containerService;
     private final ContainerConverter containerConverter;
     private final ContainerCreateConverter containerCreateConverter;
     private final ContainerInstanceWriteService containerInstanceWriteService;
@@ -40,11 +42,13 @@ public class ContainerResource {
     @Autowired
     public ContainerResource( ResponseFactory responseFactory,
                               ProjectService projectService,
+                              ContainerService containerService,
                               ContainerConverter containerConverter,
                               ContainerCreateConverter containerCreateConverter,
                               ContainerInstanceWriteService containerInstanceWriteService ) {
         this.response = responseFactory;
         this.projectService = projectService;
+        this.containerService = containerService;
         this.containerConverter = containerConverter;
         this.containerCreateConverter = containerCreateConverter;
         this.containerInstanceWriteService = containerInstanceWriteService;
@@ -76,7 +80,7 @@ public class ContainerResource {
             return response.notFound( "Project was not found!" );
 
         Container container = containerCreateConverter.toDomain( containerCreateDTO );
-        container = projectService.addContainerToProject( project, container );
+        container = containerService.addContainerToProject( project, container );
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path( "/{id}" )
@@ -94,7 +98,7 @@ public class ContainerResource {
         if( project == null )
             return response.notFound( "Project was not found!" );
 
-        Container container = projectService.getContainer( containerId );
+        Container container = containerService.getContainer( containerId );
 
         if( !project.getContainers().contains( container ) )
             return response.notFound( "Container was not found!" );
@@ -114,7 +118,7 @@ public class ContainerResource {
         if( project == null )
             return response.notFound( "Project was not found!" );
 
-        Container targetContainer = projectService.getContainer( containerId );
+        Container targetContainer = containerService.getContainer( containerId );
 
         if( !project.getContainers().contains( targetContainer ) )
             return response.notFound( "Container was not found!" );
@@ -122,7 +126,7 @@ public class ContainerResource {
         Container srcContainer = containerCreateConverter.toDomain( dto );
 
         BeanUtils.copyProperties( srcContainer, targetContainer );
-        projectService.updateContainer( targetContainer );
+        containerService.updateContainer( targetContainer );
 
         ContainerDTO containerDTO = containerConverter.toDTO( targetContainer );
 
@@ -138,12 +142,12 @@ public class ContainerResource {
         if( project == null )
             return response.notFound( "Project was not found!" );
 
-        Container container = projectService.getContainer( containerId );
+        Container container = containerService.getContainer( containerId );
 
         if( !project.getContainers().contains( container ) )
             return response.notFound( "Container was not found!" );
 
-        projectService.removeContainerFromProject( project, container );
+        containerService.removeContainerFromProject( project, container );
 
         return response.success();
     }
@@ -157,15 +161,15 @@ public class ContainerResource {
         if( project == null )
             return response.notFound( "Project was not found!" );
 
-        Container container = projectService.getContainer( containerId );
+        Container container = containerService.getContainer( containerId );
 
         if( !project.getContainers().contains( container ) )
             return response.notFound( "Container was not found!" );
 
-        Optional<Server> potentialServer = new SimpleStrategy().calculate( container );
+        Optional<Server> server = new FirstInLineStrategy().locate( container.getPotentialLocations() );
 
-        if( potentialServer.isPresent() ) {
-            containerInstanceWriteService.schedule( container, potentialServer.get() );
+        if( server.isPresent() ) {
+            containerInstanceWriteService.schedule( container, server.get() );
             return response.success();
         }
         return response.badRequest( "Container has no available servers!" );

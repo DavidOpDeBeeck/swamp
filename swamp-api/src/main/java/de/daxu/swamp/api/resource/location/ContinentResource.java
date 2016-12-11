@@ -7,10 +7,9 @@ import de.daxu.swamp.api.dto.location.ContinentDTO;
 import de.daxu.swamp.common.response.Response;
 import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
-import de.daxu.swamp.core.location.Continent;
-import de.daxu.swamp.service.LocationService;
+import de.daxu.swamp.core.location.continent.Continent;
+import de.daxu.swamp.core.location.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

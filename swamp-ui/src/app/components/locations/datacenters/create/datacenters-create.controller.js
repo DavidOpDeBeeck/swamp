@@ -16,11 +16,10 @@ class DatacentersCreateController {
 
     create() {
         this.locationService.createDatacenter(this.datacenter)
-            .then((datacenter) => {
+            .then(() => {
                 this.$scope.$close(true);
-                this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {
-                    continentId: this.continent.id,
-                    datacenterId: datacenter.id
+                this.navigationService.goTo('continents.continent.datacenters', {
+                    continentId: this.continent.id
                 });
             });
     }

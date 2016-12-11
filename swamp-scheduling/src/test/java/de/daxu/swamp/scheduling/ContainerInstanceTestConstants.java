@@ -3,21 +3,23 @@ package de.daxu.swamp.scheduling;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.container.PortMapping;
-import de.daxu.swamp.core.container.configuration.RunConfiguration;
-import de.daxu.swamp.core.location.Server;
+import de.daxu.swamp.core.runconfiguration.RunConfiguration;
+import de.daxu.swamp.core.location.server.Server;
 import de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.write.containerinstance.command.*;
 import de.daxu.swamp.scheduling.write.containerinstance.event.*;
+import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
+import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainer;
-import static de.daxu.swamp.core.container.configuration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
-import static de.daxu.swamp.core.location.Server.ServerBuilder.aServer;
+import static de.daxu.swamp.core.runconfiguration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
+import static de.daxu.swamp.core.location.server.Server.ServerBuilder.aServer;
 import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Utils.DATE;
 import static de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
 
@@ -55,10 +57,10 @@ public class ContainerInstanceTestConstants {
 
     public static class Commands {
 
-        public static final ScheduleContainerInstanceCommand SCHEDULE_COMMAND = new ScheduleContainerInstanceCommand( CONTAINER_INSTANCE_ID, CONTAINER, SERVER, DATE );
+        public static final InitializeContainerInstanceCommand SCHEDULE_COMMAND = new InitializeContainerInstanceCommand( CONTAINER_INSTANCE_ID, CONTAINER, SERVER, DATE );
         public static final CreateContainerInstanceCommand CREATE_COMMAND = new CreateContainerInstanceCommand( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE );
         public static final StartContainerInstanceCommand START_COMMAND = new StartContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE );
-        public static final StartContainerInstanceLoggingCommand START_LOGGING_COMMAND = new StartContainerInstanceLoggingCommand( CONTAINER_INSTANCE_ID, DATE );
+        public static final StartContainerInstanceLoggingCommand START_LOGGING_COMMAND = new StartContainerInstanceLoggingCommand( CONTAINER_INSTANCE_ID );
         public static final ReceiveContainerInstanceLogCommand RECEIVE_LOG_COMMAND = new ReceiveContainerInstanceLogCommand( CONTAINER_INSTANCE_ID, LOG, DATE );
         public static final StopContainerInstanceCommand STOP_COMMAND = new StopContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE );
         public static final RemoveContainerInstanceCommand REMOVE_COMMAND = new RemoveContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE );
@@ -66,7 +68,7 @@ public class ContainerInstanceTestConstants {
 
     public static class Events {
 
-        public static final ContainerInstanceScheduledEvent SCHEDULED_EVENT = new ContainerInstanceScheduledEvent( CONTAINER_INSTANCE_ID, NAME, IMAGE_CONFIGURATION, PORT_MAPPINGS, ENVIRONMENT_VARIABLES, SERVER, DATE );
+        public static final ContainerInstanceInitializedEvent SCHEDULED_EVENT = new ContainerInstanceInitializedEvent( CONTAINER_INSTANCE_ID, NAME, IMAGE_CONFIGURATION, PORT_MAPPINGS, ENVIRONMENT_VARIABLES, SERVER, DATE, configuration );
         public static final ContainerInstanceCreatedEvent CREATED_EVENT = new ContainerInstanceCreatedEvent( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE );
         public static final ContainerInstanceStartedEvent STARTED_EVENT = new ContainerInstanceStartedEvent( CONTAINER_INSTANCE_ID, DATE );
         public static final ContainerInstanceLoggingStartedEvent LOGGING_STARTED_EVENT = new ContainerInstanceLoggingStartedEvent( CONTAINER_INSTANCE_ID, DATE );

@@ -1,20 +1,10 @@
 package de.daxu.swamp.deploy;
 
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
-import de.daxu.swamp.deploy.configuration.CreateContainerConfiguration;
-import de.daxu.swamp.deploy.configuration.LogContainerConfiguration;
-import de.daxu.swamp.deploy.response.ContainerResponse;
-import de.daxu.swamp.deploy.response.CreateContainerResponse;
+import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.deploy.client.ContainerClient;
 
 public interface DeployFacade {
 
-    CreateContainerResponse createContainer( CreateContainerConfiguration config );
+    ContainerClient containerClient( Server server );
 
-    ContainerResponse startContainer( ContainerConfiguration configuration );
-
-    ContainerResponse stopContainer( ContainerConfiguration configuration );
-
-    ContainerResponse removeContainer( ContainerConfiguration configuration );
-
-    ContainerResponse logContainer( LogContainerConfiguration config );
 }

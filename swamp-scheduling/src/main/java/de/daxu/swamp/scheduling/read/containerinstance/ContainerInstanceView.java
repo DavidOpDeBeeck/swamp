@@ -25,8 +25,8 @@ public class ContainerInstanceView extends EntityView {
     private String internalContainerId;
 
     @Temporal( TemporalType.TIMESTAMP )
-    @Column( name = "date_scheduled" )
-    private Date dateScheduled;
+    @Column( name = "date_initialized" )
+    private Date dateInitialized;
 
     @Temporal( TemporalType.TIMESTAMP )
     @Column( name = "date_created" )
@@ -68,7 +68,7 @@ public class ContainerInstanceView extends EntityView {
                                    ContainerInstanceId containerInstanceId,
                                    String internalContainerName,
                                    String internalContainerId,
-                                   Date dateScheduled,
+                                   Date dateInitialized,
                                    Date dateCreated,
                                    Date dateStarted,
                                    Date dateStopped,
@@ -81,7 +81,7 @@ public class ContainerInstanceView extends EntityView {
         this.containerInstanceId = containerInstanceId;
         this.internalContainerName = internalContainerName;
         this.internalContainerId = internalContainerId;
-        this.dateScheduled = dateScheduled;
+        this.dateInitialized = dateInitialized;
         this.dateCreated = dateCreated;
         this.dateStarted = dateStarted;
         this.dateStopped = dateStopped;
@@ -108,8 +108,8 @@ public class ContainerInstanceView extends EntityView {
         this.internalContainerId = internalContainerId;
     }
 
-    public void setDateScheduled( Date dateScheduled ) {
-        this.dateScheduled = dateScheduled;
+    public void setDateInitialized( Date dateInitialized ) {
+        this.dateInitialized = dateInitialized;
     }
 
     public void setDateCreated( Date dateCreated ) {
@@ -156,8 +156,8 @@ public class ContainerInstanceView extends EntityView {
         return internalContainerId;
     }
 
-    public Date getDateScheduled() {
-        return dateScheduled;
+    public Date getDateInitialized() {
+        return dateInitialized;
     }
 
     public Date getDateCreated() {
@@ -198,7 +198,7 @@ public class ContainerInstanceView extends EntityView {
         private ContainerInstanceId containerInstanceId;
         private String internalContainerName;
         private String internalContainerId;
-        private Date dateScheduled;
+        private Date dateInitialized;
         private Date dateCreated;
         private Date dateStarted;
         private Date dateStopped;
@@ -232,8 +232,8 @@ public class ContainerInstanceView extends EntityView {
             return this;
         }
 
-        public ContainerInstanceViewBuilder withDateScheduled( Date dateScheduled ) {
-            this.dateScheduled = dateScheduled;
+        public ContainerInstanceViewBuilder withDateInitialized( Date dateInitialized ) {
+            this.dateInitialized = dateInitialized;
             return this;
         }
 
@@ -282,7 +282,7 @@ public class ContainerInstanceView extends EntityView {
                     containerInstanceId,
                     internalContainerName,
                     internalContainerId,
-                    dateScheduled,
+                    dateInitialized,
                     dateCreated,
                     dateStarted,
                     dateStopped,

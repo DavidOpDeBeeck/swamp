@@ -34,7 +34,6 @@ class ProjectService {
     }
 
     createContainer(container) {
-        console.log(container);
         return this.containerResource.create(container).$promise;
     }
 

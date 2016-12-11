@@ -27,12 +27,12 @@ public class ContainerInstanceWriteServiceTest {
 
     @Test
     public void schedule() throws Exception {
-        when( containerInstanceCommandFactory.createScheduleCommand( CONTAINER, SERVER ) )
+        when( containerInstanceCommandFactory.createInitializeCommand( serverInstanceId, CONTAINER, dateScheduled ) )
                 .thenReturn( SCHEDULE_COMMAND );
 
-        containerInstanceWriteService.schedule( CONTAINER, SERVER );
+        containerInstanceWriteService.schedule( CONTAINER );
 
-        verify( containerInstanceCommandFactory ).createScheduleCommand( CONTAINER, SERVER );
+        verify( containerInstanceCommandFactory ).createInitializeCommand( serverInstanceId, CONTAINER, dateScheduled );
         verify( commandGateway ).send( SCHEDULE_COMMAND );
     }
 
@@ -82,12 +82,12 @@ public class ContainerInstanceWriteServiceTest {
 
     @Test
     public void startLogging() throws Exception {
-        when( containerInstanceCommandFactory.createStartLoggingCommand( CONTAINER_INSTANCE_ID ) )
+        when( containerInstanceCommandFactory.createStartLoggingCommand( CONTAINER_INSTANCE_ID, logCallback ) )
                 .thenReturn( START_LOGGING_COMMAND );
 
-        containerInstanceWriteService.startLogging( CONTAINER_INSTANCE_ID );
+        containerInstanceWriteService.startLogging( CONTAINER_INSTANCE_ID, logCallback( instanceId ) );
 
-        verify( containerInstanceCommandFactory ).createStartLoggingCommand( CONTAINER_INSTANCE_ID );
+        verify( containerInstanceCommandFactory ).createStartLoggingCommand( CONTAINER_INSTANCE_ID, logCallback );
         verify( commandGateway ).send( START_LOGGING_COMMAND );
     }
 

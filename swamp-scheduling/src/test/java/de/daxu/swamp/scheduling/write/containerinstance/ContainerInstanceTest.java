@@ -21,7 +21,7 @@ public class ContainerInstanceTest {
         containerInstance.on( SCHEDULED_EVENT );
 
         assertThat( containerInstance.getContainerInstanceId() ).isEqualTo( CONTAINER_INSTANCE_ID );
-        assertThat( containerInstance.getStatus() ).isEqualTo( ContainerInstanceStatus.SCHEDULED );
+        assertThat( containerInstance.getStatus() ).isEqualTo( ContainerInstanceStatus.INITIALIZED );
     }
 
     @Test
