@@ -31,7 +31,7 @@ public class GitConfiguration extends RunConfiguration {
     private GitConfiguration() {
     }
 
-    private GitConfiguration( String url, String branch, String path, UsernamePasswordCredentials credentials ) {
+    GitConfiguration( String url, String branch, String path, UsernamePasswordCredentials credentials ) {
         this.url = url;
         this.branch = branch;
         this.path = path;
@@ -71,7 +71,7 @@ public class GitConfiguration extends RunConfiguration {
         private String path;
         private UsernamePasswordCredentials credentials;
 
-        public static GitConfigurationBuilder aGitConfiguration() {
+        public static GitConfigurationBuilder aGitConfigurationBuilder() {
             return new GitConfigurationBuilder();
         }
 

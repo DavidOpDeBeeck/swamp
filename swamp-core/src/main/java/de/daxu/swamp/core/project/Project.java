@@ -6,10 +6,12 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
 @Table( name = "project" )
@@ -27,7 +29,7 @@ public class Project extends Identifiable {
 
     @NotNull( message = "{NotNull.Project.withCreated}" )
     @Column( name = "created" )
-    private Date created;
+    private LocalDateTime created;
 
     @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
     @JoinColumn( name = "project_id", referencedColumnName = "id" )
@@ -44,7 +46,7 @@ public class Project extends Identifiable {
     private Project() {
     }
 
-    private Project( String name, String description, Date created, Set<Container> containers ) {
+    Project( String name, String description, LocalDateTime created, Set<Container> containers ) {
         this.name = name;
         this.description = description;
         this.created = created;
@@ -59,7 +61,7 @@ public class Project extends Identifiable {
         return description;
     }
 
-    public Date getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
@@ -81,15 +83,11 @@ public class Project extends Identifiable {
 
         private String name;
         private String description;
-        private Date created;
-        private Set<Container> containers;
+        private LocalDateTime created;
+        private Set<Container> containers = newHashSet();
 
-        public static ProjectBuilder aProject() {
+        public static ProjectBuilder aProjectBuilder() {
             return new ProjectBuilder();
-        }
-
-        ProjectBuilder() {
-            this.containers = new HashSet<>();
         }
 
         public ProjectBuilder withName( String name ) {
@@ -102,7 +100,7 @@ public class Project extends Identifiable {
             return this;
         }
 
-        public ProjectBuilder createdAt( Date created ) {
+        public ProjectBuilder createdAt( LocalDateTime created ) {
             this.created = created;
             return this;
         }

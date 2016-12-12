@@ -38,7 +38,7 @@ public class Container extends Identifiable {
     private Container() {
     }
 
-    private Container( String name, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
+    Container( String name, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
         this.name = name;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
@@ -97,7 +97,7 @@ public class Container extends Identifiable {
         private Set<PortMapping> portMappings = new HashSet<>();
         private Set<EnvironmentVariable> environmentVariables = new HashSet<>();
 
-        public static ContainerBuilder aContainer() {
+        public static ContainerBuilder aContainerBuilder() {
             return new ContainerBuilder();
         }
 

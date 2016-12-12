@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainer;
-import static de.daxu.swamp.core.runconfiguration.ImageConfiguration.ImageConfigurationBuilder.anImageConfiguration;
-import static de.daxu.swamp.core.location.server.Server.ServerBuilder.aServer;
+import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainerBuilder;
+import static de.daxu.swamp.core.runconfiguration.ImageConfiguration.ImageConfigurationBuilder.anImageConfigurationBuilder;
+import static de.daxu.swamp.core.location.server.Server.ServerBuilder.aServerBuilder;
 import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Utils.DATE;
 import static de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
 
@@ -42,18 +42,18 @@ public class ContainerInstanceTestConstants {
             .build();
 
     public static final String NAME = "name";
-    public static final RunConfiguration IMAGE_CONFIGURATION = anImageConfiguration().build();
+    public static final RunConfiguration IMAGE_CONFIGURATION = anImageConfigurationBuilder().build();
     public static final Set<PortMapping> PORT_MAPPINGS = new HashSet<>();
 
     public static final Set<EnvironmentVariable> ENVIRONMENT_VARIABLES = new HashSet<>();
 
-    public static final Container CONTAINER = aContainer()
+    public static final Container CONTAINER = aContainerBuilder()
             .withName( NAME )
             .withRunConfiguration( IMAGE_CONFIGURATION )
             .withPortMappings( PORT_MAPPINGS )
             .withEnvironmentVariables( ENVIRONMENT_VARIABLES )
             .build();
-    public static final Server SERVER = aServer().build();
+    public static final Server SERVER = aServerBuilder().build();
 
     public static class Commands {
 

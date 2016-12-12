@@ -53,7 +53,7 @@ public class Datacenter extends Location {
 
         private Set<Server> servers;
 
-        public static DatacenterBuilder aDatacenter() {
+        public static DatacenterBuilder aDatacenterBuilder() {
             return new DatacenterBuilder();
         }
 

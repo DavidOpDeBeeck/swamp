@@ -6,7 +6,7 @@ import de.daxu.swamp.api.dto.container.configuration.PortMappingDTO;
 import de.daxu.swamp.core.container.PortMapping;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.container.PortMapping.PortMappingBuilder.aPortMapping;
+import static de.daxu.swamp.core.container.PortMapping.PortMappingBuilder.aPortMappingBuilder;
 
 @Component
 public class PortMappingConverter implements DomainConverter<PortMappingDTO, PortMapping>, DTOConverter<PortMapping, PortMappingDTO> {
@@ -21,7 +21,7 @@ public class PortMappingConverter implements DomainConverter<PortMappingDTO, Por
 
     @Override
     public PortMapping toDomain( PortMappingDTO dto ) {
-        return aPortMapping()
+        return aPortMappingBuilder()
                 .withInternal( dto.internal )
                 .withExternal( dto.external )
                 .build();

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainer;
+import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainerBuilder;
 
 @Component
 public class ContainerCreateConverter implements DomainConverter<ContainerCreateDTO, Container> {
@@ -29,7 +29,7 @@ public class ContainerCreateConverter implements DomainConverter<ContainerCreate
 
     @Override
     public Container toDomain( ContainerCreateDTO dto ) {
-        return aContainer()
+        return aContainerBuilder()
                 .withName( dto.name )
                 .withRunConfiguration( configurationConverter.toDomain( dto.runConfiguration ) )
                 .withPotentialLocations( dto.potentialLocations.stream()

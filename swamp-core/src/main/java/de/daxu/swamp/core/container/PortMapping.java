@@ -22,7 +22,7 @@ public class PortMapping extends Identifiable {
     private PortMapping() {
     }
 
-    private PortMapping( Integer internal, Integer external ) {
+    PortMapping( Integer internal, Integer external ) {
         this.internal = internal;
         this.external = external;
     }
@@ -37,14 +37,13 @@ public class PortMapping extends Identifiable {
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        if ( !super.equals( o ) ) return false;
+        if( this == o ) return true;
+        if( o == null || getClass() != o.getClass() ) return false;
+        if( !super.equals( o ) ) return false;
 
         PortMapping that = ( PortMapping ) o;
 
-        if ( !internal.equals( that.internal ) ) return false;
-        return external.equals( that.external );
+        return internal.equals( that.internal ) && external.equals( that.external );
     }
 
     @Override
@@ -60,7 +59,7 @@ public class PortMapping extends Identifiable {
         private Integer internal;
         private Integer external;
 
-        public static PortMappingBuilder aPortMapping() {
+        public static PortMappingBuilder aPortMappingBuilder() {
             return new PortMappingBuilder();
         }
 

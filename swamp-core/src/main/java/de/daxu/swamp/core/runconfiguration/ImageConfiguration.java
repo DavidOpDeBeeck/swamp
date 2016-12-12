@@ -21,7 +21,7 @@ public class ImageConfiguration extends RunConfiguration {
     private ImageConfiguration() {
     }
 
-    private ImageConfiguration( String name ) {
+    ImageConfiguration( String name ) {
         this.name = name;
     }
 
@@ -43,7 +43,7 @@ public class ImageConfiguration extends RunConfiguration {
 
         private String name;
 
-        public static ImageConfigurationBuilder anImageConfiguration() {
+        public static ImageConfigurationBuilder anImageConfigurationBuilder() {
             return new ImageConfigurationBuilder();
         }
 

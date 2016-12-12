@@ -21,7 +21,7 @@ public class DockerfileConfiguration extends RunConfiguration {
     private DockerfileConfiguration() {
     }
 
-    private DockerfileConfiguration( String dockerfile ) {
+    DockerfileConfiguration( String dockerfile ) {
         this.dockerfile = dockerfile;
     }
 
@@ -43,7 +43,7 @@ public class DockerfileConfiguration extends RunConfiguration {
 
         private String dockerfile;
 
-        public static DockerfileConfigurationBuilder aDockerfileConfiguration() {
+        public static DockerfileConfigurationBuilder aDockerfileConfigurationBuilder() {
             return new DockerfileConfigurationBuilder();
         }
 

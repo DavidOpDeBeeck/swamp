@@ -60,7 +60,7 @@ public class Continent extends Location {
 
         private Set<Datacenter> datacenters;
 
-        public static ContinentBuilder aContinent() {
+        public static ContinentBuilder aContinentBuilder() {
             return new ContinentBuilder();
         }
 

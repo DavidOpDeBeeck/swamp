@@ -6,7 +6,7 @@ import de.daxu.swamp.api.dto.container.configuration.DockerfileConfigurationDTO;
 import de.daxu.swamp.core.runconfiguration.DockerfileConfiguration;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.runconfiguration.DockerfileConfiguration.DockerfileConfigurationBuilder.aDockerfileConfiguration;
+import static de.daxu.swamp.core.runconfiguration.DockerfileConfiguration.DockerfileConfigurationBuilder.aDockerfileConfigurationBuilder;
 
 @Component
 public class DockerfileConfigurationConverter implements DTOConverter<DockerfileConfiguration, DockerfileConfigurationDTO>, DomainConverter<DockerfileConfigurationDTO, DockerfileConfiguration> {
@@ -21,7 +21,7 @@ public class DockerfileConfigurationConverter implements DTOConverter<Dockerfile
 
     @Override
     public DockerfileConfiguration toDomain( DockerfileConfigurationDTO dto ) {
-        return aDockerfileConfiguration()
+        return aDockerfileConfigurationBuilder()
                 .withDockerfile( dto.dockerfile )
                 .build();
     }

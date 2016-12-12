@@ -94,7 +94,7 @@ public class Server extends Location {
         private String certificate;
         private String key;
 
-        public static ServerBuilder aServer() {
+        public static ServerBuilder aServerBuilder() {
             return new ServerBuilder();
         }
 
