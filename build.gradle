@@ -5,10 +5,6 @@ plugins {
     id 'io.spring.dependency-management' version '0.6.1.RELEASE'
 }
 
-dependencies {
-    compile 'mysql:mysql-connector-java'
-}
-
 allprojects  {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
@@ -19,6 +15,11 @@ allprojects  {
     repositories {
         jcenter()
         mavenCentral()
+    }
+
+    dependencies {
+        compile 'mysql:mysql-connector-java'
+        testRuntime "com.h2database:h2"
     }
 
     ext {
@@ -66,5 +67,18 @@ allprojects  {
             dependency "org.mockito:mockito-all:$mockitoVersion"
             dependency "org.assertj:assertj-core:$assertJVersion"
         }
+    }
+
+    task testJar(type: Jar, dependsOn: testClasses) {
+        baseName = "test-${project.archivesBaseName}"
+        from sourceSets.test.output
+    }
+
+    configurations {
+        tests
+    }
+
+    artifacts {
+        tests testJar
     }
 }
