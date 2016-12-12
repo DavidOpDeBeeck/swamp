@@ -18,7 +18,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @AutoConfigureTestEntityManager
 @SpringBootTest( classes = SwampTestApplication.class, webEnvironment = RANDOM_PORT )
 @TestPropertySource( locations = "classpath:test.properties" )
-public class ResourceIntegrationTest {
+public abstract class ResourceIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;

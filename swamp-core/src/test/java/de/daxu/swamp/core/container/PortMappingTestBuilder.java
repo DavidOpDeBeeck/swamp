@@ -1,8 +1,8 @@
 package de.daxu.swamp.core.container;
 
 public class PortMappingTestBuilder {
-    private Integer internal;
-    private Integer external;
+    private Integer internal = 8080;
+    private Integer external = 8888;
 
     public static PortMappingTestBuilder aPortMappingTestBuilder() {
         return new PortMappingTestBuilder();

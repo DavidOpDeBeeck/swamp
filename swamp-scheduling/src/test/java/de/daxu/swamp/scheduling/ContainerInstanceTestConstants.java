@@ -1,30 +1,7 @@
 package de.daxu.swamp.scheduling;
 
-import de.daxu.swamp.core.container.Container;
-import de.daxu.swamp.core.container.EnvironmentVariable;
-import de.daxu.swamp.core.container.PortMapping;
-import de.daxu.swamp.core.runconfiguration.RunConfiguration;
-import de.daxu.swamp.core.location.server.Server;
-import de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView;
-import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
-import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceStatus;
-import de.daxu.swamp.scheduling.write.containerinstance.command.*;
-import de.daxu.swamp.scheduling.write.containerinstance.event.*;
-import de.daxu.swamp.scheduling.write.containerinstance.command.CreateContainerInstanceCommand;
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import static de.daxu.swamp.core.container.Container.ContainerBuilder.aContainerBuilder;
-import static de.daxu.swamp.core.runconfiguration.ImageConfiguration.ImageConfigurationBuilder.anImageConfigurationBuilder;
-import static de.daxu.swamp.core.location.server.Server.ServerBuilder.aServerBuilder;
-import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Utils.DATE;
-import static de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
-
 public class ContainerInstanceTestConstants {
-
+/*
     public static final ContainerInstanceId CONTAINER_INSTANCE_ID = ContainerInstanceId.random();
     public static final ContainerInstanceId ANOTHER_CONTAINER_INSTANCE_ID = ContainerInstanceId.random();
 
@@ -81,4 +58,5 @@ public class ContainerInstanceTestConstants {
 
         public static final Date DATE = new Date();
     }
+    */
 }

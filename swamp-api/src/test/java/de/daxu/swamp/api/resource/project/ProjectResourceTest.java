@@ -1,16 +1,34 @@
 package de.daxu.swamp.api.resource.project;
 
-import de.daxu.swamp.test.ResourceIntegrationTest;
+import de.daxu.swamp.core.project.Project;
+import de.daxu.swamp.test.integration.ResourceIntegrationTest;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
+import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProjectResourceTest extends ResourceIntegrationTest {
 
     @Test
+    @Ignore
+    @Transactional
     public void getAll() throws Exception {
-        String body = restTemplate().getForObject( "/", String.class );
-        assertThat( body ).contains( "error" );
+        Project expected = aProjectTestBuilder().build();
+
+        entityManager().persist( expected );
+        entityManager().flush();
+
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+        Project actual = restTemplate().getForObject( "/projects/" + expected.getId(), Project.class );
+
+        assertThat( expected )
+                .usingDefaultComparator()
+                .isEqualTo( actual );
     }
 
     @Test

@@ -3,6 +3,11 @@ dependencies {
     compile "mysql:mysql-connector-java"
     compile "com.github.docker-java:docker-java"
     compile "org.hibernate:hibernate-core"
+    compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-validator"
-    compile "org.springframework.data:spring-data-jpa"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    testCompile project(path: ":swamp-test", configuration: "tests")
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile 'javax.el:javax.el-api:3.0.0'
+    testCompile 'org.glassfish.web:el-impl:2.2'
 }

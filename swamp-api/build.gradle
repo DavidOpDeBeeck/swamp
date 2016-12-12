@@ -1,4 +1,6 @@
-apply plugin: 'org.springframework.boot'
+plugins {
+    id 'org.springframework.boot' version '1.4.2.RELEASE'
+}
 
 dependencies {
     compile project(":swamp-core")
@@ -7,7 +9,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
 
-    testCompile project( path: ":swamp-test", configuration: "tests")
-    testCompile project( path: ":swamp-core", configuration: "tests")
+    testCompile project(path: ":swamp-test", configuration: "tests")
+    testCompile project(path: ":swamp-core", configuration: "tests")
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }

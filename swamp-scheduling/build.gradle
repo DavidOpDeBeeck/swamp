@@ -1,5 +1,3 @@
-apply plugin: 'org.springframework.boot'
-
 dependencies {
     compile project(":swamp-core")
     compile project(":swamp-common")
@@ -15,8 +13,4 @@ dependencies {
 
     compile "org.hibernate:hibernate-core"
     compile "org.hibernate:hibernate-validator"
-
-    testCompile "junit:junit"
-    testCompile "org.mockito:mockito-all"
-    testCompile "org.assertj:assertj-core"
 }

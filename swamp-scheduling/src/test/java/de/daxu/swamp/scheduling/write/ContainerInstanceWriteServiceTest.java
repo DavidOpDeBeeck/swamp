@@ -1,21 +1,8 @@
 package de.daxu.swamp.scheduling.write;
 
-import de.daxu.swamp.scheduling.write.containerinstance.command.ContainerInstanceCommandFactory;
-import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.*;
-import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Commands.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-@RunWith( MockitoJUnitRunner.class )
+//@RunWith( MockitoJUnitRunner.class )
 public class ContainerInstanceWriteServiceTest {
-
+/*
     @Mock
     private CommandGateway commandGateway;
 
@@ -101,4 +88,5 @@ public class ContainerInstanceWriteServiceTest {
         verify( containerInstanceCommandFactory ).createReceiveLogCommand( CONTAINER_INSTANCE_ID, LOG );
         verify( commandGateway ).send( RECEIVE_LOG_COMMAND );
     }
+    */
 }

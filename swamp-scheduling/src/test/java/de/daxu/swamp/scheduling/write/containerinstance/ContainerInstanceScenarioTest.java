@@ -1,15 +1,7 @@
 package de.daxu.swamp.scheduling.write.containerinstance;
 
-import org.axonframework.test.FixtureConfiguration;
-import org.axonframework.test.Fixtures;
-import org.junit.Before;
-import org.junit.Test;
-
-import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Commands.*;
-import static de.daxu.swamp.scheduling.ContainerInstanceTestConstants.Events.*;
-
 public class ContainerInstanceScenarioTest {
-
+/*
     private FixtureConfiguration fixture;
 
     @Before
@@ -64,5 +56,5 @@ public class ContainerInstanceScenarioTest {
         fixture.given( SCHEDULED_EVENT, CREATED_EVENT, START_COMMAND, START_LOGGING_COMMAND )
                 .when( RECEIVE_LOG_COMMAND )
                 .expectEvents( LOG_RECEIVED_EVENT );
-    }
+    }*/
 }

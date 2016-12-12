@@ -6,7 +6,7 @@ import de.daxu.swamp.api.dto.credentials.UsernamePasswordCredentialsDTO;
 import de.daxu.swamp.core.credentials.UsernamePasswordCredentials;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.credentials.UsernamePasswordCredentials.UsernamePasswordCredentialsBuilder.aUsernamePasswordCredentialsBuilder;
+import static de.daxu.swamp.core.credentials.UsernamePasswordCredentials.UsernamePasswordCredentialsBuilder.anUsernamePasswordCredentialsBuilder;
 
 @Component
 public class UsernamePasswordCredentialsConverter implements DomainConverter<UsernamePasswordCredentialsDTO, UsernamePasswordCredentials>, DTOConverter<UsernamePasswordCredentials, UsernamePasswordCredentialsDTO> {
@@ -22,7 +22,7 @@ public class UsernamePasswordCredentialsConverter implements DomainConverter<Use
 
     @Override
     public UsernamePasswordCredentials toDomain( UsernamePasswordCredentialsDTO dto ) {
-        return aUsernamePasswordCredentialsBuilder()
+        return anUsernamePasswordCredentialsBuilder()
                 .withUsername( dto.username )
                 .withPassword( dto.password )
                 .build();
