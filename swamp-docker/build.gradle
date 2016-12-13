@@ -1,9 +1,6 @@
 dependencies {
-    compile project(":swamp-core")
     compile project(":swamp-common")
+    compile project(":swamp-core")
     compile project(":swamp-deploy")
     compile "com.github.docker-java:docker-java"
-    testCompile "junit:junit"
-    testCompile "org.mockito:mockito-all"
-    testCompile "org.assertj:assertj-core"
 }

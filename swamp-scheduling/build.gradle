@@ -1,6 +1,6 @@
 dependencies {
-    compile project(":swamp-core")
     compile project(":swamp-common")
+    compile project(":swamp-core")
     compile project(":swamp-docker")
 
     compile "org.springframework:spring-messaging"
