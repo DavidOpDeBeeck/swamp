@@ -16,7 +16,7 @@ public class HibernateRule extends ExternalResource {
 
     @Override
     protected void before() throws Exception {
-        EntityManagerFactory factory = spring.context().getBean( EntityManagerFactory.class );
+        EntityManagerFactory factory = createManager();
         entityManager = factory.createEntityManager();
         entityManager.getTransaction().begin();
     }
@@ -24,7 +24,12 @@ public class HibernateRule extends ExternalResource {
     @Override
     protected void after() {
         entityManager.getTransaction().commit();
+        entityManager.getTransaction().rollback();
         entityManager.close();
+    }
+
+    private EntityManagerFactory createManager() {
+        return spring.context().getBean( EntityManagerFactory.class );
     }
 
     public EntityManager entityManager() {

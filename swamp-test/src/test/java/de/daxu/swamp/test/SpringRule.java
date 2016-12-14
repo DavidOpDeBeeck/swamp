@@ -1,48 +1,44 @@
 package de.daxu.swamp.test;
 
 import org.junit.rules.ExternalResource;
-import org.springframework.boot.test.context.SpringBootContextLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.test.context.MergedContextConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
 
 public class SpringRule extends ExternalResource {
 
-    private ApplicationContext applicationContext;
+    private Logger logger = LoggerFactory.getLogger( SpringRule.class );
+    private ConfigurableApplicationContext applicationContext;
+
+    public static SpringRule spring() {
+        return new SpringRule();
+    }
 
     @Override
     protected void before() throws Exception {
-        SpringBootContextLoader contextLoader = new SpringBootContextLoader();
-        MergedContextConfiguration configuration = new MergedContextConfiguration(
-                HibernateRule.class,
-                null,
-                application(),
-                null,
-                profiles(), locations(),
-                null,
-                null,
-                contextLoader,
-                null,
-                null
-        );
-        applicationContext = contextLoader.loadContext( configuration );
+        logger.debug( "Starting SpringApplication" );
+        applicationContext = createSpringApplication().run();
     }
 
     @Override
     protected void after() {
-        ( ( AbstractApplicationContext ) applicationContext ).registerShutdownHook();
+        applicationContext.close();
+    }
+
+    private SpringApplication createSpringApplication() {
+        SpringApplication application = new SpringApplication( locations() );
+        application.setAdditionalProfiles( profiles() );
+        return application;
+    }
+
+    private String[] locations() {
+        return new String[]{ "classpath:applicationContext.xml" };
     }
 
     private String[] profiles() {
         return new String[]{ "test" };
-    }
-
-    private Class[] application() {
-        return new Class[]{ SwampTestApplication.class };
-    }
-
-    private String[] locations() {
-        return new String[]{ "classpath:test.properties" };
     }
 
     ApplicationContext context() {

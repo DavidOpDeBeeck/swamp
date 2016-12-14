@@ -22,5 +22,10 @@ public class ContainerServiceIntegrationTest {
         database.entityManager().persist( project );
 
         database.entityManager().find( Project.class, project.getId() );
+
+       /* RestTemplate template = new RestTemplateBuilder().build();
+        ResponseEntity<Project> projectFromAPI = template.getForEntity( "http://localhost:8081/projects", Project.class );
+
+        assertThat( projectFromAPI ).isNotNull();*/
     }
 }
