@@ -1,31 +1,36 @@
 package de.daxu.swamp.core.container;
 
 import de.daxu.swamp.core.project.Project;
-import de.daxu.swamp.test.HibernateRule;
+import de.daxu.swamp.core.project.ProjectRepository;
+import de.daxu.swamp.test.IntegrationTestRule;
 import de.daxu.swamp.test.SpringRule;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
+import static de.daxu.swamp.test.SpringRule.spring;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContainerServiceIntegrationTest {
 
-    @Rule
-    public SpringRule spring = new SpringRule();
+    @ClassRule
+    public static SpringRule spring = spring();
 
     @Rule
-    public HibernateRule database = new HibernateRule( spring );
+    public IntegrationTestRule integration = new IntegrationTestRule(spring);
 
     @Test
     public void addContainerToProject() throws Exception {
-        Project project = aProjectTestBuilder().build();
-        database.entityManager().persist( project );
+        ProjectRepository repository = spring.getInstance( ProjectRepository.class );
 
-        database.entityManager().find( Project.class, project.getId() );
+        Project expected = aProjectTestBuilder().build();
+        expected = repository.save( expected );
 
-       /* RestTemplate template = new RestTemplateBuilder().build();
-        ResponseEntity<Project> projectFromAPI = template.getForEntity( "http://localhost:8081/projects", Project.class );
+        Project actual = integration.entityManager().find( Project.class, expected.getId() );
 
-        assertThat( projectFromAPI ).isNotNull();*/
+        assertThat( expected )
+                .usingDefaultComparator()
+                .isEqualTo( actual );
     }
 }

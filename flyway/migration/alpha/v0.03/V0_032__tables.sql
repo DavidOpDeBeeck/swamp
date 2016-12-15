@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `git_configuration` (
   `path` VARCHAR(45) NOT NULL,
   `credentials_id` VARCHAR(255) NULL,
   INDEX `fk_git_configuration_credentials1_idx` (`credentials_id` ASC),
-  INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
+  INDEX `fk_git_configuration_run_configuration2_idx` (`id` ASC),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_git_configuration_credentials1`
     FOREIGN KEY (`credentials_id`)

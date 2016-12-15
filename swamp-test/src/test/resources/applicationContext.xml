@@ -12,6 +12,8 @@
 
     <context:component-scan base-package="de.daxu.swamp"/>
 
-    <jdbc:embedded-database id="dataSource" type="H2"/>
-
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:swamp;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE;MODE=MYSQL;TRACE_LEVEL_FILE=3"/>
+    </bean>
 </beans>

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `environment_variable` (
   `value` VARCHAR(255) NOT NULL,
   `container_id` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_port_mapping_container1_idx` (`container_id` ASC),
+  INDEX `fk_environment_variable_container1_idx` (`container_id` ASC),
   CONSTRAINT `fk_port_mapping_container10`
     FOREIGN KEY (`container_id`)
     REFERENCES `container` (`id`)

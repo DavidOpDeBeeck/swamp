@@ -19,6 +19,7 @@ subprojects {
         compile "mysql:mysql-connector-java"
         testRuntime "com.h2database:h2"
         testCompile "javax.el:javax.el-api"
+        testCompile "org.flywaydb:flyway-core"
         testCompile "org.glassfish.web:javax.el"
         testCompile "org.springframework:spring-web"
         testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -43,6 +44,8 @@ subprojects {
             mavenBom 'org.springframework.boot:spring-boot-dependencies:1.4.2.RELEASE'
         }
         dependencies {
+            dependency "org.flywaydb:flyway-core:4.0.3"
+
             dependency "javax.el:javax.el-api:2.2.4"
             dependency "org.glassfish.web:javax.el:2.2.4"
 

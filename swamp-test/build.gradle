@@ -1,0 +1,4 @@
+dependencies {
+    compile project (':swamp-infrastructure')
+    testCompile project (':swamp-infrastructure')
+}

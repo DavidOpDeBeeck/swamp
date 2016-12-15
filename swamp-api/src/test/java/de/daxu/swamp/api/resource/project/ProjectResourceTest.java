@@ -1,7 +1,7 @@
 package de.daxu.swamp.api.resource.project;
 
 import de.daxu.swamp.core.project.Project;
-import de.daxu.swamp.test.HibernateRule;
+import de.daxu.swamp.test.IntegrationTestRule;
 import de.daxu.swamp.test.SpringRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -20,14 +20,14 @@ public class ProjectResourceTest {
     public static SpringRule spring = spring();
 
     @Rule
-    public HibernateRule database = new HibernateRule( spring );
+    public IntegrationTestRule integration = new IntegrationTestRule( spring );
 
     @Test
     public void getAll() throws Exception {
         Project project = aProjectTestBuilder().build();
-        database.entityManager().persist( project );
+        integration.persist( project );
 
-        database.entityManager().find( Project.class, project.getId() );
+        integration.entityManager().find( Project.class, project.getId() );
         RestTemplate template = new RestTemplateBuilder().build();
         ResponseEntity<String> projectFromAPI = template.getForEntity( "http://localhost:8081/projects", String.class );
 
@@ -36,14 +36,20 @@ public class ProjectResourceTest {
 
     @Test
     public void post() throws Exception {
-        Project project = aProjectTestBuilder().build();
-        database.entityManager().persist( project );
+        Project expected = aProjectTestBuilder().build();
 
-        database.entityManager().find( Project.class, project.getId() );
         RestTemplate template = new RestTemplateBuilder().build();
-        ResponseEntity<String> projectFromAPI = template.getForEntity( "http://localhost:8081/projects", String.class );
+        ResponseEntity<Response> httpResponse = template.postForEntity( "http://localhost:8081/projects", expected, Response.class, new Object() );
+        Response response = httpResponse.getBody();
 
-        assertThat( projectFromAPI ).isNotNull();
+        String location = response.getMeta().getLocation();
+        String id = location.substring( location.lastIndexOf( '/' ) + 1, location.length() );
+
+        ResponseEntity<Response> projectFromAPI = template.getForEntity( "http://localhost:8081/projects/" + id, Response.class );
+        Project actual = ( Project ) projectFromAPI.getBody().getData();
+
+        assertThat( expected.getName() ).isEqualTo( actual.getName() );
+        assertThat( expected.getDescription() ).isEqualTo( actual.getDescription() );
     }
 
 //    @Test

@@ -1,15 +1,11 @@
 package de.daxu.swamp.test;
 
 import org.junit.rules.ExternalResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class SpringRule extends ExternalResource {
 
-    private Logger logger = LoggerFactory.getLogger( SpringRule.class );
     private ConfigurableApplicationContext applicationContext;
 
     public static SpringRule spring() {
@@ -18,7 +14,6 @@ public class SpringRule extends ExternalResource {
 
     @Override
     protected void before() throws Exception {
-        logger.debug( "Starting SpringApplication" );
         applicationContext = createSpringApplication().run();
     }
 
@@ -41,7 +36,7 @@ public class SpringRule extends ExternalResource {
         return new String[]{ "test" };
     }
 
-    ApplicationContext context() {
-        return applicationContext;
+    public <T> T getInstance( Class<T> beanClass ) {
+        return applicationContext.getBean( beanClass );
     }
 }

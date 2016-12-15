@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `container_location` (
   CONSTRAINT `fk_container_has_location_location1`
     FOREIGN KEY (`location_id`)
     REFERENCES `location` (`id`)
-    ON DELETE CASCADE 
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -147,7 +147,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `image_configuration` (
   `id` VARCHAR(255) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
+  INDEX  `fk_image_configuration_run_configuration1_idx` (`id` ASC),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_image_configuration_run_configuration1`
     FOREIGN KEY (`id`)
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `git_configuration` (
   `password` VARCHAR(45) NOT NULL,
   `branch` VARCHAR(45) NOT NULL,
   `path` VARCHAR(45) NOT NULL,
-  INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
+  INDEX `fk_git_configuration_run_configuration1_idx` (`id` ASC),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_image_configuration_run_configuration10`
     FOREIGN KEY (`id`)
@@ -183,7 +183,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `dockerfile_configuration` (
   `id` VARCHAR(255) NOT NULL,
   `dockerfile` TEXT NOT NULL,
-  INDEX `fk_image_configuration_run_configuration1_idx` (`id` ASC),
+  INDEX `fk_dockerfile_configuration_run_configuration1_idx` (`id` ASC),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_image_configuration_run_configuration11`
     FOREIGN KEY (`id`)

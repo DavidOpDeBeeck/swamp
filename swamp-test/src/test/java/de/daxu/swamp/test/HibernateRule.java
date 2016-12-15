@@ -1,35 +1,38 @@
 package de.daxu.swamp.test;
 
 import org.junit.rules.ExternalResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 public class HibernateRule extends ExternalResource {
 
-    private SpringRule spring;
+    private Logger logger = LoggerFactory.getLogger( HibernateRule.class );
     private EntityManager entityManager;
+    private final EntityManagerFactory factory;
 
-    public HibernateRule( SpringRule spring ) {
-        this.spring = spring;
+    public HibernateRule( EntityManagerFactory entityManagerFactory ) {
+        this.factory = entityManagerFactory;
     }
 
     @Override
     protected void before() throws Exception {
-        EntityManagerFactory factory = createManager();
         entityManager = factory.createEntityManager();
-        entityManager.getTransaction().begin();
     }
 
     @Override
     protected void after() {
-        entityManager.getTransaction().commit();
-        entityManager.getTransaction().rollback();
         entityManager.close();
     }
 
-    private EntityManagerFactory createManager() {
-        return spring.context().getBean( EntityManagerFactory.class );
+    public void persist( Object o ) {
+        logger.info( "BEGIN TRANSACTION" );
+        entityManager.getTransaction().begin();
+        entityManager.persist( o );
+        entityManager.getTransaction().commit();
+        logger.info( "COMMIT TRANSACTION" );
     }
 
     public EntityManager entityManager() {

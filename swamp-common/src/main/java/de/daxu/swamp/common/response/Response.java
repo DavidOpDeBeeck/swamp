@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static de.daxu.swamp.common.response.Response.Builder.aResponse;
-
 @JsonInclude( JsonInclude.Include.NON_NULL )
 @SuppressWarnings( "unused" )
 public class Response {
