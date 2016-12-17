@@ -19,7 +19,7 @@ public class FlywayRule extends ExternalResource {
     private Flyway setup( DataSource dataSource ) {
         Flyway flyway = new Flyway();
         flyway.setDataSource( dataSource );
-        flyway.setLocations( "filesystem:../flyway/migration" );
+        flyway.setLocations( "classpath:migration" );
         flyway.setBaselineOnMigrate( true );
         return flyway;
     }
@@ -30,6 +30,7 @@ public class FlywayRule extends ExternalResource {
         logger.info( "    Flyway Migrate    " );
         logger.info( "----------------------" );
         flyway.migrate();
+        logger.info( "----------------------" );
     }
 
     @Override
@@ -38,5 +39,6 @@ public class FlywayRule extends ExternalResource {
         logger.info( "     Flyway Clean     " );
         logger.info( "----------------------" );
         flyway.clean();
+        logger.info( "----------------------" );
     }
 }

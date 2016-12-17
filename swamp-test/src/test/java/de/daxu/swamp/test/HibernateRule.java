@@ -28,14 +28,12 @@ public class HibernateRule extends ExternalResource {
     }
 
     public void persist( Object o ) {
-        logger.info( "BEGIN TRANSACTION" );
         entityManager.getTransaction().begin();
         entityManager.persist( o );
         entityManager.getTransaction().commit();
-        logger.info( "COMMIT TRANSACTION" );
     }
 
-    public EntityManager entityManager() {
-        return entityManager;
+    public <T> T find( String id, Class<T> returnType ) {
+        return entityManager.find( returnType, id );
     }
 }

@@ -1,3 +1,6 @@
 dependencies {
+    testCompile project(":swamp-common")
+    testCompile project(":swamp-infrastructure")
+
     testCompile "org.flywaydb:flyway-core"
 }

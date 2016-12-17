@@ -18,7 +18,7 @@ public class ContainerServiceIntegrationTest {
     public static SpringRule spring = spring();
 
     @Rule
-    public IntegrationTestRule integration = new IntegrationTestRule(spring);
+    public IntegrationTestRule integration = new IntegrationTestRule( spring );
 
     @Test
     public void addContainerToProject() throws Exception {
@@ -27,7 +27,7 @@ public class ContainerServiceIntegrationTest {
         Project expected = aProjectTestBuilder().build();
         expected = repository.save( expected );
 
-        Project actual = integration.entityManager().find( Project.class, expected.getId() );
+        Project actual = integration.find( expected.getId(), Project.class );
 
         assertThat( expected )
                 .usingDefaultComparator()

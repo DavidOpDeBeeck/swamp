@@ -25,6 +25,11 @@ public class SpringRule extends ExternalResource {
         applicationContext.close();
     }
 
+    public String getProperty( String name ) {
+        return applicationContext.getEnvironment()
+                .getProperty( name );
+    }
+
     public <T> T getInstance( Class<T> beanClass ) {
         return applicationContext.getBean( beanClass );
     }

@@ -5,7 +5,6 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -27,11 +26,11 @@ public class IntegrationTestRule implements TestRule {
                 .apply( base, description );
     }
 
-    public EntityManager entityManager() {
-        return database.entityManager();
-    }
-
     public void persist( Object o ) {
         database.persist( o );
+    }
+
+    public <T> T find( String id, Class<T> returnType ) {
+        return database.find( id, returnType );
     }
 }

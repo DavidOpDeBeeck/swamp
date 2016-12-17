@@ -1,0 +1,46 @@
+spring:
+  profiles: default
+  datasource:
+    url: jdbc:mysql://localhost:3306/swamp?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+server:
+  port: 8081
+application:
+  version: ${version}
+---
+spring:
+  profiles: test
+  datasource:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:swamp;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE;MODE=MYSQL;TRACE_LEVEL_FILE=3
+  jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+      generate-ddl: false
+      hibernate:
+          ddl-auto: none
+      show-sql: true
+flyway:
+    enabled: false
+logging:
+    level:
+        org:
+            hibernate: ERROR
+            springframework:
+                web: ERROR
+server:
+  port: 8888
+application:
+  version: test
+---
