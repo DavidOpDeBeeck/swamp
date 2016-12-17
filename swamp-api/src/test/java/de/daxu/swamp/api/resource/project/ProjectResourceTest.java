@@ -1,5 +1,7 @@
 package de.daxu.swamp.api.resource.project;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.daxu.swamp.api.dto.container.ProjectDTO;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.test.IntegrationTestRule;
 import de.daxu.swamp.test.SpringRule;
@@ -8,8 +10,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,10 +34,17 @@ public class ProjectResourceTest {
         integration.persist( project );
 
         integration.entityManager().find( Project.class, project.getId() );
-        RestTemplate template = new RestTemplateBuilder().build();
-        ResponseEntity<String> projectFromAPI = template.getForEntity( "http://localhost:8081/projects", String.class );
 
-        assertThat( projectFromAPI ).isNotNull();
+        MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
+        jsonMessageConverter.setObjectMapper(new ObjectMapper(  ));
+
+        RestTemplate template = new RestTemplate(newArrayList(jsonMessageConverter));
+
+        Response<List<ProjectDTO>> response = new Response<>();
+
+        Response<List<ProjectDTO>> projects = template.getForObject( "http://localhost:8081/projects", response.getClass() );
+
+        assertThat( projects ).isNotNull();
     }
 
     @Test

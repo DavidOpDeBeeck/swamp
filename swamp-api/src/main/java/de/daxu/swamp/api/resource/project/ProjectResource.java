@@ -10,7 +10,6 @@ import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.project.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -54,7 +53,7 @@ public class ProjectResource {
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public ResponseEntity<Response> post( @RequestBody ProjectCreateDTO projectCreateDTO ) {
+    public Response post( @RequestBody ProjectCreateDTO projectCreateDTO ) {
 
         Project project = projectCreateConverter.toDomain( projectCreateDTO );
         project = projectService.createProject( project );
@@ -63,20 +62,20 @@ public class ProjectResource {
                 .fromCurrentRequest().path( "/{id}" )
                 .buildAndExpand( project.getId() ).toUri();
 
-        return ResponseEntity.ok( response.created( location ) );
+        return response.created( location );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.GET )
-    public ResponseEntity<Response> get( @PathVariable( "projectId" ) String projectId ) {
+    public Response get( @PathVariable( "projectId" ) String projectId ) {
 
         Project project = projectService.getProject( projectId );
 
         if( project == null )
-            return ResponseEntity.ok( response.notFound( "Project was not found!" ) );
+            return response.notFound( "Project was not found!" );
 
         ProjectDTO projectDTO = projectConverter.toDTO( project );
 
-        return ResponseEntity.ok( response.success( projectDTO ) );
+        return response.success( projectDTO );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.PUT )

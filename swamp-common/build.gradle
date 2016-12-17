@@ -1,7 +1,10 @@
 dependencies {
     compile "org.hibernate:hibernate-core"
     compile "org.hibernate:hibernate-validator"
+
     compile "org.springframework:spring-beans"
     compile "org.springframework:spring-context"
+
+    compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.core:jackson-annotations"
 }

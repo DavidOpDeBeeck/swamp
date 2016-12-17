@@ -1,0 +1,22 @@
+spring:
+  profiles: test
+  datasource:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:swamp;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE;MODE=MYSQL;TRACE_LEVEL_FILE=3
+  jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+      generate-ddl: false
+      hibernate:
+          ddl-auto: none
+      show-sql: true
+flyway:
+    enabled: false
+logging:
+    level:
+        org:
+            hibernate: ERROR
+            springframework:
+                web: ERROR
+application:
+  version: test
+---

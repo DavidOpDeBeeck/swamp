@@ -16,10 +16,12 @@ subprojects {
     }
 
     dependencies {
-        compile "mysql:mysql-connector-java"
+        runtime "mysql:mysql-connector-java"
+
         testRuntime "com.h2database:h2"
+        testRuntime "org.flywaydb:flyway-core"
+
         testCompile "javax.el:javax.el-api"
-        testCompile "org.flywaydb:flyway-core"
         testCompile "org.glassfish.web:javax.el"
         testCompile "org.springframework:spring-web"
         testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -36,6 +38,7 @@ subprojects {
         jacksonVersion = '2.8.4'
         dockerJavaVersion = '3.0.5'
         axonVersion = '2.1.1'
+        flywayVersion = '4.0.3'
     }
 
     dependencyManagement {
@@ -44,7 +47,7 @@ subprojects {
             mavenBom 'org.springframework.boot:spring-boot-dependencies:1.4.2.RELEASE'
         }
         dependencies {
-            dependency "org.flywaydb:flyway-core:4.0.3"
+            dependency "org.flywaydb:flyway-core:$flywayVersion"
 
             dependency "javax.el:javax.el-api:2.2.4"
             dependency "org.glassfish.web:javax.el:2.2.4"
@@ -67,6 +70,7 @@ subprojects {
             dependency "org.hibernate:hibernate-validator:$hibernateValidationVersion"
 
             dependency "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+            dependency "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 
             dependency "com.github.docker-java:docker-java:$dockerJavaVersion"
 
@@ -78,6 +82,7 @@ subprojects {
     task testJar(type: Jar, dependsOn: testClasses) {
         baseName = "test-${project.archivesBaseName}"
         from sourceSets.test.output
+        from sourceSets.test.resources
     }
 
     configurations {

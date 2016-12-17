@@ -1,9 +1,12 @@
 package de.daxu.swamp.api.resource.project;
 
-public class Response {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Response<T> {
 
     private Meta meta;
-    private Object data;
+    private T data;
 
     public Response() {
     }
@@ -16,11 +19,11 @@ public class Response {
         this.meta = meta;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData( Object data ) {
+    public void setData( T data ) {
         this.data = data;
     }
 }

@@ -1,7 +1,9 @@
 package de.daxu.swamp.api.resource.project;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Meta {
     private int status;
     private String version;

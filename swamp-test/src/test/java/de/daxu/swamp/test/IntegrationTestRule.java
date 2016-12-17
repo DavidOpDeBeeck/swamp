@@ -11,8 +11,8 @@ import javax.sql.DataSource;
 
 public class IntegrationTestRule implements TestRule {
 
-    private HibernateRule database;
-    private FlywayRule flyway;
+    private final HibernateRule database;
+    private final FlywayRule flyway;
 
     public IntegrationTestRule( SpringRule spring ) {
         database = new HibernateRule( spring.getInstance( EntityManagerFactory.class ) );
