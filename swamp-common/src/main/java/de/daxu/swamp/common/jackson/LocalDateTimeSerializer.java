@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -18,7 +17,6 @@ import java.time.ZonedDateTime;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
-@Component
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> implements ContextualSerializer {
 
     private static final String DEFAULT_TIME_ZONE = "GMT";
