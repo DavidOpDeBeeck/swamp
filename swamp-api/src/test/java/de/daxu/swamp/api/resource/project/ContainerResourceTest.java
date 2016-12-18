@@ -64,12 +64,9 @@ public class ContainerResourceTest {
         Container actual = resource.find( id, Container.class );
 
         assertThat( actual ).isNotNull();
-        assertThat( actual.getName() ).isEqualTo( expected.getName() );
-
-        project = resource.find( project.getId(), Project.class );
-
-        assertThat( project.getContainers() )
-                .containsExactly( actual );
+        assertThat( actual )
+                .isEqualToComparingOnlyGivenFields(
+                        expected,  "name", "runConfiguration" );
     }
 
     @Test

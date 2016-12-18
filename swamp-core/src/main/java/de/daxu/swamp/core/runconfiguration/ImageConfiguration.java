@@ -39,6 +39,23 @@ public class ImageConfiguration extends RunConfiguration {
         return RunConfigurationType.IMAGE;
     }
 
+    @Override
+    public boolean equals( Object o ) {
+        if( this == o ) return true;
+        if( o == null || getClass() != o.getClass() ) return false;
+
+        ImageConfiguration that = ( ImageConfiguration ) o;
+
+        return name != null ? name.equals( that.name ) : that.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + ( name != null ? name.hashCode() : 0 );
+        return result;
+    }
+
     public static class ImageConfigurationBuilder {
 
         private String name;

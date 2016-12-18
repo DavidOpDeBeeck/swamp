@@ -54,7 +54,9 @@ public class ProjectResourceTest {
         Project actual = resource.find( id, Project.class );
 
         assertThat( actual ).isNotNull();
-        assertThat( actual.getName() ).isEqualTo( expected.getName() );
+        assertThat( actual )
+                .isEqualToComparingOnlyGivenFields(
+                        expected,  "name", "description", "containers" );
     }
 
     @Test
@@ -88,7 +90,9 @@ public class ProjectResourceTest {
         Project actual = resource.find( project.getId(), Project.class );
 
         assertThat( actual ).isNotNull();
-        assertThat( actual.getName() ).isEqualTo( expected.getName() );
+        assertThat( actual )
+                .isEqualToComparingOnlyGivenFields(
+                        expected,  "name", "description" );
     }
 
     @Test

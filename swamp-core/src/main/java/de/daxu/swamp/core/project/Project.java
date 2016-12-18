@@ -70,8 +70,7 @@ public class Project extends Identifiable {
     }
 
     public boolean addContainer( Container container ) {
-        if ( this.containers == null )
-            this.containers = new HashSet<>();
+        if ( this.containers == null ) this.containers = new HashSet<>();
         return this.containers.add( container );
     }
 
