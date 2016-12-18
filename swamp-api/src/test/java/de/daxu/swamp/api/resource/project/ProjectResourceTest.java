@@ -1,9 +1,11 @@
 package de.daxu.swamp.api.resource.project;
 
+import de.daxu.swamp.api.converter.container.ProjectConverter;
 import de.daxu.swamp.api.dto.container.ProjectDTO;
 import de.daxu.swamp.core.project.Project;
-import de.daxu.swamp.test.ResourceIntegrationTestRule;
-import de.daxu.swamp.test.SpringRule;
+import de.daxu.swamp.test.rule.ResourceIntegrationTestRule;
+import de.daxu.swamp.test.rule.SpringRule;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,58 +13,92 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
-import static de.daxu.swamp.test.SpringRule.spring;
+import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProjectResourceTest {
 
     @ClassRule
     public static SpringRule spring = spring();
-
     @Rule
     public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
 
+    private ProjectConverter projectConverter;
+
+    @Before
+    public void setUp() throws Exception {
+        projectConverter = spring.getInstance( ProjectConverter.class );
+    }
+
     @Test
     public void getAll() throws Exception {
-        Project project = aProjectTestBuilder().build();
-        resource.persist( project );
+        Project project1 = aProjectTestBuilder().build();
+        Project project2 = aProjectTestBuilder().build();
+        resource.persist( project1, project2 );
 
         List<ProjectDTO> projects = resource.getList( "/projects", ProjectDTO.class );
 
         assertThat( projects ).isNotEmpty();
+        assertThat( projects )
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(
+                        projectConverter.toDTO( project1 ),
+                        projectConverter.toDTO( project2 ) );
     }
 
     @Test
     public void post() throws Exception {
-       /* Project expected = aProjectTestBuilder().build();
+        Project expected = aProjectTestBuilder().build();
 
-        RestTemplate template = new RestTemplateBuilder().build();
-        ResponseEntity<Response> httpResponse = template.postForEntity( "http://localhost:8888/projects", expected, Response.class, new Object() );
-        Response response = httpResponse.getBody();
+        String id = resource.post( "/projects", expected );
+        Project actual = resource.find( id, Project.class );
 
-        String location = response.getMeta().getLocation();
-        String id = location.substring( location.lastIndexOf( '/' ) + 1, location.length() );
-
-        ResponseEntity<Response> projectFromAPI = template.getForEntity( "http://localhost:8888/projects/" + id, Response.class );
-        Project actual = ( Project ) projectFromAPI.getBody().getData();
-
-        assertThat( expected.getName() ).isEqualTo( actual.getName() );
-        assertThat( expected.getDescription() ).isEqualTo( actual.getDescription() );*/
+        assertThat( actual ).isNotNull();
+        assertThat( actual.getName() ).isEqualTo( expected.getName() );
     }
 
-//    @Test
-//    public void get() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void put() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void delete() throws Exception {
-//
-//    }
+    @Test
+    public void get() throws Exception {
+        Project expected = aProjectTestBuilder().build();
+        resource.persist( expected );
 
+        ProjectDTO actual = resource.get( "/projects/" + expected.getId(), ProjectDTO.class );
+
+        assertThat( actual ).isNotNull();
+        assertThat( actual )
+                .isEqualToComparingFieldByField(
+                        projectConverter.toDTO( expected ) );
+    }
+
+    @Test
+    public void put() throws Exception {
+        Project project = aProjectTestBuilder()
+                .withName( "oldName" )
+                .withDescription( "oldDescription" )
+                .build();
+
+        resource.persist( project );
+
+        Project expected = aProjectTestBuilder()
+                .withName( "updatedName" )
+                .withDescription( "updatedDescription" )
+                .build();
+
+        resource.put( "/projects/" + project.getId(), expected );
+        Project actual = resource.find( project.getId(), Project.class );
+
+        assertThat( actual ).isNotNull();
+        assertThat( actual.getName() ).isEqualTo( expected.getName() );
+    }
+
+    @Test
+    public void delete() throws Exception {
+        Project expected = aProjectTestBuilder().build();
+        resource.persist( expected );
+
+        resource.delete( "/projects/" + expected.getId() );
+        Project actual = resource.find( expected.getId(), Project.class );
+
+        assertThat( actual ).isNull();
+    }
 }

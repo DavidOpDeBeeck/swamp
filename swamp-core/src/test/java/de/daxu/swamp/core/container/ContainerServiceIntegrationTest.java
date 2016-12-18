@@ -2,14 +2,14 @@ package de.daxu.swamp.core.container;
 
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.project.ProjectRepository;
-import de.daxu.swamp.test.IntegrationTestRule;
-import de.daxu.swamp.test.SpringRule;
+import de.daxu.swamp.test.rule.IntegrationTestRule;
+import de.daxu.swamp.test.rule.SpringRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
-import static de.daxu.swamp.test.SpringRule.spring;
+import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContainerServiceIntegrationTest {

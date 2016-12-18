@@ -1,4 +1,4 @@
-package de.daxu.swamp.test;
+package de.daxu.swamp.test.rule;
 
 import org.flywaydb.core.Flyway;
 import org.junit.rules.ExternalResource;

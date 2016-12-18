@@ -23,6 +23,7 @@ subprojects {
         testRuntime "javax.el:javax.el-api"
         testRuntime "org.glassfish.web:javax.el"
 
+        testCompile "org.unitils:unitils-core"
         testCompile "org.springframework:spring-web"
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -40,6 +41,7 @@ subprojects {
         axonVersion = '2.1.1'
         flywayVersion = '4.0.3'
         elVersion = '2.2.4'
+        unitilsVersion = '3.4.3'
     }
 
     dependencyManagement {
@@ -49,6 +51,7 @@ subprojects {
         }
         dependencies {
             dependency "org.flywaydb:flyway-core:$flywayVersion"
+            dependency "org.unitils:unitils-core:$unitilsVersion"
 
             dependency "javax.el:javax.el-api:$elVersion"
             dependency "org.glassfish.web:javax.el:$elVersion"

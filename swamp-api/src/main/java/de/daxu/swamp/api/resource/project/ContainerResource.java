@@ -9,11 +9,11 @@ import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.ContainerService;
-import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.project.Project;
+import de.daxu.swamp.core.project.ProjectService;
 import de.daxu.swamp.core.strategy.FirstInLineStrategy;
 import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
-import de.daxu.swamp.core.project.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -55,7 +55,7 @@ public class ContainerResource {
     }
 
     @RequestMapping( method = RequestMethod.GET )
-    public Response getContainers( @PathVariable( "projectId" ) String id ) {
+    public Response getAll( @PathVariable( "projectId" ) String id ) {
 
         Project project = projectService.getProject( id );
 
@@ -71,7 +71,7 @@ public class ContainerResource {
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public Response postContainer( @PathVariable( "projectId" ) String id,
+    public Response post( @PathVariable( "projectId" ) String id,
                                    @RequestBody ContainerCreateDTO containerCreateDTO ) {
 
         Project project = projectService.getProject( id );
@@ -90,7 +90,7 @@ public class ContainerResource {
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.GET )
-    public Response getContainer( @PathVariable( "projectId" ) String projectId,
+    public Response get( @PathVariable( "projectId" ) String projectId,
                                   @PathVariable( "containerId" ) String containerId ) {
 
         Project project = projectService.getProject( projectId );
@@ -109,7 +109,7 @@ public class ContainerResource {
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.PUT )
-    public Response putContainer( @PathVariable( "projectId" ) String projectId,
+    public Response put( @PathVariable( "projectId" ) String projectId,
                                   @PathVariable( "containerId" ) String containerId,
                                   @RequestBody ContainerCreateDTO dto ) {
 
@@ -134,7 +134,7 @@ public class ContainerResource {
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.DELETE )
-    public Response deleteContainer( @PathVariable( "projectId" ) String projectId,
+    public Response delete( @PathVariable( "projectId" ) String projectId,
                                      @PathVariable( "containerId" ) String containerId ) {
 
         Project project = projectService.getProject( projectId );

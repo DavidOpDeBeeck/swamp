@@ -1,5 +1,6 @@
-package de.daxu.swamp.test;
+package de.daxu.swamp.test.rule;
 
+import de.daxu.swamp.test.SwampTestApplication;
 import org.junit.rules.ExternalResource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;

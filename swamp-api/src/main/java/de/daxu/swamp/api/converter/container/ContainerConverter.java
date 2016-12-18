@@ -13,17 +13,18 @@ import java.util.stream.Collectors;
 @Component
 public class ContainerConverter implements DTOConverter<Container, ContainerDTO> {
 
-    @Autowired
-    RunConfigurationConverter configurationConverter;
+    private final RunConfigurationConverter configurationConverter;
+    private final LocationConverter locationConverter;
+    private final PortMappingConverter portMappingConverter;
+    private final EnvironmentVariableConverter environmentVariableConverter;
 
     @Autowired
-    LocationConverter locationConverter;
-
-    @Autowired
-    PortMappingConverter portMappingConverter;
-
-    @Autowired
-    EnvironmentVariableConverter environmentVariableConverter;
+    public ContainerConverter( RunConfigurationConverter configurationConverter, LocationConverter locationConverter, PortMappingConverter portMappingConverter, EnvironmentVariableConverter environmentVariableConverter ) {
+        this.configurationConverter = configurationConverter;
+        this.locationConverter = locationConverter;
+        this.portMappingConverter = portMappingConverter;
+        this.environmentVariableConverter = environmentVariableConverter;
+    }
 
     @Override
     public ContainerDTO toDTO( Container container ) {

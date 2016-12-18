@@ -1,4 +1,4 @@
-package de.daxu.swamp.test;
+package de.daxu.swamp.test.rule;
 
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
@@ -26,7 +26,7 @@ public class IntegrationTestRule implements TestRule {
                 .apply( base, description );
     }
 
-    public void persist( Object o ) {
+    public void persist( Object... o ) {
         database.persist( o );
     }
 

@@ -1,15 +1,13 @@
-package de.daxu.swamp.test;
+package de.daxu.swamp.test.rule;
 
 import org.junit.rules.ExternalResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.Arrays;
 
 public class HibernateRule extends ExternalResource {
 
-    private Logger logger = LoggerFactory.getLogger( HibernateRule.class );
     private EntityManager entityManager;
     private final EntityManagerFactory factory;
 
@@ -27,13 +25,20 @@ public class HibernateRule extends ExternalResource {
         entityManager.close();
     }
 
-    public void persist( Object o ) {
+    public void refresh() {
+        entityManager.close();
+        entityManager = factory.createEntityManager();
+    }
+
+    public void persist( Object... o ) {
         entityManager.getTransaction().begin();
-        entityManager.persist( o );
+        Arrays.stream( o )
+                .forEach( entityManager::persist );
         entityManager.getTransaction().commit();
     }
 
     public <T> T find( String id, Class<T> returnType ) {
+        entityManager.clear();
         return entityManager.find( returnType, id );
     }
 }
