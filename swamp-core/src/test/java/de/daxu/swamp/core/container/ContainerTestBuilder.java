@@ -1,14 +1,14 @@
 package de.daxu.swamp.core.container;
 
+import de.daxu.swamp.core.configuration.RunConfiguration;
 import de.daxu.swamp.core.location.Location;
-import de.daxu.swamp.core.runconfiguration.RunConfiguration;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static de.daxu.swamp.core.configuration.ImageConfigurationTestBuilder.anImageConfigurationTestBuilder;
 import static de.daxu.swamp.core.container.EnvironmentVariableTestBuilder.anEnvironmentVariableTestBuilder;
 import static de.daxu.swamp.core.container.PortMappingTestBuilder.aPortMappingTestBuilder;
-import static de.daxu.swamp.core.runconfiguration.ImageConfigurationTestBuilder.anImageConfigurationTestBuilder;
 
 public class ContainerTestBuilder {
 

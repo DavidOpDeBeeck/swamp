@@ -1,8 +1,8 @@
 package de.daxu.swamp.deploy.configuration;
 
+import de.daxu.swamp.core.configuration.RunConfiguration;
 import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.container.PortMapping;
-import de.daxu.swamp.core.runconfiguration.RunConfiguration;
 
 import java.util.Set;
 

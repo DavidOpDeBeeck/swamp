@@ -25,11 +25,6 @@ public class HibernateRule extends ExternalResource {
         entityManager.close();
     }
 
-    public void refresh() {
-        entityManager.close();
-        entityManager = factory.createEntityManager();
-    }
-
     public void persist( Object... o ) {
         entityManager.getTransaction().begin();
         Arrays.stream( o )
