@@ -1,7 +1,7 @@
 package de.daxu.swamp.core.location;
 
 import de.daxu.swamp.common.jpa.Identifiable;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;

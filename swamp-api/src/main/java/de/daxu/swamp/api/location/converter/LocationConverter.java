@@ -9,10 +9,10 @@ import de.daxu.swamp.api.server.converter.ServerConverter;
 import de.daxu.swamp.api.server.dto.ServerDTO;
 import de.daxu.swamp.common.dto.DTOConverter;
 import de.daxu.swamp.common.dto.DomainConverter;
+import de.daxu.swamp.core.continent.Continent;
+import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.location.Location;
-import de.daxu.swamp.core.location.continent.Continent;
-import de.daxu.swamp.core.location.datacenter.Datacenter;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

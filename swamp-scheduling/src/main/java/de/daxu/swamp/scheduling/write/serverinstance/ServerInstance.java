@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.write.serverinstance;
 
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceCreatedEvent;
 import de.daxu.swamp.scheduling.write.serverinstance.command.CreateServerInstanceCommand;

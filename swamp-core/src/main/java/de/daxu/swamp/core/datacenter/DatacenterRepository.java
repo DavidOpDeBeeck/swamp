@@ -1,4 +1,4 @@
-package de.daxu.swamp.core.location.datacenter;
+package de.daxu.swamp.core.datacenter;
 
 import de.daxu.swamp.core.location.LocationBaseRepository;
 import org.springframework.stereotype.Repository;

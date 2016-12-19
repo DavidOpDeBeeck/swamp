@@ -34,9 +34,9 @@ public class ProjectResourceIntegrationTest {
     public void getAll() throws Exception {
         Project project1 = aProjectTestBuilder().build();
         Project project2 = aProjectTestBuilder().build();
-        resource.persist( project1, project2 );
+        resource.save( project1, project2 );
 
-        List<ProjectDTO> projects = resource.getList( "/projects", ProjectDTO.class );
+        List<ProjectDTO> projects = resource.getList( ProjectDTO.class, "/projects" );
 
         assertThat( projects ).isNotEmpty();
         assertThat( projects )
@@ -50,21 +50,21 @@ public class ProjectResourceIntegrationTest {
     public void post() throws Exception {
         Project expected = aProjectTestBuilder().build();
 
-        String id = resource.post( "/projects", expected );
+        String id = resource.post( expected, "/projects" );
         Project actual = resource.find( id, Project.class );
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        expected,  "name", "description", "containers" );
+                        expected, "name", "description", "containers" );
     }
 
     @Test
     public void get() throws Exception {
         Project expected = aProjectTestBuilder().build();
-        resource.persist( expected );
+        resource.save( expected );
 
-        ProjectDTO actual = resource.get( "/projects/" + expected.getId(), ProjectDTO.class );
+        ProjectDTO actual = resource.get( ProjectDTO.class, "/projects/", expected.getId() );
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
@@ -79,28 +79,28 @@ public class ProjectResourceIntegrationTest {
                 .withDescription( "oldDescription" )
                 .build();
 
-        resource.persist( project );
+        resource.save( project );
 
         Project expected = aProjectTestBuilder()
                 .withName( "updatedName" )
                 .withDescription( "updatedDescription" )
                 .build();
 
-        resource.put( "/projects/" + project.getId(), expected );
+        resource.put( expected, "/projects/", project.getId() );
         Project actual = resource.find( project.getId(), Project.class );
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        expected,  "name", "description" );
+                        expected, "name", "description" );
     }
 
     @Test
     public void delete() throws Exception {
         Project expected = aProjectTestBuilder().build();
-        resource.persist( expected );
+        resource.save( expected );
 
-        resource.delete( "/projects/" + expected.getId() );
+        resource.delete( "/projects/", expected.getId() );
         Project actual = resource.find( expected.getId(), Project.class );
 
         assertThat( actual ).isNull();

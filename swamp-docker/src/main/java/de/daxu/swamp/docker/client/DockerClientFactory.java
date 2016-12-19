@@ -4,7 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import org.springframework.stereotype.Component;
 
 @Component

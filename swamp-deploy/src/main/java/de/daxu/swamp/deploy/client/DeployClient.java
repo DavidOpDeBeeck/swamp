@@ -1,6 +1,6 @@
 package de.daxu.swamp.deploy.client;
 
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 
 public interface DeployClient {
 

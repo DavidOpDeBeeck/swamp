@@ -1,6 +1,6 @@
 package de.daxu.swamp.docker;
 
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.response.ContainerResponseFactory;

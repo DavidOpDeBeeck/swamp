@@ -1,11 +1,11 @@
-package de.daxu.swamp.core.location.continent;
+package de.daxu.swamp.core.continent;
 
-import de.daxu.swamp.core.location.datacenter.Datacenter;
+import de.daxu.swamp.core.datacenter.Datacenter;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static de.daxu.swamp.core.location.datacenter.DatacenterTestBuilder.aDatacenterTestBuilder;
+import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenterTestBuilder;
 
 public class ContinentTestBuilder {
 

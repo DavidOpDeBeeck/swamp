@@ -1,9 +1,9 @@
-package de.daxu.swamp.core.location.continent;
+package de.daxu.swamp.core.continent;
 
+import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.location.Location;
 import de.daxu.swamp.core.location.LocationType;
-import de.daxu.swamp.core.location.datacenter.Datacenter;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 
 import javax.persistence.*;
 import java.util.HashSet;

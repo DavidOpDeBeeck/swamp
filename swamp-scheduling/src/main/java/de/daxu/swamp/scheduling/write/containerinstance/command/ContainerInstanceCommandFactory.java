@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.write.containerinstance.command;
 
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import org.springframework.stereotype.Component;

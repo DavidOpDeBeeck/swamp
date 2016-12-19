@@ -32,9 +32,9 @@ public class ContainerResourceIntegrationTest {
     @Before
     public void setUp() throws Exception {
         project = aProjectTestBuilder().build();
-        resource.persist( project );
+        resource.save( project );
 
-        resource.withPathPrefix( "/projects", "/", project.getId() );
+        resource.setPathPrefixes( "/projects/", project.getId() );
         containerConverter = spring.getInstance( ContainerConverter.class );
     }
 
@@ -46,7 +46,7 @@ public class ContainerResourceIntegrationTest {
         addContainer( container1 );
         addContainer( container2 );
 
-        List<ContainerDTO> containers = resource.getList( "/containers", ContainerDTO.class );
+        List<ContainerDTO> containers = resource.getList( ContainerDTO.class, "/containers" );
 
         assertThat( containers ).isNotEmpty();
         assertThat( containers )
@@ -60,13 +60,13 @@ public class ContainerResourceIntegrationTest {
     public void post() throws Exception {
         Container expected = aContainerTestBuilder().build();
 
-        String id = resource.post( "/containers", expected );
+        String id = resource.post( expected, "/", "containers" );
         Container actual = resource.find( id, Container.class );
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        expected,  "name", "runConfiguration" );
+                        expected, "name", "runConfiguration" );
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ContainerResourceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
         addContainer( expected );
 
-        ContainerDTO actual = resource.get( "/containers/" + expected.getId(), ContainerDTO.class );
+        ContainerDTO actual = resource.get( ContainerDTO.class, "/containers/", expected.getId() );
 
         assertThat( actual ).isNotNull();
         assertReflectionEquals( actual, containerConverter.toDTO( expected ) );
@@ -92,7 +92,7 @@ public class ContainerResourceIntegrationTest {
                 .withName( "updated" )
                 .build();
 
-        resource.put( "/containers/" + container.getId(), expected );
+        resource.put( expected, "/containers/", container.getId() );
         Container actual = resource.find( container.getId(), Container.class );
 
         assertThat( actual ).isNotNull();
@@ -104,15 +104,15 @@ public class ContainerResourceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
         addContainer( expected );
 
-        resource.delete( "/containers/" + expected.getId() );
+        resource.delete( "/containers/", expected.getId() );
         Container actual = resource.find( expected.getId(), Container.class );
 
         assertThat( actual ).isNull();
     }
 
     private void addContainer( Container container ) {
-        resource.persist( container );
-        project.addContainer(container);
-        resource.persist( project );
+        resource.save( container );
+        project.addContainer( container );
+        resource.save( project );
     }
 }

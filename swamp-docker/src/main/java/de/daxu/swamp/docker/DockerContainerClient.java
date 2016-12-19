@@ -5,7 +5,7 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.model.PortBinding;
 import com.google.common.collect.Sets;
 import de.daxu.swamp.core.container.EnvironmentVariable;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.client.DeployClient;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;

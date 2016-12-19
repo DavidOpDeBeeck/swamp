@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduling.write;
 
 import de.daxu.swamp.core.container.Container;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.write.containerinstance.command.ContainerInstanceCommandFactory;

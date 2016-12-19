@@ -16,58 +16,56 @@ public class ResourceIntegrationTestRule extends IntegrationTestRule {
     private final RestTemplate restTemplate;
     private final SwampObjectMapper objectMapper;
 
-    private String pathPrefixes = "";
+    private String pathPrefixes;
 
     public ResourceIntegrationTestRule( SpringRule spring ) {
         super( spring );
         this.baseUrl = format( "http://localhost:%s", spring.getProperty( "server.port" ) );
         this.restTemplate = new RestTemplate();
         this.objectMapper = new SwampObjectMapper();
+        this.pathPrefixes = "";
     }
 
-    public <T> T get( String path, Class<T> returnType ) {
+    public void setPathPrefixes( String... pathPrefixes ) {
+        this.pathPrefixes = Arrays.stream( pathPrefixes ).reduce( String::concat ).orElse( "" );
+    }
+
+    public <T> T get( Class<T> returnType, String... path ) {
         JavaType type = objectMapper.getTypeFactory()
                 .constructType( returnType );
         return convertResponseData( getRequest( path ), type );
     }
 
-    public <T> List<T> getList( String path, Class<T> returnType ) {
+    public <T> List<T> getList( Class<T> returnType, String... path ) {
         JavaType type = objectMapper.getTypeFactory()
                 .constructCollectionType( List.class, returnType );
         return convertResponseData( getRequest( path ), type );
     }
 
-    public String post( String path, Object body ) {
-        Response response = postRequest( path, body );
+    public String post( Object body, String... path ) {
+        Response response = postRequest( body, path );
         String location = response.getMeta().getLocation();
         return location.substring( location.lastIndexOf( "/" ) + 1, location.length() );
     }
 
-    public void put( String path, Object body ) {
+    public void put( Object body, String... path ) {
         restTemplate.put( url( path ), body, Response.class );
     }
 
-    public void delete( String path ) {
+    public void delete( String... path ) {
         restTemplate.delete( url( path ), Response.class );
     }
 
-    public void withPathPrefix( String... prefixes ) {
-        StringBuilder builder = new StringBuilder( prefixes.length );
-        Arrays.stream( prefixes )
-                .forEach( builder::append );
-        this.pathPrefixes = builder.toString();
-    }
-
-    private Response getRequest( String path ) {
+    private Response getRequest( String... path ) {
         return restTemplate.getForObject( url( path ), Response.class );
     }
 
-    private Response postRequest( String path, Object body ) {
+    private Response postRequest( Object body, String... path ) {
         return restTemplate.postForObject( url( path ), body, Response.class );
     }
 
-    private String url( String path ) {
-        return format( "%s%s%s", baseUrl, pathPrefixes, path );
+    private String url( String... path ) {
+        return format( "%s%s%s", baseUrl, pathPrefixes, Arrays.stream( path ).reduce( String::concat ).orElse( "" ) );
     }
 
     private <T> T convertResponseData( Response response, JavaType type ) {

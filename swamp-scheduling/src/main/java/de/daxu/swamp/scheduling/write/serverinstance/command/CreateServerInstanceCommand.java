@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.write.serverinstance.command;
 
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.scheduling.write.serverinstance.ServerInstanceId;
 
 public class CreateServerInstanceCommand extends ServerInstanceCommand {

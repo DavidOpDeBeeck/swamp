@@ -10,12 +10,12 @@ import javax.sql.DataSource;
 
 public class IntegrationTestRule implements TestRule {
 
-    private final HibernateRule database;
     private final FlywayRule flyway;
+    private final HibernateRule database;
 
     public IntegrationTestRule( SpringRule spring ) {
-        database = new HibernateRule( spring.getInstance( EntityManagerFactory.class ) );
         flyway = new FlywayRule( spring.getInstance( DataSource.class ) );
+        database = new HibernateRule( spring.getInstance( EntityManagerFactory.class ) );
     }
 
     @Override
@@ -26,8 +26,8 @@ public class IntegrationTestRule implements TestRule {
                 .apply( base, description );
     }
 
-    public void persist( Object... o ) {
-        database.persist( o );
+    public void save( Object... o ) {
+        database.save( o );
     }
 
     public <T> T find( String id, Class<T> returnType ) {

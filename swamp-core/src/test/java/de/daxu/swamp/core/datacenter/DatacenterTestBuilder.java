@@ -1,11 +1,11 @@
-package de.daxu.swamp.core.location.datacenter;
+package de.daxu.swamp.core.datacenter;
 
 import com.google.common.collect.Sets;
-import de.daxu.swamp.core.location.server.Server;
+import de.daxu.swamp.core.server.Server;
 
 import java.util.Set;
 
-import static de.daxu.swamp.core.location.server.ServerBuilderTestBuilder.aServerBuilderTestBuilder;
+import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.aServerBuilderTestBuilder;
 
 public class DatacenterTestBuilder {
 

@@ -1,4 +1,4 @@
-package de.daxu.swamp.core.location.server;
+package de.daxu.swamp.core.server;
 
 public class ServerBuilderTestBuilder {
 

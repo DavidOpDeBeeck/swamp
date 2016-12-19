@@ -3,10 +3,10 @@ package de.daxu.swamp.api.datacenter.converter;
 import de.daxu.swamp.api.datacenter.dto.DatacenterDTO;
 import de.daxu.swamp.common.dto.DTOConverter;
 import de.daxu.swamp.common.dto.DomainConverter;
-import de.daxu.swamp.core.location.datacenter.Datacenter;
+import de.daxu.swamp.core.datacenter.Datacenter;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.location.datacenter.Datacenter.DatacenterBuilder.aDatacenterBuilder;
+import static de.daxu.swamp.core.datacenter.Datacenter.DatacenterBuilder.aDatacenterBuilder;
 
 @Component
 public class DatacenterConverter implements DTOConverter<Datacenter, DatacenterDTO>, DomainConverter<DatacenterDTO, Datacenter> {

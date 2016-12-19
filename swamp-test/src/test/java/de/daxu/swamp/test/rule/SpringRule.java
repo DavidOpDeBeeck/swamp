@@ -1,7 +1,7 @@
 package de.daxu.swamp.test.rule;
 
-import de.daxu.swamp.test.BeanOverridingProcessor;
 import de.daxu.swamp.test.SwampTestApplication;
+import de.daxu.swamp.test.bean.OverridingBeanFactoryPostProcessor;
 import org.junit.rules.ExternalResource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -44,7 +44,7 @@ public class SpringRule extends ExternalResource {
         SpringApplication application = new SpringApplication( SPRING_APPLICATION_CLASS );
         application.setAdditionalProfiles( profiles );
         application.setDefaultProperties( propertyOverrides );
-        application.addInitializers( context -> context.addBeanFactoryPostProcessor( new BeanOverridingProcessor( beanOverrides ) ) );
+        application.addInitializers( context -> context.addBeanFactoryPostProcessor( new OverridingBeanFactoryPostProcessor( beanOverrides ) ) );
         return application;
     }
 

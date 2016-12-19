@@ -1,11 +1,11 @@
 package de.daxu.swamp.core.location;
 
-import de.daxu.swamp.core.location.continent.Continent;
-import de.daxu.swamp.core.location.continent.ContinentRepository;
-import de.daxu.swamp.core.location.datacenter.Datacenter;
-import de.daxu.swamp.core.location.datacenter.DatacenterRepository;
-import de.daxu.swamp.core.location.server.Server;
-import de.daxu.swamp.core.location.server.ServerRepository;
+import de.daxu.swamp.core.continent.Continent;
+import de.daxu.swamp.core.continent.ContinentRepository;
+import de.daxu.swamp.core.datacenter.Datacenter;
+import de.daxu.swamp.core.datacenter.DatacenterRepository;
+import de.daxu.swamp.core.server.Server;
+import de.daxu.swamp.core.server.ServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
