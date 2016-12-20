@@ -1,6 +1,7 @@
 package de.daxu.swamp.api.container;
 
 import de.daxu.swamp.api.container.converter.ContainerConverter;
+import de.daxu.swamp.api.container.dto.ContainerCreateDTO;
 import de.daxu.swamp.api.container.dto.ContainerDTO;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.project.Project;
@@ -13,6 +14,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTOTestBuilder;
 import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainerTestBuilder;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
@@ -58,7 +60,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        Container expected = aContainerTestBuilder().build();
+        ContainerCreateDTO expected = aContainerCreateDTOTestBuilder().build();
 
         String id = resource.post( expected, "/", "containers" );
         Container actual = resource.find( id, Container.class );
@@ -66,7 +68,7 @@ public class ContainerResourceIntegrationTest {
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        expected, "name", "runConfiguration" );
+                        expected, "name", "runConfiguration.name" );
     }
 
     @Test

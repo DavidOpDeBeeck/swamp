@@ -6,15 +6,22 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenterTestBuilder;
+import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.anotherDatacenterTestBuilder;
 
 public class ContinentTestBuilder {
 
-    private String id = "a continent id";
+    private String id;
     private String name  = "a continent name";
     private Set<Datacenter> datacenters = newHashSet( aDatacenterTestBuilder().build() );
 
     public static ContinentTestBuilder aContinentTestBuilder() {
         return new ContinentTestBuilder();
+    }
+
+    public static ContinentTestBuilder anotherContinentTestBuilder() {
+        return new ContinentTestBuilder()
+                .withName( "another continent name" )
+                .withDatacenters( newHashSet( anotherDatacenterTestBuilder().build() ) );
     }
 
     public ContinentTestBuilder withId( String id ) {

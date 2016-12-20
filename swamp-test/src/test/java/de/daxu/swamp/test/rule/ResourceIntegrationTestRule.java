@@ -1,8 +1,11 @@
 package de.daxu.swamp.test.rule;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import de.daxu.swamp.common.jackson.SwampObjectMapper;
 import de.daxu.swamp.test.response.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -11,6 +14,8 @@ import java.util.List;
 import static java.lang.String.format;
 
 public class ResourceIntegrationTestRule extends IntegrationTestRule {
+
+    private final Logger logger = LoggerFactory.getLogger( ResourceIntegrationTestRule.class );
 
     private final String baseUrl;
     private final RestTemplate restTemplate;
@@ -57,6 +62,7 @@ public class ResourceIntegrationTestRule extends IntegrationTestRule {
     }
 
     private Response getRequest( String... path ) {
+        logger.info("GET {}", url( path ));
         return restTemplate.getForObject( url( path ), Response.class );
     }
 
@@ -69,6 +75,11 @@ public class ResourceIntegrationTestRule extends IntegrationTestRule {
     }
 
     private <T> T convertResponseData( Response response, JavaType type ) {
+        try {
+            logger.info(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString( response ));
+        } catch( JsonProcessingException e ) {
+            e.printStackTrace();
+        }
         return objectMapper.convertValue( response.getData(), type );
     }
 }

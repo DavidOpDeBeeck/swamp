@@ -2,8 +2,8 @@ package de.daxu.swamp.core.server;
 
 public class ServerBuilderTestBuilder {
 
-    private String id = "an id";
-    private String name  = "a name";
+    private String id;
+    private String name  = "a server name";
     private String ip = "an ip";
     private String CACertificate = "a CACertificate";
     private String certificate = "a certificate";
@@ -11,6 +11,11 @@ public class ServerBuilderTestBuilder {
 
     public static ServerBuilderTestBuilder aServerBuilderTestBuilder() {
         return new ServerBuilderTestBuilder();
+    }
+
+    public static ServerBuilderTestBuilder anotherServerBuilderTestBuilder() {
+        return new ServerBuilderTestBuilder()
+                .withName( "another server name" );
     }
 
     public ServerBuilderTestBuilder withId( String id ) {

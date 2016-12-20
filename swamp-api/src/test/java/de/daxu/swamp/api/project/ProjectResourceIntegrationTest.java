@@ -1,6 +1,7 @@
 package de.daxu.swamp.api.project;
 
 import de.daxu.swamp.api.project.converter.ProjectConverter;
+import de.daxu.swamp.api.project.dto.ProjectCreateDTO;
 import de.daxu.swamp.api.project.dto.ProjectDTO;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.test.rule.ResourceIntegrationTestRule;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTOTestBuilder;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,15 +50,15 @@ public class ProjectResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        Project expected = aProjectTestBuilder().build();
+        ProjectCreateDTO dto = aProjectCreateDTOTestBuilder().build();
 
-        String id = resource.post( expected, "/projects" );
+        String id = resource.post( dto, "/projects" );
         Project actual = resource.find( id, Project.class );
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        expected, "name", "description", "containers" );
+                        dto, "name", "description" );
     }
 
     @Test
@@ -81,7 +83,7 @@ public class ProjectResourceIntegrationTest {
 
         resource.save( project );
 
-        Project expected = aProjectTestBuilder()
+        ProjectCreateDTO expected = aProjectCreateDTOTestBuilder()
                 .withName( "updatedName" )
                 .withDescription( "updatedDescription" )
                 .build();
