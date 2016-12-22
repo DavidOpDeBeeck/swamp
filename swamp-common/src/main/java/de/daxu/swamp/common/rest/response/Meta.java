@@ -1,4 +1,4 @@
-package de.daxu.swamp.test.response;
+package de.daxu.swamp.common.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

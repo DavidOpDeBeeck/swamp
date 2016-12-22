@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTOTestBuilder;
+import static de.daxu.swamp.common.rest.RestClient.listType;
+import static de.daxu.swamp.common.rest.RestClient.type;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinentTestBuilder;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinentTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
@@ -42,7 +44,10 @@ public class ContinentResourceIntegrationTest {
         Continent continent2 = anotherContinentTestBuilder().build();
         saveContinent( continent1, continent2 );
 
-        List<ContinentDTO> continents = resource.getList( ContinentDTO.class, "/continents" );
+        List<ContinentDTO> continents = resource.restClient()
+                .path( "continents" )
+                .type( listType( ContinentDTO.class ) )
+                .get();
 
         assertThat( continents ).isNotEmpty();
         assertThat( continents )
@@ -56,13 +61,16 @@ public class ContinentResourceIntegrationTest {
     public void post() throws Exception {
         ContinentCreateDTO dto = aContinentCreateDTOTestBuilder().build();
 
-        String id = resource.post( dto, "/continents" );
+        String id = resource.restClient()
+                .path( "continents" )
+                .post( dto );
+
         Continent actual = resource.find( id, Continent.class );
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        dto, "name");
+                        dto, "name" );
     }
 
     @Test
@@ -70,7 +78,11 @@ public class ContinentResourceIntegrationTest {
         Continent expected = aContinentTestBuilder().build();
         saveContinent( expected );
 
-        ContinentDTO actual = resource.get( ContinentDTO.class, "/continents/", expected.getId() );
+        ContinentDTO actual = resource.restClient()
+                .path( "continents" )
+                .path( expected.getId() )
+                .type( type( ContinentDTO.class ) )
+                .get();
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
@@ -90,7 +102,11 @@ public class ContinentResourceIntegrationTest {
                 .withName( "updatedName" )
                 .build();
 
-        resource.put( expected, "/continents/", continent.getId() );
+        resource.restClient()
+                .path( "continents" )
+                .path( continent.getId() )
+                .put( expected );
+
         Continent actual = resource.find( continent.getId(), Continent.class );
 
         assertThat( actual ).isNotNull();
@@ -104,7 +120,11 @@ public class ContinentResourceIntegrationTest {
         Continent expected = aContinentTestBuilder().build();
         saveContinent( expected );
 
-        resource.delete( "/continents/", expected.getId() );
+        resource.restClient()
+                .path( "continents" )
+                .path( expected.getId() )
+                .delete();
+
         Continent actual = resource.find( expected.getId(), Continent.class );
 
         assertThat( actual ).isNull();

@@ -14,6 +14,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTOTestBuilder;
+import static de.daxu.swamp.common.rest.RestClient.listType;
+import static de.daxu.swamp.common.rest.RestClient.type;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +40,10 @@ public class ProjectResourceIntegrationTest {
         Project project2 = aProjectTestBuilder().build();
         resource.save( project1, project2 );
 
-        List<ProjectDTO> projects = resource.getList( ProjectDTO.class, "/projects" );
+        List<ProjectDTO> projects = resource.restClient()
+                .path( "projects" )
+                .type( listType( ProjectDTO.class ) )
+                .get();
 
         assertThat( projects ).isNotEmpty();
         assertThat( projects )
@@ -52,7 +57,10 @@ public class ProjectResourceIntegrationTest {
     public void post() throws Exception {
         ProjectCreateDTO dto = aProjectCreateDTOTestBuilder().build();
 
-        String id = resource.post( dto, "/projects" );
+        String id = resource.restClient()
+                .path( "projects" )
+                .post( dto );
+
         Project actual = resource.find( id, Project.class );
 
         assertThat( actual ).isNotNull();
@@ -66,7 +74,11 @@ public class ProjectResourceIntegrationTest {
         Project expected = aProjectTestBuilder().build();
         resource.save( expected );
 
-        ProjectDTO actual = resource.get( ProjectDTO.class, "/projects/", expected.getId() );
+        ProjectDTO actual = resource.restClient()
+                .path( "projects" )
+                .path( expected.getId() )
+                .type( type( ProjectDTO.class ) )
+                .get();
 
         assertThat( actual ).isNotNull();
         assertThat( actual )
@@ -88,7 +100,11 @@ public class ProjectResourceIntegrationTest {
                 .withDescription( "updatedDescription" )
                 .build();
 
-        resource.put( expected, "/projects/", project.getId() );
+        resource.restClient()
+                .path( "projects" )
+                .path( project.getId() )
+                .put( expected );
+
         Project actual = resource.find( project.getId(), Project.class );
 
         assertThat( actual ).isNotNull();
@@ -102,7 +118,11 @@ public class ProjectResourceIntegrationTest {
         Project expected = aProjectTestBuilder().build();
         resource.save( expected );
 
-        resource.delete( "/projects/", expected.getId() );
+        resource.restClient()
+                .path( "projects" )
+                .path( expected.getId() )
+                .delete();
+
         Project actual = resource.find( expected.getId(), Project.class );
 
         assertThat( actual ).isNull();

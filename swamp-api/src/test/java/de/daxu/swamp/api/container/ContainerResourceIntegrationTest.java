@@ -15,9 +15,12 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTOTestBuilder;
+import static de.daxu.swamp.common.rest.RestClient.listType;
+import static de.daxu.swamp.common.rest.RestClient.type;
 import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainerTestBuilder;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
@@ -35,9 +38,11 @@ public class ContainerResourceIntegrationTest {
     public void setUp() throws Exception {
         project = aProjectTestBuilder().build();
         resource.save( project );
-
-        resource.setPathPrefixes( "/projects/", project.getId() );
         containerConverter = spring.getInstance( ContainerConverter.class );
+    }
+
+    private String projectPath() {
+        return format( "%s/%s", "projects", project.getId() );
     }
 
     @Test
@@ -48,7 +53,11 @@ public class ContainerResourceIntegrationTest {
         addContainer( container1 );
         addContainer( container2 );
 
-        List<ContainerDTO> containers = resource.getList( ContainerDTO.class, "/containers" );
+        List<ContainerDTO> containers = resource.restClient()
+                .path( projectPath() )
+                .path( "containers" )
+                .type( listType( ContainerDTO.class ) )
+                .get();
 
         assertThat( containers ).isNotEmpty();
         assertThat( containers )
@@ -62,7 +71,11 @@ public class ContainerResourceIntegrationTest {
     public void post() throws Exception {
         ContainerCreateDTO expected = aContainerCreateDTOTestBuilder().build();
 
-        String id = resource.post( expected, "/", "containers" );
+        String id = resource.restClient()
+                .path( projectPath() )
+                .path( "containers" )
+                .post( expected );
+
         Container actual = resource.find( id, Container.class );
 
         assertThat( actual ).isNotNull();
@@ -76,7 +89,12 @@ public class ContainerResourceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
         addContainer( expected );
 
-        ContainerDTO actual = resource.get( ContainerDTO.class, "/containers/", expected.getId() );
+        ContainerDTO actual = resource.restClient()
+                .path( projectPath() )
+                .path( "containers" )
+                .path( expected.getId() )
+                .type( type( ContainerDTO.class ) )
+                .get();
 
         assertThat( actual ).isNotNull();
         assertReflectionEquals( actual, containerConverter.toDTO( expected ) );
@@ -94,7 +112,12 @@ public class ContainerResourceIntegrationTest {
                 .withName( "updated" )
                 .build();
 
-        resource.put( expected, "/containers/", container.getId() );
+        resource.restClient()
+                .path( projectPath() )
+                .path( "containers" )
+                .path( container.getId() )
+                .put( expected );
+
         Container actual = resource.find( container.getId(), Container.class );
 
         assertThat( actual ).isNotNull();
@@ -106,7 +129,12 @@ public class ContainerResourceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
         addContainer( expected );
 
-        resource.delete( "/containers/", expected.getId() );
+        resource.restClient()
+                .path( projectPath() )
+                .path( "containers" )
+                .path( expected.getId() )
+                .delete();
+
         Container actual = resource.find( expected.getId(), Container.class );
 
         assertThat( actual ).isNull();

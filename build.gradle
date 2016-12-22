@@ -42,6 +42,7 @@ subprojects {
         flywayVersion = '4.0.3'
         elVersion = '2.2.4'
         unitilsVersion = '3.4.3'
+        slf4jVersion = '1.7.21'
     }
 
     dependencyManagement {
@@ -50,6 +51,8 @@ subprojects {
             mavenBom 'org.springframework.boot:spring-boot-dependencies:1.4.2.RELEASE'
         }
         dependencies {
+            dependency "org.slf4j:slf4j-api:$slf4jVersion"
+
             dependency "org.flywaydb:flyway-core:$flywayVersion"
             dependency "org.unitils:unitils-core:$unitilsVersion"
 
