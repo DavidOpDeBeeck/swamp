@@ -14,7 +14,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTOTestBuilder;
-import static de.daxu.swamp.common.rest.RestClient.listType;
+import static de.daxu.swamp.common.rest.RestClient.list;
 import static de.daxu.swamp.common.rest.RestClient.type;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
@@ -40,9 +40,9 @@ public class ProjectResourceIntegrationTest {
         Project project2 = aProjectTestBuilder().build();
         resource.save( project1, project2 );
 
-        List<ProjectDTO> projects = resource.restClient()
+        List<ProjectDTO> projects = resource.webClient()
                 .path( "projects" )
-                .type( listType( ProjectDTO.class ) )
+                .type( list( ProjectDTO.class ) )
                 .get();
 
         assertThat( projects ).isNotEmpty();
@@ -57,7 +57,7 @@ public class ProjectResourceIntegrationTest {
     public void post() throws Exception {
         ProjectCreateDTO dto = aProjectCreateDTOTestBuilder().build();
 
-        String id = resource.restClient()
+        String id = resource.webClient()
                 .path( "projects" )
                 .post( dto );
 
@@ -74,7 +74,7 @@ public class ProjectResourceIntegrationTest {
         Project expected = aProjectTestBuilder().build();
         resource.save( expected );
 
-        ProjectDTO actual = resource.restClient()
+        ProjectDTO actual = resource.webClient()
                 .path( "projects" )
                 .path( expected.getId() )
                 .type( type( ProjectDTO.class ) )
@@ -100,7 +100,7 @@ public class ProjectResourceIntegrationTest {
                 .withDescription( "updatedDescription" )
                 .build();
 
-        resource.restClient()
+        resource.webClient()
                 .path( "projects" )
                 .path( project.getId() )
                 .put( expected );
@@ -118,7 +118,7 @@ public class ProjectResourceIntegrationTest {
         Project expected = aProjectTestBuilder().build();
         resource.save( expected );
 
-        resource.restClient()
+        resource.webClient()
                 .path( "projects" )
                 .path( expected.getId() )
                 .delete();

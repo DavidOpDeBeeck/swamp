@@ -15,7 +15,7 @@ public class ResourceIntegrationTestRule extends IntegrationTestRule {
         this.url = format( "http://%s:%s", "localhost", spring.getProperty( "server.port" ) );
     }
 
-    public RestClient restClient() {
+    public RestClient.Resource webClient() {
         return aRestClient().resource( url );
     }
 }

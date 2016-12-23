@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTOTestBuilder;
-import static de.daxu.swamp.common.rest.RestClient.listType;
+import static de.daxu.swamp.common.rest.RestClient.list;
 import static de.daxu.swamp.common.rest.RestClient.type;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinentTestBuilder;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinentTestBuilder;
@@ -44,9 +44,9 @@ public class ContinentResourceIntegrationTest {
         Continent continent2 = anotherContinentTestBuilder().build();
         saveContinent( continent1, continent2 );
 
-        List<ContinentDTO> continents = resource.restClient()
+        List<ContinentDTO> continents = resource.webClient()
                 .path( "continents" )
-                .type( listType( ContinentDTO.class ) )
+                .type( list( ContinentDTO.class ) )
                 .get();
 
         assertThat( continents ).isNotEmpty();
@@ -61,7 +61,7 @@ public class ContinentResourceIntegrationTest {
     public void post() throws Exception {
         ContinentCreateDTO dto = aContinentCreateDTOTestBuilder().build();
 
-        String id = resource.restClient()
+        String id = resource.webClient()
                 .path( "continents" )
                 .post( dto );
 
@@ -78,7 +78,7 @@ public class ContinentResourceIntegrationTest {
         Continent expected = aContinentTestBuilder().build();
         saveContinent( expected );
 
-        ContinentDTO actual = resource.restClient()
+        ContinentDTO actual = resource.webClient()
                 .path( "continents" )
                 .path( expected.getId() )
                 .type( type( ContinentDTO.class ) )
@@ -102,7 +102,7 @@ public class ContinentResourceIntegrationTest {
                 .withName( "updatedName" )
                 .build();
 
-        resource.restClient()
+        resource.webClient()
                 .path( "continents" )
                 .path( continent.getId() )
                 .put( expected );
@@ -120,7 +120,7 @@ public class ContinentResourceIntegrationTest {
         Continent expected = aContinentTestBuilder().build();
         saveContinent( expected );
 
-        resource.restClient()
+        resource.webClient()
                 .path( "continents" )
                 .path( expected.getId() )
                 .delete();

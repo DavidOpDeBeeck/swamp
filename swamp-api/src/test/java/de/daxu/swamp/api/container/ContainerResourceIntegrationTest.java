@@ -15,7 +15,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTOTestBuilder;
-import static de.daxu.swamp.common.rest.RestClient.listType;
+import static de.daxu.swamp.common.rest.RestClient.list;
 import static de.daxu.swamp.common.rest.RestClient.type;
 import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainerTestBuilder;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
@@ -53,10 +53,10 @@ public class ContainerResourceIntegrationTest {
         addContainer( container1 );
         addContainer( container2 );
 
-        List<ContainerDTO> containers = resource.restClient()
+        List<ContainerDTO> containers = resource.webClient()
                 .path( projectPath() )
                 .path( "containers" )
-                .type( listType( ContainerDTO.class ) )
+                .type( list( ContainerDTO.class ) )
                 .get();
 
         assertThat( containers ).isNotEmpty();
@@ -71,7 +71,7 @@ public class ContainerResourceIntegrationTest {
     public void post() throws Exception {
         ContainerCreateDTO expected = aContainerCreateDTOTestBuilder().build();
 
-        String id = resource.restClient()
+        String id = resource.webClient()
                 .path( projectPath() )
                 .path( "containers" )
                 .post( expected );
@@ -89,7 +89,7 @@ public class ContainerResourceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
         addContainer( expected );
 
-        ContainerDTO actual = resource.restClient()
+        ContainerDTO actual = resource.webClient()
                 .path( projectPath() )
                 .path( "containers" )
                 .path( expected.getId() )
@@ -112,7 +112,7 @@ public class ContainerResourceIntegrationTest {
                 .withName( "updated" )
                 .build();
 
-        resource.restClient()
+        resource.webClient()
                 .path( projectPath() )
                 .path( "containers" )
                 .path( container.getId() )
@@ -129,7 +129,7 @@ public class ContainerResourceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
         addContainer( expected );
 
-        resource.restClient()
+        resource.webClient()
                 .path( projectPath() )
                 .path( "containers" )
                 .path( expected.getId() )
