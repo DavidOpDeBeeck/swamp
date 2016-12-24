@@ -1,4 +1,4 @@
-package de.daxu.swamp.common.response;
+package de.daxu.swamp.common.web.response;
 
 
 import org.springframework.beans.factory.annotation.Value;

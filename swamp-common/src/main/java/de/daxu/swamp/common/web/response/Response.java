@@ -1,7 +1,9 @@
-package de.daxu.swamp.common.response;
+package de.daxu.swamp.common.web.response;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +16,10 @@ public class Response {
     private Object data;
     private Collection<String> errors;
 
-    private Response( Meta meta, Object data, Collection<String> errors ) {
+    @JsonCreator
+    private Response( @JsonProperty( "meta" ) Meta meta,
+                      @JsonProperty( "data" ) Object data,
+                      @JsonProperty( "errors" ) Collection<String> errors ) {
         this.meta = meta;
         this.data = data;
         this.errors = errors;

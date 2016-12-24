@@ -2,8 +2,8 @@ package de.daxu.swamp.api.location;
 
 import de.daxu.swamp.api.location.converter.LocationConverter;
 import de.daxu.swamp.api.location.dto.LocationDTO;
-import de.daxu.swamp.common.response.Response;
-import de.daxu.swamp.common.response.ResponseFactory;
+import de.daxu.swamp.common.web.response.Response;
+import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.location.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

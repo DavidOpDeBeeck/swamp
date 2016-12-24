@@ -1,7 +1,9 @@
-package de.daxu.swamp.common.response;
+package de.daxu.swamp.common.web.response;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.daxu.swamp.common.jackson.LocalDateTimeSerializer;
 
@@ -17,7 +19,11 @@ public class Meta {
     private LocalDateTime requestTimestamp;
     private String location;
 
-    private Meta( int status, String version, LocalDateTime requestTimestamp, String location ) {
+    @JsonCreator
+    private Meta( @JsonProperty( "status" ) int status,
+                  @JsonProperty( "version" ) String version,
+                  @JsonProperty( "requestTimestamp" ) LocalDateTime requestTimestamp,
+                  @JsonProperty( "location" ) String location ) {
         this.status = status;
         this.version = version;
         this.requestTimestamp = requestTimestamp;

@@ -4,9 +4,9 @@ import de.daxu.swamp.api.project.converter.ProjectConverter;
 import de.daxu.swamp.api.project.converter.ProjectCreateConverter;
 import de.daxu.swamp.api.project.dto.ProjectCreateDTO;
 import de.daxu.swamp.api.project.dto.ProjectDTO;
-import de.daxu.swamp.common.response.Response;
-import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
+import de.daxu.swamp.common.web.response.Response;
+import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.project.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,46 +66,27 @@ public class ProjectResource {
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.GET )
-    public Response get( @PathVariable( "projectId" ) String projectId ) {
+    public Response get( @PathVariable( "projectId" ) Project project ) {
 
-        Project project = projectService.getProject( projectId );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
-
-        ProjectDTO projectDTO = projectConverter.toDTO( project );
-
-        return response.success( projectDTO );
+        return response.success( projectConverter.toDTO( project ) );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.PUT )
-    public Response put( @PathVariable( "projectId" ) String projectId,
-                         @RequestBody ProjectCreateDTO projectCreateDTO ) {
+    public Response put( @PathVariable( "projectId" ) Project projectToUpdate,
+                         @RequestBody ProjectCreateDTO updatedProjectDTO ) {
 
-        Project targetProject = projectService.getProject( projectId );
-        Project srcProject = projectCreateConverter.toDomain( projectCreateDTO );
+        Project updatedProject = projectCreateConverter.toDomain( updatedProjectDTO );
 
-        if( targetProject == null )
-            return response.notFound( "Project was not found!" );
+        BeanUtils.copyProperties( updatedProject, projectToUpdate );
+        projectService.updateProject( projectToUpdate );
 
-        BeanUtils.copyProperties( srcProject, targetProject );
-        projectService.updateProject( targetProject );
-
-        ProjectDTO projectDTO = projectConverter.toDTO( targetProject );
-
-        return response.success( projectDTO );
+        return response.success( projectConverter.toDTO( projectToUpdate ) );
     }
 
     @RequestMapping( value = "/{projectId}", method = RequestMethod.DELETE )
-    public Response delete( @PathVariable( "projectId" ) String projectId ) {
-
-        Project project = projectService.getProject( projectId );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
+    public Response delete( @PathVariable( "projectId" ) Project project ) {
 
         projectService.deleteProject( project );
-
         return response.success();
     }
 }

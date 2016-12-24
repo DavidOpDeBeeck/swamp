@@ -4,13 +4,12 @@ import de.daxu.swamp.api.container.converter.ContainerConverter;
 import de.daxu.swamp.api.container.converter.ContainerCreateConverter;
 import de.daxu.swamp.api.container.dto.ContainerCreateDTO;
 import de.daxu.swamp.api.container.dto.ContainerDTO;
-import de.daxu.swamp.common.response.Response;
-import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
+import de.daxu.swamp.common.web.response.Response;
+import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.ContainerService;
 import de.daxu.swamp.core.project.Project;
-import de.daxu.swamp.core.project.ProjectService;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.core.strategy.FirstInLineStrategy;
 import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
@@ -30,10 +29,9 @@ import static de.daxu.swamp.api.project.ProjectResource.PROJECTS_URL;
 @RequestMapping( CONTAINERS_URL )
 public class ContainerResource {
 
-    public static final String CONTAINERS_URL = PROJECTS_URL + "/{projectId}/containers";
+    static final String CONTAINERS_URL = PROJECTS_URL + "/{projectId}/containers";
 
     private final ResponseFactory response;
-    private final ProjectService projectService;
     private final ContainerService containerService;
     private final ContainerConverter containerConverter;
     private final ContainerCreateConverter containerCreateConverter;
@@ -41,13 +39,11 @@ public class ContainerResource {
 
     @Autowired
     public ContainerResource( ResponseFactory responseFactory,
-                              ProjectService projectService,
                               ContainerService containerService,
                               ContainerConverter containerConverter,
                               ContainerCreateConverter containerCreateConverter,
                               ContainerInstanceWriteService containerInstanceWriteService ) {
         this.response = responseFactory;
-        this.projectService = projectService;
         this.containerService = containerService;
         this.containerConverter = containerConverter;
         this.containerCreateConverter = containerCreateConverter;
@@ -55,12 +51,7 @@ public class ContainerResource {
     }
 
     @RequestMapping( method = RequestMethod.GET )
-    public Response getAll( @PathVariable( "projectId" ) String id ) {
-
-        Project project = projectService.getProject( id );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
+    public Response getAll( @PathVariable( "projectId" ) Project project ) {
 
         List<ContainerDTO> containers = project.getContainers()
                 .stream()
@@ -71,15 +62,10 @@ public class ContainerResource {
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public Response post( @PathVariable( "projectId" ) String id,
-                                   @RequestBody ContainerCreateDTO containerCreateDTO ) {
+    public Response post( @PathVariable( "projectId" ) Project project,
+                          @RequestBody ContainerCreateDTO dto ) {
 
-        Project project = projectService.getProject( id );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
-
-        Container container = containerCreateConverter.toDomain( containerCreateDTO );
+        Container container = containerCreateConverter.toDomain( dto );
         container = containerService.addContainerToProject( project, container );
 
         URI location = ServletUriComponentsBuilder
@@ -90,88 +76,42 @@ public class ContainerResource {
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.GET )
-    public Response get( @PathVariable( "projectId" ) String projectId,
-                                  @PathVariable( "containerId" ) String containerId ) {
+    public Response get( @PathVariable( "containerId" ) Container container ) {
 
-        Project project = projectService.getProject( projectId );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
-
-        Container container = containerService.getContainer( containerId );
-
-        if( !project.getContainers().contains( container ) )
-            return response.notFound( "Container was not found!" );
-
-        ContainerDTO containerDTO = containerConverter.toDTO( container );
-
-        return response.success( containerDTO );
+        return response.success( containerConverter.toDTO( container ) );
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.PUT )
-    public Response put( @PathVariable( "projectId" ) String projectId,
-                                  @PathVariable( "containerId" ) String containerId,
-                                  @RequestBody ContainerCreateDTO dto ) {
+    public Response put( @PathVariable( "containerId" ) Container containerToUpdate,
+                         @RequestBody ContainerCreateDTO updatedContainerDTO ) {
 
-        Project project = projectService.getProject( projectId );
+        Container updatedContainer = containerCreateConverter.toDomain( updatedContainerDTO );
 
-        if( project == null )
-            return response.notFound( "Project was not found!" );
+        BeanUtils.copyProperties( updatedContainer, containerToUpdate );
+        containerService.updateContainer( containerToUpdate );
 
-        Container targetContainer = containerService.getContainer( containerId );
-
-        if( !project.getContainers().contains( targetContainer ) )
-            return response.notFound( "Container was not found!" );
-
-        Container srcContainer = containerCreateConverter.toDomain( dto );
-
-        BeanUtils.copyProperties( srcContainer, targetContainer );
-        containerService.updateContainer( targetContainer );
-
-        ContainerDTO containerDTO = containerConverter.toDTO( targetContainer );
-
-        return response.success( containerDTO );
+        return response.success( containerConverter.toDTO( containerToUpdate ) );
     }
 
     @RequestMapping( value = "/{containerId}", method = RequestMethod.DELETE )
-    public Response delete( @PathVariable( "projectId" ) String projectId,
-                                     @PathVariable( "containerId" ) String containerId ) {
-
-        Project project = projectService.getProject( projectId );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
-
-        Container container = containerService.getContainer( containerId );
-
-        if( !project.getContainers().contains( container ) )
-            return response.notFound( "Container was not found!" );
+    public Response delete( @PathVariable( "projectId" ) Project project,
+                            @PathVariable( "containerId" ) Container container ) {
 
         containerService.removeContainerFromProject( project, container );
-
         return response.success();
     }
 
     @RequestMapping( value = "/{containerId}", params = { "action=schedule" }, method = RequestMethod.POST )
-    public Response schedule( @PathVariable( "projectId" ) String projectId,
-                              @PathVariable( value = "containerId" ) String containerId ) {
+    public Response schedule( @PathVariable( "containerId" ) Container container ) {
 
-        Project project = projectService.getProject( projectId );
-
-        if( project == null )
-            return response.notFound( "Project was not found!" );
-
-        Container container = containerService.getContainer( containerId );
-
-        if( !project.getContainers().contains( container ) )
-            return response.notFound( "Container was not found!" );
-
-        Optional<Server> server = new FirstInLineStrategy().locate( container.getPotentialLocations() );
+        Optional<Server> server = new FirstInLineStrategy()
+                .locate( container.getPotentialLocations() );
 
         if( server.isPresent() ) {
             containerInstanceWriteService.schedule( container, server.get() );
             return response.success();
         }
+
         return response.badRequest( "Container has no available servers!" );
     }
 }

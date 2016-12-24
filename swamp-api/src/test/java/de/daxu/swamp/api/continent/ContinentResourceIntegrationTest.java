@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTOTestBuilder;
-import static de.daxu.swamp.common.rest.RestClient.list;
-import static de.daxu.swamp.common.rest.RestClient.type;
+import static de.daxu.swamp.common.web.WebClient.list;
+import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinentTestBuilder;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinentTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;

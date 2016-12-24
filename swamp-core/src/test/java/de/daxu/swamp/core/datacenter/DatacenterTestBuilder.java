@@ -5,14 +5,12 @@ import de.daxu.swamp.core.server.Server;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.aServerBuilderTestBuilder;
-import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.anotherServerBuilderTestBuilder;
 
 public class DatacenterTestBuilder {
 
     private String id;
-    private String name  = "a datacenter name";
-    private Set<Server> servers = newHashSet( aServerBuilderTestBuilder().build() );
+    private String name = "a datacenter name";
+    private Set<Server> servers = newHashSet();
 
     public static DatacenterTestBuilder aDatacenterTestBuilder() {
         return new DatacenterTestBuilder();
@@ -20,8 +18,7 @@ public class DatacenterTestBuilder {
 
     public static DatacenterTestBuilder anotherDatacenterTestBuilder() {
         return new DatacenterTestBuilder()
-                .withName( "another datacenter name" )
-                .withServers( newHashSet( anotherServerBuilderTestBuilder().build() ) );
+                .withName( "another datacenter name" );
     }
 
     public DatacenterTestBuilder withId( String id ) {

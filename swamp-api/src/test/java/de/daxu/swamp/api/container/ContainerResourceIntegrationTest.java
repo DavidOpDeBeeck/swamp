@@ -15,8 +15,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTOTestBuilder;
-import static de.daxu.swamp.common.rest.RestClient.list;
-import static de.daxu.swamp.common.rest.RestClient.type;
+import static de.daxu.swamp.common.web.WebClient.list;
+import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainerTestBuilder;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
@@ -32,13 +32,12 @@ public class ContainerResourceIntegrationTest {
     public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
 
     private Project project;
-    private ContainerConverter containerConverter;
+    private ContainerConverter containerConverter = spring.getInstance( ContainerConverter.class );
 
     @Before
     public void setUp() throws Exception {
         project = aProjectTestBuilder().build();
         resource.save( project );
-        containerConverter = spring.getInstance( ContainerConverter.class );
     }
 
     private String projectPath() {

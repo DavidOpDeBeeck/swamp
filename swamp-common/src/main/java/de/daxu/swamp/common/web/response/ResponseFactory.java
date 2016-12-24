@@ -1,4 +1,4 @@
-package de.daxu.swamp.common.response;
+package de.daxu.swamp.common.web.response;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.URI;
 
-import static de.daxu.swamp.common.response.Response.Builder.aResponse;
+import static de.daxu.swamp.common.web.response.Response.Builder.aResponse;
 
 @Component
 public class ResponseFactory {

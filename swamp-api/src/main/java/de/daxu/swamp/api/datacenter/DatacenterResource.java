@@ -4,9 +4,9 @@ import de.daxu.swamp.api.datacenter.converter.DatacenterConverter;
 import de.daxu.swamp.api.datacenter.converter.DatacenterCreateConverter;
 import de.daxu.swamp.api.datacenter.dto.DatacenterCreateDTO;
 import de.daxu.swamp.api.datacenter.dto.DatacenterDTO;
-import de.daxu.swamp.common.response.Response;
-import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
+import de.daxu.swamp.common.web.response.Response;
+import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.continent.Continent;
 import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.location.LocationService;
@@ -44,12 +44,7 @@ public class DatacenterResource {
     }
 
     @RequestMapping( method = RequestMethod.GET )
-    public Response getDatacenters( @PathVariable( "continentId" ) String continentId ) {
-
-        Continent continent = locationService.getContinent( continentId );
-
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
+    public Response getAll( @PathVariable( "continentId" ) Continent continent ) {
 
         List<DatacenterDTO> containers = continent.getDatacenters()
                 .stream()
@@ -60,13 +55,8 @@ public class DatacenterResource {
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public Response postDatacenter( @PathVariable( "continentId" ) String continentId,
-                                    @RequestBody DatacenterCreateDTO dto ) {
-
-        Continent continent = locationService.getContinent( continentId );
-
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
+    public Response post( @PathVariable( "continentId" ) Continent continent,
+                          @RequestBody DatacenterCreateDTO dto ) {
 
         Datacenter datacenter = datacenterCreateConverter.toDomain( dto );
         datacenter = locationService.addDatacenterToContinent( continent, datacenter );
@@ -79,65 +69,29 @@ public class DatacenterResource {
     }
 
     @RequestMapping( value = "/{datacenterId}", method = RequestMethod.GET )
-    public Response getDatacenter( @PathVariable( "continentId" ) String continentId,
-                                   @PathVariable( "datacenterId" ) String datacenterId ) {
+    public Response get( @PathVariable( "datacenterId" ) Datacenter datacenter ) {
 
-        Continent continent = locationService.getContinent( continentId );
-
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
-
-        Datacenter datacenter = locationService.getDatacenter( datacenterId );
-
-        if( datacenter == null )
-            return response.notFound( "Datacenter was not found!" );
-
-        DatacenterDTO datacenterDTO = datacenterConverter.toDTO( datacenter );
-
-        return response.success( datacenterDTO );
+        return response.success( datacenterConverter.toDTO( datacenter ) );
     }
 
     @RequestMapping( value = "/{datacenterId}", method = RequestMethod.PUT )
-    public Response putDatacenter( @PathVariable( "continentId" ) String continentId,
-                                   @PathVariable( "datacenterId" ) String datacenterId,
-                                   @RequestBody DatacenterCreateDTO datacenterCreateDTO ) {
+    public Response put( @PathVariable( "datacenterId" ) Datacenter datacenterToUpdate,
+                         @RequestBody DatacenterCreateDTO updatedDatacenterDTO ) {
 
-        Continent continent = locationService.getContinent( continentId );
 
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
+        Datacenter updatedDatacenter = datacenterCreateConverter.toDomain( updatedDatacenterDTO );
 
-        Datacenter targetDatacenter = locationService.getDatacenter( datacenterId );
+        BeanUtils.copyProperties( updatedDatacenter, datacenterToUpdate );
+        locationService.updateDatacenter( datacenterToUpdate );
 
-        if( targetDatacenter == null )
-            return response.notFound( "Datacenter was not found!" );
-
-        Datacenter srcDatacenter = datacenterCreateConverter.toDomain( datacenterCreateDTO );
-
-        BeanUtils.copyProperties( srcDatacenter, targetDatacenter );
-        locationService.updateDatacenter( targetDatacenter );
-
-        DatacenterDTO datacenterDTO = datacenterConverter.toDTO( targetDatacenter );
-
-        return response.success( datacenterDTO );
+        return response.success( datacenterConverter.toDTO( datacenterToUpdate ) );
     }
 
     @RequestMapping( value = "/{datacenterId}", method = RequestMethod.DELETE )
-    public Response deleteDatacenter( @PathVariable( "continentId" ) String continentId,
-                                            @PathVariable( "datacenterId" ) String datacenterId ) {
-
-        Continent continent = locationService.getContinent( continentId );
-
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
-
-        Datacenter datacenter = locationService.getDatacenter( datacenterId );
-
-        if( datacenter == null )
-            return response.notFound( "Datacenter was not found!" );
+    public Response delete( @PathVariable( "continentId" ) Continent continent,
+                            @PathVariable( "datacenterId" ) Datacenter datacenter ) {
 
         locationService.removeDatacenterFromContinent( continent, datacenter );
-
         return response.success();
     }
 }

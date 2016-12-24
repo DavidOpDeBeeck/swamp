@@ -1,8 +1,8 @@
-package de.daxu.swamp.common.rest;
+package de.daxu.swamp.common.web;
 
 import com.fasterxml.jackson.databind.JavaType;
 import de.daxu.swamp.common.jackson.SwampObjectMapper;
-import de.daxu.swamp.common.rest.response.Response;
+import de.daxu.swamp.common.web.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -11,12 +11,12 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class RestClient {
+public class WebClient {
 
     private static final SwampObjectMapper OBJECT_MAPPER = new SwampObjectMapper();
 
-    public static RestClient aRestClient() {
-        return new RestClient();
+    public static Resource resource( String resource ) {
+        return new Resource( resource );
     }
 
     public static JavaType type( Class returnType ) {
@@ -29,11 +29,7 @@ public class RestClient {
                 .constructCollectionType( List.class, returnType );
     }
 
-    private RestClient() {
-    }
-
-    public Resource resource( String resource ) {
-        return new Resource( resource );
+    private WebClient() {
     }
 
     public static class Resource {
@@ -62,7 +58,8 @@ public class RestClient {
         public <T> T get() {
             String url = this.url.toString();
             logger.info( "[GET] {}", url );
-            Response response = restTemplate.getForObject( url, Response.class );
+            Object object = restTemplate.getForObject( url, Object.class );
+            Response response = OBJECT_MAPPER.convertValue( object, Response.class );
             logger.info( "[RESPONSE] {}", OBJECT_MAPPER.toJSON( response ) );
             return convertResponseData( response );
         }
@@ -71,7 +68,8 @@ public class RestClient {
             String url = this.url.toString();
             logger.info( "[POST] {}", url );
             logger.info( "[PAYLOAD] {}", OBJECT_MAPPER.toJSON( payload ) );
-            Response response = restTemplate.postForObject( url, payload, Response.class );
+            Object object = restTemplate.postForObject( url, payload, Object.class );
+            Response response = OBJECT_MAPPER.convertValue( object, Response.class );
             logger.info( "[RESPONSE] {}", OBJECT_MAPPER.toJSON( response ) );
             String location = response.getMeta().getLocation();
             return location.substring( location.lastIndexOf( "/" ) + 1, location.length() );

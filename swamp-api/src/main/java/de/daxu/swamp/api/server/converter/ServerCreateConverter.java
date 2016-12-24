@@ -15,7 +15,7 @@ public class ServerCreateConverter implements DomainConverter<ServerCreateDTO, S
         return aServerBuilder()
                 .withName( dto.name )
                 .withIp( dto.ip )
-                .withCACertificate( dto.CAcertificate )
+                .withCACertificate( dto.CACertificate )
                 .withCertificate( dto.certificate )
                 .withKey( dto.key )
                 .build();

@@ -4,9 +4,9 @@ import de.daxu.swamp.api.continent.converter.ContinentConverter;
 import de.daxu.swamp.api.continent.converter.ContinentCreateConverter;
 import de.daxu.swamp.api.continent.dto.ContinentCreateDTO;
 import de.daxu.swamp.api.continent.dto.ContinentDTO;
-import de.daxu.swamp.common.response.Response;
-import de.daxu.swamp.common.response.ResponseFactory;
 import de.daxu.swamp.common.util.BeanUtils;
+import de.daxu.swamp.common.web.response.Response;
+import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.continent.Continent;
 import de.daxu.swamp.core.location.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,10 @@ public class ContinentResource {
     private final ContinentCreateConverter continentCreateConverter;
 
     @Autowired
-    public ContinentResource( ResponseFactory responseFactory, LocationService locationService, ContinentConverter continentConverter, ContinentCreateConverter continentCreateConverter ) {
+    public ContinentResource( ResponseFactory responseFactory,
+                              LocationService locationService,
+                              ContinentConverter continentConverter,
+                              ContinentCreateConverter continentCreateConverter ) {
         this.response = responseFactory;
         this.locationService = locationService;
         this.continentConverter = continentConverter;
@@ -64,46 +67,27 @@ public class ContinentResource {
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.GET )
-    public Response get( @PathVariable( "continentId" ) String continentId ) {
+    public Response get( @PathVariable( "continentId" ) Continent continent ) {
 
-        Continent continent = locationService.getContinent( continentId );
-
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
-
-        ContinentDTO continentDTO = continentConverter.toDTO( continent );
-
-        return response.success( continentDTO );
+        return response.success( continentConverter.toDTO( continent ) );
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.PUT )
-    public Response put( @PathVariable( "continentId" ) String continentId,
-                         @RequestBody ContinentCreateDTO continentCreateDTO ) {
+    public Response put( @PathVariable( "continentId" ) Continent continentToUpdate,
+                         @RequestBody ContinentCreateDTO updatedContinentDTO ) {
 
-        Continent targetContinent = locationService.getContinent( continentId );
-        Continent srcContinent = continentCreateConverter.toDomain( continentCreateDTO );
+        Continent updatedContinent = continentCreateConverter.toDomain( updatedContinentDTO );
 
-        if( targetContinent == null )
-            return response.notFound( "Continent was not found!" );
+        BeanUtils.copyProperties( updatedContinent, continentToUpdate );
+        locationService.updateContinent( continentToUpdate );
 
-        BeanUtils.copyProperties( srcContinent, targetContinent );
-        locationService.updateContinent( targetContinent );
-
-        ContinentDTO continentDTO = continentConverter.toDTO( targetContinent );
-
-        return response.success( continentDTO );
+        return response.success( continentConverter.toDTO( continentToUpdate ) );
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.DELETE )
-    public Response delete( @PathVariable( "continentId" ) String continentId ) {
-
-        Continent continent = locationService.getContinent( continentId );
-
-        if( continent == null )
-            return response.notFound( "Continent was not found!" );
+    public Response delete( @PathVariable( "continentId" ) Continent continent ) {
 
         locationService.deleteContinent( continent );
-
         return response.success();
     }
 }

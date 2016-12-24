@@ -14,8 +14,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTOTestBuilder;
-import static de.daxu.swamp.common.rest.RestClient.list;
-import static de.daxu.swamp.common.rest.RestClient.type;
+import static de.daxu.swamp.common.web.WebClient.list;
+import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;

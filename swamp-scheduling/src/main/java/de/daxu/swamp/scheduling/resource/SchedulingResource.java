@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduling.resource;
 
-import de.daxu.swamp.common.response.Response;
-import de.daxu.swamp.common.response.ResponseFactory;
+import de.daxu.swamp.common.web.response.Response;
+import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.scheduling.read.ContainerInstanceReadService;
 import de.daxu.swamp.scheduling.read.containerinstance.ContainerInstanceView;
 import de.daxu.swamp.scheduling.write.containerinstance.ContainerInstanceId;
