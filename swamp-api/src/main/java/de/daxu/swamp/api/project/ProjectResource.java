@@ -53,9 +53,9 @@ public class ProjectResource {
     }
 
     @RequestMapping( method = RequestMethod.POST )
-    public Response post( @RequestBody ProjectCreateDTO projectCreateDTO ) {
+    public Response post( @RequestBody ProjectCreateDTO dto ) {
 
-        Project project = projectCreateConverter.toDomain( projectCreateDTO );
+        Project project = projectCreateConverter.toDomain( dto );
         project = projectService.createProject( project );
 
         URI location = ServletUriComponentsBuilder
