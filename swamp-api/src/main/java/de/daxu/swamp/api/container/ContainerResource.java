@@ -10,16 +10,12 @@ import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.container.ContainerService;
 import de.daxu.swamp.core.project.Project;
-import de.daxu.swamp.core.server.Server;
-import de.daxu.swamp.core.strategy.FirstInLineStrategy;
-import de.daxu.swamp.scheduling.write.ContainerInstanceWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static de.daxu.swamp.api.container.ContainerResource.CONTAINERS_URL;
@@ -35,19 +31,16 @@ public class ContainerResource {
     private final ContainerService containerService;
     private final ContainerConverter containerConverter;
     private final ContainerCreateConverter containerCreateConverter;
-    private final ContainerInstanceWriteService containerInstanceWriteService;
 
     @Autowired
     public ContainerResource( ResponseFactory responseFactory,
                               ContainerService containerService,
                               ContainerConverter containerConverter,
-                              ContainerCreateConverter containerCreateConverter,
-                              ContainerInstanceWriteService containerInstanceWriteService ) {
+                              ContainerCreateConverter containerCreateConverter ) {
         this.response = responseFactory;
         this.containerService = containerService;
         this.containerConverter = containerConverter;
         this.containerCreateConverter = containerCreateConverter;
-        this.containerInstanceWriteService = containerInstanceWriteService;
     }
 
     @RequestMapping( method = RequestMethod.GET )
@@ -99,19 +92,5 @@ public class ContainerResource {
 
         containerService.removeContainerFromProject( project, container );
         return response.success();
-    }
-
-    @RequestMapping( value = "/{containerId}", params = { "action=schedule" }, method = RequestMethod.POST )
-    public Response schedule( @PathVariable( "containerId" ) Container container ) {
-
-        Optional<Server> server = new FirstInLineStrategy()
-                .locate( container.getPotentialLocations() );
-
-        if( server.isPresent() ) {
-            containerInstanceWriteService.schedule( container, server.get() );
-            return response.success();
-        }
-
-        return response.badRequest( "Container has no available servers!" );
     }
 }

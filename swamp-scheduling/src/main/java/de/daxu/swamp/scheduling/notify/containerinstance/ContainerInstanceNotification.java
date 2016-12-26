@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.notify.containerinstance;
 
-import de.daxu.swamp.scheduling.write.containerinstance.event.ContainerInstanceEvent;
+import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceEvent;
 
 public class ContainerInstanceNotification {
 

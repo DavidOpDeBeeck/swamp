@@ -1,7 +1,6 @@
 package de.daxu.swamp.core.container;
 
 import de.daxu.swamp.core.project.Project;
-import de.daxu.swamp.core.project.ProjectRepository;
 import de.daxu.swamp.test.rule.IntegrationTestRule;
 import de.daxu.swamp.test.rule.SpringRule;
 import org.junit.Before;
@@ -22,13 +21,12 @@ public class ContainerServiceIntegrationTest {
     public IntegrationTestRule integration = new IntegrationTestRule( spring );
 
     private Project project;
-    private ContainerService containerService;
+    private ContainerService containerService = spring.getInstance( ContainerService.class );
 
     @Before
     public void setUp() throws Exception {
-        ProjectRepository projectRepository = spring.getInstance( ProjectRepository.class );
-        project = projectRepository.save( aProjectTestBuilder().build() );
-        containerService = spring.getInstance( ContainerService.class );
+        project = aProjectTestBuilder().build();
+        integration.save( project );
     }
 
     @Test
@@ -36,36 +34,36 @@ public class ContainerServiceIntegrationTest {
         Container container = aContainerTestBuilder().build();
 
         containerService.addContainerToProject( project, container );
-        project = integration.find( project.getId(), Project.class );
 
+        project = integration.find( project.getId(), Project.class );
         assertThat( project.getContainers() )
                 .containsExactly( container );
     }
 
     @Test
     public void updateContainer() throws Exception {
-        Container expected = aContainerTestBuilder()
-                .withName( "oldName" )
-                .build();
-        containerService.addContainerToProject( project, expected );
+        Container container = aContainerTestBuilder().withName( "oldName" ).build();
+        project.addContainer( container );
+        integration.save( container, project );
 
-        expected.setName( "updatedName" );
-        containerService.updateContainer( expected );
-        Container actual = integration.find( expected.getId(), Container.class );
+        container.setName( "updatedName" );
+        containerService.updateContainer( container );
 
+        Container actual = integration.find( container.getId(), Container.class );
         assertThat( actual.getName() )
-                .isEqualTo( expected.getName() );
+                .isEqualTo( container.getName() );
     }
 
     @Test
     public void removeContainerFromProject() throws Exception {
         Container container = aContainerTestBuilder().build();
+        project.addContainer( container );
+        integration.save( container, project );
 
-        containerService.addContainerToProject( project, container );
         containerService.removeContainerFromProject( project, container );
+
         project = integration.find( project.getId(), Project.class );
         Container deletedContainer = integration.find( container.getId(), Container.class );
-
         assertThat( deletedContainer ).isNull();
         assertThat( project.getContainers() )
                 .doesNotContain( container );
@@ -76,8 +74,8 @@ public class ContainerServiceIntegrationTest {
         Container expected = aContainerTestBuilder().build();
 
         containerService.addContainerToProject( project, expected );
-        Container actual = containerService.getContainer( expected.getId() );
 
+        Container actual = containerService.getContainer( expected.getId() );
         assertThat( actual )
                 .isEqualTo( expected );
     }

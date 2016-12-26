@@ -1,5 +1,6 @@
 package de.daxu.swamp.core.location;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.daxu.swamp.common.jpa.Identifiable;
 import de.daxu.swamp.core.server.Server;
 import org.hibernate.validator.constraints.NotBlank;
@@ -35,6 +36,7 @@ public abstract class Location extends Identifiable {
 
     public abstract LocationType getType();
 
+    @JsonIgnore
     public abstract Set<Server> getServers();
 
     @SuppressWarnings( "unchecked" )
