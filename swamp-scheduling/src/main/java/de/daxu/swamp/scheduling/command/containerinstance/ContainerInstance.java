@@ -4,7 +4,7 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.response.CreateContainerResponse;
+import de.daxu.swamp.deploy.result.CreateContainerResult;
 import de.daxu.swamp.scheduling.command.containerinstance.command.*;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -42,7 +42,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     public void create( CreateContainerInstanceCommand command, DeployFacade deployFacade ) {
         validateStatusChange( CREATED );
 
-        CreateContainerResponse response = deployFacade
+        CreateContainerResult response = deployFacade
                 .containerClient( server )
                 .create( configuration );
 

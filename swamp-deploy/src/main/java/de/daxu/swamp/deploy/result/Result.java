@@ -1,14 +1,14 @@
-package de.daxu.swamp.deploy.response;
+package de.daxu.swamp.deploy.result;
 
 import java.util.Date;
 import java.util.Set;
 
-public class Response {
+public class Result {
 
     private Set<String> warnings;
     private Date timestamp;
 
-    Response( Set<String> warnings, Date timestamp ) {
+    Result( Set<String> warnings, Date timestamp ) {
         this.warnings = warnings;
         this.timestamp = timestamp;
     }
@@ -45,8 +45,8 @@ public class Response {
             return ( BUILDER ) this;
         }
 
-        public Response build() {
-            return new Response( warnings, timestamp );
+        public Result build() {
+            return new Result( warnings, timestamp );
         }
     }
 }

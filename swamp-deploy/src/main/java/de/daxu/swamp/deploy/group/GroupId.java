@@ -1,14 +1,14 @@
-package de.daxu.swamp.deploy.container;
+package de.daxu.swamp.deploy.group;
 
-public class ContainerId {
+public class GroupId {
 
     private final String value;
 
-    public static ContainerId of( String value ) {
-        return new ContainerId( value );
+    public static GroupId of( String value ) {
+        return new GroupId( value );
     }
 
-    private ContainerId( String value ) {
+    private GroupId( String value ) {
         this.value = value;
     }
 
@@ -21,7 +21,7 @@ public class ContainerId {
         if( this == o ) return true;
         if( o == null || getClass() != o.getClass() ) return false;
 
-        ContainerId that = ( ContainerId ) o;
+        GroupId that = ( GroupId ) o;
 
         return value != null ? value.equals( that.value ) : that.value == null;
     }

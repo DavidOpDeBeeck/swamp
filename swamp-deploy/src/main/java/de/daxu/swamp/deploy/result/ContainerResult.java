@@ -1,15 +1,15 @@
-package de.daxu.swamp.deploy.response;
+package de.daxu.swamp.deploy.result;
 
 import de.daxu.swamp.deploy.container.ContainerId;
 
 import java.util.Date;
 import java.util.Set;
 
-public class ContainerResponse extends Response {
+public class ContainerResult extends Result {
 
     private ContainerId containerId;
 
-    ContainerResponse( ContainerId containerId, Set<String> warnings, Date timestamp ) {
+    ContainerResult( ContainerId containerId, Set<String> warnings, Date timestamp ) {
         super( warnings, timestamp );
         this.containerId = containerId;
     }
@@ -19,7 +19,7 @@ public class ContainerResponse extends Response {
     }
 
     @SuppressWarnings( "unchecked" )
-    public static class Builder<BUILDER extends Builder<BUILDER>> extends Response.Builder<BUILDER> {
+    public static class Builder<BUILDER extends Builder<BUILDER>> extends Result.Builder<BUILDER> {
 
         protected ContainerId containerId;
 
@@ -29,8 +29,8 @@ public class ContainerResponse extends Response {
         }
 
         @Override
-        public ContainerResponse build() {
-            return new ContainerResponse( containerId, warnings, timestamp );
+        public ContainerResult build() {
+            return new ContainerResult( containerId, warnings, timestamp );
         }
     }
 }

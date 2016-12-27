@@ -1,15 +1,15 @@
-package de.daxu.swamp.deploy.response;
+package de.daxu.swamp.deploy.result;
 
 import de.daxu.swamp.deploy.container.ContainerId;
 
 import java.util.Date;
 import java.util.Set;
 
-public class CreateContainerResponse extends ContainerResponse {
+public class CreateContainerResult extends ContainerResult {
 
     private String internalContainerId;
 
-    private CreateContainerResponse( ContainerId containerId, Set<String> warnings, Date timestamp, String internalContainerId ) {
+    private CreateContainerResult( ContainerId containerId, Set<String> warnings, Date timestamp, String internalContainerId ) {
         super( containerId, warnings, timestamp );
         this.internalContainerId = internalContainerId;
     }
@@ -18,7 +18,7 @@ public class CreateContainerResponse extends ContainerResponse {
         return internalContainerId;
     }
 
-    public static class Builder extends ContainerResponse.Builder<Builder> {
+    public static class Builder extends ContainerResult.Builder<Builder> {
 
         private String internalContainerId;
 
@@ -32,8 +32,8 @@ public class CreateContainerResponse extends ContainerResponse {
         }
 
         @Override
-        public CreateContainerResponse build() {
-            return new CreateContainerResponse( containerId, warnings, timestamp, internalContainerId );
+        public CreateContainerResult build() {
+            return new CreateContainerResult( containerId, warnings, timestamp, internalContainerId );
         }
     }
 }

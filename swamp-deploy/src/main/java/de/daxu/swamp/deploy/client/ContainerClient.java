@@ -2,20 +2,20 @@ package de.daxu.swamp.deploy.client;
 
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.response.ContainerResponse;
-import de.daxu.swamp.deploy.response.CreateContainerResponse;
+import de.daxu.swamp.deploy.result.ContainerResult;
+import de.daxu.swamp.deploy.result.CreateContainerResult;
 
 import java.util.function.Consumer;
 
 public interface ContainerClient extends DeployClient {
 
-    CreateContainerResponse create( ContainerConfiguration config );
+    CreateContainerResult create( ContainerConfiguration config );
 
-    ContainerResponse start( ContainerId containerId );
+    ContainerResult start( ContainerId containerId );
 
-    ContainerResponse stop( ContainerId containerId );
+    ContainerResult stop( ContainerId containerId );
 
-    ContainerResponse remove( ContainerId containerId );
+    ContainerResult remove( ContainerId containerId );
 
-    ContainerResponse log( ContainerId containerId, Consumer<String> logCallback );
+    ContainerResult log( ContainerId containerId, Consumer<String> logCallback );
 }
