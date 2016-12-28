@@ -13,17 +13,32 @@ import static java.util.Map.Entry;
 public class GroupManagerImpl implements GroupManager {
 
     final Map<GroupId, Set<ContainerId>> groups = newHashMap();
+    final Map<GroupId, Map<String, String>> groupMetaData = newHashMap();
 
     @Override
     public void addGroup( GroupId groupId ) {
-        groups.put( groupId, newHashSet() );
+        groups.putIfAbsent( groupId, newHashSet() );
+        groupMetaData.putIfAbsent( groupId, newHashMap() );
+    }
+
+    @Override
+    public void addGroupMetaData( GroupId groupId, String key, String value ) {
+        addGroup( groupId );
+        groupMetaData.get( groupId ).put( key, value );
+    }
+
+    @Override
+    public String getGroupMetaData( GroupId groupId, String key ) {
+        Map<String, String> metaData = groupMetaData.get( groupId );
+        if( metaData == null )
+            return null;
+        return metaData.get( key );
     }
 
     @Override
     public void addContainer( GroupId groupId, ContainerId containerId ) {
-        Set<ContainerId> containerIds = groups.getOrDefault( groupId, newHashSet() );
-        containerIds.add( containerId );
-        groups.put( groupId, containerIds );
+        addGroup( groupId );
+        groups.get( groupId ).add( containerId );
     }
 
     @Override

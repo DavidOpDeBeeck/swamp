@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DockerClientFactory {
 
-    private static final String DOCKER_VERSION = "1.24";
+    private static final String DOCKER_VERSION = "1.22";
 
     public DockerClient createClient( Server server ) {
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()

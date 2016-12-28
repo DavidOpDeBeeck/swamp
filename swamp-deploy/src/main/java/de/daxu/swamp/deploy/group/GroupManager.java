@@ -8,6 +8,10 @@ public interface GroupManager {
 
     void addGroup( GroupId groupId );
 
+    void addGroupMetaData( GroupId groupId, String key, String value );
+
+    String getGroupMetaData( GroupId groupId, String key );
+
     void addContainer( GroupId groupId, ContainerId containerId );
 
     Set<GroupId> getGroups( ContainerId containerId );

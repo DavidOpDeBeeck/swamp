@@ -4,8 +4,10 @@ import de.daxu.swamp.deploy.container.ContainerId;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,6 +28,30 @@ public class GroupManagerImplTest {
 
         assertThat( groupManager.groups.keySet() )
                 .containsExactly( groupId );
+    }
+
+    @Test
+    public void addGroupMetaData() throws Exception {
+        GroupId groupId = GroupId.of( "1" );
+
+        groupManager.addGroup( groupId );
+        groupManager.addGroupMetaData( groupId, "testKey", "testValue" );
+
+        Map<String, String> actual = groupManager.groupMetaData.get( groupId );
+        assertThat( actual ).isNotNull();
+        assertThat( actual.get( "testKey" ) ).isEqualTo( "testValue" );
+    }
+
+    @Test
+    public void getGroupMetaData() throws Exception {
+        GroupId groupId = GroupId.of( "1" );
+        groupManager.groups.put( groupId, newHashSet() );
+        groupManager.groupMetaData.put( groupId, newHashMap() );
+        groupManager.groupMetaData.get( groupId ).put( "testKey", "testValue" );
+
+        String metaData = groupManager.getGroupMetaData( groupId, "testKey" );
+
+        assertThat( metaData ).isEqualTo( "testValue" );
     }
 
     @Test

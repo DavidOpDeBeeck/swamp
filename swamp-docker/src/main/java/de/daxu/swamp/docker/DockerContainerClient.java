@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.PortBinding;
 import com.google.common.collect.Sets;
@@ -79,17 +80,19 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
                 () -> {
                     if( !groupManager.exists( groupId ) ) {
                         groupManager.addGroup( groupId );
-                        docker().createNetworkCmd()
+                        CreateNetworkResponse networkResponse = docker().createNetworkCmd()
                                 .withDriver( "overlay" )
                                 .withIpam( new Ipam() )
                                 .withName( groupId.getValue() ).exec();
+                        groupManager.addGroupMetaData( groupId, "network.id", networkResponse.getId() );
                     }
                 }
         );
     }
 
     class Ipam extends Network.Ipam {
-        @JsonProperty("Driver")
+
+        @JsonProperty( "Driver" )
         private String driver = "default";
 
         public String getDriver() {
@@ -98,10 +101,11 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
     }
 
     private Set<String> connectToGroupNetwork( GroupId groupId, ContainerId containerId ) {
+        String networkId = groupManager.getGroupMetaData( groupId, "network.id" );
         return catchWarnings(
                 () -> docker().connectToNetworkCmd()
                         .withContainerId( containerId.getValue() )
-                        .withNetworkId( groupId.getValue() ).exec()
+                        .withNetworkId( networkId ).exec()
         );
     }
 
