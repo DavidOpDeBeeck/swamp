@@ -9,11 +9,11 @@ public class ContainerInstanceTestConstants {
     public static final String INTERNAL_CONTAINER_ID = "id";
     public static final String LOG = "log";
 
-    public static final ContainerInstanceView CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
+    public static final ProjectInstanceView CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
             .withContainerInstanceId( CONTAINER_INSTANCE_ID )
             .withStatus( ContainerInstanceStatus.STARTED )
             .build();
-    public static final ContainerInstanceView ANOTHER_CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
+    public static final ProjectInstanceView ANOTHER_CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
             .withContainerInstanceId( ANOTHER_CONTAINER_INSTANCE_ID )
             .withStatus( ContainerInstanceStatus.STARTED )
             .build();

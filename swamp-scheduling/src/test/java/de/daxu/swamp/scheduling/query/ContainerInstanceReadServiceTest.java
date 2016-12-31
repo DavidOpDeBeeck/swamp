@@ -13,7 +13,7 @@ public class ContainerInstanceReadServiceTest {
     public void getContainerInstanceViewsByStatus() throws Exception {
         when( containerInstanceViewRepository.getByStatus( ContainerInstanceStatus.STARTED ) ) .thenReturn( newArrayList( CONTAINER_INSTANCE_VIEW, ANOTHER_CONTAINER_INSTANCE_VIEW ) );
 
-        List<ContainerInstanceView> views = containerInstanceReadService
+        List<ProjectInstanceView> views = containerInstanceReadService
                 .getContainerInstanceViewsByStatus( ContainerInstanceStatus.STARTED );
 
         assertThat( views ).isNotNull();
@@ -26,7 +26,7 @@ public class ContainerInstanceReadServiceTest {
         when( containerInstanceViewRepository.getByContainerInstanceId( CONTAINER_INSTANCE_ID ) )
                 .thenReturn( CONTAINER_INSTANCE_VIEW );
 
-        ContainerInstanceView view = containerInstanceReadService
+        ProjectInstanceView view = containerInstanceReadService
                 .getContainerInstanceViewById( CONTAINER_INSTANCE_ID );
 
         assertThat( view ).isNotNull();

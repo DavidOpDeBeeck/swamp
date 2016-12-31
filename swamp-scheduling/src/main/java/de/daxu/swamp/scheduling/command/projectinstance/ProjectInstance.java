@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduling.command.projectinstance;
 
 import com.google.common.collect.Maps;
 import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.projectinstance.command.InitializeProjectInstanceCommand;
 import de.daxu.swamp.scheduling.command.projectinstance.event.ProjectInstanceInitializedEvent;
@@ -27,13 +28,14 @@ public class ProjectInstance extends AbstractAnnotatedAggregateRoot<ProjectInsta
 
     @CommandHandler
     public ProjectInstance( InitializeProjectInstanceCommand command ) {
+        Project project = command.getProject();
         Map<ContainerInstanceId, Container> containers = Maps.newHashMap();
 
-        command.getProject().getContainers()
+        project.getContainers()
                 .forEach( container -> containers.put( ContainerInstanceId.random(), container ) );
 
         apply( new ProjectInstanceInitializedEvent(
-                command.getProjectInstanceId(), containers, new Date() ) );
+                command.getProjectInstanceId(), project.getName(), project.getDescription(), containers, new Date() ) );
     }
 
     @EventHandler

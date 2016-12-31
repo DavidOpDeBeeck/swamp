@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="input-group margin-sm-bottom">
+            <span class="input-group-addon" id="projects-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="ProjectInstancesCtrl.filter"
+                   aria-describedby="projects-search-icon"/>
+        </div>
+        <div class="list-group">
+            <a class="list-group-item"
+               ng-repeat="projectInstance in ProjectInstancesCtrl.projectInstances | orderBy: 'dateInitialized':-1 | filter: ProjectInstancesCtrl.filter"
+               ui-sref-active="active" ui-sref="projectInstances.projectInstance.containerInstances({projectInstanceId: projectInstance.projectInstanceId})">
+                <span class="label label-primary pull-right">{{ projectInstance.dateInitialized | toDate }}</span>
+                <h4 class="list-group-item-heading" ng-bind="projectInstance.name"></h4>
+                <p class="list-group-item-text" ng-bind="projectInstance.description"></p>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div ui-view></div>
+    </div>
+</div>

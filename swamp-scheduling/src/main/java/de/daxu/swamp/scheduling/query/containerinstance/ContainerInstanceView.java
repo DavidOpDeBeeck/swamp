@@ -15,11 +15,8 @@ import java.util.Date;
 public class ContainerInstanceView extends EntityView {
 
     @Embedded
-    @NotNull( message = "{NotNull.ContainerInstanceView.containerInstanceId}" )
+    @NotNull( message = "{NotNull.ProjectInstanceView.containerInstanceId}" )
     private ContainerInstanceId containerInstanceId;
-
-    @Column( name = "internal_container_name" )
-    private String internalContainerName;
 
     @Column( name = "internal_container_id" )
     private String internalContainerId;
@@ -64,9 +61,7 @@ public class ContainerInstanceView extends EntityView {
     private ContainerInstanceView() {
     }
 
-    private ContainerInstanceView( ProjectInstanceId projectInstanceId,
-                                   ContainerInstanceId containerInstanceId,
-                                   String internalContainerName,
+    private ContainerInstanceView( ContainerInstanceId containerInstanceId,
                                    String internalContainerId,
                                    Date dateInitialized,
                                    Date dateCreated,
@@ -77,9 +72,7 @@ public class ContainerInstanceView extends EntityView {
                                    ContainerInstanceStatus status,
                                    ServerView server,
                                    RunConfigurationView runConfiguration ) {
-        //this.projectInstanceId = projectInstanceId;
         this.containerInstanceId = containerInstanceId;
-        this.internalContainerName = internalContainerName;
         this.internalContainerId = internalContainerId;
         this.dateInitialized = dateInitialized;
         this.dateCreated = dateCreated;
@@ -92,16 +85,8 @@ public class ContainerInstanceView extends EntityView {
         this.runConfiguration = runConfiguration;
     }
 
-    public void setProjectInstanceId( ProjectInstanceId projectInstanceId ) {
-        //this.projectInstanceId = projectInstanceId;
-    }
-
     public void setContainerInstanceId( ContainerInstanceId containerInstanceId ) {
         this.containerInstanceId = containerInstanceId;
-    }
-
-    public void setInternalContainerName( String internalContainerName ) {
-        this.internalContainerName = internalContainerName;
     }
 
     public void setInternalContainerId( String internalContainerId ) {
@@ -148,10 +133,6 @@ public class ContainerInstanceView extends EntityView {
         return containerInstanceId;
     }
 
-    public String getInternalContainerName() {
-        return internalContainerName;
-    }
-
     public String getInternalContainerId() {
         return internalContainerId;
     }
@@ -196,7 +177,6 @@ public class ContainerInstanceView extends EntityView {
 
         private ProjectInstanceId projectInstanceId;
         private ContainerInstanceId containerInstanceId;
-        private String internalContainerName;
         private String internalContainerId;
         private Date dateInitialized;
         private Date dateCreated;
@@ -219,11 +199,6 @@ public class ContainerInstanceView extends EntityView {
 
         public ContainerInstanceViewBuilder withContainerInstanceId( ContainerInstanceId containerInstanceId ) {
             this.containerInstanceId = containerInstanceId;
-            return this;
-        }
-
-        public ContainerInstanceViewBuilder withInternalContainerName( String internalContainerName ) {
-            this.internalContainerName = internalContainerName;
             return this;
         }
 
@@ -278,9 +253,8 @@ public class ContainerInstanceView extends EntityView {
         }
 
         public ContainerInstanceView build() {
-            return new ContainerInstanceView( projectInstanceId,
+            return new ContainerInstanceView(
                     containerInstanceId,
-                    internalContainerName,
                     internalContainerId,
                     dateInitialized,
                     dateCreated,

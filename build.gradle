@@ -4,6 +4,14 @@ plugins {
     id 'io.spring.dependency-management' version '0.6.1.RELEASE'
 }
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtime "mysql:mysql-connector-java:5.1.38"
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
@@ -44,6 +52,8 @@ subprojects {
         unitilsVersion = '3.4.3'
         slf4jVersion = '1.7.21'
     }
+
+    ext['bouncycastle.version'] = '1.54'
 
     dependencyManagement {
         imports {

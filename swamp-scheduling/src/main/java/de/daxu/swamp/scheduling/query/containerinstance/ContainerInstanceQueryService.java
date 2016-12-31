@@ -1,9 +1,7 @@
-package de.daxu.swamp.scheduling.query;
+package de.daxu.swamp.scheduling.query.containerinstance;
 
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
-import de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView;
-import de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

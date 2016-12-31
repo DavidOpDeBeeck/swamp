@@ -12,24 +12,24 @@
                 </button>
             </span>
         </div>
-        <div class="panel panel-default"
-             ng-repeat="continent in ContinentsCtrl.continents | filter: ContinentsCtrl.filter"
-             ui-sref-active="panel-primary">
-            <div class="panel-heading" ng-bind="continent.name"></div>
-            <div class="panel-footer clearfix">
-                <button type="button" class="btn btn-xs btn-default pull-right"
-                        ng-click="ContinentsCtrl.delete(continent)">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                        ui-sref="continents.continent.edit({continentId: continent.id})">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters({continentId: continent.id})">
-                    {{ continent.datacenters }} datacenters
-                </button>
-            </div>
+        <div class="list-group">
+            <a class="list-group-item"
+               ng-repeat="continent in ContinentsCtrl.continents | filter: ContinentsCtrl.filter"
+               ui-sref-active="active" ui-sref="continents.continent.datacenters({continentId: continent.id})">
+                <span class="label label-primary pull-right">{{ continent.datacenters }} datacenters</span>
+                <h4 class="list-group-item-heading" ng-bind="continent.name"></h4>
+                <p class="list-group-item-footer">
+                    <button type="button" class="btn btn-xs btn-default pull-right"
+                            ng-click="ContinentsCtrl.delete(continent)">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
+                            ui-sref="continents.continent.edit({continentId: continent.id})"
+                            ng-click="$event.stopPropagation()">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
+                </p>
+            </a>
         </div>
     </div>
     <div class="col-md-8">

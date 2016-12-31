@@ -3,6 +3,7 @@ import uiBootstrap from "angular-ui-bootstrap";
 import uiRouter from "angular-ui-router";
 import "ng-stomp";
 import httpInterceptor from "./interceptors/http.interceptor.module";
+import filters from "./filters/filters.module";
 import field from "./field/field.module";
 import AppRoute from "./app.route";
 import AppConfig from "./app.config";
@@ -12,13 +13,14 @@ import shared from "./components/shared/shared.module";
 import home from "./components/home/home.module";
 import projects from "./components/projects/projects.module";
 import locations from "./components/locations/locations.module";
-import scheduler from "./components/scheduler/scheduler.module";
+import projectInstances from "./components/project-instances/project-instances.module";
 
 angular.module('swamp', [
         'ngStomp',
         uiRouter,
         uiBootstrap,
         httpInterceptor,
+        filters,
         field,
         services,
         layout,
@@ -26,7 +28,7 @@ angular.module('swamp', [
         home,
         projects,
         locations,
-        scheduler
+        projectInstances
     ])
     .config(AppRoute)
     .run(AppConfig);

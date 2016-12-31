@@ -9,15 +9,27 @@ import java.util.Map;
 
 public class ProjectInstanceInitializedEvent extends ProjectInstanceEvent {
 
+    private final String name;
+    private final String description;
     private final Map<ContainerInstanceId, Container> containers;
     private final Date dateInitialized;
 
     public ProjectInstanceInitializedEvent( ProjectInstanceId projectInstanceId,
-                                            Map<ContainerInstanceId, Container> containers,
+                                            String name, String description, Map<ContainerInstanceId, Container> containers,
                                             Date dateInitialized ) {
         super( projectInstanceId );
+        this.name = name;
+        this.description = description;
         this.containers = containers;
         this.dateInitialized = dateInitialized;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Map<ContainerInstanceId, Container> getContainers() {

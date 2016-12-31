@@ -1,11 +1,10 @@
 package de.daxu.swamp.docker;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
-import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.PortBinding;
 import com.google.common.collect.Sets;
 import de.daxu.swamp.core.container.EnvironmentVariable;
@@ -18,7 +17,6 @@ import de.daxu.swamp.deploy.group.GroupId;
 import de.daxu.swamp.deploy.group.GroupManager;
 import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
-import de.daxu.swamp.deploy.result.CreateContainerResult;
 import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.log.LogCallback;
 import de.daxu.swamp.docker.mapper.PortMappingMapper;
@@ -52,7 +50,7 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
     }
 
     @Override
-    public CreateContainerResult create( ContainerConfiguration config ) {
+    public ContainerResult create( ContainerConfiguration config ) {
         CreateContainerCmd dockerCommand = config.getRunConfiguration()
                 .execute( docker() );
 
@@ -72,7 +70,7 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
 
         groupManager.addContainer( groupId, containerId );
 
-        return containerResultFactory.createCreateContainerResponse( containerId, response.getId(), warnings );
+        return containerResultFactory.createResponse( containerId, warnings );
     }
 
     private Set<String> createNetworkIfGroupIsNew( GroupId groupId ) {
@@ -82,22 +80,11 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
                         groupManager.addGroup( groupId );
                         CreateNetworkResponse networkResponse = docker().createNetworkCmd()
                                 .withDriver( "overlay" )
-                                .withIpam( new Ipam() )
                                 .withName( groupId.getValue() ).exec();
                         groupManager.addGroupMetaData( groupId, "network.id", networkResponse.getId() );
                     }
                 }
         );
-    }
-
-    class Ipam extends Network.Ipam {
-
-        @JsonProperty( "Driver" )
-        private String driver = "default";
-
-        public String getDriver() {
-            return driver;
-        }
     }
 
     private Set<String> connectToGroupNetwork( GroupId groupId, ContainerId containerId ) {
@@ -143,6 +130,22 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
                         .exec( LogCallback.withConsumer( logCallback ) )
         );
         return containerResultFactory.createResponse( containerId, warnings );
+    }
+
+    @Override
+    public boolean exists( ContainerId containerId ) {
+        Set<String> warnings = catchWarnings(
+                () -> docker().inspectContainerCmd( containerId.getValue() ).exec()
+        );
+        return warnings.isEmpty(); // TODO: find a better way
+    }
+
+    @Override
+    public boolean isRunning( ContainerId containerId ) {
+        if( !exists( containerId ) ) return false;
+        InspectContainerResponse response = docker().inspectContainerCmd( containerId.getValue() ).exec();
+        return response.getState().getStatus().equals( "created" )
+                || response.getState().getStatus().equals( "running" );
     }
 
     @Override

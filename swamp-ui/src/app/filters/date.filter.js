@@ -1,0 +1,1 @@
+export default () => (item) => new Date(item).toISOString().replace("T", " ").replace("Z", "")

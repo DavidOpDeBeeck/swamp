@@ -103,6 +103,10 @@ public class LocationService {
         return serverRepository.findOne( id );
     }
 
+    public Server getServerByName( String name ) {
+        return serverRepository.findByName( name );
+    }
+
     public Collection<Continent> getAllContinents() {
         return continentRepository.findAll();
     }

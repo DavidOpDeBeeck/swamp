@@ -20,17 +20,8 @@ public class ServerView extends EntityView {
     private ServerView() {
     }
 
-    private ServerView( String name,
-                        String ip ) {
+    private ServerView( String name, String ip ) {
         this.name = name;
-        this.ip = ip;
-    }
-
-    public void setName( String name ) {
-        this.name = name;
-    }
-
-    public void setIp( String ip ) {
         this.ip = ip;
     }
 

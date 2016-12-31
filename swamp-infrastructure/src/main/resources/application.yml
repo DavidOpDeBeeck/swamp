@@ -6,7 +6,7 @@ spring:
     password: 1234
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
-    show-sql: true
+    show-sql: false
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
   mvc:
     throw-exception-if-no-handler-found: true
@@ -23,7 +23,11 @@ logging:
   level:
     com:
       github:
-        dockerjava: DEBUG
+        dockerjava: ERROR
+    org:
+      hibernate: ERROR
+      springframework:
+          web: ERROR
 ---
 spring:
   profiles: test

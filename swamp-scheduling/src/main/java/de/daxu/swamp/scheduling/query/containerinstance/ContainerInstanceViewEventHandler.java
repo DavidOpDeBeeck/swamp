@@ -1,6 +1,5 @@
 package de.daxu.swamp.scheduling.query.containerinstance;
 
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
@@ -23,13 +22,12 @@ public class ContainerInstanceViewEventHandler {
 
     @EventHandler
     void on( ContainerInstanceInitializedEvent event ) {
-        ContainerConfiguration configuration = event.getConfiguration();
         ContainerInstanceView view = aContainerInstanceView()
                 .withContainerInstanceId( event.getContainerInstanceId() )
                 .withDateInitialized( event.getDateInitialized() )
                 .withServer( aServerView()
-                        .withName( "" )
-                        .withIp( "" )
+                        .withName( event.getServer().getName() )
+                        .withIp( event.getServer().getIp() )
                         .build() )
                 .withStatus( ContainerInstanceStatus.INITIALIZED )
                 .build();
@@ -40,10 +38,9 @@ public class ContainerInstanceViewEventHandler {
     void on( ContainerInstanceCreatedEvent event ) {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
-        view.setInternalContainerId( event.getInternalContainerId() );
-        //view.setInternalContainerName( event.getInternalContainerName() );
         view.setDateCreated( event.getDateCreated() );
         view.setStatus( ContainerInstanceStatus.CREATED );
+        view.setInternalContainerId( event.getContainerId().getValue() );
 
         containerInstanceViewRepository.save( view );
     }

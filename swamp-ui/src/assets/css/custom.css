@@ -30,14 +30,21 @@
     white-space: pre-line
 }
 
-.input-group input {
-    width: calc(100% - 5px) !important;
-    margin-right: 5px !important;
+.input-group button {
+    margin-left: 5px !important;
 }
 
 .input-half > input {
+    width: 50% !important;
+}
+
+.input-half > input:nth-child(2) {
     width: calc(50% - 5px) !important;
-    margin-right: 5px !important;
+    margin-left: 5px !important;
+}
+
+.input-half > button {
+    margin-left: 5px !important;
 }
 
 .well-half {
@@ -53,6 +60,16 @@
 .well-half > .well {
     flex: 1;
     width: calc(50% - 2.5px) !important;
+}
+
+.list-group-item-text {
+    margin: 10px 0;
+}
+
+
+.list-group-item-footer {
+    overflow: auto;
+    margin: 0;
 }
 
 textarea {

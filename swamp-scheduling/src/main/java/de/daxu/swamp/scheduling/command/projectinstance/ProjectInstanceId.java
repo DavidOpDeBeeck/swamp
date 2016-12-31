@@ -12,6 +12,9 @@ import java.util.UUID;
 @AttributeOverride( name = "value", column = @Column( name = "project_instance_id" ) )
 public class ProjectInstanceId extends EntityId {
 
+    private ProjectInstanceId() {
+    }
+
     private ProjectInstanceId( UUID projectInstanceId ) {
         super( projectInstanceId );
     }

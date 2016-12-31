@@ -1,7 +1,7 @@
 class ContainerInstanceController {
-    constructor(SchedulerService, $interval) {
+    constructor(ProjectInstanceService, $interval) {
         this.interval = $interval;
-        this.schedulerService = SchedulerService;
+        this.projectInstanceService = ProjectInstanceService;
         this.update( this.initial );
         this.setUpInterval();
     }
@@ -11,17 +11,17 @@ class ContainerInstanceController {
     }
 
     getInstance() {
-        this.schedulerService.getContainer(this.project.id, this.instance.id)
+        this.projectInstanceService.getContainerInstance(this.projectInstance.projectInstanceId, this.instance.containerInstanceId)
             .then((instance) => this.update(instance));
     }
 
     update( instance ) {
         this.instance = instance;
-        this.logs = instance.logs;
+        this.log = instance.log;
         this.status = instance.status;
         this.container = instance.container;
-        this.startedAt = this.formatDate(instance.startedAt);
-        this.finishedAt = instance.finishedAt == null ? "not yet finished" : this.formatDate(instance.finishedAt);
+        this.startedAt = this.formatDate(instance.dateStarted);
+        this.finishedAt = instance.dateStopped == null ? "not yet finished" : this.formatDate(instance.dateStopped);
     }
 
     start() { this.instance.$start(); }
@@ -35,4 +35,4 @@ class ContainerInstanceController {
     }
 }
 
-export default ['SchedulerService', '$interval', ContainerInstanceController]
+export default ['ProjectInstanceService', '$interval', ContainerInstanceController]

@@ -13,19 +13,24 @@
                 </button>
             </span>
         </div>
-        <div class="panel panel-default" ng-repeat="server in ServersCtrl.servers | filter: ServersCtrl.filter">
-            <div class="panel-heading" ng-bind="server.name"></div>
-            <div class="panel-body" ng-bind="server.ip"></div>
-            <div class="panel-footer clearfix">
-                <button type="button" class="btn btn-xs btn-default pull-right"
-                        ng-click="ServersCtrl.delete(server)">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters.datacenter.servers.server.edit({continentId: ServersCtrl.continent.id, datacenterId: ServersCtrl.datacenter.id, serverId: server.id})">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                </button>
-            </div>
+        <div class="list-group">
+            <a class="list-group-item"
+               ng-repeat="server in ServersCtrl.servers | filter: ServersCtrl.filter"
+               ui-sref-active="active">
+                <span class="label label-primary pull-right">{{ server.ip }}</span>
+                <h4 class="list-group-item-heading" ng-bind="server.name"></h4>
+                <p class="list-group-item-footer">
+                    <button type="button" class="btn btn-xs btn-default pull-right"
+                            ng-click="ServersCtrl.delete(server)">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
+                            ui-sref="continents.continent.datacenters.datacenter.servers.server.edit({continentId: ServersCtrl.continent.id, datacenterId: ServersCtrl.datacenter.id, serverId: server.id})"
+                            ng-click="$event.stopPropagation()">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
+                </p>
+            </a>
         </div>
     </div>
 </div>
