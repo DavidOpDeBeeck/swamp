@@ -7,10 +7,10 @@ import static com.google.common.collect.Sets.newHashSet;
 
 public enum ContainerInstanceStatus {
     INITIALIZED(),
-    CREATED( INITIALIZED ),
-    STARTED( CREATED ),
-    STOPPED( STARTED ),
-    REMOVED( INITIALIZED, CREATED, STARTED );
+    CREATED( ContainerInstanceStatus.INITIALIZED ),
+    STARTED( ContainerInstanceStatus.CREATED, ContainerInstanceStatus.STOPPED ),
+    STOPPED( ContainerInstanceStatus.STARTED ),
+    REMOVED( ContainerInstanceStatus.INITIALIZED, ContainerInstanceStatus.CREATED, ContainerInstanceStatus.STARTED );
 
     private final Set<ContainerInstanceStatus> validPreviousStatuses = newHashSet();
 

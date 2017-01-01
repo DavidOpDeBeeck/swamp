@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduling.resource.containerinstance;
 
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceCommandService;
 import de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceQueryService;
 import de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView;
 import de.daxu.swamp.scheduling.query.projectinstance.ProjectInstanceView;
@@ -23,18 +24,21 @@ public class ContainerInstanceResource {
 
     final static String CONTAINER_INSTANCE_URL = PROJECT_INSTANCE_URL + "/{projectInstanceId}/containerInstances";
 
+    private final ContainerInstanceCommandService containerInstanceCommandService;
     private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ResponseFactory response;
 
     @Autowired
-    public ContainerInstanceResource( ContainerInstanceQueryService containerInstanceQueryService,
+    public ContainerInstanceResource( ContainerInstanceCommandService containerInstanceCommandService,
+                                      ContainerInstanceQueryService containerInstanceQueryService,
                                       ResponseFactory responseFactory ) {
+        this.containerInstanceCommandService = containerInstanceCommandService;
         this.containerInstanceQueryService = containerInstanceQueryService;
         this.response = responseFactory;
     }
 
     @RequestMapping( method = RequestMethod.GET )
-    public Response getContainerInstances( @PathVariable( "projectInstanceId" ) ProjectInstanceView view ) {
+    public Response getAll( @PathVariable( "projectInstanceId" ) ProjectInstanceView view ) {
 
         Set<ContainerInstanceView> containers = view.getContainers()
                 .stream()
@@ -45,8 +49,30 @@ public class ContainerInstanceResource {
     }
 
     @RequestMapping( value = "/{containerInstanceId}", method = RequestMethod.GET )
-    public Response getContainerInstance( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
+    public Response get( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
 
         return response.success( view );
+    }
+
+    @RequestMapping( value = "/{containerInstanceId}", params = { "action=start" }, method = RequestMethod.POST )
+    public Response start( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
+
+        containerInstanceCommandService.start( view.getContainerInstanceId() );
+        return response.success();
+    }
+
+    @RequestMapping( value = "/{containerInstanceId}", params = { "action=restart" }, method = RequestMethod.POST )
+    public Response restart( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
+
+        containerInstanceCommandService.stop( view.getContainerInstanceId() );
+        containerInstanceCommandService.start( view.getContainerInstanceId() );
+        return response.success();
+    }
+
+    @RequestMapping( value = "/{containerInstanceId}", params = { "action=stop" }, method = RequestMethod.POST )
+    public Response stop( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
+
+        containerInstanceCommandService.stop( view.getContainerInstanceId() );
+        return response.success();
     }
 }
