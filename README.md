@@ -1,5 +1,6 @@
-# Swamp
 <img src="https://raw.github.com/DavidOpDeBeeck/swamp/master/swamp-ui/src/assets/img/favicon.png" width="64">
+
+# Swamp
 
 Swamp allows for a fast and easy deployment of all your projects. You can create and manage your own sandbox, create and deploy your own applications on a project basis. The main purpose of swamp is to manage a sandbox where you can deploy your projects.
 
