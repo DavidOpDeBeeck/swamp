@@ -104,7 +104,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     private void validateStatusChange( ContainerInstanceStatus nextStatus ) {
-        if( !nextStatus.isValidPreviousStatus( status ) ) {
+        if( !isValidPreviousStatus( nextStatus, status ) ) {
             throw new InvalidContainerStatusChangeException( status, nextStatus );
         }
     }

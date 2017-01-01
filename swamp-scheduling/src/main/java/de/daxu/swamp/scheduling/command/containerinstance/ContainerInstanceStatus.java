@@ -1,24 +1,29 @@
 package de.daxu.swamp.scheduling.command.containerinstance;
 
-import java.util.Collections;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
 public enum ContainerInstanceStatus {
-    INITIALIZED(),
-    CREATED( ContainerInstanceStatus.INITIALIZED ),
-    STARTED( ContainerInstanceStatus.CREATED, ContainerInstanceStatus.STOPPED ),
-    STOPPED( ContainerInstanceStatus.STARTED ),
-    REMOVED( ContainerInstanceStatus.INITIALIZED, ContainerInstanceStatus.CREATED, ContainerInstanceStatus.STARTED );
 
-    private final Set<ContainerInstanceStatus> validPreviousStatuses = newHashSet();
+    INITIALIZED,
+    CREATED,
+    STARTED,
+    STOPPED,
+    REMOVED;
 
-    ContainerInstanceStatus( ContainerInstanceStatus... validPreviousStatuses ) {
-        Collections.addAll( this.validPreviousStatuses, validPreviousStatuses );
-    }
+    private static final ImmutableMap<ContainerInstanceStatus, Set<ContainerInstanceStatus>> validPreviousStatuses
+            = new ImmutableMap.Builder<ContainerInstanceStatus, Set<ContainerInstanceStatus>>()
+            .put( INITIALIZED, newHashSet() )
+            .put( CREATED, newHashSet( INITIALIZED ) )
+            .put( STARTED, newHashSet( CREATED, STOPPED ) )
+            .put( STOPPED, newHashSet( STARTED ) )
+            .put( REMOVED, newHashSet( INITIALIZED, CREATED, STARTED, STOPPED ) )
+            .build();
 
-    public boolean isValidPreviousStatus( ContainerInstanceStatus previousStatus ) {
-        return validPreviousStatuses.contains( previousStatus );
+    public static boolean isValidPreviousStatus( ContainerInstanceStatus status, ContainerInstanceStatus previousStatus ) {
+        return validPreviousStatuses.get( status ).contains( previousStatus );
     }
 }
