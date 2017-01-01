@@ -8,7 +8,7 @@ import de.daxu.swamp.core.configuration.GitConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.configuration.GitConfiguration.GitConfigurationBuilder.aGitConfigurationBuilder;
+import static de.daxu.swamp.core.configuration.GitConfiguration.Builder.aGitConfiguration;
 
 @Component
 public class GitConfigurationConverter implements DTOConverter<GitConfiguration, GitConfigurationDTO>, DomainConverter<GitConfigurationDTO, GitConfiguration> {
@@ -33,7 +33,7 @@ public class GitConfigurationConverter implements DTOConverter<GitConfiguration,
 
     @Override
     public GitConfiguration toDomain( GitConfigurationDTO dto ) {
-        return aGitConfigurationBuilder()
+        return aGitConfiguration()
                 .withUrl( dto.url )
                 .withBranch( dto.branch )
                 .withPath( dto.path )

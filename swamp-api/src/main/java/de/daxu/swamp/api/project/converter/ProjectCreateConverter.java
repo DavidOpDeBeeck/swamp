@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-import static de.daxu.swamp.core.project.Project.ProjectBuilder.aProjectBuilder;
+import static de.daxu.swamp.core.project.Project.Builder.aProject;
 
 @Component
 public class ProjectCreateConverter implements DomainConverter<ProjectCreateDTO, Project> {
 
     @Override
     public Project toDomain( ProjectCreateDTO dto ) {
-        return aProjectBuilder()
+        return aProject()
                 .withName( dto.name )
                 .withDescription( dto.description )
-                .createdAt( LocalDateTime.now( Clock.systemUTC()) )
+                .withCreatedAt( LocalDateTime.now( Clock.systemUTC()) )
                 .build();
     }
 }

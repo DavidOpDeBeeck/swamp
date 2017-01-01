@@ -3,6 +3,7 @@ package de.daxu.swamp.scheduling.batch;
 import de.daxu.swamp.core.location.LocationService;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
+import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceCommandService;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
@@ -53,22 +54,21 @@ public class ContainerCleanupBatch {
 
         runningContainers.stream()
                 .filter( this::getCompleteContainers )
-                .forEach( this::removeNotRunningContainers );
+                .forEach( this::removeMissingAndNotRunningContainers );
     }
 
-    private void removeNotRunningContainers( ContainerInstanceView view ) {
+    private void removeMissingAndNotRunningContainers( ContainerInstanceView view ) {
         ServerView server = view.getServer();
+        ContainerId containerId = view.getContainerId();
 
-        boolean exists = deployFacade.containerClient( getServerByName( server.getName() ) )
-                .exists( ContainerId.of( view.getInternalContainerId() ) );
+        boolean exists = containerClient( server ).exists( containerId );
 
         if( !exists ) {
             removeContainer( view.getContainerInstanceId() );
             return;
         }
 
-        boolean running = deployFacade.containerClient( getServerByName( server.getName() ) )
-                .isRunning( ContainerId.of( view.getInternalContainerId() ) );
+        boolean running = containerClient( server ).isRunning( containerId );
 
         if( !running ) {
             stopContainer( view.getContainerInstanceId() );
@@ -91,12 +91,16 @@ public class ContainerCleanupBatch {
                 + "\n**************************\n" );
     }
 
+    private ContainerClient containerClient( ServerView server ) {
+        return deployFacade.containerClient( getServerByName( server.getName() ) );
+    }
+
     private boolean getInCompleteContainers( ContainerInstanceView view ) {
         return !getCompleteContainers( view );
     }
 
     private boolean getCompleteContainers( ContainerInstanceView view ) {
-        return view.getInternalContainerId() != null && isServerComplete( view.getServer() );
+        return view.getContainerId() != null && isServerComplete( view.getServer() );
     }
 
     private boolean isServerComplete( ServerView serverView ) {

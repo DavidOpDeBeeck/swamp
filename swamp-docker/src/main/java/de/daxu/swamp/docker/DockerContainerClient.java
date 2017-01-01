@@ -3,11 +3,13 @@ package de.daxu.swamp.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import com.google.common.collect.Sets;
 import de.daxu.swamp.core.container.EnvironmentVariable;
+import de.daxu.swamp.core.container.PortMapping;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.client.DeployClient;
@@ -19,32 +21,30 @@ import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.log.LogCallback;
-import de.daxu.swamp.docker.mapper.PortMappingMapper;
 
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.github.dockerjava.api.model.ExposedPort.tcp;
+import static com.github.dockerjava.api.model.Ports.Binding.bindPort;
 import static com.google.common.collect.Sets.newHashSet;
 
 public class DockerContainerClient implements ContainerClient, DeployClient {
 
     private final DockerClientFactory dockerClientFactory;
     private final ContainerResultFactory containerResultFactory;
-    private final PortMappingMapper portMappingMapper;
     private final GroupManager groupManager;
 
     private final Server server;
 
     DockerContainerClient( DockerClientFactory dockerClientFactory,
                            ContainerResultFactory containerResultFactory,
-                           PortMappingMapper portMappingMapper,
                            GroupManager groupManager,
                            Server server ) {
         this.dockerClientFactory = dockerClientFactory;
         this.containerResultFactory = containerResultFactory;
-        this.portMappingMapper = portMappingMapper;
         this.groupManager = groupManager;
         this.server = server;
     }
@@ -68,7 +68,7 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
         warnings.addAll( connectToGroupNetwork( groupId, containerId ) );
         warnings.addAll( toSet( response.getWarnings() ) );
 
-        groupManager.addContainer( groupId, containerId );
+        groupManager.addContainerToGroup( groupId, containerId );
 
         return containerResultFactory.createResponse( containerId, warnings );
     }
@@ -77,22 +77,19 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
         return catchWarnings(
                 () -> {
                     if( !groupManager.exists( groupId ) ) {
-                        groupManager.addGroup( groupId );
-                        CreateNetworkResponse networkResponse = docker().createNetworkCmd()
+                        docker().createNetworkCmd()
                                 .withDriver( "overlay" )
                                 .withName( groupId.getValue() ).exec();
-                        groupManager.addGroupMetaData( groupId, "network.id", networkResponse.getId() );
                     }
                 }
         );
     }
 
     private Set<String> connectToGroupNetwork( GroupId groupId, ContainerId containerId ) {
-        String networkId = groupManager.getGroupMetaData( groupId, "network.id" );
         return catchWarnings(
                 () -> docker().connectToNetworkCmd()
                         .withContainerId( containerId.getValue() )
-                        .withNetworkId( networkId ).exec()
+                        .withNetworkId( groupId.getValue() ).exec()
         );
     }
 
@@ -179,7 +176,17 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
 
     private List<PortBinding> extractPortBindings( ContainerConfiguration config ) {
         return config.getPortMappings().stream()
-                .map( portMappingMapper::convert )
+                .map( this::convertPortMapping )
                 .collect( Collectors.toList() );
+    }
+
+    private PortBinding convertPortMapping( PortMapping portMapping ) {
+        return createPortBinding( portMapping.getInternal(), portMapping.getExternal() );
+    }
+
+    private PortBinding createPortBinding( int internalPort, int externalPort ) {
+        ExposedPort internal = tcp( internalPort );
+        Ports.Binding external = bindPort( externalPort );
+        return new PortBinding( external, internal );
     }
 }

@@ -95,7 +95,7 @@ public class ProjectResource {
     }
 
     @RequestMapping( value = "/{projectId}", params = { "action=deploy" }, method = RequestMethod.POST )
-    public Response schedule( @PathVariable( "projectId" ) Project project ) {
+    public Response deploy( @PathVariable( "projectId" ) Project project ) {
 
         projectInstanceCommandService.initialize( project );
         return response.success();

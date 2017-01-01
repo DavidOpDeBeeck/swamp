@@ -31,7 +31,7 @@ public class GitConfiguration extends RunConfiguration {
     private GitConfiguration() {
     }
 
-    GitConfiguration( String url, String branch, String path, UsernamePasswordCredentials credentials ) {
+    private GitConfiguration( String url, String branch, String path, UsernamePasswordCredentials credentials ) {
         this.url = url;
         this.branch = branch;
         this.path = path;
@@ -64,33 +64,33 @@ public class GitConfiguration extends RunConfiguration {
         return RunConfigurationType.GIT;
     }
 
-    public static class GitConfigurationBuilder {
+    public static class Builder {
 
         private String url;
         private String branch;
         private String path;
         private UsernamePasswordCredentials credentials;
 
-        public static GitConfigurationBuilder aGitConfigurationBuilder() {
-            return new GitConfigurationBuilder();
+        public static Builder aGitConfiguration() {
+            return new Builder();
         }
 
-        public GitConfigurationBuilder withUrl( String url ) {
+        public Builder withUrl( String url ) {
             this.url = url;
             return this;
         }
 
-        public GitConfigurationBuilder withBranch( String branch ) {
+        public Builder withBranch( String branch ) {
             this.branch = branch;
             return this;
         }
 
-        public GitConfigurationBuilder withPath( String path ) {
+        public Builder withPath( String path ) {
             this.path = path;
             return this;
         }
 
-        public GitConfigurationBuilder withCredentials( UsernamePasswordCredentials credentials ) {
+        public Builder withCredentials( UsernamePasswordCredentials credentials ) {
             this.credentials = credentials;
             return this;
         }

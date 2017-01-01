@@ -1,11 +1,11 @@
 package de.daxu.swamp.scheduling.query.containerinstance;
 
-import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 import static de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
 import static de.daxu.swamp.scheduling.query.containerinstance.ServerView.ServerViewBuilder.aServerView;
 
@@ -24,12 +24,12 @@ public class ContainerInstanceViewEventHandler {
     void on( ContainerInstanceInitializedEvent event ) {
         ContainerInstanceView view = aContainerInstanceView()
                 .withContainerInstanceId( event.getContainerInstanceId() )
-                .withDateInitialized( event.getDateInitialized() )
+                .withInitializedAt( event.getInitializedAt() )
                 .withServer( aServerView()
                         .withName( event.getServer().getName() )
                         .withIp( event.getServer().getIp() )
                         .build() )
-                .withStatus( ContainerInstanceStatus.INITIALIZED )
+                .withStatus( INITIALIZED )
                 .build();
         containerInstanceViewRepository.save( view );
     }
@@ -38,9 +38,9 @@ public class ContainerInstanceViewEventHandler {
     void on( ContainerInstanceCreatedEvent event ) {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
-        view.setDateCreated( event.getDateCreated() );
-        view.setStatus( ContainerInstanceStatus.CREATED );
-        view.setInternalContainerId( event.getContainerId().getValue() );
+        view.setCreatedAt( event.getCreatedAt() );
+        view.setStatus( CREATED );
+        view.setContainerId( event.getContainerId() );
 
         containerInstanceViewRepository.save( view );
     }
@@ -49,8 +49,8 @@ public class ContainerInstanceViewEventHandler {
     void on( ContainerInstanceStartedEvent event ) {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
-        view.setDateStarted( event.getDateStarted() );
-        view.setStatus( ContainerInstanceStatus.STARTED );
+        view.setStartedAt( event.getStartedAt() );
+        view.setStatus( STARTED );
 
         containerInstanceViewRepository.save( view );
     }
@@ -59,8 +59,8 @@ public class ContainerInstanceViewEventHandler {
     void on( ContainerInstanceStoppedEvent event ) {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
-        view.setDateStopped( event.getDateStopped() );
-        view.setStatus( ContainerInstanceStatus.STOPPED );
+        view.setStoppedAt( event.getStoppedAt() );
+        view.setStatus( STOPPED );
 
         containerInstanceViewRepository.save( view );
     }
@@ -69,8 +69,8 @@ public class ContainerInstanceViewEventHandler {
     void on( ContainerInstanceRemovedEvent event ) {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
-        view.setDateRemoved( event.getDateRemoved() );
-        view.setStatus( ContainerInstanceStatus.REMOVED );
+        view.setRemovedAt( event.getRemovedAt() );
+        view.setStatus( REMOVED );
 
         containerInstanceViewRepository.save( view );
     }

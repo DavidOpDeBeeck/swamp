@@ -22,7 +22,7 @@ public class EnvironmentVariable extends Identifiable {
     private EnvironmentVariable() {
     }
 
-    EnvironmentVariable( String name, String value ) {
+    private EnvironmentVariable( String name, String value ) {
         this.name = name;
         this.value = value;
     }
@@ -39,21 +39,21 @@ public class EnvironmentVariable extends Identifiable {
         return String.format( "%s=%s", name, value );
     }
 
-    public static class EnvironmentVariableBuilder {
+    public static class Builder {
 
         private String name;
         private String value;
 
-        public static EnvironmentVariableBuilder anEnvironmentVariableBuilder() {
-            return new EnvironmentVariableBuilder();
+        public static Builder anEnvironmentVariable() {
+            return new Builder();
         }
 
-        public EnvironmentVariableBuilder withName( String name ) {
+        public Builder withName( String name ) {
             this.name = name;
             return this;
         }
 
-        public EnvironmentVariableBuilder withValue( String value ) {
+        public Builder withValue( String value ) {
             this.value = value;
             return this;
         }

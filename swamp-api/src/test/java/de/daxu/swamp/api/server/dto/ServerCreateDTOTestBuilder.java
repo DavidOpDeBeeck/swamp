@@ -8,7 +8,7 @@ public class ServerCreateDTOTestBuilder {
     private String certificate = "a server certificate";
     private String key = "a server key";
 
-    public static ServerCreateDTOTestBuilder aServerCreateDTOTestBuilder() {
+    public static ServerCreateDTOTestBuilder aServerCreateDTO() {
         return new ServerCreateDTOTestBuilder();
     }
 

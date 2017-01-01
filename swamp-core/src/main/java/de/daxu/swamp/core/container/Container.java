@@ -5,7 +5,7 @@ import de.daxu.swamp.core.configuration.RunConfiguration;
 import de.daxu.swamp.core.location.Location;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -13,7 +13,8 @@ import java.util.Set;
 @SuppressWarnings( "unused" )
 public class Container extends Identifiable {
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL , orphanRemoval = true )
+    @NotNull( message = "{NotNull.Container.runConfiguration}" )
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true )
     @JoinColumn( name = "run_configuration_id" )
     private RunConfiguration runConfiguration;
 
@@ -38,7 +39,7 @@ public class Container extends Identifiable {
     private Container() {
     }
 
-    Container( String name, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
+    private Container( String name, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
         this.name = name;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
@@ -89,39 +90,39 @@ public class Container extends Identifiable {
         return environmentVariables;
     }
 
-    public static class ContainerBuilder {
+    public static class Builder {
 
         private String name;
         private RunConfiguration runConfiguration;
-        private Set<Location> potentialLocations = new HashSet<>();
-        private Set<PortMapping> portMappings = new HashSet<>();
-        private Set<EnvironmentVariable> environmentVariables = new HashSet<>();
+        private Set<Location> potentialLocations;
+        private Set<PortMapping> portMappings;
+        private Set<EnvironmentVariable> environmentVariables;
 
-        public static ContainerBuilder aContainerBuilder() {
-            return new ContainerBuilder();
+        public static Builder aContainer() {
+            return new Builder();
         }
 
-        public ContainerBuilder withName( String name ) {
+        public Builder withName( String name ) {
             this.name = name;
             return this;
         }
 
-        public ContainerBuilder withRunConfiguration( RunConfiguration runConfiguration ) {
+        public Builder withRunConfiguration( RunConfiguration runConfiguration ) {
             this.runConfiguration = runConfiguration;
             return this;
         }
 
-        public ContainerBuilder withPotentialLocations( Set<Location> potentialLocations ) {
+        public Builder withPotentialLocations( Set<Location> potentialLocations ) {
             this.potentialLocations = potentialLocations;
             return this;
         }
 
-        public ContainerBuilder withPortMappings( Set<PortMapping> portMappings ) {
+        public Builder withPortMappings( Set<PortMapping> portMappings ) {
             this.portMappings = portMappings;
             return this;
         }
 
-        public ContainerBuilder withEnvironmentVariables( Set<EnvironmentVariable> environmentVariables ) {
+        public Builder withEnvironmentVariables( Set<EnvironmentVariable> environmentVariables ) {
             this.environmentVariables = environmentVariables;
             return this;
         }

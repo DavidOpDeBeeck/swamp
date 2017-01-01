@@ -19,9 +19,8 @@ class ContainerInstanceController {
         this.instance = instance;
         this.log = instance.log;
         this.status = instance.status;
-        this.container = instance.container;
-        this.startedAt = this.formatDate(instance.dateStarted);
-        this.finishedAt = instance.dateStopped == null ? "not yet finished" : this.formatDate(instance.dateStopped);
+        this.startedAt = this.formatDate(instance.startedAt);
+        this.finishedAt = instance.stoppedAt == null ? "not yet finished" : this.formatDate(instance.stoppedAt);
     }
 
     start() { this.instance.$start(); }

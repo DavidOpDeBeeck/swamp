@@ -6,7 +6,7 @@ public class ContinentDTOTestBuilder {
     private String name = "a continent name";
     private int datacenters = 0;
 
-    public static ContinentDTOTestBuilder aContinentDTOTestBuilder() {
+    public static ContinentDTOTestBuilder aContinentDTO() {
         return new ContinentDTOTestBuilder();
     }
 

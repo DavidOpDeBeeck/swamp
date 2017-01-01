@@ -37,7 +37,7 @@ public class Server extends Location {
     private Server() {
     }
 
-    Server( String id, String name, String ip, String CACertificate, String certificate, String key ) {
+    private Server( String id, String name, String ip, String CACertificate, String certificate, String key ) {
         super( id, name );
         this.ip = ip;
         this.CACertificate = CACertificate;
@@ -87,33 +87,33 @@ public class Server extends Location {
         return newHashSet( this );
     }
 
-    public static class ServerBuilder extends LocationBuilder<ServerBuilder> {
+    public static class Builder extends Location.Builder<Builder> {
 
         private String ip;
         private String CACertificate;
         private String certificate;
         private String key;
 
-        public static ServerBuilder aServerBuilder() {
-            return new ServerBuilder();
+        public static Builder aServer() {
+            return new Builder();
         }
 
-        public ServerBuilder withIp( String ip ) {
+        public Builder withIp( String ip ) {
             this.ip = ip;
             return this;
         }
 
-        public ServerBuilder withCACertificate( String CACertificate ) {
+        public Builder withCACertificate( String CACertificate ) {
             this.CACertificate = CACertificate;
             return this;
         }
 
-        public ServerBuilder withCertificate( String certificate ) {
+        public Builder withCertificate( String certificate ) {
             this.certificate = certificate;
             return this;
         }
 
-        public ServerBuilder withKey( String key ) {
+        public Builder withKey( String key ) {
             this.key = key;
             return this;
         }

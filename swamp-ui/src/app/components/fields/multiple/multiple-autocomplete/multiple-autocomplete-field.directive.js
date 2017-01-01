@@ -1,4 +1,4 @@
-import MultipleFieldDirective from "./../multiple-field.directive.js";
+import MultipleFieldDirective from "../multiple-field.directive.js";
 
 class MultipleAutocompleteFieldDirective extends MultipleFieldDirective {
     constructor() {
@@ -6,7 +6,7 @@ class MultipleAutocompleteFieldDirective extends MultipleFieldDirective {
             extraScope: {
                 'autocompleteList': '='
             },
-            templateUrl: '/app/field/multiple/multiple-autocomplete/multiple-autocomplete-field.template.html'
+            templateUrl: '/app/components/fields/multiple/multiple-autocomplete/multiple-autocomplete-field.template.html'
         });
     }
 }

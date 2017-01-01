@@ -6,7 +6,7 @@ import de.daxu.swamp.common.dto.DomainConverter;
 import de.daxu.swamp.core.container.EnvironmentVariable;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.container.EnvironmentVariable.EnvironmentVariableBuilder.anEnvironmentVariableBuilder;
+import static de.daxu.swamp.core.container.EnvironmentVariable.Builder.anEnvironmentVariable;
 
 @Component
 public class EnvironmentVariableConverter implements DomainConverter<EnvironmentVariableDTO, EnvironmentVariable>, DTOConverter<EnvironmentVariable, EnvironmentVariableDTO> {
@@ -21,7 +21,7 @@ public class EnvironmentVariableConverter implements DomainConverter<Environment
 
     @Override
     public EnvironmentVariable toDomain( EnvironmentVariableDTO dto ) {
-        return anEnvironmentVariableBuilder()
+        return anEnvironmentVariable()
                 .withName( dto.name )
                 .withValue( dto.value )
                 .build();

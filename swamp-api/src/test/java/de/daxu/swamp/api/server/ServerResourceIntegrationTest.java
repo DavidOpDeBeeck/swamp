@@ -15,13 +15,13 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static de.daxu.swamp.api.server.dto.ServerCreateDTOTestBuilder.aServerCreateDTOTestBuilder;
+import static de.daxu.swamp.api.server.dto.ServerCreateDTOTestBuilder.aServerCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.common.web.WebClient.type;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinentTestBuilder;
-import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenterTestBuilder;
-import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.aServerBuilderTestBuilder;
-import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.anotherServerBuilderTestBuilder;
+import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
+import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenter;
+import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.aServer;
+import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.anotherServer;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,8 +40,8 @@ public class ServerResourceIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        continent = aContinentTestBuilder().build();
-        datacenter = aDatacenterTestBuilder().build();
+        continent = aContinent().build();
+        datacenter = aDatacenter().build();
         resource.save( continent );
         resource.save( datacenter );
         continent.addDatacenter( datacenter );
@@ -54,8 +54,8 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Server server1 = aServerBuilderTestBuilder().build();
-        Server server2 = anotherServerBuilderTestBuilder().build();
+        Server server1 = aServer().build();
+        Server server2 = anotherServer().build();
 
         addServer( server1 );
         addServer( server2 );
@@ -76,7 +76,7 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        ServerCreateDTO dto = aServerCreateDTOTestBuilder().build();
+        ServerCreateDTO dto = aServerCreateDTO().build();
 
         String id = resource.webClient()
                 .path( datacenterPath() )
@@ -93,7 +93,7 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void get() throws Exception {
-        Server expected = aServerBuilderTestBuilder().build();
+        Server expected = aServer().build();
         addServer( expected );
 
         ServerDTO actual = resource.webClient()
@@ -111,13 +111,13 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void put() throws Exception {
-        Server server = aServerBuilderTestBuilder()
+        Server server = aServer()
                 .withName( "oldName" )
                 .build();
 
         addServer( server );
 
-        ServerCreateDTO expected = aServerCreateDTOTestBuilder()
+        ServerCreateDTO expected = aServerCreateDTO()
                 .withName( "updatedName" )
                 .build();
 
@@ -137,7 +137,7 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void delete() throws Exception {
-        Server expected = aServerBuilderTestBuilder().build();
+        Server expected = aServer().build();
         addServer( expected );
 
         resource.webClient()

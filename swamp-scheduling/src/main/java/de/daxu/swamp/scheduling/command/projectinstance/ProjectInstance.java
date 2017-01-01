@@ -11,7 +11,7 @@ import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class ProjectInstance extends AbstractAnnotatedAggregateRoot<ProjectInsta
                 .forEach( container -> containers.put( ContainerInstanceId.random(), container ) );
 
         apply( new ProjectInstanceInitializedEvent(
-                command.getProjectInstanceId(), project.getName(), project.getDescription(), containers, new Date() ) );
+                command.getProjectInstanceId(), project.getName(), project.getDescription(), containers, LocalDateTime.now() ) );
     }
 
     @EventHandler

@@ -13,10 +13,10 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTOTestBuilder;
+import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.common.web.WebClient.type;
-import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
+import static de.daxu.swamp.core.project.ProjectTestBuilder.aProject;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,8 +36,8 @@ public class ProjectResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Project project1 = aProjectTestBuilder().build();
-        Project project2 = aProjectTestBuilder().build();
+        Project project1 = aProject().build();
+        Project project2 = aProject().build();
         resource.save( project1, project2 );
 
         List<ProjectDTO> projects = resource.webClient()
@@ -55,7 +55,7 @@ public class ProjectResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        ProjectCreateDTO dto = aProjectCreateDTOTestBuilder().build();
+        ProjectCreateDTO dto = aProjectCreateDTO().build();
 
         String id = resource.webClient()
                 .path( "projects" )
@@ -71,7 +71,7 @@ public class ProjectResourceIntegrationTest {
 
     @Test
     public void get() throws Exception {
-        Project expected = aProjectTestBuilder().build();
+        Project expected = aProject().build();
         resource.save( expected );
 
         ProjectDTO actual = resource.webClient()
@@ -88,14 +88,14 @@ public class ProjectResourceIntegrationTest {
 
     @Test
     public void put() throws Exception {
-        Project project = aProjectTestBuilder()
+        Project project = aProject()
                 .withName( "oldName" )
                 .withDescription( "oldDescription" )
                 .build();
 
         resource.save( project );
 
-        ProjectCreateDTO expected = aProjectCreateDTOTestBuilder()
+        ProjectCreateDTO expected = aProjectCreateDTO()
                 .withName( "updatedName" )
                 .withDescription( "updatedDescription" )
                 .build();
@@ -115,7 +115,7 @@ public class ProjectResourceIntegrationTest {
 
     @Test
     public void delete() throws Exception {
-        Project expected = aProjectTestBuilder().build();
+        Project expected = aProject().build();
         resource.save( expected );
 
         resource.webClient()

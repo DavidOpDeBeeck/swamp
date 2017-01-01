@@ -4,7 +4,7 @@ public class DatacenterCreateDTOTestBuilder {
 
     private String name = "a datacenter name";
 
-    public static DatacenterCreateDTOTestBuilder aDatacenterCreateDTOTestBuilder() {
+    public static DatacenterCreateDTOTestBuilder aDatacenterCreateDTO() {
         return new DatacenterCreateDTOTestBuilder();
     }
 

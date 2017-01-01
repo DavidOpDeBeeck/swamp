@@ -1,11 +1,13 @@
 package de.daxu.swamp.core.credentials;
 
+import static de.daxu.swamp.core.credentials.UsernamePasswordCredentials.Builder;
+
 public class UsernamePasswordCredentialsTestBuilder {
 
-    private String username;
-    private String password;
+    private String username = "a test username";
+    private String password = "a test password";
 
-    public static UsernamePasswordCredentialsTestBuilder anUsernamePasswordCredentialsTestBuilder() {
+    public static UsernamePasswordCredentialsTestBuilder anUsernamePasswordCredentials() {
         return new UsernamePasswordCredentialsTestBuilder();
     }
 
@@ -20,6 +22,9 @@ public class UsernamePasswordCredentialsTestBuilder {
     }
 
     public UsernamePasswordCredentials build() {
-        return new UsernamePasswordCredentials( username, password );
+        return Builder.anUsernamePasswordCredentials()
+                .withUsername( username )
+                .withPassword( password )
+                .build();
     }
 }

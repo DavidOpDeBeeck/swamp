@@ -4,7 +4,7 @@ public class PortMappingDTOTestBuilder {
     private Integer internal = 8080;
     private Integer external = 8888;
 
-    public static PortMappingDTOTestBuilder aPortMappingDTOTestBuilder() {
+    public static PortMappingDTOTestBuilder aPortMappingDTO() {
         return new PortMappingDTOTestBuilder();
     }
 

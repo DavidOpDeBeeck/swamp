@@ -14,12 +14,12 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static de.daxu.swamp.api.datacenter.dto.DatacenterCreateDTOTestBuilder.aDatacenterCreateDTOTestBuilder;
+import static de.daxu.swamp.api.datacenter.dto.DatacenterCreateDTOTestBuilder.aDatacenterCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.common.web.WebClient.type;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinentTestBuilder;
-import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenterTestBuilder;
-import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.anotherDatacenterTestBuilder;
+import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
+import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenter;
+import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.anotherDatacenter;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +36,7 @@ public class DatacenterResourceIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        continent = aContinentTestBuilder().build();
+        continent = aContinent().build();
         resource.save( continent );
     }
 
@@ -46,8 +46,8 @@ public class DatacenterResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Datacenter datacenter1 = aDatacenterTestBuilder().build();
-        Datacenter datacenter2 = anotherDatacenterTestBuilder().build();
+        Datacenter datacenter1 = aDatacenter().build();
+        Datacenter datacenter2 = anotherDatacenter().build();
 
         addDatacenter( datacenter1 );
         addDatacenter( datacenter2 );
@@ -68,7 +68,7 @@ public class DatacenterResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        DatacenterCreateDTO dto = aDatacenterCreateDTOTestBuilder().build();
+        DatacenterCreateDTO dto = aDatacenterCreateDTO().build();
 
         String id = resource.webClient()
                 .path( continentPath() )
@@ -85,7 +85,7 @@ public class DatacenterResourceIntegrationTest {
 
     @Test
     public void get() throws Exception {
-        Datacenter expected = aDatacenterTestBuilder().build();
+        Datacenter expected = aDatacenter().build();
         addDatacenter( expected );
 
         DatacenterDTO actual = resource.webClient()
@@ -103,13 +103,13 @@ public class DatacenterResourceIntegrationTest {
 
     @Test
     public void put() throws Exception {
-        Datacenter datacenter = aDatacenterTestBuilder()
+        Datacenter datacenter = aDatacenter()
                 .withName( "oldName" )
                 .build();
 
         addDatacenter( datacenter );
 
-        DatacenterCreateDTO expected = aDatacenterCreateDTOTestBuilder()
+        DatacenterCreateDTO expected = aDatacenterCreateDTO()
                 .withName( "updatedName" )
                 .build();
 
@@ -129,7 +129,7 @@ public class DatacenterResourceIntegrationTest {
 
     @Test
     public void delete() throws Exception {
-        Datacenter expected = aDatacenterTestBuilder().build();
+        Datacenter expected = aDatacenter().build();
         addDatacenter( expected );
 
         resource.webClient()

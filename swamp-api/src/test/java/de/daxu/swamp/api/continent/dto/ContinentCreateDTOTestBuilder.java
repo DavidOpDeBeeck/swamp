@@ -4,7 +4,7 @@ public class ContinentCreateDTOTestBuilder {
 
     private String name ="a continent name";
 
-    public static ContinentCreateDTOTestBuilder aContinentCreateDTOTestBuilder() {
+    public static ContinentCreateDTOTestBuilder aContinentCreateDTO() {
         return new ContinentCreateDTOTestBuilder();
     }
 

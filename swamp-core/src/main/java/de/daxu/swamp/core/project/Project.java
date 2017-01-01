@@ -7,8 +7,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -27,9 +25,9 @@ public class Project extends Identifiable {
     @Column( name = "description" )
     private String description;
 
-    @NotNull( message = "{NotNull.Project.withCreated}" )
-    @Column( name = "created" )
-    private LocalDateTime created;
+    @NotNull( message = "{NotNull.Project.createdAt}" )
+    @Column( name = "created_at" )
+    private LocalDateTime createdAt;
 
     @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
     @JoinColumn( name = "project_id", referencedColumnName = "id" )
@@ -46,10 +44,10 @@ public class Project extends Identifiable {
     private Project() {
     }
 
-    Project( String name, String description, LocalDateTime created, Set<Container> containers ) {
+    private Project( String name, String description, LocalDateTime createdAt, Set<Container> containers ) {
         this.name = name;
         this.description = description;
-        this.created = created;
+        this.createdAt = createdAt;
         this.containers = containers;
     }
 
@@ -61,8 +59,8 @@ public class Project extends Identifiable {
         return description;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public Set<Container> getContainers() {
@@ -70,7 +68,7 @@ public class Project extends Identifiable {
     }
 
     public boolean addContainer( Container container ) {
-        if ( this.containers == null ) this.containers = new HashSet<>();
+        if ( this.containers == null ) this.containers = newHashSet();
         return this.containers.add( container );
     }
 
@@ -78,39 +76,39 @@ public class Project extends Identifiable {
         return this.containers.remove( container );
     }
 
-    public static class ProjectBuilder {
+    public static class Builder {
 
         private String name;
         private String description;
-        private LocalDateTime created;
-        private Set<Container> containers = newHashSet();
+        private LocalDateTime createdAt;
+        private Set<Container> containers;
 
-        public static ProjectBuilder aProjectBuilder() {
-            return new ProjectBuilder();
+        public static Builder aProject() {
+            return new Builder();
         }
 
-        public ProjectBuilder withName( String name ) {
+        public Builder withName( String name ) {
             this.name = name;
             return this;
         }
 
-        public ProjectBuilder withDescription( String description ) {
+        public Builder withDescription( String description ) {
             this.description = description;
             return this;
         }
 
-        public ProjectBuilder createdAt( LocalDateTime created ) {
-            this.created = created;
+        public Builder withCreatedAt( LocalDateTime createdAt ) {
+            this.createdAt = createdAt;
             return this;
         }
 
-        public ProjectBuilder withContainer( Container... containers ) {
-            Collections.addAll( this.containers, containers );
+        public Builder withContainers( Set<Container> containers ) {
+            this.containers = containers;
             return this;
         }
 
         public Project build() {
-            return new Project( name, description, created, containers );
+            return new Project( name, description, createdAt, containers );
         }
     }
 }

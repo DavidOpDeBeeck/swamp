@@ -16,11 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTOTestBuilder;
+import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.common.web.WebClient.type;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinentTestBuilder;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinentTestBuilder;
+import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
+import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinent;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +40,8 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Continent continent1 = aContinentTestBuilder().build();
-        Continent continent2 = anotherContinentTestBuilder().build();
+        Continent continent1 = aContinent().build();
+        Continent continent2 = anotherContinent().build();
         saveContinent( continent1, continent2 );
 
         List<ContinentDTO> continents = resource.webClient()
@@ -59,7 +59,7 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        ContinentCreateDTO dto = aContinentCreateDTOTestBuilder().build();
+        ContinentCreateDTO dto = aContinentCreateDTO().build();
 
         String id = resource.webClient()
                 .path( "continents" )
@@ -75,7 +75,7 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void get() throws Exception {
-        Continent expected = aContinentTestBuilder().build();
+        Continent expected = aContinent().build();
         saveContinent( expected );
 
         ContinentDTO actual = resource.webClient()
@@ -92,13 +92,13 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void put() throws Exception {
-        Continent continent = aContinentTestBuilder()
+        Continent continent = aContinent()
                 .withName( "oldName" )
                 .build();
 
         saveContinent( continent );
 
-        ContinentCreateDTO expected = aContinentCreateDTOTestBuilder()
+        ContinentCreateDTO expected = aContinentCreateDTO()
                 .withName( "updatedName" )
                 .build();
 
@@ -117,7 +117,7 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void delete() throws Exception {
-        Continent expected = aContinentTestBuilder().build();
+        Continent expected = aContinent().build();
         saveContinent( expected );
 
         resource.webClient()

@@ -9,9 +9,9 @@
         </div>
         <div class="list-group">
             <a class="list-group-item"
-               ng-repeat="projectInstance in ProjectInstancesCtrl.projectInstances | orderBy: 'dateInitialized':-1 | filter: ProjectInstancesCtrl.filter"
+               ng-repeat="projectInstance in ProjectInstancesCtrl.projectInstances | orderBy: 'initializedAt':-1 | filter: ProjectInstancesCtrl.filter"
                ui-sref-active="active" ui-sref="projectInstances.projectInstance.containerInstances({projectInstanceId: projectInstance.projectInstanceId})">
-                <span class="label label-primary pull-right">{{ projectInstance.dateInitialized | toDate }}</span>
+                <span class="label label-primary pull-right">{{ projectInstance.initializedAt | toDate }}</span>
                 <h4 class="list-group-item-heading" ng-bind="projectInstance.name"></h4>
                 <p class="list-group-item-text" ng-bind="projectInstance.description"></p>
             </a>

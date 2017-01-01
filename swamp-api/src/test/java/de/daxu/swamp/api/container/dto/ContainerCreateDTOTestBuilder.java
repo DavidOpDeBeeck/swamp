@@ -6,19 +6,19 @@ import de.daxu.swamp.api.location.dto.LocationDTO;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static de.daxu.swamp.api.configuration.dto.ImageConfigurationDTOTestBuilder.anImageConfigurationDTOTestBuilder;
-import static de.daxu.swamp.api.container.dto.EnvironmentVariableDTOTestBuilder.anEnvironmentVariableDTOTestBuilder;
-import static de.daxu.swamp.api.container.dto.PortMappingDTOTestBuilder.aPortMappingDTOTestBuilder;
+import static de.daxu.swamp.api.configuration.dto.ImageConfigurationDTOTestBuilder.anImageConfigurationDTO;
+import static de.daxu.swamp.api.container.dto.EnvironmentVariableDTOTestBuilder.anEnvironmentVariableDTO;
+import static de.daxu.swamp.api.container.dto.PortMappingDTOTestBuilder.aPortMappingDTO;
 
 public class ContainerCreateDTOTestBuilder {
 
     private String name = "a container name";
-    private RunConfigurationDTO runConfiguration = anImageConfigurationDTOTestBuilder().build();
+    private RunConfigurationDTO runConfiguration = anImageConfigurationDTO().build();
     private Set<LocationDTO> potentialLocations = newHashSet();
-    private Set<PortMappingDTO> portMappings = newHashSet( aPortMappingDTOTestBuilder().build() );
-    private Set<EnvironmentVariableDTO> environmentVariables = newHashSet( anEnvironmentVariableDTOTestBuilder().build() );
+    private Set<PortMappingDTO> portMappings = newHashSet( aPortMappingDTO().build() );
+    private Set<EnvironmentVariableDTO> environmentVariables = newHashSet( anEnvironmentVariableDTO().build() );
 
-    public static ContainerCreateDTOTestBuilder aContainerCreateDTOTestBuilder() {
+    public static ContainerCreateDTOTestBuilder aContainerCreateDTO() {
         return new ContainerCreateDTOTestBuilder();
     }
 

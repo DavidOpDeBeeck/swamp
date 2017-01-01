@@ -19,7 +19,7 @@ public class ContainerInstanceTestConstants {
             .build();
 
     public static final String NAME = "name";
-    public static final RunConfiguration IMAGE_CONFIGURATION = anImageConfigurationBuilder().build();
+    public static final RunConfiguration IMAGE_CONFIGURATION = anImageConfiguration().build();
     public static final Set<PortMapping> PORT_MAPPINGS = new HashSet<>();
 
     public static final Set<EnvironmentVariable> ENVIRONMENT_VARIABLES = new HashSet<>();
@@ -30,7 +30,7 @@ public class ContainerInstanceTestConstants {
             .withPortMappings( PORT_MAPPINGS )
             .withEnvironmentVariables( ENVIRONMENT_VARIABLES )
             .build();
-    public static final Server SERVER = aServerBuilder().build();
+    public static final Server SERVER = aServer().build();
 
     public static class Commands {
 

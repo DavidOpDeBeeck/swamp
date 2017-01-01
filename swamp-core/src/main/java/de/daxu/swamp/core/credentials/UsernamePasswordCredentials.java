@@ -14,7 +14,7 @@ public class UsernamePasswordCredentials extends Credentials {
     private UsernamePasswordCredentials() {
     }
 
-    UsernamePasswordCredentials( String username, String password ) {
+    private UsernamePasswordCredentials( String username, String password ) {
         this.username = username;
         this.password = password;
     }
@@ -32,21 +32,21 @@ public class UsernamePasswordCredentials extends Credentials {
         return CredentialsType.USERNAME_PASSWORD;
     }
 
-    public static class UsernamePasswordCredentialsBuilder {
+    public static class Builder {
 
         private String username;
         private String password;
 
-        public static UsernamePasswordCredentialsBuilder anUsernamePasswordCredentialsBuilder() {
-            return new UsernamePasswordCredentialsBuilder();
+        public static Builder anUsernamePasswordCredentials() {
+            return new Builder();
         }
 
-        public UsernamePasswordCredentialsBuilder withUsername( String username ) {
+        public Builder withUsername( String username ) {
             this.username = username;
             return this;
         }
 
-        public UsernamePasswordCredentialsBuilder withPassword( String password ) {
+        public Builder withPassword( String password ) {
             this.password = password;
             return this;
         }

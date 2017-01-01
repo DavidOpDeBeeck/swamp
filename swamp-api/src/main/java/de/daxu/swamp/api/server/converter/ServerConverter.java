@@ -6,7 +6,7 @@ import de.daxu.swamp.common.dto.DomainConverter;
 import de.daxu.swamp.core.server.Server;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.server.Server.ServerBuilder.aServerBuilder;
+import static de.daxu.swamp.core.server.Server.Builder.aServer;
 
 @Component
 public class ServerConverter implements DTOConverter<Server, ServerDTO>, DomainConverter<ServerDTO, Server> {
@@ -23,7 +23,7 @@ public class ServerConverter implements DTOConverter<Server, ServerDTO>, DomainC
 
     @Override
     public Server toDomain( ServerDTO dto ) {
-        return aServerBuilder()
+        return aServer()
                 .withId( dto.id )
                 .withName( dto.name )
                 .withIp( dto.ip )

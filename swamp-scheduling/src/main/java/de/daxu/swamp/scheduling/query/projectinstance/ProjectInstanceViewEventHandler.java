@@ -25,7 +25,7 @@ public class ProjectInstanceViewEventHandler {
                 .withProjectInstanceId( event.getProjectInstanceId() )
                 .withName( event.getName() )
                 .withDescription( event.getDescription() )
-                .withDateInitialized( event.getDateInitialized() )
+                .withInitializedAt( event.getInitializedAt() )
                 .withContainers( event.getContainers().keySet() )
                 .build();
         projectInstanceViewRepository.save( view );

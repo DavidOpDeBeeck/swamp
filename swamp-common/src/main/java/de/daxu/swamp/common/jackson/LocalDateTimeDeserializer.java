@@ -2,26 +2,22 @@ package de.daxu.swamp.common.jackson;
 
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import de.daxu.swamp.common.time.Dates;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
-    private static final String DEFAULT_TIME_ZONE = "GMT";
-
     @Override
-    public LocalDateTime deserialize( JsonParser parser, DeserializationContext context ) throws IOException, JsonProcessingException {
+    public LocalDateTime deserialize( JsonParser parser, DeserializationContext context ) throws IOException {
         JsonNode dateNode = parser.getCodec().readTree( parser );
-        return Instant
-                .ofEpochMilli( dateNode.longValue() )
-                .atZone( ZoneId.of( DEFAULT_TIME_ZONE ) )
-                .toLocalDateTime();
+        return LocalDateTime
+                .parse( dateNode.asText(), ofPattern( Dates.DATE_TIME_FORMAT ) );
     }
 }

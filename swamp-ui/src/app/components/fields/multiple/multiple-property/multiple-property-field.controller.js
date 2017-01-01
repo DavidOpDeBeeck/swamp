@@ -1,4 +1,4 @@
-import MultipleFieldController from "./../multiple.field.controller.js";
+import MultipleFieldController from "../multiple.field.controller.js";
 
 class MultiplePropertyFieldController extends MultipleFieldController {
     constructor() {

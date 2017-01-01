@@ -1,4 +1,4 @@
-import FieldDirective from "./../field.directive";
+import FieldDirective from "../field.directive";
 
 class InputFieldDirective extends FieldDirective {
     constructor() {
@@ -6,7 +6,7 @@ class InputFieldDirective extends FieldDirective {
             extraScope: {
                 'autocompleteList': '='
             },
-            templateUrl: '/app/field/autocomplete/autocomplete-field.template.html'
+            templateUrl: '/app/components/fields/autocomplete/autocomplete-field.template.html'
         });
     }
 }

@@ -1,5 +1,6 @@
 package de.daxu.swamp.core.datacenter;
 
+import de.daxu.swamp.core.datacenter.Datacenter.Builder;
 import de.daxu.swamp.core.server.Server;
 
 import java.util.Set;
@@ -12,11 +13,11 @@ public class DatacenterTestBuilder {
     private String name = "a datacenter name";
     private Set<Server> servers = newHashSet();
 
-    public static DatacenterTestBuilder aDatacenterTestBuilder() {
+    public static DatacenterTestBuilder aDatacenter() {
         return new DatacenterTestBuilder();
     }
 
-    public static DatacenterTestBuilder anotherDatacenterTestBuilder() {
+    public static DatacenterTestBuilder anotherDatacenter() {
         return new DatacenterTestBuilder()
                 .withName( "another datacenter name" );
     }
@@ -37,6 +38,10 @@ public class DatacenterTestBuilder {
     }
 
     public Datacenter build() {
-        return new Datacenter( id, name, servers );
+        return Builder.aDatacenter()
+                .withId( id )
+                .withName( name )
+                .withServers( servers )
+                .build();
     }
 }

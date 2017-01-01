@@ -2,16 +2,17 @@ package de.daxu.swamp.core.configuration;
 
 import de.daxu.swamp.core.credentials.UsernamePasswordCredentials;
 
-import static de.daxu.swamp.core.credentials.UsernamePasswordCredentialsTestBuilder.anUsernamePasswordCredentialsTestBuilder;
+import static de.daxu.swamp.core.configuration.GitConfiguration.Builder;
+import static de.daxu.swamp.core.credentials.UsernamePasswordCredentialsTestBuilder.anUsernamePasswordCredentials;
 
 public class GitConfigurationTestBuilder {
 
     private String url = "a git url";
     private String branch = "a git branch";
     private String path = "a git path";
-    private UsernamePasswordCredentials credentials = anUsernamePasswordCredentialsTestBuilder().build();
+    private UsernamePasswordCredentials credentials = anUsernamePasswordCredentials().build();
 
-    public static GitConfigurationTestBuilder aGitConfigurationTestBuilder() {
+    public static GitConfigurationTestBuilder aGitConfiguration() {
         return new GitConfigurationTestBuilder();
     }
 
@@ -36,6 +37,11 @@ public class GitConfigurationTestBuilder {
     }
 
     public GitConfiguration build() {
-        return new GitConfiguration( url, branch, path, credentials );
+        return Builder.aGitConfiguration()
+                .withUrl( url )
+                .withBranch( branch )
+                .withPath( path )
+                .withCredentials( credentials )
+                .build();
     }
 }

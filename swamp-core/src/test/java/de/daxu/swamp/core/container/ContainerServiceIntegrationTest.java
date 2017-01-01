@@ -8,8 +8,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainerTestBuilder;
-import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
+import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainer;
+import static de.daxu.swamp.core.project.ProjectTestBuilder.aProject;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,13 +25,13 @@ public class ContainerServiceIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        project = aProjectTestBuilder().build();
+        project = aProject().build();
         integration.save( project );
     }
 
     @Test
     public void addContainerToProject() throws Exception {
-        Container container = aContainerTestBuilder().build();
+        Container container = aContainer().build();
 
         containerService.addContainerToProject( project, container );
 
@@ -42,7 +42,7 @@ public class ContainerServiceIntegrationTest {
 
     @Test
     public void updateContainer() throws Exception {
-        Container container = aContainerTestBuilder().withName( "oldName" ).build();
+        Container container = aContainer().withName( "oldName" ).build();
         project.addContainer( container );
         integration.save( container, project );
 
@@ -56,7 +56,7 @@ public class ContainerServiceIntegrationTest {
 
     @Test
     public void removeContainerFromProject() throws Exception {
-        Container container = aContainerTestBuilder().build();
+        Container container = aContainer().build();
         project.addContainer( container );
         integration.save( container, project );
 
@@ -71,7 +71,7 @@ public class ContainerServiceIntegrationTest {
 
     @Test
     public void getContainer() throws Exception {
-        Container expected = aContainerTestBuilder().build();
+        Container expected = aContainer().build();
 
         containerService.addContainerToProject( project, expected );
 

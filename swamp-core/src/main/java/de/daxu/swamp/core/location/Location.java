@@ -40,7 +40,7 @@ public abstract class Location extends Identifiable {
     public abstract Set<Server> getServers();
 
     @SuppressWarnings( "unchecked" )
-    public static abstract class LocationBuilder<B extends LocationBuilder<B>> {
+    public static abstract class Builder<B extends Builder<B>> {
 
         protected String id;
         protected String name;

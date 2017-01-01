@@ -4,7 +4,7 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('projectInstances.projectInstance.containerInstances', {
         url: "/containerInstances",
         data: {
-            displayName: 'containerInstances',
+            displayName: 'container-instances',
             disabled: false
         },
         templateUrl: '/app/components/project-instances/project-instance/container-instances/container-instances.template.html',

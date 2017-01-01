@@ -1,33 +1,25 @@
 package de.daxu.swamp.deploy.group;
 
-public class GroupId {
+import de.daxu.swamp.common.cqrs.EntityId;
 
-    private final String value;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.util.UUID;
 
-    public static GroupId of( String value ) {
-        return new GroupId( value );
+@Embeddable
+@AttributeOverride( name = "value", column = @Column( name = "group_id" ) )
+public class GroupId extends EntityId {
+
+    public static GroupId of( String id ) {
+        return new GroupId( UUID.fromString( id ) );
     }
 
-    private GroupId( String value ) {
-        this.value = value;
+    @SuppressWarnings( "unused" )
+    private GroupId() {
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean equals( Object o ) {
-        if( this == o ) return true;
-        if( o == null || getClass() != o.getClass() ) return false;
-
-        GroupId that = ( GroupId ) o;
-
-        return value != null ? value.equals( that.value ) : that.value == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+    private GroupId( UUID groupId ) {
+        super( groupId );
     }
 }

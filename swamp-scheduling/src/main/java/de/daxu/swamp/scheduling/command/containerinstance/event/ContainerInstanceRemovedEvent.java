@@ -2,19 +2,19 @@ package de.daxu.swamp.scheduling.command.containerinstance.event;
 
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ContainerInstanceRemovedEvent extends ContainerInstanceEvent {
 
-    private Date dateRemoved;
+    private LocalDateTime removedAt;
 
-    public ContainerInstanceRemovedEvent( ContainerInstanceId containerInstanceId, Date dateRemoved ) {
+    public ContainerInstanceRemovedEvent( ContainerInstanceId containerInstanceId, LocalDateTime removedAt ) {
         super(containerInstanceId);
-        this.dateRemoved = dateRemoved;
+        this.removedAt = removedAt;
     }
 
-    public Date getDateRemoved() {
-        return dateRemoved;
+    public LocalDateTime getRemovedAt() {
+        return removedAt;
     }
 }
 

@@ -5,7 +5,6 @@ import de.daxu.swamp.core.location.LocationType;
 import de.daxu.swamp.core.server.Server;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -21,17 +20,15 @@ public class Datacenter extends Location {
     private Set<Server> servers;
 
     private Datacenter() {
-        servers = new HashSet<>();
     }
 
-    Datacenter( String id, String name, Set<Server> servers ) {
+    private Datacenter( String id, String name, Set<Server> servers ) {
         super( id, name );
         this.servers = servers;
     }
 
     public boolean addServer( Server server ) {
-        if ( this.servers == null )
-            this.servers = new HashSet<>();
+        if ( this.servers == null ) this.servers = newHashSet();
         return this.servers.add( server );
     }
 
@@ -49,15 +46,15 @@ public class Datacenter extends Location {
         return LocationType.DATACENTER;
     }
 
-    public static class DatacenterBuilder extends LocationBuilder<DatacenterBuilder> {
+    public static class Builder extends Location.Builder<Builder> {
 
         private Set<Server> servers;
 
-        public static DatacenterBuilder aDatacenterBuilder() {
-            return new DatacenterBuilder();
+        public static Builder aDatacenter() {
+            return new Builder();
         }
 
-        public DatacenterBuilder withServers( Set<Server> servers ) {
+        public Builder withServers( Set<Server> servers ) {
             this.servers = servers;
             return this;
         }

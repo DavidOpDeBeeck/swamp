@@ -1,4 +1,4 @@
-import FieldDirective from "./../field.directive";
+import FieldDirective from "../field.directive";
 
 class PropertyFieldDirective extends FieldDirective {
     constructor() {
@@ -7,7 +7,7 @@ class PropertyFieldDirective extends FieldDirective {
                 'nameField': '@',
                 'valueField': '@'
             },
-            templateUrl: '/app/field/property/property-field.template.html'
+            templateUrl: '/app/components/fields/property/property-field.template.html'
         });
     }
 }

@@ -1,10 +1,13 @@
 package de.daxu.swamp.core.container;
 
+import static de.daxu.swamp.core.container.PortMapping.Builder;
+
 public class PortMappingTestBuilder {
+
     private Integer internal = 8080;
     private Integer external = 8888;
 
-    public static PortMappingTestBuilder aPortMappingTestBuilder() {
+    public static PortMappingTestBuilder aPortMapping() {
         return new PortMappingTestBuilder();
     }
 
@@ -19,6 +22,9 @@ public class PortMappingTestBuilder {
     }
 
     public PortMapping build() {
-        return new PortMapping( internal, external );
+        return Builder.aPortMapping()
+                .withInternal( internal )
+                .withExternal( external )
+                .build();
     }
 }

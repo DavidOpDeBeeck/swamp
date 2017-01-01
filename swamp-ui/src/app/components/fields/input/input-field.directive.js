@@ -1,9 +1,9 @@
-import FieldDirective from "./../field.directive";
+import FieldDirective from "../field.directive";
 
 class InputFieldDirective extends FieldDirective {
     constructor() {
         super({
-            templateUrl: '/app/field/input/input-field.template.html'
+            templateUrl: '/app/components/fields/input/input-field.template.html'
         });
     }
 }

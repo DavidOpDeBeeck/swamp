@@ -11,7 +11,7 @@ public class ProjectDTO {
     public String name;
     public String description;
     @JsonSerialize( using = LocalDateTimeSerializer.class )
-    public LocalDateTime created;
+    public LocalDateTime createdAt;
     public int containers;
 
 }

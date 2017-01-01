@@ -6,9 +6,10 @@ import de.daxu.swamp.core.location.LocationType;
 import de.daxu.swamp.core.server.Server;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
 @Table( name = "continent" )
@@ -21,17 +22,15 @@ public class Continent extends Location {
     private Set<Datacenter> datacenters;
 
     private Continent() {
-        datacenters = new HashSet<>();
     }
 
-    Continent( String id, String name, Set<Datacenter> datacenters ) {
+    private Continent( String id, String name, Set<Datacenter> datacenters ) {
         super( id, name );
         this.datacenters = datacenters;
     }
 
     public boolean addDatacenter( Datacenter datacenter ) {
-        if( this.datacenters == null )
-            this.datacenters = new HashSet<>();
+        if ( this.datacenters == null ) this.datacenters = newHashSet();
         return this.datacenters.add( datacenter );
     }
 
@@ -56,15 +55,15 @@ public class Continent extends Location {
         return datacenters;
     }
 
-    public static class ContinentBuilder extends LocationBuilder<ContinentBuilder> {
+    public static class Builder extends Location.Builder<Builder> {
 
         private Set<Datacenter> datacenters;
 
-        public static ContinentBuilder aContinentBuilder() {
-            return new ContinentBuilder();
+        public static Builder aContinent() {
+            return new Builder();
         }
 
-        public ContinentBuilder withDatacenters( Set<Datacenter> datacenters ) {
+        public Builder withDatacenters( Set<Datacenter> datacenters ) {
             this.datacenters = datacenters;
             return this;
         }

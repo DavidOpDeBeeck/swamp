@@ -4,7 +4,7 @@ import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.projectinstance.ProjectInstanceId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class ProjectInstanceInitializedEvent extends ProjectInstanceEvent {
@@ -12,16 +12,16 @@ public class ProjectInstanceInitializedEvent extends ProjectInstanceEvent {
     private final String name;
     private final String description;
     private final Map<ContainerInstanceId, Container> containers;
-    private final Date dateInitialized;
+    private final LocalDateTime initializedAt;
 
     public ProjectInstanceInitializedEvent( ProjectInstanceId projectInstanceId,
                                             String name, String description, Map<ContainerInstanceId, Container> containers,
-                                            Date dateInitialized ) {
+                                            LocalDateTime initializedAt ) {
         super( projectInstanceId );
         this.name = name;
         this.description = description;
         this.containers = containers;
-        this.dateInitialized = dateInitialized;
+        this.initializedAt = initializedAt;
     }
 
     public String getName() {
@@ -36,7 +36,7 @@ public class ProjectInstanceInitializedEvent extends ProjectInstanceEvent {
         return containers;
     }
 
-    public Date getDateInitialized() {
-        return dateInitialized;
+    public LocalDateTime getInitializedAt() {
+        return initializedAt;
     }
 }

@@ -14,11 +14,11 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTOTestBuilder;
+import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.common.web.WebClient.type;
-import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainerTestBuilder;
-import static de.daxu.swamp.core.project.ProjectTestBuilder.aProjectTestBuilder;
+import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainer;
+import static de.daxu.swamp.core.project.ProjectTestBuilder.aProject;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +36,7 @@ public class ContainerResourceIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        project = aProjectTestBuilder().build();
+        project = aProject().build();
         resource.save( project );
     }
 
@@ -46,8 +46,8 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Container container1 = aContainerTestBuilder().build();
-        Container container2 = aContainerTestBuilder().build();
+        Container container1 = aContainer().build();
+        Container container2 = aContainer().build();
 
         addContainer( container1 );
         addContainer( container2 );
@@ -68,7 +68,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        ContainerCreateDTO expected = aContainerCreateDTOTestBuilder().build();
+        ContainerCreateDTO expected = aContainerCreateDTO().build();
 
         String id = resource.webClient()
                 .path( projectPath() )
@@ -85,7 +85,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void get() throws Exception {
-        Container expected = aContainerTestBuilder().build();
+        Container expected = aContainer().build();
         addContainer( expected );
 
         ContainerDTO actual = resource.webClient()
@@ -101,13 +101,13 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void put() throws Exception {
-        Container container = aContainerTestBuilder()
+        Container container = aContainer()
                 .withName( "old" )
                 .build();
 
         addContainer( container );
 
-        Container expected = aContainerTestBuilder()
+        Container expected = aContainer()
                 .withName( "updated" )
                 .build();
 
@@ -125,7 +125,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void delete() throws Exception {
-        Container expected = aContainerTestBuilder().build();
+        Container expected = aContainer().build();
         addContainer( expected );
 
         resource.webClient()

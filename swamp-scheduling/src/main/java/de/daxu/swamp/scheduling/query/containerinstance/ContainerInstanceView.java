@@ -1,13 +1,15 @@
 package de.daxu.swamp.scheduling.query.containerinstance;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.daxu.swamp.common.cqrs.EntityView;
+import de.daxu.swamp.common.jackson.LocalDateTimeSerializer;
+import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
-import de.daxu.swamp.scheduling.command.projectinstance.ProjectInstanceId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table( name = "container_instance_view" )
@@ -18,28 +20,23 @@ public class ContainerInstanceView extends EntityView {
     @NotNull( message = "{NotNull.ProjectInstanceView.containerInstanceId}" )
     private ContainerInstanceId containerInstanceId;
 
-    @Column( name = "internal_container_id" )
-    private String internalContainerId;
+    @Column( name = "container_id" )
+    private ContainerId containerId;
 
-    @Temporal( TemporalType.TIMESTAMP )
-    @Column( name = "date_initialized" )
-    private Date dateInitialized;
+    @Column( name = "initialized_at" )
+    private LocalDateTime initializedAt;
 
-    @Temporal( TemporalType.TIMESTAMP )
-    @Column( name = "date_created" )
-    private Date dateCreated;
+    @Column( name = "created_at" )
+    private LocalDateTime createdAt;
 
-    @Temporal( TemporalType.TIMESTAMP )
-    @Column( name = "date_started" )
-    private Date dateStarted;
+    @Column( name = "started_at" )
+    private LocalDateTime startedAt;
 
-    @Temporal( TemporalType.TIMESTAMP )
-    @Column( name = "date_stopped" )
-    private Date dateStopped;
+    @Column( name = "stopped_at" )
+    private LocalDateTime stoppedAt;
 
-    @Temporal( TemporalType.TIMESTAMP )
-    @Column( name = "date_removed" )
-    private Date dateRemoved;
+    @Column( name = "removed_at" )
+    private LocalDateTime removedAt;
 
     @Lob
     @Column( name = "log" )
@@ -62,23 +59,23 @@ public class ContainerInstanceView extends EntityView {
     }
 
     private ContainerInstanceView( ContainerInstanceId containerInstanceId,
-                                   String internalContainerId,
-                                   Date dateInitialized,
-                                   Date dateCreated,
-                                   Date dateStarted,
-                                   Date dateStopped,
-                                   Date dateRemoved,
+                                   ContainerId containerId,
+                                   LocalDateTime initializedAt,
+                                   LocalDateTime createdAt,
+                                   LocalDateTime startedAt,
+                                   LocalDateTime stoppedAt,
+                                   LocalDateTime removedAt,
                                    String log,
                                    ContainerInstanceStatus status,
                                    ServerView server,
                                    RunConfigurationView runConfiguration ) {
         this.containerInstanceId = containerInstanceId;
-        this.internalContainerId = internalContainerId;
-        this.dateInitialized = dateInitialized;
-        this.dateCreated = dateCreated;
-        this.dateStarted = dateStarted;
-        this.dateStopped = dateStopped;
-        this.dateRemoved = dateRemoved;
+        this.containerId = containerId;
+        this.initializedAt = initializedAt;
+        this.createdAt = createdAt;
+        this.startedAt = startedAt;
+        this.stoppedAt = stoppedAt;
+        this.removedAt = removedAt;
         this.log = log;
         this.status = status;
         this.server = server;
@@ -89,72 +86,65 @@ public class ContainerInstanceView extends EntityView {
         this.containerInstanceId = containerInstanceId;
     }
 
-    public void setInternalContainerId( String internalContainerId ) {
-        this.internalContainerId = internalContainerId;
+    void setContainerId( ContainerId containerId ) {
+        this.containerId = containerId;
     }
 
-    public void setDateInitialized( Date dateInitialized ) {
-        this.dateInitialized = dateInitialized;
+    void setCreatedAt( LocalDateTime createdAt ) {
+        this.createdAt = createdAt;
     }
 
-    public void setDateCreated( Date dateCreated ) {
-        this.dateCreated = dateCreated;
+    void setStartedAt( LocalDateTime startedAt ) {
+        this.startedAt = startedAt;
     }
 
-    public void setDateStarted( Date dateStarted ) {
-        this.dateStarted = dateStarted;
+    void setStoppedAt( LocalDateTime stoppedAt ) {
+        this.stoppedAt = stoppedAt;
     }
 
-    public void setDateStopped( Date dateStopped ) {
-        this.dateStopped = dateStopped;
+    void setRemovedAt( LocalDateTime removedAt ) {
+        this.removedAt = removedAt;
     }
 
-    public void setDateRemoved( Date dateRemoved ) {
-        this.dateRemoved = dateRemoved;
-    }
-
-    public void addLog( String log ) {
+    void addLog( String log ) {
         this.log += log;
     }
 
-    public void setStatus( ContainerInstanceStatus status ) {
+    void setStatus( ContainerInstanceStatus status ) {
         this.status = status;
-    }
-
-    public void setServer( ServerView server ) {
-        this.server = server;
-    }
-
-    public void setRunConfiguration( RunConfigurationView runConfiguration ) {
-        this.runConfiguration = runConfiguration;
     }
 
     public ContainerInstanceId getContainerInstanceId() {
         return containerInstanceId;
     }
 
-    public String getInternalContainerId() {
-        return internalContainerId;
+    public ContainerId getContainerId() {
+        return containerId;
     }
 
-    public Date getDateInitialized() {
-        return dateInitialized;
+    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    public LocalDateTime getInitializedAt() {
+        return initializedAt;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
+    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public Date getDateStarted() {
-        return dateStarted;
+    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    public LocalDateTime getStartedAt() {
+        return startedAt;
     }
 
-    public Date getDateStopped() {
-        return dateStopped;
+    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    public LocalDateTime getStoppedAt() {
+        return stoppedAt;
     }
 
-    public Date getDateRemoved() {
-        return dateRemoved;
+    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    public LocalDateTime getRemovedAt() {
+        return removedAt;
     }
 
     public String getLog() {
@@ -175,26 +165,20 @@ public class ContainerInstanceView extends EntityView {
 
     public static class ContainerInstanceViewBuilder {
 
-        private ProjectInstanceId projectInstanceId;
         private ContainerInstanceId containerInstanceId;
-        private String internalContainerId;
-        private Date dateInitialized;
-        private Date dateCreated;
-        private Date dateStarted;
-        private Date dateStopped;
-        private Date dateRemoved;
+        private ContainerId containerId;
+        private LocalDateTime initializedAt;
+        private LocalDateTime createdAt;
+        private LocalDateTime startedAt;
+        private LocalDateTime stoppedAt;
+        private LocalDateTime removedAt;
         private String log;
         private ContainerInstanceStatus status;
         private ServerView server;
         private RunConfigurationView runConfiguration;
 
-        public static ContainerInstanceViewBuilder aContainerInstanceView() {
+        static ContainerInstanceViewBuilder aContainerInstanceView() {
             return new ContainerInstanceViewBuilder();
-        }
-
-        public ContainerInstanceViewBuilder withProjectInstanceId( ProjectInstanceId projectInstanceId ) {
-            this.projectInstanceId = projectInstanceId;
-            return this;
         }
 
         public ContainerInstanceViewBuilder withContainerInstanceId( ContainerInstanceId containerInstanceId ) {
@@ -202,33 +186,33 @@ public class ContainerInstanceView extends EntityView {
             return this;
         }
 
-        public ContainerInstanceViewBuilder withInternalContainerId( String internalContainerId ) {
-            this.internalContainerId = internalContainerId;
+        public ContainerInstanceViewBuilder withContainerId( ContainerId containerId ) {
+            this.containerId = containerId;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withDateInitialized( Date dateInitialized ) {
-            this.dateInitialized = dateInitialized;
+        public ContainerInstanceViewBuilder withInitializedAt( LocalDateTime dateInitialized ) {
+            this.initializedAt = dateInitialized;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withDateCreated( Date dateCreated ) {
-            this.dateCreated = dateCreated;
+        public ContainerInstanceViewBuilder withCreatedAt( LocalDateTime dateCreated ) {
+            this.createdAt = dateCreated;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withDateStarted( Date dateStarted ) {
-            this.dateStarted = dateStarted;
+        public ContainerInstanceViewBuilder withStartedAt( LocalDateTime dateStarted ) {
+            this.startedAt = dateStarted;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withDateStopped( Date dateStopped ) {
-            this.dateStopped = dateStopped;
+        public ContainerInstanceViewBuilder withStoppedAt( LocalDateTime dateStopped ) {
+            this.stoppedAt = dateStopped;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withDateRemoved( Date dateRemoved ) {
-            this.dateRemoved = dateRemoved;
+        public ContainerInstanceViewBuilder withRemovedAt( LocalDateTime dateRemoved ) {
+            this.removedAt = dateRemoved;
             return this;
         }
 
@@ -255,12 +239,12 @@ public class ContainerInstanceView extends EntityView {
         public ContainerInstanceView build() {
             return new ContainerInstanceView(
                     containerInstanceId,
-                    internalContainerId,
-                    dateInitialized,
-                    dateCreated,
-                    dateStarted,
-                    dateStopped,
-                    dateRemoved,
+                    containerId,
+                    initializedAt,
+                    createdAt,
+                    startedAt,
+                    stoppedAt,
+                    removedAt,
                     log,
                     status,
                     server,

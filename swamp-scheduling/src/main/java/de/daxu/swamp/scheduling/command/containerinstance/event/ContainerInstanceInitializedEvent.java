@@ -4,22 +4,22 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ContainerInstanceInitializedEvent extends ContainerInstanceEvent {
 
     private final Server server;
     private final ContainerConfiguration configuration;
-    private final Date dateInitialized;
+    private final LocalDateTime initializedAt;
 
     public ContainerInstanceInitializedEvent( ContainerInstanceId containerInstanceId,
                                               Server server,
                                               ContainerConfiguration configuration,
-                                              Date dateInitialized ) {
+                                              LocalDateTime initializedAt ) {
         super( containerInstanceId );
         this.server = server;
         this.configuration = configuration;
-        this.dateInitialized = dateInitialized;
+        this.initializedAt = initializedAt;
     }
 
     public Server getServer() {
@@ -30,7 +30,7 @@ public class ContainerInstanceInitializedEvent extends ContainerInstanceEvent {
         return configuration;
     }
 
-    public Date getDateInitialized() {
-        return dateInitialized;
+    public LocalDateTime getInitializedAt() {
+        return initializedAt;
     }
 }

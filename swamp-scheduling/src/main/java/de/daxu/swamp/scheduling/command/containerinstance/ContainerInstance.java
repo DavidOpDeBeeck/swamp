@@ -12,7 +12,7 @@ import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 
@@ -35,7 +35,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         apply( new ContainerInstanceInitializedEvent(
                 command.getContainerInstanceId(),
                 command.getServer(),
-                command.getConfiguration(), new Date() ) );
+                command.getConfiguration(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -48,7 +48,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
 
         apply( new ContainerInstanceCreatedEvent(
                 containerInstanceId,
-                response.getContainerId(), new Date() ) );
+                response.getContainerId(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -59,7 +59,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .start( containerId );
 
-        apply( new ContainerInstanceStartedEvent( containerInstanceId, new Date() ) );
+        apply( new ContainerInstanceStartedEvent( containerInstanceId, LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -70,7 +70,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .stop( containerId );
 
-        apply( new ContainerInstanceStoppedEvent( containerInstanceId, new Date() ) );
+        apply( new ContainerInstanceStoppedEvent( containerInstanceId, LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -81,7 +81,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .remove( containerId );
 
-        apply( new ContainerInstanceRemovedEvent( containerInstanceId, new Date() ) );
+        apply( new ContainerInstanceRemovedEvent( containerInstanceId, LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -94,13 +94,13 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .log( containerId, ( log ) -> service.receiveLog( containerInstanceId, log ) );
 
-        apply( new ContainerInstanceLoggingStartedEvent( containerInstanceId, new Date() ) );
+        apply( new ContainerInstanceLoggingStartedEvent( containerInstanceId, LocalDateTime.now() ) );
     }
 
     @CommandHandler
     public void receiveLog( ReceiveContainerInstanceLogCommand command ) {
         validateStatus( STARTED );
-        apply( new ContainerInstanceLogReceivedEvent( containerInstanceId, command.getLog(), new Date() ) );
+        apply( new ContainerInstanceLogReceivedEvent( containerInstanceId, command.getLog(), LocalDateTime.now() ) );
     }
 
     private void validateStatusChange( ContainerInstanceStatus nextStatus ) {

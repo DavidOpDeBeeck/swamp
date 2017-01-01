@@ -5,7 +5,7 @@ import de.daxu.swamp.core.configuration.RunConfigurationType;
 public class ImageConfigurationDTOTestBuilder {
     private String name = "an image name";
 
-    public static ImageConfigurationDTOTestBuilder anImageConfigurationDTOTestBuilder() {
+    public static ImageConfigurationDTOTestBuilder anImageConfigurationDTO() {
         return new ImageConfigurationDTOTestBuilder();
     }
 

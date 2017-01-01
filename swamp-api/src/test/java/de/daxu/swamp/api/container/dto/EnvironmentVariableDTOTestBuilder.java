@@ -5,7 +5,7 @@ public class EnvironmentVariableDTOTestBuilder {
     private String name = "an environment variable name";
     private String value = "an environment variable value";
 
-    public static EnvironmentVariableDTOTestBuilder anEnvironmentVariableDTOTestBuilder() {
+    public static EnvironmentVariableDTOTestBuilder anEnvironmentVariableDTO() {
         return new EnvironmentVariableDTOTestBuilder();
     }
 

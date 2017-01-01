@@ -10,7 +10,7 @@ public enum ContainerInstanceStatus {
     CREATED( INITIALIZED ),
     STARTED( CREATED ),
     STOPPED( STARTED ),
-    REMOVED( CREATED, STARTED );
+    REMOVED( INITIALIZED, CREATED, STARTED );
 
     private final Set<ContainerInstanceStatus> validPreviousStatuses = newHashSet();
 

@@ -5,7 +5,7 @@ public class ProjectCreateDTOTestBuilder {
     private String name = "a project name";
     private String description = "a project description";
 
-    public static ProjectCreateDTOTestBuilder aProjectCreateDTOTestBuilder() {
+    public static ProjectCreateDTOTestBuilder aProjectCreateDTO() {
         return new ProjectCreateDTOTestBuilder();
     }
 

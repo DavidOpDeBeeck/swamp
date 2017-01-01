@@ -1,24 +1,25 @@
 package de.daxu.swamp.core.container;
 
 import de.daxu.swamp.core.configuration.RunConfiguration;
+import de.daxu.swamp.core.container.Container.Builder;
 import de.daxu.swamp.core.location.Location;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static de.daxu.swamp.core.configuration.ImageConfigurationTestBuilder.anImageConfigurationTestBuilder;
-import static de.daxu.swamp.core.container.EnvironmentVariableTestBuilder.anEnvironmentVariableTestBuilder;
-import static de.daxu.swamp.core.container.PortMappingTestBuilder.aPortMappingTestBuilder;
+import static de.daxu.swamp.core.configuration.ImageConfigurationTestBuilder.anImageConfiguration;
+import static de.daxu.swamp.core.container.EnvironmentVariableTestBuilder.anEnvironmentVariable;
+import static de.daxu.swamp.core.container.PortMappingTestBuilder.aPortMapping;
 
 public class ContainerTestBuilder {
 
     private String name = "a container name";
-    private RunConfiguration runConfiguration = anImageConfigurationTestBuilder().build();
+    private RunConfiguration runConfiguration = anImageConfiguration().build();
     private Set<Location> potentialLocations = newHashSet();
-    private Set<PortMapping> portMappings = newHashSet( aPortMappingTestBuilder().build() );
-    private Set<EnvironmentVariable> environmentVariables = newHashSet( anEnvironmentVariableTestBuilder().build() );
+    private Set<PortMapping> portMappings = newHashSet( aPortMapping().build() );
+    private Set<EnvironmentVariable> environmentVariables = newHashSet( anEnvironmentVariable().build() );
 
-    public static ContainerTestBuilder aContainerTestBuilder() {
+    public static ContainerTestBuilder aContainer() {
         return new ContainerTestBuilder();
     }
 
@@ -48,6 +49,12 @@ public class ContainerTestBuilder {
     }
 
     public Container build() {
-        return new Container( name, runConfiguration, potentialLocations, portMappings, environmentVariables );
+        return Builder.aContainer()
+                .withName( name )
+                .withRunConfiguration( runConfiguration )
+                .withPotentialLocations( potentialLocations )
+                .withPortMappings( portMappings )
+                .withEnvironmentVariables( environmentVariables )
+                .build();
     }
 }

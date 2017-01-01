@@ -1,6 +1,7 @@
 package de.daxu.swamp.core.project;
 
 import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.project.Project.Builder;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -12,10 +13,10 @@ public class ProjectTestBuilder {
 
     private String name = "a project name";
     private String description = "a project description";
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
     private Set<Container> containers = newHashSet();
 
-    public static ProjectTestBuilder aProjectTestBuilder() {
+    public static ProjectTestBuilder aProject() {
         return new ProjectTestBuilder();
     }
 
@@ -30,7 +31,7 @@ public class ProjectTestBuilder {
     }
 
     public ProjectTestBuilder createdAt( LocalDateTime created ) {
-        this.created = created;
+        this.createdAt = created;
         return this;
     }
 
@@ -40,6 +41,11 @@ public class ProjectTestBuilder {
     }
 
     public Project build() {
-        return new Project( name, description, created, containers );
+        return Builder.aProject()
+                .withName( name )
+                .withDescription( description )
+                .withCreatedAt( createdAt )
+                .withContainers( containers )
+                .build();
     }
 }

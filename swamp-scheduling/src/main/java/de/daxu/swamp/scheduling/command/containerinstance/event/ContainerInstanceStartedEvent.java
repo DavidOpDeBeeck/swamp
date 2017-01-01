@@ -2,18 +2,19 @@ package de.daxu.swamp.scheduling.command.containerinstance.event;
 
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ContainerInstanceStartedEvent extends ContainerInstanceEvent {
 
-    private Date dateStarted;
+    private LocalDateTime startedAt;
 
-    public ContainerInstanceStartedEvent( ContainerInstanceId containerInstanceId, Date dateStarted ) {
+    public ContainerInstanceStartedEvent( ContainerInstanceId containerInstanceId,
+                                          LocalDateTime startedAt ) {
         super( containerInstanceId );
-        this.dateStarted = dateStarted;
+        this.startedAt = startedAt;
     }
 
-    public Date getDateStarted() {
-        return dateStarted;
+    public LocalDateTime getStartedAt() {
+        return startedAt;
     }
 }

@@ -1,33 +1,25 @@
 package de.daxu.swamp.deploy.container;
 
-public class ContainerId {
+import de.daxu.swamp.common.cqrs.EntityId;
 
-    private final String value;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.util.UUID;
 
-    public static ContainerId of( String value ) {
-        return new ContainerId( value );
+@Embeddable
+@AttributeOverride( name = "value", column = @Column( name = "container_id" ) )
+public class ContainerId extends EntityId {
+
+    public static ContainerId of( String id ) {
+        return new ContainerId( UUID.fromString( id ) );
     }
 
-    private ContainerId( String value ) {
-        this.value = value;
+    @SuppressWarnings( "unused" )
+    private ContainerId() {
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean equals( Object o ) {
-        if( this == o ) return true;
-        if( o == null || getClass() != o.getClass() ) return false;
-
-        ContainerId that = ( ContainerId ) o;
-
-        return value != null ? value.equals( that.value ) : that.value == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+    private ContainerId( UUID containerId ) {
+        super( containerId );
     }
 }

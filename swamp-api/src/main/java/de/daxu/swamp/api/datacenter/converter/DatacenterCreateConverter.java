@@ -5,14 +5,14 @@ import de.daxu.swamp.common.dto.DomainConverter;
 import de.daxu.swamp.core.datacenter.Datacenter;
 import org.springframework.stereotype.Component;
 
-import static de.daxu.swamp.core.datacenter.Datacenter.DatacenterBuilder.aDatacenterBuilder;
+import static de.daxu.swamp.core.datacenter.Datacenter.Builder.aDatacenter;
 
 @Component
 public class DatacenterCreateConverter implements DomainConverter<DatacenterCreateDTO, Datacenter> {
 
     @Override
     public Datacenter toDomain( DatacenterCreateDTO dto ) {
-        return aDatacenterBuilder()
+        return aDatacenter()
                 .withName( dto.name )
                 .build();
     }

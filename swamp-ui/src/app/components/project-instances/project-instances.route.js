@@ -4,7 +4,7 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('projectInstances', {
         url: "/projectInstances",
         data: {
-            displayName: 'projectInstances',
+            displayName: 'project-instances',
             disabled: false
         },
         templateUrl: '/app/components/project-instances/project-instances.template.html',

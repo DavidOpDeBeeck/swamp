@@ -1,10 +1,12 @@
 package de.daxu.swamp.core.configuration;
 
+import de.daxu.swamp.core.configuration.DockerfileConfiguration.Builder;
+
 public class DockerfileConfigurationTestBuilder {
 
     private String dockerfile;
 
-    public static DockerfileConfigurationTestBuilder aDockerfileConfigurationTestBuilder() {
+    public static DockerfileConfigurationTestBuilder aDockerfileConfiguration() {
         return new DockerfileConfigurationTestBuilder();
     }
 
@@ -14,6 +16,8 @@ public class DockerfileConfigurationTestBuilder {
     }
 
     public DockerfileConfiguration build() {
-        return new DockerfileConfiguration( dockerfile );
+        return Builder.aDockerfileConfiguration()
+                .withDockerfile( dockerfile )
+                .build();
     }
 }
