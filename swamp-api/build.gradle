@@ -2,6 +2,10 @@ plugins {
     id 'org.springframework.boot' version '1.4.2.RELEASE'
 }
 
+springBoot {
+    mainClass = "de.swamp.SwampApplication"
+}
+
 dependencies {
     compile project(":swamp-core")
     compile project(":swamp-scheduling")

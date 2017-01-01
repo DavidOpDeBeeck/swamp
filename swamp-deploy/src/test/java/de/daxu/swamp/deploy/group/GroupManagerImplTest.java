@@ -4,6 +4,8 @@ import de.daxu.swamp.deploy.container.ContainerId;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +20,8 @@ public class GroupManagerImplTest {
 
     @Test
     public void addContainer() throws Exception {
-        GroupId groupId = GroupId.of( "1" );
-        ContainerId containerId = ContainerId.of( "1" );
+        GroupId groupId = GroupId.of( UUID.randomUUID().toString() );
+        ContainerId containerId = ContainerId.of( UUID.randomUUID().toString() );
 
         groupManager.addContainerToGroup( groupId, containerId );
 
@@ -29,7 +31,7 @@ public class GroupManagerImplTest {
 
     @Test
     public void exists() throws Exception {
-        GroupId groupId = GroupId.of( "1" );
+        GroupId groupId = GroupId.of( UUID.randomUUID().toString() );
         groupManager.groups.put( groupId, newHashSet() );
 
         boolean exists = groupManager.exists( groupId );
