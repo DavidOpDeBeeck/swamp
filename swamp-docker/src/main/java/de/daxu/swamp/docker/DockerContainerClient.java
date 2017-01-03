@@ -20,6 +20,7 @@ import de.daxu.swamp.deploy.group.GroupManager;
 import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
+import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
 import de.daxu.swamp.docker.log.LogCallback;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
     @Override
     public ContainerResult create( ContainerConfiguration config ) {
         CreateContainerCmd dockerCommand = config.getRunConfiguration()
-                .execute( docker() );
+                .configure( configurator() );
 
         dockerCommand
                 .withPortBindings( extractPortBindings( config ) )
@@ -152,6 +153,10 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
 
     private DockerClient docker() {
         return dockerClientFactory.createClient( server );
+    }
+
+    private DockerRunConfigurator configurator() {
+        return new DockerRunConfigurator( docker() );
     }
 
     private Set<String> catchWarnings( Runnable runnable ) {

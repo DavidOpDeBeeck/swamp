@@ -1,7 +1,5 @@
 package de.daxu.swamp.core.configuration;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerCmd;
 import de.daxu.swamp.core.credentials.UsernamePasswordCredentials;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -55,8 +53,8 @@ public class GitConfiguration extends RunConfiguration {
     }
 
     @Override
-    public CreateContainerCmd execute( DockerClient client ) {
-        return null;
+    public <T> T configure( RunConfigurator<T> configurator ) {
+        return configurator.configure( this );
     }
 
     @Override
