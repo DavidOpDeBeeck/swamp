@@ -25,7 +25,7 @@ import static de.daxu.swamp.api.server.ServerResource.SERVERS_URL;
 @RequestMapping( SERVERS_URL )
 public class ServerResource {
 
-    public static final String SERVERS_URL = DATACENTERS_URL + "/{datacenterId}/servers";
+    static final String SERVERS_URL = DATACENTERS_URL + "/{datacenterId}/servers";
 
     private final ResponseFactory responseFactory;
     private final LocationService locationService;

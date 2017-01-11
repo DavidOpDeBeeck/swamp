@@ -4,10 +4,12 @@ import LocationService from "./location.service";
 import ProjectService from "./project.service";
 import NavigationService from "./navigation.service";
 import ProjectInstanceService from "./project-instance.service";
+import VersionService from "./version.service";
 
 export default angular.module('swamp.services', [angularResource])
     .service('LocationService', LocationService)
     .service('ProjectService', ProjectService)
     .service('NavigationService', NavigationService)
     .service('ProjectInstanceService', ProjectInstanceService)
+    .service('VersionService', VersionService)
     .name;

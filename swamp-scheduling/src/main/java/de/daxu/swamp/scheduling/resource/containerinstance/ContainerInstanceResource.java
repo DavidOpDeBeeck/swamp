@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason.STOPPED_BY_USER;
 import static de.daxu.swamp.scheduling.resource.containerinstance.ContainerInstanceResource.CONTAINER_INSTANCE_URL;
 import static de.daxu.swamp.scheduling.resource.projectinstance.ProjectInstanceResource.PROJECT_INSTANCE_URL;
 
@@ -64,7 +65,7 @@ public class ContainerInstanceResource {
     @RequestMapping( value = "/{containerInstanceId}", params = { "action=restart" }, method = RequestMethod.POST )
     public Response restart( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
 
-        containerInstanceCommandService.stop( view.getContainerInstanceId() );
+        containerInstanceCommandService.stop( view.getContainerInstanceId(), STOPPED_BY_USER );
         containerInstanceCommandService.start( view.getContainerInstanceId() );
         return response.success();
     }
@@ -72,7 +73,7 @@ public class ContainerInstanceResource {
     @RequestMapping( value = "/{containerInstanceId}", params = { "action=stop" }, method = RequestMethod.POST )
     public Response stop( @PathVariable( "containerInstanceId" ) ContainerInstanceView view ) {
 
-        containerInstanceCommandService.stop( view.getContainerInstanceId() );
+        containerInstanceCommandService.stop( view.getContainerInstanceId(), STOPPED_BY_USER );
         return response.success();
     }
 }

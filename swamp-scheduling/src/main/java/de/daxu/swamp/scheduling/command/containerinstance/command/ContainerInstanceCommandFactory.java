@@ -3,6 +3,8 @@ package de.daxu.swamp.scheduling.command.containerinstance.command;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
+import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,12 +26,12 @@ public class ContainerInstanceCommandFactory {
         return new StartContainerInstanceLoggingCommand( containerInstanceId );
     }
 
-    public StopContainerInstanceCommand createStopCommand( ContainerInstanceId containerInstanceId ) {
-        return new StopContainerInstanceCommand( containerInstanceId );
+    public StopContainerInstanceCommand createStopCommand( ContainerInstanceId containerInstanceId, ContainerInstanceStopReason reason ) {
+        return new StopContainerInstanceCommand( containerInstanceId, reason );
     }
 
-    public RemoveContainerInstanceCommand createRemoveCommand( ContainerInstanceId containerInstanceId ) {
-        return new RemoveContainerInstanceCommand( containerInstanceId );
+    public RemoveContainerInstanceCommand createRemoveCommand( ContainerInstanceId containerInstanceId, ContainerInstanceRemoveReason reason ) {
+        return new RemoveContainerInstanceCommand( containerInstanceId, reason );
     }
 
     public ReceiveContainerInstanceLogCommand createReceiveLogCommand( ContainerInstanceId containerInstanceId, String log ) {

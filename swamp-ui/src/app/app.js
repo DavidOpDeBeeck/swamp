@@ -14,6 +14,7 @@ import home from "./components/home/home.module";
 import projects from "./components/projects/projects.module";
 import locations from "./components/locations/locations.module";
 import projectInstances from "./components/project-instances/project-instances.module";
+import version from "./components/version/version.module";
 
 angular.module('swamp', [
         'ngStomp',
@@ -28,7 +29,8 @@ angular.module('swamp', [
         home,
         projects,
         locations,
-        projectInstances
+        projectInstances,
+        version
     ])
     .config(AppRoute)
     .run(AppConfig);

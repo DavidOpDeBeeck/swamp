@@ -70,7 +70,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .stop( containerId );
 
-        apply( new ContainerInstanceStoppedEvent( containerInstanceId, LocalDateTime.now() ) );
+        apply( new ContainerInstanceStoppedEvent( containerInstanceId, command.getReason(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -81,7 +81,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .remove( containerId );
 
-        apply( new ContainerInstanceRemovedEvent( containerInstanceId, LocalDateTime.now() ) );
+        apply( new ContainerInstanceRemovedEvent( containerInstanceId, command.getReason(), LocalDateTime.now() ) );
     }
 
     @CommandHandler

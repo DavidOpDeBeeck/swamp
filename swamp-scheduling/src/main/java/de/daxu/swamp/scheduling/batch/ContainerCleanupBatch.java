@@ -20,6 +20,9 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
+import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason.INVALID_CONTAINER_CONFIG;
+import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason.NOT_AVAILABLE_ON_HOST;
+import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason.NOT_RUNNING_ON_HOST;
 
 @Component
 public class ContainerCleanupBatch {
@@ -50,11 +53,15 @@ public class ContainerCleanupBatch {
 
         runningContainers.stream()
                 .filter( this::getInCompleteContainers )
-                .forEach( view -> containerInstanceCommandService.remove( view.getContainerInstanceId() ) );
+                .forEach( this::removeContainer );
 
         runningContainers.stream()
                 .filter( this::getCompleteContainers )
                 .forEach( this::removeMissingAndNotRunningContainers );
+    }
+
+    private void removeContainer( ContainerInstanceView view ) {
+        containerInstanceCommandService.remove( view.getContainerInstanceId(), INVALID_CONTAINER_CONFIG );
     }
 
     private void removeMissingAndNotRunningContainers( ContainerInstanceView view ) {
@@ -76,19 +83,13 @@ public class ContainerCleanupBatch {
     }
 
     private void removeContainer( ContainerInstanceId id ) {
-        containerInstanceCommandService.remove( id );
-
-        logger.info( "\n**************************\n"
-                + "Removing : " + id
-                + "\n**************************\n" );
+        containerInstanceCommandService.remove( id, NOT_AVAILABLE_ON_HOST );
+        logger.info( "Removing : " + id );
     }
 
     private void stopContainer( ContainerInstanceId id ) {
-        containerInstanceCommandService.stop( id );
-
-        logger.info( "\n**************************\n"
-                + "Stopping : " + id
-                + "\n**************************\n" );
+        containerInstanceCommandService.stop( id, NOT_RUNNING_ON_HOST );
+        logger.info( "Stopping : " + id );
     }
 
     private ContainerClient containerClient( ServerView server ) {

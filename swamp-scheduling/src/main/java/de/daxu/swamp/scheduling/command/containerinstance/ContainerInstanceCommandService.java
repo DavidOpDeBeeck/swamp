@@ -3,6 +3,8 @@ package de.daxu.swamp.scheduling.command.containerinstance;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.command.containerinstance.command.ContainerInstanceCommandFactory;
+import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
+import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +34,12 @@ public class ContainerInstanceCommandService {
         commandGateway.send( containerInstanceCommandFactory.createStartCommand( containerInstanceId ) );
     }
 
-    public void stop( ContainerInstanceId containerInstanceId ) {
-        commandGateway.send( containerInstanceCommandFactory.createStopCommand( containerInstanceId ) );
+    public void stop( ContainerInstanceId containerInstanceId, ContainerInstanceStopReason reason ) {
+        commandGateway.send( containerInstanceCommandFactory.createStopCommand( containerInstanceId, reason ) );
     }
 
-    public void remove( ContainerInstanceId containerInstanceId ) {
-        commandGateway.send( containerInstanceCommandFactory.createRemoveCommand( containerInstanceId ) );
+    public void remove( ContainerInstanceId containerInstanceId, ContainerInstanceRemoveReason reason ) {
+        commandGateway.send( containerInstanceCommandFactory.createRemoveCommand( containerInstanceId, reason ) );
     }
 
     public void startLogging( ContainerInstanceId containerInstanceId ) {
