@@ -1,0 +1,16 @@
+<div class="template-picker">
+    <div class="row">
+        <div class="col-md-12">
+            <div ng-show="templatePicker.editable">
+                <div class="form-group">
+                    <label for="template">Container template: </label>
+                    <select id="template" class="form-control"
+                            ng-options="template.container as template.name for template in templatePicker.templates"
+                            ng-model="templatePicker.container">
+                        <option value="" disabled>Select a template</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

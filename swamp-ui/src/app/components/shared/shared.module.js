@@ -5,11 +5,13 @@ import ConfigurationPickerDirective from "./configuration-picker/configuration-p
 import LocationPickerDirective from "./location-picker/location-picker.directive";
 import BreadcrumbsDirective from "./ui-breadcrumbs/ui-breadcrumbs.directive";
 import ScrollBottomDirective from "./scroll-bottom/scroll-bottom.directive";
+import TemplatePickerDirective from "./template-picker/template-picker.directive";
 
 const module = angular.module('swamp.shared', [services, uiBootstrap])
     .directive('configurationPicker', ConfigurationPickerDirective)
     .directive('locationPicker', LocationPickerDirective)
     .directive('uiBreadcrumbs', BreadcrumbsDirective)
-    .directive('scrollBottom', ScrollBottomDirective);
+    .directive('scrollBottom', ScrollBottomDirective)
+    .directive('templatePicker', TemplatePickerDirective);
 
 export default module.name;

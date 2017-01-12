@@ -21,7 +21,7 @@ function copyScripts() {
 }
 
 function copyTemplates() {
-    return gulp.src(SRC_FOLDER + '/**/*.html')
+    return gulp.src([SRC_FOLDER + '/**/*.html', SRC_FOLDER + '/**/*.json'])
         .pipe(gulp.dest(PUBLIC_FOLDER + '/'));
 }
 

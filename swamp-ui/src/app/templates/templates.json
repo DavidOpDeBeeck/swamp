@@ -1,0 +1,20 @@
+[
+  {
+    "name": "jenkins",
+    "container": {
+      "name": "jenkins",
+      "runConfiguration": {
+        "type": "IMAGE",
+        "name": "jenkins:2.0"
+      },
+      "potentialLocations": [],
+      "portMappings": [
+        {
+          "internal": 8080,
+          "external": 8888
+        }
+      ],
+      "environmentVariables": []
+    }
+  }
+]
