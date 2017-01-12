@@ -7,6 +7,7 @@
         "type": "IMAGE",
         "name": "jenkins:2.0"
       },
+      "aliases": [ "jenkins" ],
       "potentialLocations": [],
       "portMappings": [
         {

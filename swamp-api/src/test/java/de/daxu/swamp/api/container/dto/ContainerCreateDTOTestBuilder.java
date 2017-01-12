@@ -12,7 +12,7 @@ import static de.daxu.swamp.api.container.dto.PortMappingDTOTestBuilder.aPortMap
 
 public class ContainerCreateDTOTestBuilder {
 
-    private String name = "a container name";
+    private Set<String> aliases = newHashSet( "a container name");
     private RunConfigurationDTO runConfiguration = anImageConfigurationDTO().build();
     private Set<LocationDTO> potentialLocations = newHashSet();
     private Set<PortMappingDTO> portMappings = newHashSet( aPortMappingDTO().build() );
@@ -22,8 +22,8 @@ public class ContainerCreateDTOTestBuilder {
         return new ContainerCreateDTOTestBuilder();
     }
 
-    public ContainerCreateDTOTestBuilder withName( String name ) {
-        this.name = name;
+    public ContainerCreateDTOTestBuilder withAliases( Set<String> aliases ) {
+        this.aliases = aliases;
         return this;
     }
 
@@ -49,7 +49,7 @@ public class ContainerCreateDTOTestBuilder {
 
     public ContainerCreateDTO build() {
         ContainerCreateDTO dto = new ContainerCreateDTO();
-        dto.name = this.name;
+        dto.aliases = this.aliases;
         dto.portMappings = this.portMappings;
         dto.runConfiguration = this.runConfiguration;
         dto.environmentVariables = this.environmentVariables;

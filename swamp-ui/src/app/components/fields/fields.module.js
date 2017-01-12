@@ -7,7 +7,8 @@ import AutocompleteFieldDirective from "./autocomplete/autocomplete-field.direct
 import SelectFieldDirective from "./select/select-field.directive";
 import PropertyFieldDirective from "./property/property-field.directive";
 import MultiplePropertyFieldDirective from "./multiple/multiple-property/multiple-property-field.directive";
-import MultipleAutocompleteField from "./multiple/multiple-autocomplete/multiple-autocomplete-field.directive";
+import MultipleAutocompleteFieldDirective from "./multiple/multiple-autocomplete/multiple-autocomplete-field.directive";
+import MultipleInputFieldDirective from "./multiple/multiple-input/multiple-input-field.directive";
 
 const module = angular.module('swamp.field', [uiBootstrap])
     .directive('includeReplace', IncludeReplaceDirective)
@@ -16,7 +17,8 @@ const module = angular.module('swamp.field', [uiBootstrap])
     .directive('autocompleteField', AutocompleteFieldDirective)
     .directive('selectField', SelectFieldDirective)
     .directive('propertyField', PropertyFieldDirective)
-    .directive('multipleAutocompleteField', MultipleAutocompleteField)
-    .directive('multiplePropertyField', MultiplePropertyFieldDirective);
+    .directive('multipleAutocompleteField', MultipleAutocompleteFieldDirective)
+    .directive('multiplePropertyField', MultiplePropertyFieldDirective)
+    .directive('multipleInputField', MultipleInputFieldDirective);
 
 export default module.name;

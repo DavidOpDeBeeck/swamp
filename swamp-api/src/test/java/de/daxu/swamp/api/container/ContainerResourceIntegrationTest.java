@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static de.daxu.swamp.api.container.dto.ContainerCreateDTOTestBuilder.aContainerCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.common.web.WebClient.type;
@@ -80,7 +81,7 @@ public class ContainerResourceIntegrationTest {
         assertThat( actual ).isNotNull();
         assertThat( actual )
                 .isEqualToComparingOnlyGivenFields(
-                        expected, "name", "runConfiguration.name" );
+                        expected, "aliases", "runConfiguration.name" );
     }
 
     @Test
@@ -102,13 +103,13 @@ public class ContainerResourceIntegrationTest {
     @Test
     public void put() throws Exception {
         Container container = aContainer()
-                .withName( "old" )
+                .withAliases( newHashSet(  "old") )
                 .build();
 
         addContainer( container );
 
         Container expected = aContainer()
-                .withName( "updated" )
+                .withAliases( newHashSet("updated") )
                 .build();
 
         resource.webClient()
@@ -120,7 +121,7 @@ public class ContainerResourceIntegrationTest {
         Container actual = resource.find( container.getId(), Container.class );
 
         assertThat( actual ).isNotNull();
-        assertThat( actual.getName() ).isEqualTo( expected.getName() );
+        assertThat( actual.getAliases() ).isEqualTo( expected.getAliases() );
     }
 
     @Test

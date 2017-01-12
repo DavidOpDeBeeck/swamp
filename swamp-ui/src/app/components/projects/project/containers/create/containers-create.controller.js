@@ -8,6 +8,7 @@ class ContainersCreateController {
         this.availableLocations = [];
         this.container = {
             'projectId': this.project.id,
+            'aliases': [],
             'runConfiguration': {},
             'potentialLocations': []
         };

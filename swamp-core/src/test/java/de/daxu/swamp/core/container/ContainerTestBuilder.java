@@ -13,7 +13,7 @@ import static de.daxu.swamp.core.container.PortMappingTestBuilder.aPortMapping;
 
 public class ContainerTestBuilder {
 
-    private String name = "a container name";
+    private Set<String> aliases = newHashSet( "a container name" );
     private RunConfiguration runConfiguration = anImageConfiguration().build();
     private Set<Location> potentialLocations = newHashSet();
     private Set<PortMapping> portMappings = newHashSet( aPortMapping().build() );
@@ -23,8 +23,8 @@ public class ContainerTestBuilder {
         return new ContainerTestBuilder();
     }
 
-    public ContainerTestBuilder withName( String name ) {
-        this.name = name;
+    public ContainerTestBuilder withAliases( Set<String> aliases ) {
+        this.aliases = aliases;
         return this;
     }
 
@@ -50,7 +50,7 @@ public class ContainerTestBuilder {
 
     public Container build() {
         return Builder.aContainer()
-                .withName( name )
+                .withAliases( aliases )
                 .withRunConfiguration( runConfiguration )
                 .withPotentialLocations( potentialLocations )
                 .withPortMappings( portMappings )

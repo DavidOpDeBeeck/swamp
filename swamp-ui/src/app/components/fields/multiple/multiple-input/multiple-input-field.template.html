@@ -1,0 +1,21 @@
+<div class="form-group">
+    <label for="{{ multiple.id }}">{{ multiple.label }}: </label>
+    <div id="{{ multiple.id }}" class="form-group margin-xs-bottom" ng-repeat="field in multiple.list track by $index">
+        <div ng-class="{ 'input-group' : multiple.editable }">
+            <input-field value="multiple.list[$index]"
+                            editable="multiple.editable"></input-field>
+            <span class="input-group-btn" ng-show="multiple.editable">
+                <button class="btn btn-default" type="button" ng-click="multiple.remove($index)">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="well well-sm margin-sm-bottom" ng-show="multiple.list.length == 0">
+        No {{ multiple.entity }}s specified.
+    </div>
+    <button class="btn btn-xs btn-success" type="button" ng-click="multiple.add()" ng-show="multiple.editable">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Add {{ multiple.entity }}
+    </button>
+</div>

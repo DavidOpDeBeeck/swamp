@@ -8,7 +8,7 @@ import java.util.Set;
 public class ContainerDTO {
 
     public String id;
-    public String name;
+    public Set<String> aliases;
     public RunConfigurationDTO runConfiguration;
     public Set<LocationDTO> potentialLocations;
     public Set<PortMappingDTO> portMappings;

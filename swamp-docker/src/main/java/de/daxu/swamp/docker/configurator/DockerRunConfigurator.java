@@ -6,7 +6,7 @@ import de.daxu.swamp.core.configuration.DockerfileConfiguration;
 import de.daxu.swamp.core.configuration.GitConfiguration;
 import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang.NotImplementedException;
 
 public class DockerRunConfigurator implements RunConfigurator<CreateContainerCmd> {
 

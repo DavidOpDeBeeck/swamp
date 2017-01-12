@@ -18,8 +18,9 @@ public class Container extends Identifiable {
     @JoinColumn( name = "run_configuration_id" )
     private RunConfiguration runConfiguration;
 
-    @Column( name = "name" )
-    private String name;
+    @ElementCollection
+    @CollectionTable( name = "container_aliases", joinColumns = @JoinColumn( name = "container_id" ) )
+    private Set<String> aliases;
 
     @ManyToMany
     @JoinTable(
@@ -39,16 +40,20 @@ public class Container extends Identifiable {
     private Container() {
     }
 
-    private Container( String name, RunConfiguration runConfiguration, Set<Location> potentialLocations, Set<PortMapping> portMappings, Set<EnvironmentVariable> environmentVariables ) {
-        this.name = name;
+    private Container( Set<String> aliases,
+                       RunConfiguration runConfiguration,
+                       Set<Location> potentialLocations,
+                       Set<PortMapping> portMappings,
+                       Set<EnvironmentVariable> environmentVariables ) {
+        this.aliases = aliases;
         this.runConfiguration = runConfiguration;
         this.potentialLocations = potentialLocations;
         this.portMappings = portMappings;
         this.environmentVariables = environmentVariables;
     }
 
-    public void setName( String name ) {
-        this.name = name;
+    public void setAliases( Set<String> aliases ) {
+        this.aliases = aliases;
     }
 
     public void setRunConfiguration( RunConfiguration runConfiguration ) {
@@ -70,8 +75,8 @@ public class Container extends Identifiable {
         this.environmentVariables.addAll( environmentVariables );
     }
 
-    public String getName() {
-        return name;
+    public Set<String> getAliases() {
+        return aliases;
     }
 
     public RunConfiguration getRunConfiguration() {
@@ -92,7 +97,7 @@ public class Container extends Identifiable {
 
     public static class Builder {
 
-        private String name;
+        private Set<String> aliases;
         private RunConfiguration runConfiguration;
         private Set<Location> potentialLocations;
         private Set<PortMapping> portMappings;
@@ -102,8 +107,8 @@ public class Container extends Identifiable {
             return new Builder();
         }
 
-        public Builder withName( String name ) {
-            this.name = name;
+        public Builder withAliases( Set<String> aliases ) {
+            this.aliases = aliases;
             return this;
         }
 
@@ -128,7 +133,7 @@ public class Container extends Identifiable {
         }
 
         public Container build() {
-            return new Container( name, runConfiguration, potentialLocations, portMappings, environmentVariables );
+            return new Container( aliases, runConfiguration, potentialLocations, portMappings, environmentVariables );
         }
     }
 }

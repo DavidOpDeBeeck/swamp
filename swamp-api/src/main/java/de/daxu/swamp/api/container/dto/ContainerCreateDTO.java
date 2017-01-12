@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ContainerCreateDTO {
 
-    public String name;
+    public Set<String> aliases;
     public RunConfigurationDTO runConfiguration;
     public Set<LocationDTO> potentialLocations;
     public Set<PortMappingDTO> portMappings;

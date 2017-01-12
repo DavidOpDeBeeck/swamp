@@ -8,6 +8,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static de.daxu.swamp.core.container.ContainerTestBuilder.aContainer;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProject;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
@@ -42,16 +43,16 @@ public class ContainerServiceIntegrationTest {
 
     @Test
     public void updateContainer() throws Exception {
-        Container container = aContainer().withName( "oldName" ).build();
+        Container container = aContainer().withAliases( newHashSet( "oldName" ) ).build();
         project.addContainer( container );
         integration.save( container, project );
 
-        container.setName( "updatedName" );
+        container.setAliases( newHashSet("updatedName") );
         containerService.updateContainer( container );
 
         Container actual = integration.find( container.getId(), Container.class );
-        assertThat( actual.getName() )
-                .isEqualTo( container.getName() );
+        assertThat( actual.getAliases() )
+                .isEqualTo( container.getAliases() );
     }
 
     @Test
