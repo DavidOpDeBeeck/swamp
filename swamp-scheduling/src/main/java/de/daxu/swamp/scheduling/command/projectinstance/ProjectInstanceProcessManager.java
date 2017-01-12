@@ -55,6 +55,7 @@ public class ProjectInstanceProcessManager {
     private ContainerConfiguration configuration( Container container, ProjectInstanceId projectInstanceId ) {
         return aContainerConfiguration()
                 .withGroup( GroupId.of( projectInstanceId.getValue() ) )
+                .withAliases( container.getAliases() )
                 .withPortMappings( container.getPortMappings() )
                 .withEnvironmentVariables( container.getEnvironmentVariables() )
                 .withRunConfiguration( container.getRunConfiguration() ).build();

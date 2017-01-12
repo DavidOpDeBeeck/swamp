@@ -12,15 +12,18 @@ import static com.google.common.collect.Sets.newHashSet;
 public class ContainerConfiguration {
 
     private final GroupId group;
+    private final Set<String> aliases;
     private final RunConfiguration runConfiguration;
     private final Set<PortMapping> portMappings;
     private final Set<EnvironmentVariable> environmentVariables;
 
     private ContainerConfiguration( GroupId group,
+                                    Set<String> aliases,
                                     RunConfiguration runConfiguration,
                                     Set<PortMapping> portMappings,
                                     Set<EnvironmentVariable> environmentVariables ) {
         this.group = group;
+        this.aliases = aliases;
         this.runConfiguration = runConfiguration;
         this.portMappings = portMappings;
         this.environmentVariables = environmentVariables;
@@ -28,6 +31,10 @@ public class ContainerConfiguration {
 
     public GroupId getGroup() {
         return group;
+    }
+
+    public Set<String> getAliases() {
+        return aliases;
     }
 
     public RunConfiguration getRunConfiguration() {
@@ -45,6 +52,7 @@ public class ContainerConfiguration {
     public static class Builder {
 
         private GroupId group;
+        private Set<String> aliases;
         private RunConfiguration runConfiguration;
         private Set<PortMapping> portMappings = newHashSet();
         private Set<EnvironmentVariable> environmentVariables = newHashSet();
@@ -55,6 +63,11 @@ public class ContainerConfiguration {
 
         public Builder withGroup( GroupId group ) {
             this.group = group;
+            return this;
+        }
+
+        public Builder withAliases( Set<String> aliases ) {
+            this.aliases = aliases;
             return this;
         }
 
@@ -74,7 +87,7 @@ public class ContainerConfiguration {
         }
 
         public ContainerConfiguration build() {
-            return new ContainerConfiguration( group, runConfiguration, portMappings, environmentVariables );
+            return new ContainerConfiguration( group, aliases, runConfiguration, portMappings, environmentVariables );
         }
     }
 }

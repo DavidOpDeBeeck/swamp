@@ -18,7 +18,7 @@ public class Container extends Identifiable {
     @JoinColumn( name = "run_configuration_id" )
     private RunConfiguration runConfiguration;
 
-    @ElementCollection
+    @ElementCollection( fetch = FetchType.EAGER )
     @CollectionTable( name = "container_aliases", joinColumns = @JoinColumn( name = "container_id" ) )
     private Set<String> aliases;
 

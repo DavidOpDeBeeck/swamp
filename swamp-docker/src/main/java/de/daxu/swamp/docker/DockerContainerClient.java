@@ -57,6 +57,7 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
 
         dockerCommand
                 .withPortBindings( extractPortBindings( config ) )
+       //         .withAliases( newArrayList( config.getAliases() ) )
                 .withEnv( extractEnvironmentVariables( config ) );
 
         CreateContainerResponse response = dockerCommand.exec();

@@ -17,6 +17,10 @@ public abstract class EntityId implements AggregateId {
         this.value = value.toString();
     }
 
+    protected EntityId( String value ) {
+        this.value = value;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;

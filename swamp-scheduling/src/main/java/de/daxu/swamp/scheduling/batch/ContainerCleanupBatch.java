@@ -13,7 +13,6 @@ import de.daxu.swamp.scheduling.query.containerinstance.ServerView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -45,7 +44,7 @@ public class ContainerCleanupBatch {
         this.containerInstanceCommandService = containerInstanceCommandService;
     }
 
-    @Scheduled( fixedDelay = 5000 )
+   // @Scheduled( fixedDelay = 5000 )
     public void cleanupContainers() {
         Set<ContainerInstanceView> runningContainers = getRunningContainers();
 
