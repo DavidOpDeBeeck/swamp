@@ -30,7 +30,7 @@
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                     </button>
                     <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                            ng-click="ProjectCtrl.deploy(project) && $event.stopPropagation()">
+                            ng-click="$event.stopPropagation() && ProjectCtrl.deploy(project)">
                         <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
                     </button>
                 </p>

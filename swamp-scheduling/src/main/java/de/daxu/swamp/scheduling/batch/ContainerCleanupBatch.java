@@ -44,7 +44,7 @@ public class ContainerCleanupBatch {
         this.containerInstanceCommandService = containerInstanceCommandService;
     }
 
-   // @Scheduled( fixedDelay = 5000 )
+    //@Scheduled( fixedDelay = 5000 )
     public void cleanupContainers() {
         Set<ContainerInstanceView> runningContainers = getRunningContainers();
 

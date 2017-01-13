@@ -134,6 +134,16 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         this.status = STARTED;
     }
 
+    @EventHandler
+    void on( ContainerInstanceStoppedEvent event ) {
+        this.status = STOPPED;
+    }
+
+    @EventHandler
+    void on( ContainerInstanceRemovedEvent event ) {
+        this.status = REMOVED;
+    }
+
     public ContainerInstanceId getContainerInstanceId() {
         return containerInstanceId;
     }

@@ -16,17 +16,17 @@ public class Meta {
 
     private int status;
     private String version;
-    private LocalDateTime requestTimestamp;
+    private LocalDateTime requestedAt;
     private String location;
 
     @JsonCreator
     private Meta( @JsonProperty( "status" ) int status,
                   @JsonProperty( "version" ) String version,
-                  @JsonProperty( "requestTimestamp" ) LocalDateTime requestTimestamp,
+                  @JsonProperty( "requestedAt" ) LocalDateTime requestedAt,
                   @JsonProperty( "location" ) String location ) {
         this.status = status;
         this.version = version;
-        this.requestTimestamp = requestTimestamp;
+        this.requestedAt = requestedAt;
         this.location = location;
     }
 
@@ -39,8 +39,8 @@ public class Meta {
     }
 
     @JsonSerialize( using = LocalDateTimeSerializer.class )
-    public LocalDateTime getRequestTimestamp() {
-        return requestTimestamp;
+    public LocalDateTime getRequestedAt() {
+        return requestedAt;
     }
 
     public String getLocation() {

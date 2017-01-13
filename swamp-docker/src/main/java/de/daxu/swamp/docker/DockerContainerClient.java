@@ -5,6 +5,7 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.google.common.collect.Sets;
@@ -23,6 +24,7 @@ import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
 import de.daxu.swamp.docker.log.LogCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -52,21 +54,25 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
 
     @Override
     public ContainerResult create( ContainerConfiguration config ) {
+        Set<String> warnings = newHashSet();
+
+        GroupId groupId = config.getGroup();
+        warnings.addAll( createNetworkIfGroupIsNew( groupId ) );
+
         CreateContainerCmd dockerCommand = config.getRunConfiguration()
                 .configure( configurator() );
 
         dockerCommand
                 .withPortBindings( extractPortBindings( config ) )
-       //         .withAliases( newArrayList( config.getAliases() ) )
+                .withHostConfig( new HostConfig()
+                        .withNetworkMode( groupId.getValue() ) )
+                .withAliases( new ArrayList<>( config.getAliases() ) )
                 .withEnv( extractEnvironmentVariables( config ) );
 
         CreateContainerResponse response = dockerCommand.exec();
 
-        GroupId groupId = config.getGroup();
         ContainerId containerId = ContainerId.of( response.getId() );
 
-        Set<String> warnings = newHashSet();
-        warnings.addAll( createNetworkIfGroupIsNew( groupId ) );
         warnings.addAll( connectToGroupNetwork( groupId, containerId ) );
         warnings.addAll( toSet( response.getWarnings() ) );
 
