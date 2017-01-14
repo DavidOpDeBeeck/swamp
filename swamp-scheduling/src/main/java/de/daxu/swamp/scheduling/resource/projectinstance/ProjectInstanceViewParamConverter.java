@@ -21,7 +21,7 @@ public class ProjectInstanceViewParamConverter implements Converter<String, Proj
     @Override
     public ProjectInstanceView convert( String source ) {
         ProjectInstanceId id = ProjectInstanceId.from( source );
-        ProjectInstanceView view = projectInstanceQueryService.getProjectInstancesViewById( id );
+        ProjectInstanceView view = projectInstanceQueryService.getProjectInstanceViewById( id );
 
         if( view == null )
             throw new NotFoundException( "Project instance was not found!" );

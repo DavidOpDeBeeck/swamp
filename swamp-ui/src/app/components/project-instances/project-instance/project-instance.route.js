@@ -3,7 +3,7 @@ export default ['$stateProvider', ($stateProvider) => {
         url: "/{projectInstanceId:.{36}}",
         template: '<ui-view />',
         data: {
-            displayName: '{{ projectInstance.name }}',
+            displayName: '{{ projectInstance.build }}',
             disabled: true
         },
         resolve: {

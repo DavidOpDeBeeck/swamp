@@ -1,7 +1,7 @@
 class ProjectInstancesController {
     constructor(ProjectInstanceService, $stomp) {
         this.projectInstanceService = ProjectInstanceService;
-        this.getAllProjectInstances();
+        this.getAllProjects();
         $stomp
             .connect('http://localhost:8081/schedule')
             .then(() => {
@@ -11,9 +11,9 @@ class ProjectInstancesController {
             });
     }
 
-    getAllProjectInstances() {
-        this.projectInstanceService.getAllProjectInstances()
-            .then((projectInstances) => this.projectInstances = projectInstances);
+    getAllProjects() {
+        this.projectInstanceService.getAllProjects()
+            .then((projects) => this.projects = projects);
     }
 }
 

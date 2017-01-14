@@ -2,7 +2,7 @@ package de.daxu.swamp.scheduling.resource.projectinstance;
 
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
-import de.daxu.swamp.scheduling.query.projectinstance.ProjectInstanceQueryService;
+import de.daxu.swamp.scheduling.query.project.ProjectQueryService;
 import de.daxu.swamp.scheduling.query.projectinstance.ProjectInstanceView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,20 +18,20 @@ public class ProjectInstanceResource {
 
     public final static String PROJECT_INSTANCE_URL = "/projectInstances";
 
-    private final ProjectInstanceQueryService projectInstanceQueryService;
     private final ResponseFactory response;
+    private final ProjectQueryService projectQueryService;
 
     @Autowired
-    public ProjectInstanceResource( ProjectInstanceQueryService projectInstanceQueryService,
-                                    ResponseFactory responseFactory ) {
-        this.projectInstanceQueryService = projectInstanceQueryService;
+    public ProjectInstanceResource( ResponseFactory responseFactory,
+                                    ProjectQueryService projectQueryService ) {
         this.response = responseFactory;
+        this.projectQueryService = projectQueryService;
     }
 
     @RequestMapping( method = RequestMethod.GET )
     public Response getAll() {
 
-        return response.success( projectInstanceQueryService.getAllProjectInstancesView() );
+        return response.success( projectQueryService.getAllProjectViews() );
     }
 
     @RequestMapping( value = "/{projectInstanceId}", method = RequestMethod.GET )

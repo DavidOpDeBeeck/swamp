@@ -20,12 +20,6 @@ public class ProjectInstanceView extends EntityView {
     @NotNull( message = "{NotNull.ProjectInstanceView.projectInstanceId}" )
     private ProjectInstanceId projectInstanceId;
 
-    @Column( name = "name" )
-    private String name;
-
-    @Column( name = "description" )
-    private String description;
-
     @Column( name = "initialized_at" )
     private LocalDateTime initializedAt;
 
@@ -37,27 +31,15 @@ public class ProjectInstanceView extends EntityView {
     }
 
     public ProjectInstanceView( ProjectInstanceId projectInstanceId,
-                                String name,
-                                String description,
                                 LocalDateTime initializedAt,
                                 Set<ContainerInstanceId> containers ) {
         this.projectInstanceId = projectInstanceId;
-        this.name = name;
-        this.description = description;
         this.initializedAt = initializedAt;
         this.containers = containers;
     }
 
     public ProjectInstanceId getProjectInstanceId() {
         return projectInstanceId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @JsonSerialize( using = LocalDateTimeSerializer.class )
@@ -69,7 +51,7 @@ public class ProjectInstanceView extends EntityView {
         return containers;
     }
 
-    public static class ProjectInstanceViewBuilder {
+    public static class Builder {
 
         private ProjectInstanceId projectInstanceId;
         private String name;
@@ -77,31 +59,21 @@ public class ProjectInstanceView extends EntityView {
         private LocalDateTime initializedAt;
         private Set<ContainerInstanceId> containers;
 
-        public static ProjectInstanceViewBuilder aProjectInstanceView() {
-            return new ProjectInstanceViewBuilder();
+        public static Builder aProjectInstanceView() {
+            return new Builder();
         }
 
-        public ProjectInstanceViewBuilder withProjectInstanceId( ProjectInstanceId projectInstanceId ) {
+        public Builder withProjectInstanceId( ProjectInstanceId projectInstanceId ) {
             this.projectInstanceId = projectInstanceId;
             return this;
         }
 
-        public ProjectInstanceViewBuilder withName( String name ) {
-            this.name = name;
-            return this;
-        }
-
-        public ProjectInstanceViewBuilder withDescription( String description ) {
-            this.description = description;
-            return this;
-        }
-
-        public ProjectInstanceViewBuilder withInitializedAt( LocalDateTime dateInitialized ) {
+        public Builder withInitializedAt( LocalDateTime dateInitialized ) {
             this.initializedAt = dateInitialized;
             return this;
         }
 
-        public ProjectInstanceViewBuilder withContainers( Set<ContainerInstanceId> containers ) {
+        public Builder withContainers( Set<ContainerInstanceId> containers ) {
             this.containers = containers;
             return this;
         }
@@ -109,8 +81,6 @@ public class ProjectInstanceView extends EntityView {
         public ProjectInstanceView build() {
             return new ProjectInstanceView(
                     projectInstanceId,
-                    name,
-                    description,
                     initializedAt,
                     containers );
         }

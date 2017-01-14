@@ -7,13 +7,17 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="ProjectInstancesCtrl.filter"
                    aria-describedby="projects-search-icon"/>
         </div>
-        <div class="list-group">
+        <div class="list-group" ng-repeat="project in ProjectInstancesCtrl.projects | filter: ProjectInstancesCtrl.filter">
+            <li class="list-group-item">
+                <span class="badge">{{ project.projectInstances.length }} builds</span>
+                {{ project.name }}
+            </li>
             <a class="list-group-item"
-               ng-repeat="projectInstance in ProjectInstancesCtrl.projectInstances | orderBy: 'initializedAt':-1 | filter: ProjectInstancesCtrl.filter"
-               ui-sref-active="active" ui-sref="projectInstances.projectInstance.containerInstances({projectInstanceId: projectInstance.projectInstanceId})">
-                <span class="label label-primary pull-right">{{ projectInstance.initializedAt | toDate }}</span>
-                <h4 class="list-group-item-heading" ng-bind="projectInstance.name"></h4>
-                <p class="list-group-item-text" ng-bind="projectInstance.description"></p>
+               ng-repeat="projectInstance in project.projectInstances | orderBy: 'initializedAt':-1"
+               ui-sref="projectInstances.projectInstance.containerInstances({projectInstanceId: projectInstance.projectInstanceId})"
+               ui-sref-active="active">
+                <span class="badge">{{ projectInstance.initializedAt | toDate }}</span>
+                {{ projectInstance.containers.length }} container(s)
             </a>
         </div>
     </div>

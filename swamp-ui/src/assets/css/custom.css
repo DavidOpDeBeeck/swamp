@@ -4,28 +4,6 @@
     content: "/\00a0";
 }
 
-.panel {
-    border: 1px solid #d9d9d9;
-    box-shadow: 1px 1px 1px #bfbfbf;
-}
-
-.panel-default > .panel-heading {
-    color: #333333;
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    background-color: #ffffff;
-    border-bottom: 0;
-}
-
-.panel-default > .panel-body {
-    font-size: 1.2rem;
-}
-
-.panel-default > .panel-footer {
-    border-top: 0;
-    background-color: #ffffff;
-}
-
 .well.textarea {
     white-space: pre-line
 }
@@ -103,4 +81,8 @@ footer > p > .divider:after {
 .container-instance #container-logs {
     overflow: auto;
     max-height: 300px;
+}
+
+.list-group > .list-group-item {
+    overflow: auto;
 }

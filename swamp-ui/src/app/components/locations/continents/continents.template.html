@@ -12,24 +12,26 @@
                 </button>
             </span>
         </div>
-        <div class="list-group">
-            <a class="list-group-item"
-               ng-repeat="continent in ContinentsCtrl.continents | filter: ContinentsCtrl.filter"
-               ui-sref-active="active" ui-sref="continents.continent.datacenters({continentId: continent.id})">
-                <span class="label label-primary pull-right">{{ continent.datacenters }} datacenters</span>
-                <h4 class="list-group-item-heading" ng-bind="continent.name"></h4>
-                <p class="list-group-item-footer">
-                    <button type="button" class="btn btn-xs btn-default pull-right"
-                            ng-click="ContinentsCtrl.delete(continent)">
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                            ui-sref="continents.continent.edit({continentId: continent.id})"
-                            ng-click="$event.stopPropagation()">
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                    </button>
-                </p>
-            </a>
+        <div class="list-group"
+             ng-repeat="continent in ContinentsCtrl.continents | filter: ContinentsCtrl.filter">
+            <li class="list-group-item">
+                <span class="badge">{{ continent.datacenters }} datacenters</span>
+                {{ continent.name }}
+            </li>
+            <li class="list-group-item">
+                <button type="button" class="btn btn-xs btn-danger pull-right"
+                        ng-click="ContinentsCtrl.delete(continent)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
+                        ui-sref="continents.continent.edit({continentId: continent.id})">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-xs btn-info pull-right margin-xs-right"
+                        ui-sref="continents.continent.datacenters({continentId: continent.id})">
+                    <span class="glyphicon glyphicon-eye-open" ui-sref-active="glyphicon-eye-close" aria-hidden="true"></span>
+                </button>
+            </li>
         </div>
     </div>
     <div class="col-md-8">

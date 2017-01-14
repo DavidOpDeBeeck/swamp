@@ -33,21 +33,21 @@ public class ServerView extends EntityView {
         return ip;
     }
 
-    public static class ServerViewBuilder {
+    public static class Builder {
 
         private String name;
         private String ip;
 
-        public static ServerViewBuilder aServerView() {
-            return new ServerViewBuilder();
+        public static Builder aServerView() {
+            return new Builder();
         }
 
-        public ServerViewBuilder withName( String name ) {
+        public Builder withName( String name ) {
             this.name = name;
             return this;
         }
 
-        public ServerViewBuilder withIp( String ip ) {
+        public Builder withIp( String ip ) {
             this.ip = ip;
             return this;
         }

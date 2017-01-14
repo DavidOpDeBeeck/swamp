@@ -6,7 +6,7 @@
                 <a ui-sref="{{ crumb.route }}" ng-hide="$last || crumb.disabled">
                     {{ crumb.displayName}}&nbsp;
                 </a>
-                <span ng-show="$last || crumb.disabled">{{ crumb.displayName }}<span ng-hide="$last">&nbsp;</span></span>
+                <span ng-show="$last || crumb.disabled">{{ crumb.displayName | lowercase }}<span ng-hide="$last">&nbsp;</span></span>
             </li>
         </ol>
     </div>

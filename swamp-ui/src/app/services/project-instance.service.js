@@ -38,7 +38,7 @@ class ProjectInstanceService {
             .then((containerInstances) => containerInstances.map((containerInstance) => this.mapInstance(projectInstanceId, containerInstance)));
     }
 
-    getAllProjectInstances() {
+    getAllProjects() {
         return this.projectInstanceResource.query().$promise;
     }
 

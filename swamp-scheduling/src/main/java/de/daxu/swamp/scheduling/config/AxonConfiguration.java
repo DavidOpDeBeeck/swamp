@@ -35,8 +35,12 @@ import static com.google.common.collect.Sets.newHashSet;
 @Configuration
 public class AxonConfiguration {
 
+    private final PlatformTransactionManager transactionManager;
+
     @Autowired
-    private PlatformTransactionManager transactionManager;
+    public AxonConfiguration( PlatformTransactionManager transactionManager ) {
+        this.transactionManager = transactionManager;
+    }
 
     @Bean
     public AnnotationEventListenerBeanPostProcessor annotationEventListenerBeanPostProcessor() {

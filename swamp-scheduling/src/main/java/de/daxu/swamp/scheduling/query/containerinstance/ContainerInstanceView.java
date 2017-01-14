@@ -163,7 +163,7 @@ public class ContainerInstanceView extends EntityView {
         return runConfiguration;
     }
 
-    public static class ContainerInstanceViewBuilder {
+    public static class Builder {
 
         private ContainerInstanceId containerInstanceId;
         private ContainerId containerId;
@@ -177,61 +177,61 @@ public class ContainerInstanceView extends EntityView {
         private ServerView server;
         private RunConfigurationView runConfiguration;
 
-        static ContainerInstanceViewBuilder aContainerInstanceView() {
-            return new ContainerInstanceViewBuilder();
+        static Builder aContainerInstanceView() {
+            return new Builder();
         }
 
-        public ContainerInstanceViewBuilder withContainerInstanceId( ContainerInstanceId containerInstanceId ) {
+        public Builder withContainerInstanceId( ContainerInstanceId containerInstanceId ) {
             this.containerInstanceId = containerInstanceId;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withContainerId( ContainerId containerId ) {
+        public Builder withContainerId( ContainerId containerId ) {
             this.containerId = containerId;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withInitializedAt( LocalDateTime dateInitialized ) {
+        public Builder withInitializedAt( LocalDateTime dateInitialized ) {
             this.initializedAt = dateInitialized;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withCreatedAt( LocalDateTime dateCreated ) {
+        public Builder withCreatedAt( LocalDateTime dateCreated ) {
             this.createdAt = dateCreated;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withStartedAt( LocalDateTime dateStarted ) {
+        public Builder withStartedAt( LocalDateTime dateStarted ) {
             this.startedAt = dateStarted;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withStoppedAt( LocalDateTime dateStopped ) {
+        public Builder withStoppedAt( LocalDateTime dateStopped ) {
             this.stoppedAt = dateStopped;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withRemovedAt( LocalDateTime dateRemoved ) {
+        public Builder withRemovedAt( LocalDateTime dateRemoved ) {
             this.removedAt = dateRemoved;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withLog( String log ) {
+        public Builder withLog( String log ) {
             this.log = log;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withStatus( ContainerInstanceStatus status ) {
+        public Builder withStatus( ContainerInstanceStatus status ) {
             this.status = status;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withServer( ServerView server ) {
+        public Builder withServer( ServerView server ) {
             this.server = server;
             return this;
         }
 
-        public ContainerInstanceViewBuilder withRunConfiguration( RunConfigurationView runConfiguration ) {
+        public Builder withRunConfiguration( RunConfigurationView runConfiguration ) {
             this.runConfiguration = runConfiguration;
             return this;
         }

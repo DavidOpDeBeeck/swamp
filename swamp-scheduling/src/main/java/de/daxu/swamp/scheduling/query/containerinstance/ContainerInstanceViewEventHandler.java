@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
-import static de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView.ContainerInstanceViewBuilder.aContainerInstanceView;
-import static de.daxu.swamp.scheduling.query.containerinstance.ServerView.ServerViewBuilder.aServerView;
+import static de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView.Builder.aContainerInstanceView;
+import static de.daxu.swamp.scheduling.query.containerinstance.ServerView.Builder.aServerView;
 
 @Component
 @SuppressWarnings( "unused" )
