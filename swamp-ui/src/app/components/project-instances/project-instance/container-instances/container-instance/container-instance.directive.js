@@ -11,7 +11,7 @@ class ContainerInstanceDirective {
         this.replace = true;
         this.controller = ContainerInstanceController;
         this.controllerAs = 'ContainerInstanceCtrl';
-        this.templateUrl = '/app/components/project-instances/project-instance/container-instances/container-instance/container-instance.template.html';
+        this.templateUrl = '/assets/templates/container-instance.template.html';
     }
 }
 

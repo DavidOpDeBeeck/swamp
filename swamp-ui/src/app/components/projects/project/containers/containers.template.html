@@ -7,7 +7,7 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="ContainersCtrl.filter"
                    aria-describedby="containers-search-icon"/>
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ui-sref="projects.project.containers.create">
+                <button class="btn btn-default" type="button" ng-click="ContainersCtrl.create()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
@@ -18,12 +18,12 @@
                 <container container="container" editable="false"></container>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-xs btn-default pull-right"
+                        <button type="button" class="btn btn-xs btn-danger pull-right"
                                 ng-click="ContainersCtrl.delete(container)">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                         </button>
-                        <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
-                                ui-sref="projects.project.containers.container.edit({projectId: ContainersCtrl.project.id, containerId: container.id})">
+                        <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
+                                ng-click="ContainersCtrl.edit(container)">
                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         </button>
                     </div>

@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h3 class="modal-title" ng-hide="ContinentModalCtrl.update">Create a new Continent</h3>
+    <h3 class="modal-title" ng-show="ContinentModalCtrl.update">{{ ContinentModalCtrl.continent.name }}</h3>
+</div>
+<div class="modal-body">
+    <input-field label="Continent name" value="ContinentModalCtrl.continent.name" editable="true"></input-field>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="ContinentModalCtrl.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ContinentModalCtrl.submit()">{{ ContinentModalCtrl.update ? 'Update' : 'Create' }}</button>
+</div>

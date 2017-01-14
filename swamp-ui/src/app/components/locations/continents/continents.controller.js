@@ -1,7 +1,9 @@
+import ContinentModalController from "./modal/continent-modal.controller";
+
 class ContinentsController {
-    constructor(LocationService, NavigationService) {
+    constructor(LocationService, $uibModal) {
         this.locationService = LocationService;
-        this.navigationService = NavigationService;
+        this.$uibModal = $uibModal;
         this.getAllContinents();
     }
 
@@ -10,11 +12,39 @@ class ContinentsController {
             .then((continents) => this.continents = continents);
     }
 
+    create() {
+        let modal = this.createModal({}, false);
+        modal.result.then((continent) => {
+            this.locationService.createContinent(continent)
+                .then(() => this.getAllContinents());
+        });
+    }
+
+    edit(continent) {
+        let modal = this.createModal(continent, true);
+        modal.result.then((continent) => {
+            continent.$update()
+                .then(() => this.getAllContinents());
+        });
+    }
+
+    createModal(continent, update) {
+        return this.$uibModal.open({
+            backdrop: 'static',
+            controllerAs: 'ContinentModalCtrl',
+            controller: ContinentModalController,
+            templateUrl: "/assets/templates/continent-modal.template.html",
+            resolve: {
+                continent: () => continent,
+                update: update
+            }
+        });
+    }
+
     delete(continent) {
         continent.$delete()
-            .then(() => this.getAllContinents())
-            .then(() => this.navigationService.goTo('continents'));
+            .then(() => this.getAllContinents());
     }
 }
 
-export default ['LocationService', 'NavigationService', ContinentsController]
+export default ['LocationService', '$uibModal', ContinentsController]

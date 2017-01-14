@@ -8,7 +8,7 @@ export default ['$stateProvider', ($stateProvider) => {
                 displayName: "datacenters",
                 disabled: false
             },
-            templateUrl: '/app/components/locations/datacenters/datacenters.template.html',
+            templateUrl: '/assets/templates/datacenters.template.html',
             controller: DatacentersController,
             controllerAs: 'DatacentersCtrl'
         });

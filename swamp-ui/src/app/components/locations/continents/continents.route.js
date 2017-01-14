@@ -7,7 +7,7 @@ export default ['$stateProvider', ($stateProvider) => {
             displayName: "continents",
             disabled: false
         },
-        templateUrl: '/app/components/locations/continents/continents.template.html',
+        templateUrl: '/assets/templates/continents.template.html',
         controller: ContinentsController,
         controllerAs: 'ContinentsCtrl'
     });

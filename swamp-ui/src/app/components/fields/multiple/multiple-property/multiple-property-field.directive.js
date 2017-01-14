@@ -9,7 +9,7 @@ class MultiplePropertyFieldDirective extends MultipleFieldDirective {
                 'valueField': '@'
             },
             controller: MultiplePropertyFieldController,
-            templateUrl: '/app/components/fields/multiple/multiple-property/multiple-property-field.template.html'
+            templateUrl: '/assets/templates/multiple-property-field.template.html'
         });
     }
 }

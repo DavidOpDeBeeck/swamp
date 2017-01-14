@@ -2,7 +2,7 @@ class FooterDirective {
     constructor() {
         this.restrict = 'E';
         this.replace = true;
-        this.templateUrl = '/app/components/layout/footer/footer.template.html';
+        this.templateUrl = '/assets/templates/footer.template.html';
     }
 }
 

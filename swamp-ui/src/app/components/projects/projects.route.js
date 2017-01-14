@@ -7,7 +7,7 @@ export default ['$stateProvider', ($stateProvider) => {
             displayName: 'projects',
             disabled: false
         },
-        templateUrl: '/app/components/projects/projects.template.html',
+        templateUrl: '/assets/templates/projects.template.html',
         controller: ProjectsController,
         controllerAs: 'ProjectCtrl'
     });

@@ -7,7 +7,7 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="DatacentersCtrl.filter"
                    aria-describedby="datacenters-search-icon"/>
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ui-sref="continents.continent.datacenters.create">
+                <button class="btn btn-default" type="button" ng-click="DatacentersCtrl.create()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
@@ -20,11 +20,11 @@
             </li>
             <li class="list-group-item">
                 <button type="button" class="btn btn-xs btn-danger pull-right"
-                        ng-click="DatacentersCtrl.delete(continent)">
+                        ng-click="DatacentersCtrl.delete(datacenter)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters.datacenter.edit({continentId: datacenter.continentId, datacenterId: datacenter.id})">
+                        ng-click="DatacentersCtrl.edit(datacenter)">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-info pull-right margin-xs-right"

@@ -1,36 +1,37 @@
-import angular from "angular";
-import uiBootstrap from "angular-ui-bootstrap";
-import uiRouter from "angular-ui-router";
+import Angular from "angular";
+import UIRouter from "angular-ui-router";
+import UIBootstrap from "angular-ui-bootstrap";
 import "ng-stomp";
-import httpInterceptor from "./interceptors/http.interceptor.module";
-import filters from "./filters/filters.module";
+import HttpInterceptor from "./interceptors/http.interceptor.module";
+import Filters from "./filters/filters.module";
 import AppRoute from "./app.route";
 import AppConfig from "./app.config";
-import services from "./services/services.module";
-import field from "./components/fields/fields.module";
-import layout from "./components/layout/layout.module";
-import shared from "./components/shared/shared.module";
-import home from "./components/home/home.module";
-import projects from "./components/projects/projects.module";
-import locations from "./components/locations/locations.module";
-import projectInstances from "./components/project-instances/project-instances.module";
-import version from "./components/version/version.module";
+import Services from "./services/services.module";
+import Field from "./components/fields/fields.module";
+import Layout from "./components/layout/layout.module";
+import Shared from "./components/shared/shared.module";
+import Home from "./components/home/home.module";
+import Projects from "./components/projects/projects.module";
+import Locations from "./components/locations/locations.module";
+import ProjectInstances from "./components/project-instances/project-instances.module";
+import Version from "./components/version/version.module";
 
-angular.module('swamp', [
+let module = Angular.module('swamp', [
         'ngStomp',
-        uiRouter,
-        uiBootstrap,
-        httpInterceptor,
-        filters,
-        field,
-        services,
-        layout,
-        shared,
-        home,
-        projects,
-        locations,
-        projectInstances,
-        version
+        UIRouter,
+        UIBootstrap,
+        HttpInterceptor,
+        Filters,
+        Services,
+        Field,
+        Layout,
+        Shared,
+        Home,
+        Projects,
+        Locations,
+        ProjectInstances,
+        Version
     ])
-    .config(AppRoute)
-    .run(AppConfig);
+    .config(AppRoute);
+
+module.run(AppConfig);

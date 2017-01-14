@@ -6,7 +6,7 @@ class VersionDirective {
         this.replace = true;
         this.controller = VersionController;
         this.controllerAs = 'versionCtrl';
-        this.templateUrl = '/app/components/version/version.template.html';
+        this.templateUrl = '/assets/templates/version.template.html';
     }
 }
 

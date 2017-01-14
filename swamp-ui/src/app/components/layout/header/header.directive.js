@@ -2,7 +2,7 @@ class HeaderDirective {
     constructor() {
         this.restrict = 'E';
         this.replace = true;
-        this.templateUrl = '/app/components/layout/header/header.template.html';
+        this.templateUrl = '/assets/templates/header.template.html';
     }
 }
 

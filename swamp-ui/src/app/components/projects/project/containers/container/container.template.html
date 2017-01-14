@@ -14,15 +14,6 @@
         <hr />
     </div>
     <div class="col-md-12">
-        <multiple-input-field
-                label="Aliases"
-                list="ContainerCtrl.container.aliases"
-                entity="Alias"
-                editable="ContainerCtrl.editable">
-        </multiple-input-field>
-        <hr />
-    </div>
-    <div class="col-md-12">
         <location-picker
                 locations="ContainerCtrl.container.potentialLocations"
                 editable="ContainerCtrl.editable">
@@ -30,14 +21,12 @@
         <hr />
     </div>
     <div class="col-md-12">
-        <multiple-property-field
-                label="Environment Variables"
-                list="ContainerCtrl.container.environmentVariables"
-                entity="Environment Variable"
-                name-field="name"
-                value-field="value"
+        <multiple-input-field
+                label="Aliases"
+                list="ContainerCtrl.container.aliases"
+                entity="Alias"
                 editable="ContainerCtrl.editable">
-        </multiple-property-field>
+        </multiple-input-field>
     </div>
     <div class="col-md-12">
         <multiple-property-field
@@ -46,6 +35,16 @@
                 entity="Port mapping"
                 name-field="internal"
                 value-field="external"
+                editable="ContainerCtrl.editable">
+        </multiple-property-field>
+    </div>
+    <div class="col-md-12">
+        <multiple-property-field
+                label="Environment Variables"
+                list="ContainerCtrl.container.environmentVariables"
+                entity="Environment Variable"
+                name-field="name"
+                value-field="value"
                 editable="ContainerCtrl.editable">
         </multiple-property-field>
     </div>

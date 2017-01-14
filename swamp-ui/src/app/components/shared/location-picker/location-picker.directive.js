@@ -11,7 +11,7 @@ class LocationPickerDirective {
         this.replace = true;
         this.controller = LocationPickerController;
         this.controllerAs = 'locationPicker';
-        this.templateUrl = '/app/components/shared/location-picker/location-picker.template.html';
+        this.templateUrl = '/assets/templates/location-picker.template.html';
     }
 }
 

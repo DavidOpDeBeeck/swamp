@@ -11,7 +11,7 @@ class ConfigurationPickerDirective {
         this.replace = true;
         this.controller = ConfigurationPickerController;
         this.controllerAs = 'configurationPicker';
-        this.templateUrl = '/app/components/shared/configuration-picker/configuration-picker.template.html';
+        this.templateUrl = '/assets/templates/configuration-picker.template.html';
     }
 }
 

@@ -1,12 +1,10 @@
-import angular from "angular";
-import uiBootstrap from "angular-ui-bootstrap";
-import services from "../../../services/services.module";
+import Angular from "angular";
+import UIBootstrap from "angular-ui-bootstrap";
+import Services from "../../../services/services.module";
 import Server from "./server/server.module";
 import ServersRoute from "./servers.route";
-import ServersCreateRoute from "./create/servers-create.route";
 
-const module = angular.module('swamp.servers', [services, uiBootstrap, Server])
-    .config(ServersRoute)
-    .config(ServersCreateRoute);
+const module = Angular.module('swamp.servers', [UIBootstrap, Services, Server])
+    .config(ServersRoute);
 
 export default module.name;

@@ -7,7 +7,7 @@ export default ['$stateProvider', ($stateProvider) => {
             displayName: "servers",
             disabled: false
         },
-        templateUrl: '/app/components/locations/servers/servers.template.html',
+        templateUrl: '/assets/templates/servers.template.html',
         controller: ServersController,
         controllerAs: 'ServersCtrl'
     });

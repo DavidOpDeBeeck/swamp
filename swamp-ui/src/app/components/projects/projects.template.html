@@ -7,7 +7,7 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="ProjectCtrl.filter"
                    aria-describedby="projects-search-icon"/>
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ui-sref="projects.create">
+                <button class="btn btn-default" type="button" ng-click="ProjectCtrl.create()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
@@ -23,11 +23,11 @@
             </li>
             <li class="list-group-item">
                 <button type="button" class="btn btn-xs btn-danger pull-right"
-                        ng-click="ProjectCtrl.delete(continent)">
+                        ng-click="ProjectCtrl.delete(project)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
-                        ui-sref="projects.project.edit({projectId: project.id})">
+                        ng-click="ProjectCtrl.edit(project)">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-info pull-right margin-xs-right"

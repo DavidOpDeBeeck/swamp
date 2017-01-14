@@ -1,11 +1,9 @@
-import angular from "angular";
-import uiBootstrap from "angular-ui-bootstrap";
+import Angular from "angular";
+import UIBootstrap from "angular-ui-bootstrap";
 import services from "../../../../services/services.module";
 import DatacenterRoute from "./datacenter.route";
-import DatacenterEditRoute from "./edit/datacenter-edit.route";
 
-const module = angular.module('swamp.datacenter', [services, uiBootstrap])
-    .config(DatacenterRoute)
-    .config(DatacenterEditRoute);
+const module = Angular.module('swamp.datacenter', [UIBootstrap, services])
+    .config(DatacenterRoute);
 
 export default module.name;

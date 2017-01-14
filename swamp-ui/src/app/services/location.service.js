@@ -44,8 +44,8 @@ class LocationService {
         }).$promise;
     }
 
-    createDatacenter(datacenter) {
-        return this.datacentersResource.create(datacenter).$promise;
+    createDatacenter(continentId, datacenter) {
+        return this.datacentersResource.create({continentId: continentId}, datacenter).$promise;
     }
 
     getDatacenter(continentId, datacenterId) {
@@ -57,8 +57,8 @@ class LocationService {
             .then((datacenter) => this.mapDatacenter(continentId, datacenter));
     }
 
-    createServer(server) {
-        return this.serversResource.create(server).$promise;
+    createServer(continentId, datacenterId, server) {
+        return this.serversResource.create({continentId: continentId, datacenterId: datacenterId}, server).$promise;
     }
 
     getServer(continentId, datacenterId, serverId) {

@@ -6,7 +6,7 @@ class MultipleAutocompleteFieldDirective extends MultipleFieldDirective {
             extraScope: {
                 'autocompleteList': '='
             },
-            templateUrl: '/app/components/fields/multiple/multiple-autocomplete/multiple-autocomplete-field.template.html'
+            templateUrl: '/assets/templates/multiple-autocomplete-field.template.html'
         });
     }
 }

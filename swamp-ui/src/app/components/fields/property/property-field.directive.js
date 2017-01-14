@@ -7,7 +7,7 @@ class PropertyFieldDirective extends FieldDirective {
                 'nameField': '@',
                 'valueField': '@'
             },
-            templateUrl: '/app/components/fields/property/property-field.template.html'
+            templateUrl: '/assets/templates/property-field.template.html'
         });
     }
 }

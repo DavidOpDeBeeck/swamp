@@ -1,7 +1,7 @@
-import angular from "angular";
+import Angular from "angular";
 import HomeRoute from "./home.route";
 
-const module = angular.module('swamp.home', [])
+const module = Angular.module('swamp.home', [])
     .config(HomeRoute);
 
 export default module.name;

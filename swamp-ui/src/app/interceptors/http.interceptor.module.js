@@ -1,3 +1,4 @@
+import Angular from "angular";
 import Logger from "../common/logger";
 
 function RequestConverter() {
@@ -32,7 +33,7 @@ function RequestProvider($httpProvider) {
     $httpProvider.interceptors.push('RequestConverter');
 }
 
-export default angular.module('swamp.interceptors', [])
+export default Angular.module('swamp.interceptors', [])
     .factory('RequestLogger', RequestLogger)
     .factory('RequestConverter', RequestConverter)
     .config(['$httpProvider', RequestProvider])

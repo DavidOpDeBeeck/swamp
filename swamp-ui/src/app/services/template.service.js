@@ -1,6 +1,6 @@
 class TemplateService {
     constructor($resource) {
-        this.templateResource = $resource('/app/templates/templates.json');
+        this.templateResource = $resource('/assets/json/templates.json');
     }
 
     getTemplates() {
@@ -8,4 +8,4 @@ class TemplateService {
     }
 }
 
-export default  ['$resource', TemplateService]
+export default ['$resource', TemplateService]

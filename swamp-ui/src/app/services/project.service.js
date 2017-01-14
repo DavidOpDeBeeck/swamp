@@ -33,8 +33,8 @@ class ProjectService {
         return this.projectResource.get({id: id}).$promise;
     }
 
-    createContainer(container) {
-        return this.containerResource.create(container).$promise;
+    createContainer(projectId, container) {
+        return this.containerResource.create({projectId: projectId}, container).$promise;
     }
 
     getContainer(projectId, containerId) {

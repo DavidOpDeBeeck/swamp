@@ -8,7 +8,7 @@ export default ['$stateProvider', ($stateProvider) => {
             disabled: false,
             display: false
         },
-        templateUrl: '/app/components/projects/project/containers/containers.template.html',
+        templateUrl: '/assets/templates/containers.template.html',
         controller: ContainersController,
         controllerAs: 'ContainersCtrl'
     });

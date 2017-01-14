@@ -1,17 +1,16 @@
-import angular from "angular";
-import angularResource from "angular-resource";
+import Angular from "angular";
+import AngularResource from "angular-resource";
 import LocationService from "./location.service";
 import ProjectService from "./project.service";
-import NavigationService from "./navigation.service";
 import ProjectInstanceService from "./project-instance.service";
 import VersionService from "./version.service";
 import TemplateService from "./template.service";
 
-export default angular.module('swamp.services', [angularResource])
+let module = Angular.module('swamp.services', [AngularResource])
     .service('LocationService', LocationService)
     .service('ProjectService', ProjectService)
-    .service('NavigationService', NavigationService)
     .service('ProjectInstanceService', ProjectInstanceService)
     .service('VersionService', VersionService)
-    .service('TemplateService', TemplateService)
-    .name;
+    .service('TemplateService', TemplateService);
+
+export default module.name;

@@ -1,6 +1,6 @@
 export default ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
     $stateProvider.state('home', {
         url: "/",
-        templateUrl: '/app/components/home/home.template.html'
+        templateUrl: '/assets/templates/home.template.html'
     });
 }];

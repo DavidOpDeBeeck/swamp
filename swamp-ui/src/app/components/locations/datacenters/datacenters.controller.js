@@ -1,8 +1,10 @@
+import DatacenterModalController from "./modal/datacenter-modal.controller";
+
 class DatacentersController {
-    constructor(LocationService, NavigationService, continent) {
+    constructor(LocationService, continent, $uibModal) {
         this.continent = continent;
         this.locationService = LocationService;
-        this.navigationService = NavigationService;
+        this.$uibModal = $uibModal;
         this.getAllDatacenters();
     }
 
@@ -11,11 +13,39 @@ class DatacentersController {
             .then((datacenters) => this.datacenters = datacenters);
     }
 
+    create() {
+        let modal = this.createModal({}, false);
+        modal.result.then((datacenter) => {
+            this.locationService.createDatacenter(this.continent.id, datacenter)
+                .then(() => this.getAllDatacenters());
+        });
+    }
+
+    edit(datacenter) {
+        let modal = this.createModal(datacenter, true);
+        modal.result.then((datacenter) => {
+            datacenter.$update()
+                .then(() => this.getAllDatacenters());
+        });
+    }
+
+    createModal(datacenter, update) {
+        return this.$uibModal.open({
+            backdrop: 'static',
+            controllerAs: 'DatacenterModalCtrl',
+            controller: DatacenterModalController,
+            templateUrl: "/assets/templates/datacenter-modal.template.html",
+            resolve: {
+                datacenter: () => datacenter,
+                update: update
+            }
+        });
+    }
+
     delete(datacenter) {
         datacenter.$delete()
-            .then(() => this.getAllDatacenters())
-            .then(() => this.navigationService.goTo('continents.continent.datacenters', {continentId: this.continent.id}));
+            .then(() => this.getAllDatacenters());
     }
 }
 
-export default ['LocationService', 'NavigationService', 'continent', DatacentersController]
+export default ['LocationService', 'continent', '$uibModal', DatacentersController]

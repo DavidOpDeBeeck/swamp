@@ -3,7 +3,6 @@ import MultipleFieldController from "../multiple.field.controller.js";
 class MultiplePropertyFieldController extends MultipleFieldController {
     constructor() {
         super();
-        this.list = this.list ? this.list : [];
     }
 
     add() {

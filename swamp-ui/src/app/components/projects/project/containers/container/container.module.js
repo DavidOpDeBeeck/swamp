@@ -1,13 +1,11 @@
-import angular from "angular";
-import uiBootstrap from "angular-ui-bootstrap";
-import services from "../../../../../services/services.module";
+import Angular from "angular";
+import UIBootstrap from "angular-ui-bootstrap";
+import Services from "../../../../../services/services.module";
 import ContainerRoute from "./container.route";
-import ContainerEditRoute from "./edit/container-edit.route";
 import ContainerDirective from "./container.directive";
 
-const module = angular.module('swamp.container', [services, uiBootstrap])
+const module = Angular.module('swamp.container', [UIBootstrap, Services])
     .directive("container", ContainerDirective)
-    .config(ContainerRoute)
-    .config(ContainerEditRoute);
+    .config(ContainerRoute);
 
 export default module.name;

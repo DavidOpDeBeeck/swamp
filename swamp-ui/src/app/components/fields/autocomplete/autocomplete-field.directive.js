@@ -6,7 +6,7 @@ class InputFieldDirective extends FieldDirective {
             extraScope: {
                 'autocompleteList': '='
             },
-            templateUrl: '/app/components/fields/autocomplete/autocomplete-field.template.html'
+            templateUrl: '/assets/templates/autocomplete-field.template.html'
         });
     }
 }

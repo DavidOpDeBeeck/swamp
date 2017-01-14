@@ -3,6 +3,7 @@ import FieldController from "../field.controller";
 class MultipleFieldsController extends FieldController {
     constructor() {
         super();
+        this.list = this.list ? this.list : [];
     }
 
     add() {

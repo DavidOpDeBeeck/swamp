@@ -1,5 +1,5 @@
-import angular from "angular";
-import uiBootstrap from "angular-ui-bootstrap";
+import Angular from "angular";
+import UIBootstrap from "angular-ui-bootstrap";
 import IncludeReplaceDirective from "./include-replace.directive";
 import InputFieldDirective from "./input/input-field.directive";
 import TextareaFieldDirective from "./textarea/textarea-field.directive";
@@ -10,7 +10,7 @@ import MultiplePropertyFieldDirective from "./multiple/multiple-property/multipl
 import MultipleAutocompleteFieldDirective from "./multiple/multiple-autocomplete/multiple-autocomplete-field.directive";
 import MultipleInputFieldDirective from "./multiple/multiple-input/multiple-input-field.directive";
 
-const module = angular.module('swamp.field', [uiBootstrap])
+const module = Angular.module('swamp.field', [UIBootstrap])
     .directive('includeReplace', IncludeReplaceDirective)
     .directive('inputField', InputFieldDirective)
     .directive('textareaField', TextareaFieldDirective)

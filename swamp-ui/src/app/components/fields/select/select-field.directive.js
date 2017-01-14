@@ -3,7 +3,7 @@ import FieldDirective from "../field.directive";
 class SelectFieldDirective extends FieldDirective {
     constructor() {
         super({
-            templateUrl: '/app/components/fields/select/select-field.template.html'
+            templateUrl: '/assets/templates/select-field.template.html'
         });
     }
 }

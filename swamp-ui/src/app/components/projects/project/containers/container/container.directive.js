@@ -10,7 +10,7 @@ class ContainerDirective {
         this.controller = () => {
         };
         this.controllerAs = 'ContainerCtrl';
-        this.templateUrl = '/app/components/projects/project/containers/container/container.template.html';
+        this.templateUrl = '/assets/templates/container.template.html';
     }
 }
 

@@ -1,5 +1,7 @@
-import angular from "angular";
+import Angular from "angular";
 import DateFilter from "./date.filter";
 
-export default angular.module( 'swamp.filters', [] )
-        .filter( "toDate", DateFilter ).name;
+let module = Angular.module('swamp.filters', [])
+    .filter("toDate", DateFilter);
+
+export default module.name;

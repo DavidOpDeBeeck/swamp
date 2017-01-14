@@ -7,7 +7,7 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="ContinentsCtrl.filter"
                    aria-describedby="continents-search-icon"/>
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ui-sref="continents.create">
+                <button class="btn btn-default" type="button" ng-click="ContinentsCtrl.create()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
@@ -24,7 +24,7 @@
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
-                        ui-sref="continents.continent.edit({continentId: continent.id})">
+                        ng-click="ContinentsCtrl.edit(continent)">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-info pull-right margin-xs-right"

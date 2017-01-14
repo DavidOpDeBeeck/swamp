@@ -8,7 +8,7 @@
                    aria-describedby="servers-search-icon"/>
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button"
-                        ui-sref="continents.continent.datacenters.datacenter.servers.create">
+                        ng-click="ServersCtrl.create()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </span>
@@ -21,11 +21,11 @@
             </li>
             <li class="list-group-item">
                 <button type="button" class="btn btn-xs btn-danger pull-right"
-                        ng-click="ServersCtrl.delete(continent)">
+                        ng-click="ServersCtrl.delete(server)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters.datacenter.servers.server.edit({continentId: ServersCtrl.continent.id, datacenterId: ServersCtrl.datacenter.id, serverId: server.id})">
+                        ng-click="ServersCtrl.edit(server)">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </button>
             </li>

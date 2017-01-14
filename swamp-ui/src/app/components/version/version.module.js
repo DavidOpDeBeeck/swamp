@@ -1,7 +1,7 @@
-import angular from "angular";
+import Angular from "angular";
 import VersionDirective from "./version.directive";
 
-const module = angular.module('swamp.version', [])
+const module = Angular.module('swamp.version', [])
     .directive('version', VersionDirective);
 
 export default module.name;

@@ -1,9 +1,11 @@
+import ServerModalController from "./modal/server-modal.controller";
+
 class ServersController {
-    constructor(LocationService, NavigationService, continent, datacenter) {
+    constructor(LocationService, continent, datacenter, $uibModal) {
         this.continent = continent;
         this.datacenter = datacenter;
         this.locationService = LocationService;
-        this.navigationService = NavigationService;
+        this.$uibModal = $uibModal;
         this.getAllServers();
     }
 
@@ -12,14 +14,39 @@ class ServersController {
             .then((servers) => this.servers = servers);
     }
 
+    create() {
+        let modal = this.createModal({}, false);
+        modal.result.then((server) => {
+            this.locationService.createServer(this.continent.id, this.datacenter.id, server)
+                .then(() => this.getAllServers());
+        });
+    }
+
+    edit(server) {
+        let modal = this.createModal(server, true);
+        modal.result.then((server) => {
+            server.$update()
+                .then(() => this.getAllServers());
+        });
+    }
+
+    createModal(server, update) {
+        return this.$uibModal.open({
+            backdrop: 'static',
+            controllerAs: 'ServerModalCtrl',
+            controller: ServerModalController,
+            templateUrl: "/assets/templates/server-modal.template.html",
+            resolve: {
+                server: () => server,
+                update: update
+            }
+        });
+    }
+
     delete(server) {
         server.$delete()
-            .then(() => this.getAllServers())
-            .then(() => this.navigationService.goTo('continents.continent.datacenters.datacenter.servers', {
-                continentId: this.continent.id,
-                datacenterId: this.datacenter.id
-            }));
+            .then(() => this.getAllServers());
     }
 }
 
-export default ['LocationService', 'NavigationService', 'continent', 'datacenter', ServersController]
+export default ['LocationService', 'continent', 'datacenter', '$uibModal', ServersController]

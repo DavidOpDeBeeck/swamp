@@ -1,3 +1,8 @@
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .breadcrumb > li + li:before {
     padding: 0 5px;
     color: #ccc;

@@ -11,7 +11,7 @@ class LocationPickerDirective {
         this.replace = true;
         this.controller = TemplatePickerController;
         this.controllerAs = 'templatePicker';
-        this.templateUrl = '/app/components/shared/template-picker/template-picker.template.html';
+        this.templateUrl = '/assets/templates/template-picker.template.html';
     }
 }
 

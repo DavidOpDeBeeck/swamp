@@ -4,7 +4,7 @@
 class BreadcrumbsDirective {
     constructor($interpolate, $state) {
         this.restrict = 'E';
-        this.templateUrl = '/app/components/shared/ui-breadcrumbs/ui-breadcrumbs.template.html';
+        this.templateUrl = '/assets/templates/ui-breadcrumbs.template.html';
         this.scope = {
             displaynameProperty: '@',
             disabledProperty: '@?'

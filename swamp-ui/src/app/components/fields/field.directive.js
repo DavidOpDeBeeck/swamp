@@ -1,4 +1,4 @@
-import angular from "angular";
+import Angular from "angular";
 import FieldController from "./field.controller.js";
 
 class FieldDirective {
@@ -20,7 +20,7 @@ class FieldDirective {
         this.controller = controller;
         this.controllerAs = controllerAs;
         this.template = '<div ng-include="templateUrl" include-replace></div>';
-        angular.extend(this.scope, extraScope);
+        Angular.extend(this.scope, extraScope);
     }
 
     link($scope) {
