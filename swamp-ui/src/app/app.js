@@ -1,11 +1,12 @@
 import Angular from "angular";
 import UIRouter from "angular-ui-router";
 import UIBootstrap from "angular-ui-bootstrap";
+import UINotification from "angular-ui-notification";
 import "ng-stomp";
 import HttpInterceptor from "./interceptors/http.interceptor.module";
 import Filters from "./filters/filters.module";
+import AppConfigs from "./configs/configs.module";
 import AppRoute from "./app.route";
-import AppConfig from "./app.config";
 import Services from "./services/services.module";
 import Field from "./components/fields/fields.module";
 import Layout from "./components/layout/layout.module";
@@ -16,13 +17,15 @@ import Locations from "./components/locations/locations.module";
 import ProjectInstances from "./components/project-instances/project-instances.module";
 import Version from "./components/version/version.module";
 
-let module = Angular.module('swamp', [
+const module = Angular.module('swamp', [
         'ngStomp',
         UIRouter,
         UIBootstrap,
+        UINotification,
         HttpInterceptor,
         Filters,
         Services,
+        AppConfigs,
         Field,
         Layout,
         Shared,
@@ -33,5 +36,3 @@ let module = Angular.module('swamp', [
         Version
     ])
     .config(AppRoute);
-
-module.run(AppConfig);

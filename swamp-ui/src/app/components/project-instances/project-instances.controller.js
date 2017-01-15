@@ -1,14 +1,7 @@
 class ProjectInstancesController {
-    constructor(ProjectInstanceService, $stomp) {
+    constructor(ProjectInstanceService) {
         this.projectInstanceService = ProjectInstanceService;
         this.getAllProjects();
-        $stomp
-            .connect('http://localhost:8081/schedule')
-            .then(() => {
-                $stomp.subscribe('/topic/container-updates', (payload) => {
-                    console.log(payload);
-                })
-            });
     }
 
     getAllProjects() {
@@ -17,4 +10,4 @@ class ProjectInstancesController {
     }
 }
 
-export default ['ProjectInstanceService', '$stomp', ProjectInstancesController]
+export default ['ProjectInstanceService', ProjectInstancesController]
