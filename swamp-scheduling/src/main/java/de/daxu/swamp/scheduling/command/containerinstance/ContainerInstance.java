@@ -11,6 +11,8 @@ import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +20,8 @@ import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstan
 
 @SuppressWarnings( "unused" )
 public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerInstanceId> {
+
+    private final Logger logger = LoggerFactory.getLogger( ContainerInstance.class );
 
     @AggregateIdentifier
     private ContainerInstanceId containerInstanceId;
@@ -42,22 +46,28 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     public void create( CreateContainerInstanceCommand command, DeployFacade deployFacade ) {
         validateStatusChange( CREATED );
 
-        ContainerResult response = deployFacade
+        ContainerResult result = deployFacade
                 .containerClient( server )
                 .create( configuration );
 
+        logger.info( "Container created: {}", result.getContainerId() );
+        logger.info( result.getWarnings().toString() );
+
         apply( new ContainerInstanceCreatedEvent(
                 containerInstanceId,
-                response.getContainerId(), LocalDateTime.now() ) );
+                result.getContainerId(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
     public void start( StartContainerInstanceCommand command, DeployFacade deployFacade ) {
         validateStatusChange( STARTED );
 
-        deployFacade
+        ContainerResult result = deployFacade
                 .containerClient( server )
                 .start( containerId );
+
+        logger.info( "Container started: {}", result.getContainerId() );
+        logger.info( result.getWarnings().toString() );
 
         apply( new ContainerInstanceStartedEvent( containerInstanceId, LocalDateTime.now() ) );
     }
@@ -66,9 +76,12 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     public void stop( StopContainerInstanceCommand command, DeployFacade deployFacade ) {
         validateStatusChange( STOPPED );
 
-        deployFacade
+        ContainerResult result = deployFacade
                 .containerClient( server )
                 .stop( containerId );
+
+        logger.info( "Container stopped: {}", result.getContainerId() );
+        logger.info( result.getWarnings().toString() );
 
         apply( new ContainerInstanceStoppedEvent( containerInstanceId, command.getReason(), LocalDateTime.now() ) );
     }
@@ -77,9 +90,12 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     public void remove( RemoveContainerInstanceCommand command, DeployFacade deployFacade ) {
         validateStatusChange( REMOVED );
 
-        deployFacade
+        ContainerResult result = deployFacade
                 .containerClient( server )
                 .remove( containerId );
+
+        logger.info( "Container stopped: {}", result.getContainerId() );
+        logger.info( result.getWarnings().toString() );
 
         apply( new ContainerInstanceRemovedEvent( containerInstanceId, command.getReason(), LocalDateTime.now() ) );
     }

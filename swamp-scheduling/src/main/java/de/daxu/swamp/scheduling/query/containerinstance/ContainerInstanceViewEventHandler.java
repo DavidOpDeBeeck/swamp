@@ -60,6 +60,7 @@ public class ContainerInstanceViewEventHandler {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
         view.setStoppedAt( event.getStoppedAt() );
+        view.setStopReason( event.getReason() );
         view.setStatus( STOPPED );
 
         containerInstanceViewRepository.save( view );
@@ -70,6 +71,7 @@ public class ContainerInstanceViewEventHandler {
         ContainerInstanceView view = getByContainerInstanceId( event );
 
         view.setRemovedAt( event.getRemovedAt() );
+        view.setRemoveReason( event.getReason() );
         view.setStatus( REMOVED );
 
         containerInstanceViewRepository.save( view );

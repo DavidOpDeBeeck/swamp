@@ -6,6 +6,8 @@ import de.daxu.swamp.common.jackson.LocalDateTimeSerializer;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
+import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
+import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -55,6 +57,14 @@ public class ContainerInstanceView extends EntityView {
     @Embedded
     private RunConfigurationView runConfiguration;
 
+    @Enumerated( EnumType.STRING )
+    @Column( name = "stop_reason" )
+    private ContainerInstanceStopReason stopReason;
+
+    @Enumerated( EnumType.STRING )
+    @Column( name = "remove_reason" )
+    private ContainerInstanceRemoveReason removeReason;
+
     private ContainerInstanceView() {
     }
 
@@ -68,7 +78,9 @@ public class ContainerInstanceView extends EntityView {
                                    String log,
                                    ContainerInstanceStatus status,
                                    ServerView server,
-                                   RunConfigurationView runConfiguration ) {
+                                   RunConfigurationView runConfiguration,
+                                   ContainerInstanceStopReason stopReason,
+                                   ContainerInstanceRemoveReason removeReason ) {
         this.containerInstanceId = containerInstanceId;
         this.containerId = containerId;
         this.initializedAt = initializedAt;
@@ -79,6 +91,8 @@ public class ContainerInstanceView extends EntityView {
         this.log = log;
         this.status = status;
         this.server = server;
+        this.stopReason = stopReason;
+        this.removeReason = removeReason;
         this.runConfiguration = runConfiguration;
     }
 
@@ -112,6 +126,14 @@ public class ContainerInstanceView extends EntityView {
 
     void setStatus( ContainerInstanceStatus status ) {
         this.status = status;
+    }
+
+    public void setStopReason( ContainerInstanceStopReason stopReason ) {
+        this.stopReason = stopReason;
+    }
+
+    public void setRemoveReason( ContainerInstanceRemoveReason removeReason ) {
+        this.removeReason = removeReason;
     }
 
     public ContainerInstanceId getContainerInstanceId() {
@@ -163,6 +185,14 @@ public class ContainerInstanceView extends EntityView {
         return runConfiguration;
     }
 
+    public ContainerInstanceStopReason getStopReason() {
+        return stopReason;
+    }
+
+    public ContainerInstanceRemoveReason getRemoveReason() {
+        return removeReason;
+    }
+
     public static class Builder {
 
         private ContainerInstanceId containerInstanceId;
@@ -176,6 +206,8 @@ public class ContainerInstanceView extends EntityView {
         private ContainerInstanceStatus status;
         private ServerView server;
         private RunConfigurationView runConfiguration;
+        private ContainerInstanceStopReason stopReason;
+        private ContainerInstanceRemoveReason removeReason;
 
         static Builder aContainerInstanceView() {
             return new Builder();
@@ -231,8 +263,13 @@ public class ContainerInstanceView extends EntityView {
             return this;
         }
 
-        public Builder withRunConfiguration( RunConfigurationView runConfiguration ) {
-            this.runConfiguration = runConfiguration;
+        public Builder withStopReason( ContainerInstanceStopReason stopReason ) {
+            this.stopReason = stopReason;
+            return this;
+        }
+
+        public Builder withRemoveReason( ContainerInstanceRemoveReason removeReason ) {
+            this.removeReason = removeReason;
             return this;
         }
 
@@ -248,7 +285,9 @@ public class ContainerInstanceView extends EntityView {
                     log,
                     status,
                     server,
-                    runConfiguration );
+                    runConfiguration,
+                    stopReason,
+                    removeReason );
         }
     }
 }

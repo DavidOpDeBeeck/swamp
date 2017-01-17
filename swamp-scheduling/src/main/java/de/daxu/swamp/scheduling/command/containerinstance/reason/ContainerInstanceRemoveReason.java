@@ -2,8 +2,8 @@ package de.daxu.swamp.scheduling.command.containerinstance.reason;
 
 public enum ContainerInstanceRemoveReason {
 
+    INITIALIZATION_FAILED,
     NOT_AVAILABLE_ON_HOST,
-    DEPLOY_WAIT_TIME_EXCEEDED,
-    INVALID_CONTAINER_CONFIG
+    STOPPED_WAIT_TIME_EXCEEDED
 
 }
