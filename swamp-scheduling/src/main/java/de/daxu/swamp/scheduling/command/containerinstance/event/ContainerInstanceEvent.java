@@ -4,7 +4,7 @@ import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
 public class ContainerInstanceEvent {
 
-    private ContainerInstanceId containerInstanceId;
+    private final ContainerInstanceId containerInstanceId;
 
     public ContainerInstanceEvent( ContainerInstanceId containerInstanceId ) {
         this.containerInstanceId = containerInstanceId;

@@ -21,6 +21,7 @@ class ContainerInstanceController {
         this.status = instance.status;
         this.stopReason = instance.stopReason;
         this.removeReason = instance.removeReason;
+        this.warnings = instance.warnings;
         this.startedAt = this.formatDate(instance.startedAt);
         this.finishedAt = instance.stoppedAt == null ? "not yet finished" : this.formatDate(instance.stoppedAt);
     }

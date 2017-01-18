@@ -41,6 +41,7 @@ public class ContainerInstanceViewEventHandler {
         view.setCreatedAt( event.getCreatedAt() );
         view.setStatus( CREATED );
         view.setContainerId( event.getContainerId() );
+        view.addWarnings( event.getWarnings() );
 
         containerInstanceViewRepository.save( view );
     }
@@ -51,6 +52,7 @@ public class ContainerInstanceViewEventHandler {
 
         view.setStartedAt( event.getStartedAt() );
         view.setStatus( STARTED );
+        view.addWarnings( event.getWarnings() );
 
         containerInstanceViewRepository.save( view );
     }
@@ -62,6 +64,7 @@ public class ContainerInstanceViewEventHandler {
         view.setStoppedAt( event.getStoppedAt() );
         view.setStopReason( event.getReason() );
         view.setStatus( STOPPED );
+        view.addWarnings( event.getWarnings() );
 
         containerInstanceViewRepository.save( view );
     }
@@ -73,6 +76,7 @@ public class ContainerInstanceViewEventHandler {
         view.setRemovedAt( event.getRemovedAt() );
         view.setRemoveReason( event.getReason() );
         view.setStatus( REMOVED );
+        view.addWarnings( event.getWarnings() );
 
         containerInstanceViewRepository.save( view );
     }

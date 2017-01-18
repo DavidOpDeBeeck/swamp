@@ -2,27 +2,27 @@ function SetupNotifications($stomp, Notification) {
     $stomp
         .connect('http://localhost:8081/schedule')
         .then(() => {
-            $stomp.subscribe('/topic/container-updates', payload => {
-                handle(payload);
-            })
+            $stomp.subscribe('/topic/container-updates', payload => handle(payload));
         });
 
-    function handle( event ) {
-        switch (event.type) {
+    function handle(payload) {
+        let type = payload.type;
+        let event = payload.event;
+        switch (type) {
             case "ContainerInstanceStartedEvent":
-                display("Container started", event.startedAt);
+                display("Container started", event.containerInstanceId, "success");
                 break;
             case "ContainerInstanceStoppedEvent":
-                display("Container stopped", event.stoppedAt);
+                display("Container stopped", event.containerInstanceId, "warning");
                 break;
             case "ContainerInstanceRemovedEvent":
-                display("Container removed", event.removedAt);
+                display("Container removed", event.containerInstanceId, "error");
                 break;
         }
     }
 
-    function display(title, message) {
-        Notification({message: message, title: title});
+    function display(title, message, type) {
+        Notification({title: title, message: message}, type);
     }
 }
 

@@ -2,6 +2,10 @@
     color: #ffffff;
 }
 
+.ui-notification .message {
+    color: #ffffff;
+}
+
 hr {
     margin-top: 10px;
     margin-bottom: 10px;

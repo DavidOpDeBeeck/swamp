@@ -50,12 +50,11 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .create( configuration );
 
-        logger.info( "Container created: {}", result.getContainerId() );
-        logger.info( result.getWarnings().toString() );
-
         apply( new ContainerInstanceCreatedEvent(
                 containerInstanceId,
-                result.getContainerId(), LocalDateTime.now() ) );
+                result.getWarnings(),
+                result.getContainerId(),
+                LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -66,10 +65,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .start( containerId );
 
-        logger.info( "Container started: {}", result.getContainerId() );
-        logger.info( result.getWarnings().toString() );
-
-        apply( new ContainerInstanceStartedEvent( containerInstanceId, LocalDateTime.now() ) );
+        apply( new ContainerInstanceStartedEvent( containerInstanceId, result.getWarnings(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -80,10 +76,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .stop( containerId );
 
-        logger.info( "Container stopped: {}", result.getContainerId() );
-        logger.info( result.getWarnings().toString() );
-
-        apply( new ContainerInstanceStoppedEvent( containerInstanceId, command.getReason(), LocalDateTime.now() ) );
+        apply( new ContainerInstanceStoppedEvent( containerInstanceId, result.getWarnings(), command.getReason(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -94,10 +87,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .containerClient( server )
                 .remove( containerId );
 
-        logger.info( "Container stopped: {}", result.getContainerId() );
-        logger.info( result.getWarnings().toString() );
-
-        apply( new ContainerInstanceRemovedEvent( containerInstanceId, command.getReason(), LocalDateTime.now() ) );
+        apply( new ContainerInstanceRemovedEvent( containerInstanceId, result.getWarnings(), command.getReason(), LocalDateTime.now() ) );
     }
 
     @CommandHandler
@@ -106,11 +96,11 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                               ContainerInstanceCommandService service ) {
         validateStatus( STARTED );
 
-        deployFacade
+        ContainerResult result = deployFacade
                 .containerClient( server )
                 .log( containerId, ( log ) -> service.receiveLog( containerInstanceId, log ) );
 
-        apply( new ContainerInstanceLoggingStartedEvent( containerInstanceId, LocalDateTime.now() ) );
+        apply( new ContainerInstanceLoggingStartedEvent( containerInstanceId, result.getWarnings(), LocalDateTime.now() ) );
     }
 
     @CommandHandler

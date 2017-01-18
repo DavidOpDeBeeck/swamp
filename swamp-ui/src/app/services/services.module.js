@@ -6,7 +6,7 @@ import ProjectInstanceService from "./project-instance.service";
 import VersionService from "./version.service";
 import TemplateService from "./template.service";
 
-let module = Angular.module('swamp.services', [AngularResource])
+const module = Angular.module('swamp.services', [AngularResource])
     .service('LocationService', LocationService)
     .service('ProjectService', ProjectService)
     .service('ProjectInstanceService', ProjectInstanceService)

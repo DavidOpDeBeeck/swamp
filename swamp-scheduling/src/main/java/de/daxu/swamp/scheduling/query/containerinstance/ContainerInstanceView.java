@@ -12,6 +12,8 @@ import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstan
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table( name = "container_instance_view" )
@@ -65,6 +67,10 @@ public class ContainerInstanceView extends EntityView {
     @Column( name = "remove_reason" )
     private ContainerInstanceRemoveReason removeReason;
 
+    @ElementCollection
+    @CollectionTable( name = "container_instance_warning_view", joinColumns = @JoinColumn( name = "container_instance_view_id" ) )
+    private Set<String> warnings;
+
     private ContainerInstanceView() {
     }
 
@@ -80,7 +86,8 @@ public class ContainerInstanceView extends EntityView {
                                    ServerView server,
                                    RunConfigurationView runConfiguration,
                                    ContainerInstanceStopReason stopReason,
-                                   ContainerInstanceRemoveReason removeReason ) {
+                                   ContainerInstanceRemoveReason removeReason,
+                                   Set<String> warnings ) {
         this.containerInstanceId = containerInstanceId;
         this.containerId = containerId;
         this.initializedAt = initializedAt;
@@ -94,6 +101,7 @@ public class ContainerInstanceView extends EntityView {
         this.stopReason = stopReason;
         this.removeReason = removeReason;
         this.runConfiguration = runConfiguration;
+        this.warnings = warnings;
     }
 
     public void setContainerInstanceId( ContainerInstanceId containerInstanceId ) {
@@ -122,6 +130,12 @@ public class ContainerInstanceView extends EntityView {
 
     void addLog( String log ) {
         this.log += log;
+    }
+
+    void addWarnings( Set<String> warnings ) {
+        if( this.warnings == null )
+            this.warnings = new HashSet<>();
+        this.warnings.addAll( warnings );
     }
 
     void setStatus( ContainerInstanceStatus status ) {
@@ -193,6 +207,10 @@ public class ContainerInstanceView extends EntityView {
         return removeReason;
     }
 
+    public Set<String> getWarnings() {
+        return warnings;
+    }
+
     public static class Builder {
 
         private ContainerInstanceId containerInstanceId;
@@ -208,6 +226,7 @@ public class ContainerInstanceView extends EntityView {
         private RunConfigurationView runConfiguration;
         private ContainerInstanceStopReason stopReason;
         private ContainerInstanceRemoveReason removeReason;
+        private Set<String> warnings;
 
         static Builder aContainerInstanceView() {
             return new Builder();
@@ -273,6 +292,11 @@ public class ContainerInstanceView extends EntityView {
             return this;
         }
 
+        public Builder withWarnings( Set<String> warnings ) {
+            this.warnings = warnings;
+            return this;
+        }
+
         public ContainerInstanceView build() {
             return new ContainerInstanceView(
                     containerInstanceId,
@@ -287,7 +311,8 @@ public class ContainerInstanceView extends EntityView {
                     server,
                     runConfiguration,
                     stopReason,
-                    removeReason );
+                    removeReason,
+                    warnings );
         }
     }
 }

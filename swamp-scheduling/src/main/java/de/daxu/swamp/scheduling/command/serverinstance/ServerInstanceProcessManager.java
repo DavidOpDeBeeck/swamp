@@ -8,6 +8,8 @@ import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason.ERRORS_ON_ACTION;
+
 @Component
 @SuppressWarnings( "unused" )
 public class ServerInstanceProcessManager {
@@ -26,11 +28,19 @@ public class ServerInstanceProcessManager {
 
     @EventHandler
     public void on( ContainerInstanceCreatedEvent event ) {
-        containerInstanceCommandService.start( event.getContainerInstanceId() );
+        if( event.getWarnings().isEmpty() ) {
+            containerInstanceCommandService.start( event.getContainerInstanceId() );
+        } else {
+            containerInstanceCommandService.remove( event.getContainerInstanceId(), ERRORS_ON_ACTION );
+        }
     }
 
     @EventHandler
     public void on( ContainerInstanceStartedEvent event ) {
-        containerInstanceCommandService.startLogging( event.getContainerInstanceId() );
+        if( event.getWarnings().isEmpty() ) {
+            containerInstanceCommandService.startLogging( event.getContainerInstanceId() );
+        } else {
+            containerInstanceCommandService.remove( event.getContainerInstanceId(), ERRORS_ON_ACTION );
+        }
     }
 }
