@@ -44,3 +44,7 @@ Swamp is currently not production ready.
 - [v0.2-alpha](https://github.com/DavidOpDeBeeck/swamp/releases/tag/v0.2-alpha)
 - [v0.3-alpha](https://github.com/DavidOpDeBeeck/swamp/releases/tag/v0.3-alpha)
 - [v0.4-alpha](https://github.com/DavidOpDeBeeck/swamp/releases/tag/v0.4-alpha)
+
+## Status Diagram
+
+![status state diagram](https://raw.githubusercontent.com/DavidOpDeBeeck/swamp/master/models/status-state-diagram.jpg)
