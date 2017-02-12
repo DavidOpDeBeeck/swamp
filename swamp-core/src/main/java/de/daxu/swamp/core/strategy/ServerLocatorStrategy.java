@@ -8,5 +8,5 @@ import java.util.Set;
 
 public interface ServerLocatorStrategy {
 
-    Optional<Server> locate( Set<Location> locations );
+    Optional<Server> locate(Set<Location> locations);
 }

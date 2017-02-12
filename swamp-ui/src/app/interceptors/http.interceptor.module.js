@@ -1,5 +1,5 @@
 import Angular from "angular";
-import Logger from "../common/logger";
+import Logger from "domain/logger";
 
 function RequestConverter() {
     return {

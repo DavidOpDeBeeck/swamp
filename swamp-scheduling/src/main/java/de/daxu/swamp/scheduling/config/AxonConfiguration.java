@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduling.config;
 
+import de.daxu.swamp.scheduling.command.build.Build;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstance;
-import de.daxu.swamp.scheduling.command.projectinstance.ProjectInstance;
 import de.daxu.swamp.scheduling.command.serverinstance.ServerInstance;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
@@ -27,9 +27,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.util.Collections;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
 @Configuration
@@ -38,36 +38,36 @@ public class AxonConfiguration {
     private final PlatformTransactionManager transactionManager;
 
     @Autowired
-    public AxonConfiguration( PlatformTransactionManager transactionManager ) {
+    public AxonConfiguration(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
     @Bean
     public AnnotationEventListenerBeanPostProcessor annotationEventListenerBeanPostProcessor() {
         AnnotationEventListenerBeanPostProcessor processor = new AnnotationEventListenerBeanPostProcessor();
-        processor.setEventBus( eventBus() );
+        processor.setEventBus(eventBus());
         return processor;
     }
 
     @Bean
     public AnnotationCommandHandlerBeanPostProcessor annotationCommandHandlerBeanPostProcessor() {
         AnnotationCommandHandlerBeanPostProcessor processor = new AnnotationCommandHandlerBeanPostProcessor();
-        processor.setCommandBus( commandBus() );
+        processor.setCommandBus(commandBus());
         return processor;
     }
 
     @Bean
     public CommandBus commandBus() {
         SimpleCommandBus commandBus = new SimpleCommandBus();
-        commandBus.setHandlerInterceptors( Collections.singletonList( new BeanValidationInterceptor() ) );
-        commandBus.setTransactionManager( new SpringTransactionManager( transactionManager ) );
+        commandBus.setHandlerInterceptors(newArrayList(new BeanValidationInterceptor(), new CommandExceptionInterceptor()));
+        commandBus.setTransactionManager(new SpringTransactionManager(transactionManager));
         return commandBus;
     }
 
     @Bean
     public CommandGatewayFactoryBean<CommandGateway> commandGatewayFactoryBean() {
         CommandGatewayFactoryBean<CommandGateway> factory = new CommandGatewayFactoryBean<>();
-        factory.setCommandBus( commandBus() );
+        factory.setCommandBus(commandBus());
         return factory;
     }
 
@@ -78,7 +78,7 @@ public class AxonConfiguration {
 
     @Bean
     public JpaEventStore eventStore() {
-        return new JpaEventStore( entityManagerProvider() );
+        return new JpaEventStore(entityManagerProvider());
     }
 
     @Bean
@@ -89,22 +89,22 @@ public class AxonConfiguration {
     @Bean
     public Set<AggregateAnnotationCommandHandler> commandHandler() {
         return newHashSet(
-                createCommandHandler( ContainerInstance.class ),
-                createCommandHandler( ProjectInstance.class ),
-                createCommandHandler( ServerInstance.class )
+                createCommandHandler(ContainerInstance.class),
+                createCommandHandler(Build.class),
+                createCommandHandler(ServerInstance.class)
         );
     }
 
-    private <T extends EventSourcedAggregateRoot> AggregateAnnotationCommandHandler<T> createCommandHandler( Class<T> clazz ) {
+    private <T extends EventSourcedAggregateRoot> AggregateAnnotationCommandHandler<T> createCommandHandler(Class<T> clazz) {
         AggregateAnnotationCommandHandler<T> handler
-                = new AggregateAnnotationCommandHandler<>( clazz, repository( clazz ), annotationCommandTargetResolver(), springBeanParameterResolverFactory() );
-        handler.supportedCommands().forEach( command -> commandBus().subscribe( command, handler ) );
+                = new AggregateAnnotationCommandHandler<>(clazz, repository(clazz), annotationCommandTargetResolver(), springBeanParameterResolverFactory());
+        handler.supportedCommands().forEach(command -> commandBus().subscribe(command, handler));
         return handler;
     }
 
-    public <T extends EventSourcedAggregateRoot> EventSourcingRepository<T> repository( Class<T> clazz ) {
-        EventSourcingRepository<T> repository = new EventSourcingRepository<>( clazz, eventStore() );
-        repository.setEventBus( eventBus() );
+    private <T extends EventSourcedAggregateRoot> EventSourcingRepository<T> repository(Class<T> clazz) {
+        EventSourcingRepository<T> repository = new EventSourcingRepository<>(clazz, eventStore());
+        repository.setEventBus(eventBus());
         return repository;
     }
 

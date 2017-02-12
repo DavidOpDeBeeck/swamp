@@ -1,19 +1,9 @@
 package de.daxu.swamp.scheduling.command.containerinstance.event;
 
-import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.deploy.container.ContainerId;
 
-import java.util.Set;
+public interface ContainerInstanceDeployEvent extends ContainerInstanceEvent {
 
-public class ContainerInstanceDeployEvent extends ContainerInstanceEvent {
+    ContainerId getContainerId();
 
-    private final Set<String> warnings;
-
-    public ContainerInstanceDeployEvent( ContainerInstanceId containerInstanceId, Set<String> warnings ) {
-        super( containerInstanceId );
-        this.warnings = warnings;
-    }
-
-    public Set<String> getWarnings() {
-        return warnings;
-    }
 }

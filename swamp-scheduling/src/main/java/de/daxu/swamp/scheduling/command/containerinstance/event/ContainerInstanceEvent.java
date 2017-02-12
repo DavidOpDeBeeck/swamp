@@ -1,16 +1,9 @@
 package de.daxu.swamp.scheduling.command.containerinstance.event;
 
+import de.daxu.swamp.common.cqrs.Event;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
-public class ContainerInstanceEvent {
+public interface ContainerInstanceEvent extends Event {
 
-    private final ContainerInstanceId containerInstanceId;
-
-    public ContainerInstanceEvent( ContainerInstanceId containerInstanceId ) {
-        this.containerInstanceId = containerInstanceId;
-    }
-
-    public ContainerInstanceId getContainerInstanceId() {
-        return containerInstanceId;
-    }
+    ContainerInstanceId getContainerInstanceId();
 }

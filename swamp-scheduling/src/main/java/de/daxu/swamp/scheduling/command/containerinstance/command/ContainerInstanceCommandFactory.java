@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduling.command.containerinstance.command;
 
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
+import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
 import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContainerInstanceCommandFactory {
 
-    public InitializeContainerInstanceCommand createInitializeCommand( ContainerInstanceId containerInstanceId, ContainerConfiguration configuration, Server server ) {
-        return new InitializeContainerInstanceCommand( containerInstanceId, configuration, server );
+    public InitializeContainerInstanceCommand createInitializeCommand( ContainerInstanceId containerInstanceId,
+                                                                       BuildId buildId,
+                                                                       ContainerConfiguration configuration,
+                                                                       Server server ) {
+        return new InitializeContainerInstanceCommand( containerInstanceId, buildId, configuration, server );
     }
 
     public CreateContainerInstanceCommand createCreateCommand( ContainerInstanceId containerInstanceId ) {

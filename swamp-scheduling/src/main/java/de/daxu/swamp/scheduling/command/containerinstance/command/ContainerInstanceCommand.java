@@ -6,7 +6,7 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
 public class ContainerInstanceCommand {
 
     @TargetAggregateIdentifier
-    private ContainerInstanceId containerInstanceId;
+    private final ContainerInstanceId containerInstanceId;
 
     public ContainerInstanceCommand( ContainerInstanceId containerInstanceId ) {
         this.containerInstanceId = containerInstanceId;

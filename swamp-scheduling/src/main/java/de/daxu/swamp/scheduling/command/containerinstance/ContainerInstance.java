@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.command.containerinstance;
 
+import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
@@ -14,14 +15,12 @@ import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
-
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 
-@SuppressWarnings( "unused" )
+@SuppressWarnings("unused")
 public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerInstanceId> {
 
-    private final Logger logger = LoggerFactory.getLogger( ContainerInstance.class );
+    private final Logger logger = LoggerFactory.getLogger(ContainerInstance.class);
 
     @AggregateIdentifier
     private ContainerInstanceId containerInstanceId;
@@ -35,94 +34,161 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     @CommandHandler
-    public ContainerInstance( InitializeContainerInstanceCommand command ) {
-        apply( new ContainerInstanceInitializedEvent(
+    public ContainerInstance(InitializeContainerInstanceCommand command, EventMetaDataFactory eventMetaDataFactory) {
+        apply(new ContainerInstanceInitializedEvent(
                 command.getContainerInstanceId(),
+                eventMetaDataFactory.create(),
+                command.getBuildId(),
                 command.getServer(),
-                command.getConfiguration(), LocalDateTime.now() ) );
+                command.getConfiguration()));
     }
 
     @CommandHandler
-    public void create( CreateContainerInstanceCommand command, DeployFacade deployFacade ) {
-        validateStatusChange( CREATED );
+    public void create(CreateContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatusChange(CREATED);
 
         ContainerResult result = deployFacade
-                .containerClient( server )
-                .create( configuration );
+                .containerClient(server)
+                .create(configuration);
 
-        apply( new ContainerInstanceCreatedEvent(
-                containerInstanceId,
-                result.getWarnings(),
-                result.getContainerId(),
-                LocalDateTime.now() ) );
-    }
-
-    @CommandHandler
-    public void start( StartContainerInstanceCommand command, DeployFacade deployFacade ) {
-        validateStatusChange( STARTED );
-
-        ContainerResult result = deployFacade
-                .containerClient( server )
-                .start( containerId );
-
-        apply( new ContainerInstanceStartedEvent( containerInstanceId, result.getWarnings(), LocalDateTime.now() ) );
-    }
-
-    @CommandHandler
-    public void stop( StopContainerInstanceCommand command, DeployFacade deployFacade ) {
-        validateStatusChange( STOPPED );
-
-        ContainerResult result = deployFacade
-                .containerClient( server )
-                .stop( containerId );
-
-        apply( new ContainerInstanceStoppedEvent( containerInstanceId, result.getWarnings(), command.getReason(), LocalDateTime.now() ) );
-    }
-
-    @CommandHandler
-    public void remove( RemoveContainerInstanceCommand command, DeployFacade deployFacade ) {
-        validateStatusChange( REMOVED );
-
-        ContainerResult result = deployFacade
-                .containerClient( server )
-                .remove( containerId );
-
-        apply( new ContainerInstanceRemovedEvent( containerInstanceId, result.getWarnings(), command.getReason(), LocalDateTime.now() ) );
-    }
-
-    @CommandHandler
-    public void startLogging( StartContainerInstanceLoggingCommand command,
-                              DeployFacade deployFacade,
-                              ContainerInstanceCommandService service ) {
-        validateStatus( STARTED );
-
-        ContainerResult result = deployFacade
-                .containerClient( server )
-                .log( containerId, ( log ) -> service.receiveLog( containerInstanceId, log ) );
-
-        apply( new ContainerInstanceLoggingStartedEvent( containerInstanceId, result.getWarnings(), LocalDateTime.now() ) );
-    }
-
-    @CommandHandler
-    public void receiveLog( ReceiveContainerInstanceLogCommand command ) {
-        validateStatus( STARTED );
-        apply( new ContainerInstanceLogReceivedEvent( containerInstanceId, command.getLog(), LocalDateTime.now() ) );
-    }
-
-    private void validateStatusChange( ContainerInstanceStatus nextStatus ) {
-        if( !isValidPreviousStatus( nextStatus, status ) ) {
-            throw new InvalidContainerStatusChangeException( status, nextStatus );
+        if(result.isSuccess()) {
+            apply(new ContainerInstanceCreatedSucceededEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId()
+            ));
+        } else {
+            apply(new ContainerInstanceCreatedFailedEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    result.getWarnings()));
         }
     }
 
-    private void validateStatus( ContainerInstanceStatus statusToBe ) {
-        if( this.status != statusToBe ) {
-            throw new InvalidContainerStatusException( status, statusToBe );
+    @CommandHandler
+    public void start(StartContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatusChange(STARTED);
+
+        ContainerResult result = deployFacade
+                .containerClient(server)
+                .start(containerId);
+
+        if(result.isSuccess()) {
+            apply(new ContainerInstanceStartedSucceededEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId()
+            ));
+        } else {
+            apply(new ContainerInstanceStartedFailedEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    result.getWarnings()));
+        }
+    }
+
+    @CommandHandler
+    public void stop(StopContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatusChange(STOPPED);
+
+        ContainerResult result = deployFacade
+                .containerClient(server)
+                .stop(containerId);
+
+        if(result.isSuccess()) {
+            apply(new ContainerInstanceStoppedSucceededEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    command.getReason()
+            ));
+        } else {
+            apply(new ContainerInstanceStoppedFailedEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    result.getWarnings(),
+                    command.getReason()));
+        }
+    }
+
+    @CommandHandler
+    public void remove(RemoveContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatusChange(REMOVED);
+
+        ContainerResult result = deployFacade
+                .containerClient(server)
+                .remove(containerId);
+
+        if(result.isSuccess()) {
+            apply(new ContainerInstanceRemovedSucceededEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    command.getReason()
+            ));
+        } else {
+            apply(new ContainerInstanceRemovedFailedEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    result.getWarnings(),
+                    command.getReason()));
+        }
+    }
+
+    @CommandHandler
+    public void startLogging(StartContainerInstanceLoggingCommand command,
+                             DeployFacade deployFacade,
+                             ContainerInstanceCommandService service,
+                             EventMetaDataFactory eventMetaDataFactory) {
+        validateStatus(STARTED);
+
+        ContainerResult result = deployFacade
+                .containerClient(server)
+                .log(containerId, (log) -> service.receiveLog(containerInstanceId, log));
+
+        if(result.isSuccess()) {
+            apply(new ContainerInstanceLoggingStartedSucceededEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId()
+            ));
+        } else {
+            apply(new ContainerInstanceLoggingStartedFailedEvent(
+                    containerInstanceId,
+                    eventMetaDataFactory.create(),
+                    result.getContainerId(),
+                    result.getWarnings()));
+        }
+    }
+
+    @CommandHandler
+    public void receiveLog(ReceiveContainerInstanceLogCommand command, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatus(STARTED);
+        apply(new ContainerInstanceLogReceivedEvent(
+                containerInstanceId,
+                eventMetaDataFactory.create(),
+                containerId,
+                command.getLog()));
+    }
+
+    private void validateStatusChange(ContainerInstanceStatus nextStatus) {
+        if(!isValidPreviousStatus(nextStatus, status)) {
+            throw new InvalidContainerStatusChangeException(status, nextStatus);
+        }
+    }
+
+    private void validateStatus(ContainerInstanceStatus statusToBe) {
+        if(this.status != statusToBe) {
+            throw new InvalidContainerStatusException(status, statusToBe);
         }
     }
 
     @EventHandler
-    void on( ContainerInstanceInitializedEvent event ) {
+    void on(ContainerInstanceInitializedEvent event) {
         this.status = INITIALIZED;
         this.server = event.getServer();
         this.configuration = event.getConfiguration();
@@ -130,23 +196,23 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     @EventHandler
-    void on( ContainerInstanceCreatedEvent event ) {
+    void on(ContainerInstanceCreatedSucceededEvent event) {
         this.status = CREATED;
         this.containerId = event.getContainerId();
     }
 
     @EventHandler
-    void on( ContainerInstanceStartedEvent event ) {
+    void on(ContainerInstanceStartedEvent event) {
         this.status = STARTED;
     }
 
     @EventHandler
-    void on( ContainerInstanceStoppedEvent event ) {
+    void on(ContainerInstanceStoppedEvent event) {
         this.status = STOPPED;
     }
 
     @EventHandler
-    void on( ContainerInstanceRemovedEvent event ) {
+    void on(ContainerInstanceRemovedEvent event) {
         this.status = REMOVED;
     }
 

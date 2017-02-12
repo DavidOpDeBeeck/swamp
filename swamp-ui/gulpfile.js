@@ -39,7 +39,12 @@ function copyJSONTemplates() {
 }
 
 function build() {
-    return browserify({entries: APP_FOLDER + '/app.js', extensions: ['.js'], debug: true})
+    return browserify({
+            entries: APP_FOLDER + '/app.js',
+            extensions: ['.js'],
+            paths: ['./node_modules', './src/app/'],
+            debug: true
+        })
         .transform(babelify.configure({
             "presets": ["es2015"]
         }))

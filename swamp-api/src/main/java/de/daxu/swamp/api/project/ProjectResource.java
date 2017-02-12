@@ -9,7 +9,7 @@ import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.project.ProjectService;
-import de.daxu.swamp.scheduling.command.projectinstance.ProjectInstanceCommandService;
+import de.daxu.swamp.scheduling.command.build.BuildCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,19 +30,19 @@ public class ProjectResource {
     private final ProjectService projectService;
     private final ProjectConverter projectConverter;
     private final ProjectCreateConverter projectCreateConverter;
-    private final ProjectInstanceCommandService projectInstanceCommandService;
+    private final BuildCommandService buildCommandService;
 
     @Autowired
-    public ProjectResource( ResponseFactory responseFactory,
-                            ProjectService projectService,
-                            ProjectConverter projectConverter,
-                            ProjectCreateConverter projectCreateConverter,
-                            ProjectInstanceCommandService projectInstanceCommandService ) {
+    public ProjectResource(ResponseFactory responseFactory,
+                           ProjectService projectService,
+                           ProjectConverter projectConverter,
+                           ProjectCreateConverter projectCreateConverter,
+                           BuildCommandService buildCommandService) {
         this.response = responseFactory;
         this.projectService = projectService;
         this.projectConverter = projectConverter;
         this.projectCreateConverter = projectCreateConverter;
-        this.projectInstanceCommandService = projectInstanceCommandService;
+        this.buildCommandService = buildCommandService;
     }
 
     @RequestMapping( method = RequestMethod.GET )
@@ -97,7 +97,7 @@ public class ProjectResource {
     @RequestMapping( value = "/{projectId}", params = { "action=deploy" }, method = RequestMethod.POST )
     public Response deploy( @PathVariable( "projectId" ) Project project ) {
 
-        projectInstanceCommandService.initialize( project );
+        buildCommandService.initialize( project );
         return response.success();
     }
 }

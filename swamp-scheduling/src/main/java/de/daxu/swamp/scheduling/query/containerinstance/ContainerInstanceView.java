@@ -21,7 +21,7 @@ import java.util.Set;
 public class ContainerInstanceView extends EntityView {
 
     @Embedded
-    @NotNull( message = "{NotNull.ProjectInstanceView.containerInstanceId}" )
+    @NotNull( message = "{NotNull.ContainerInstanceView.containerInstanceId}" )
     private ContainerInstanceId containerInstanceId;
 
     @Column( name = "container_id" )

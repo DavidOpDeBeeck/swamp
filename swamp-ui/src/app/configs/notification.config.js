@@ -9,13 +9,13 @@ function SetupNotifications($stomp, Notification) {
         let type = payload.type;
         let event = payload.event;
         switch (type) {
-            case "ContainerInstanceStartedEvent":
+            case "ContainerInstanceStartedSucceededEvent":
                 display("Container started", event.containerInstanceId, "success");
                 break;
-            case "ContainerInstanceStoppedEvent":
+            case "ContainerInstanceStoppedSucceededEvent":
                 display("Container stopped", event.containerInstanceId, "warning");
                 break;
-            case "ContainerInstanceRemovedEvent":
+            case "ContainerInstanceRemovedSucceededEvent":
                 display("Container removed", event.containerInstanceId, "error");
                 break;
         }

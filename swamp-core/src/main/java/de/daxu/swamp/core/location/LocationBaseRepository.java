@@ -1,6 +1,5 @@
 package de.daxu.swamp.core.location;
 
-import de.daxu.swamp.core.location.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;

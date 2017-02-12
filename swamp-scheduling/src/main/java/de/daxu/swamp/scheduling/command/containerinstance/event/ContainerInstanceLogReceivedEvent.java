@@ -1,25 +1,24 @@
 package de.daxu.swamp.scheduling.command.containerinstance.event;
 
+import de.daxu.swamp.common.cqrs.EventMetaData;
+import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
-import java.time.LocalDateTime;
-
-public class ContainerInstanceLogReceivedEvent extends ContainerInstanceEvent {
+public class ContainerInstanceLogReceivedEvent
+        extends AbstractContainerInstanceDeployEvent
+        implements ContainerInstanceDeploySucceededEvent {
 
     private final String log;
-    private final LocalDateTime logReceivedAt;
 
-    public ContainerInstanceLogReceivedEvent( ContainerInstanceId containerInstanceId, String log, LocalDateTime logReceivedAt ) {
-        super( containerInstanceId );
+    public ContainerInstanceLogReceivedEvent(ContainerInstanceId containerInstanceId,
+                                             EventMetaData eventMetaData,
+                                             ContainerId containerId,
+                                             String log) {
+        super(containerInstanceId, eventMetaData, containerId);
         this.log = log;
-        this.logReceivedAt = logReceivedAt;
     }
 
     public String getLog() {
         return log;
-    }
-
-    public LocalDateTime getLogReceivedAt() {
-        return logReceivedAt;
     }
 }

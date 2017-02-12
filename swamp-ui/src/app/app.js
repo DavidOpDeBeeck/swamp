@@ -14,7 +14,7 @@ import Shared from "./components/shared/shared.module";
 import Home from "./components/home/home.module";
 import Projects from "./components/projects/projects.module";
 import Locations from "./components/locations/locations.module";
-import ProjectInstances from "./components/project-instances/project-instances.module";
+import Builds from "./components/builds/builds.module";
 import Version from "./components/version/version.module";
 
 const module = Angular.module('swamp', [
@@ -32,7 +32,7 @@ const module = Angular.module('swamp', [
         Home,
         Projects,
         Locations,
-        ProjectInstances,
+        Builds,
         Version
     ])
     .config(AppRoute);

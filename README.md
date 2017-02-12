@@ -48,3 +48,7 @@ Swamp is currently not production ready.
 ## Status Diagram
 
 ![status state diagram](https://raw.githubusercontent.com/DavidOpDeBeeck/swamp/master/models/status-state-diagram.jpg)
+
+## UML
+
+![deploy event uml](https://raw.githubusercontent.com/DavidOpDeBeeck/swamp/master/models/deploy-event-uml.png)

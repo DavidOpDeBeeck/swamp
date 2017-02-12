@@ -10,87 +10,128 @@ import static de.daxu.swamp.scheduling.query.containerinstance.ContainerInstance
 import static de.daxu.swamp.scheduling.query.containerinstance.ServerView.Builder.aServerView;
 
 @Component
-@SuppressWarnings( "unused" )
+@SuppressWarnings("unused")
 public class ContainerInstanceViewEventHandler {
 
     private final ContainerInstanceViewRepository containerInstanceViewRepository;
 
     @Autowired
-    public ContainerInstanceViewEventHandler( ContainerInstanceViewRepository containerInstanceViewRepository ) {
+    public ContainerInstanceViewEventHandler(ContainerInstanceViewRepository containerInstanceViewRepository) {
         this.containerInstanceViewRepository = containerInstanceViewRepository;
     }
 
     @EventHandler
-    void on( ContainerInstanceInitializedEvent event ) {
+    void on(ContainerInstanceInitializedEvent event) {
         ContainerInstanceView view = aContainerInstanceView()
-                .withContainerInstanceId( event.getContainerInstanceId() )
-                .withInitializedAt( event.getInitializedAt() )
-                .withServer( aServerView()
-                        .withName( event.getServer().getName() )
-                        .withIp( event.getServer().getIp() )
-                        .build() )
-                .withStatus( INITIALIZED )
+                .withContainerInstanceId(event.getContainerInstanceId())
+                .withInitializedAt(event.getEventMetaData().getCreatedAt())
+                .withServer(aServerView()
+                        .withName(event.getServer().getName())
+                        .withIp(event.getServer().getIp())
+                        .build())
+                .withStatus(INITIALIZED)
                 .build();
-        containerInstanceViewRepository.save( view );
+        containerInstanceViewRepository.save(view);
     }
 
     @EventHandler
-    void on( ContainerInstanceCreatedEvent event ) {
-        ContainerInstanceView view = getByContainerInstanceId( event );
+    void on(ContainerInstanceCreatedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
 
-        view.setCreatedAt( event.getCreatedAt() );
-        view.setStatus( CREATED );
-        view.setContainerId( event.getContainerId() );
-        view.addWarnings( event.getWarnings() );
+        view.setCreatedAt(event.getEventMetaData().getCreatedAt());
+        view.setStatus(CREATED);
+        view.setContainerId(event.getContainerId());
 
-        containerInstanceViewRepository.save( view );
+        containerInstanceViewRepository.save(view);
     }
 
     @EventHandler
-    void on( ContainerInstanceStartedEvent event ) {
-        ContainerInstanceView view = getByContainerInstanceId( event );
+    void on(ContainerInstanceCreatedFailedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
 
-        view.setStartedAt( event.getStartedAt() );
-        view.setStatus( STARTED );
-        view.addWarnings( event.getWarnings() );
+        view.setCreatedAt(event.getEventMetaData().getCreatedAt());
+        view.setStatus(CREATED);
+        view.setContainerId(event.getContainerId());
+        view.addWarnings(event.getErrors());
 
-        containerInstanceViewRepository.save( view );
+        containerInstanceViewRepository.save(view);
     }
 
     @EventHandler
-    void on( ContainerInstanceStoppedEvent event ) {
-        ContainerInstanceView view = getByContainerInstanceId( event );
+    void on(ContainerInstanceStartedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
 
-        view.setStoppedAt( event.getStoppedAt() );
-        view.setStopReason( event.getReason() );
-        view.setStatus( STOPPED );
-        view.addWarnings( event.getWarnings() );
+        view.setStartedAt(event.getEventMetaData().getCreatedAt());
+        view.setStatus(STARTED);
 
-        containerInstanceViewRepository.save( view );
+        containerInstanceViewRepository.save(view);
     }
 
     @EventHandler
-    void on( ContainerInstanceRemovedEvent event ) {
-        ContainerInstanceView view = getByContainerInstanceId( event );
+    void on(ContainerInstanceStartedFailedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
 
-        view.setRemovedAt( event.getRemovedAt() );
-        view.setRemoveReason( event.getReason() );
-        view.setStatus( REMOVED );
-        view.addWarnings( event.getWarnings() );
+        view.setStartedAt(event.getEventMetaData().getCreatedAt());
+        view.setStatus(STARTED);
+        view.addWarnings(event.getErrors());
 
-        containerInstanceViewRepository.save( view );
+        containerInstanceViewRepository.save(view);
     }
 
     @EventHandler
-    void on( ContainerInstanceLogReceivedEvent event ) {
-        ContainerInstanceView view = getByContainerInstanceId( event );
+    void on(ContainerInstanceStoppedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
 
-        view.addLog( event.getLog() );
+        view.setStoppedAt(event.getEventMetaData().getCreatedAt());
+        view.setStopReason(event.getReason());
+        view.setStatus(STOPPED);
 
-        containerInstanceViewRepository.save( view );
+        containerInstanceViewRepository.save(view);
     }
 
-    private ContainerInstanceView getByContainerInstanceId( ContainerInstanceEvent event ) {
-        return containerInstanceViewRepository.getByContainerInstanceId( event.getContainerInstanceId() );
+    @EventHandler
+    void on(ContainerInstanceStoppedFailedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
+
+        view.setStoppedAt(event.getEventMetaData().getCreatedAt());
+        view.setStopReason(event.getReason());
+        view.setStatus(STOPPED);
+        view.addWarnings(event.getErrors());
+
+        containerInstanceViewRepository.save(view);
+    }
+
+    @EventHandler
+    void on(ContainerInstanceRemovedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
+
+        view.setRemovedAt(event.getEventMetaData().getCreatedAt());
+        view.setRemoveReason(event.getReason());
+        view.setStatus(REMOVED);
+
+        containerInstanceViewRepository.save(view);
+    }
+
+    @EventHandler()
+    void on(ContainerInstanceRemovedFailedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
+
+        view.setRemovedAt(event.getEventMetaData().getCreatedAt());
+        view.setRemoveReason(event.getReason());
+        view.setStatus(REMOVED);
+        view.addWarnings(event.getErrors());
+
+        containerInstanceViewRepository.save(view);
+    }
+
+    @EventHandler
+    void on(ContainerInstanceLogReceivedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
+        view.addLog(event.getLog());
+        containerInstanceViewRepository.save(view);
+    }
+
+    private ContainerInstanceView getByContainerInstanceId(ContainerInstanceEvent event) {
+        return containerInstanceViewRepository.getByContainerInstanceId(event.getContainerInstanceId());
     }
 }

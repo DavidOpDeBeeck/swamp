@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="input-group margin-sm-bottom">
+            <span class="input-group-addon" id="projects-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="BuildsCtrl.filter"
+                   aria-describedby="projects-search-icon"/>
+        </div>
+        <div class="list-group" ng-repeat="project in BuildsCtrl.projects | filter: BuildsCtrl.filter">
+            <li class="list-group-item">
+                <span class="badge">{{ project.builds.length }} builds</span>
+                {{ project.name }}
+            </li>
+            <a class="list-group-item"
+               ng-repeat="build in project.builds | orderBy: 'initializedAt':-1"
+               ui-sref="builds.build.containerInstances({buildId: build.buildId})"
+               ui-sref-active="active">
+                <span class="badge">{{ build.initializedAt | toDate }}</span>
+                {{ build.containers.length }} container(s)
+            </a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div ui-view></div>
+    </div>
+</div>

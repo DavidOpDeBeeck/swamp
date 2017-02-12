@@ -1,7 +1,7 @@
 package de.daxu.swamp.scheduling.query.project;
 
 import de.daxu.swamp.common.cqrs.EntityView;
-import de.daxu.swamp.scheduling.query.projectinstance.ProjectInstanceView;
+import de.daxu.swamp.scheduling.query.build.BuildView;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -21,20 +21,20 @@ public class ProjectView extends EntityView {
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
     @JoinColumn( name = "project_view_id", referencedColumnName = "id" )
-    private Set<ProjectInstanceView> projectInstances;
+    private Set<BuildView> builds;
 
     private ProjectView() {
     }
 
-    private ProjectView( String name, String description, Set<ProjectInstanceView> projectInstances ) {
+    private ProjectView( String name, String description, Set<BuildView> builds) {
         this.name = name;
         this.description = description;
-        this.projectInstances = projectInstances;
+        this.builds = builds;
     }
 
-    void addProjectInstance( ProjectInstanceView projectInstance ) {
-        if ( this.projectInstances == null ) this.projectInstances = newHashSet();
-        this.projectInstances.add( projectInstance );
+    void addBuild(BuildView build ) {
+        if ( this.builds == null ) this.builds = newHashSet();
+        this.builds.add( build );
     }
 
     public String getName() {
@@ -45,15 +45,15 @@ public class ProjectView extends EntityView {
         return description;
     }
 
-    public Set<ProjectInstanceView> getProjectInstances() {
-        return projectInstances;
+    public Set<BuildView> getBuilds() {
+        return builds;
     }
 
     public static class Builder {
 
         private String name;
         private String description;
-        private Set<ProjectInstanceView> projectInstances;
+        private Set<BuildView> projectInstances;
 
         public static Builder aProjectView() {
             return new Builder();
@@ -69,7 +69,7 @@ public class ProjectView extends EntityView {
             return this;
         }
 
-        public Builder withProjectInstances( Set<ProjectInstanceView> projectInstances ) {
+        public Builder withBuilds(Set<BuildView> projectInstances ) {
             this.projectInstances = projectInstances;
             return this;
         }

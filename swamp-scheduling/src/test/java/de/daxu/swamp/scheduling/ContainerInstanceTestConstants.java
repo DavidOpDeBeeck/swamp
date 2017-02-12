@@ -9,11 +9,11 @@ public class ContainerInstanceTestConstants {
     public static final String INTERNAL_CONTAINER_ID = "id";
     public static final String LOG = "log";
 
-    public static final ProjectInstanceView CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
+    public static final BuildView CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
             .withContainerInstanceId( CONTAINER_INSTANCE_ID )
             .withStatus( ContainerInstanceStatus.STARTED )
             .build();
-    public static final ProjectInstanceView ANOTHER_CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
+    public static final BuildView ANOTHER_CONTAINER_INSTANCE_VIEW = aContainerInstanceView()
             .withContainerInstanceId( ANOTHER_CONTAINER_INSTANCE_ID )
             .withStatus( ContainerInstanceStatus.STARTED )
             .build();
@@ -46,7 +46,7 @@ public class ContainerInstanceTestConstants {
     public static class Events {
 
         public static final ContainerInstanceInitializedEvent SCHEDULED_EVENT = new ContainerInstanceInitializedEvent( CONTAINER_INSTANCE_ID, NAME, IMAGE_CONFIGURATION, PORT_MAPPINGS, ENVIRONMENT_VARIABLES, SERVER, DATE, configuration );
-        public static final ContainerInstanceCreatedEvent CREATED_EVENT = new ContainerInstanceCreatedEvent( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE );
+        public static final ContainerInstanceCreatedSucceededEvent CREATED_EVENT = new ContainerInstanceCreatedSucceededEvent( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE );
         public static final ContainerInstanceStartedEvent STARTED_EVENT = new ContainerInstanceStartedEvent( CONTAINER_INSTANCE_ID, DATE );
         public static final ContainerInstanceLoggingStartedEvent LOGGING_STARTED_EVENT = new ContainerInstanceLoggingStartedEvent( CONTAINER_INSTANCE_ID, DATE );
         public static final ContainerInstanceLogReceivedEvent LOG_RECEIVED_EVENT = new ContainerInstanceLogReceivedEvent( CONTAINER_INSTANCE_ID, LOG, DATE );
