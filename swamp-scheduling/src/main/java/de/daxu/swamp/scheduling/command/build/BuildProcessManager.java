@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.command.build;
 
+import de.daxu.swamp.common.axon.ProcessManager;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.core.strategy.FirstInLineStrategy;
@@ -11,13 +12,12 @@ import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceComma
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-@Component
+@ProcessManager
 @SuppressWarnings("unused")
 public class BuildProcessManager {
 

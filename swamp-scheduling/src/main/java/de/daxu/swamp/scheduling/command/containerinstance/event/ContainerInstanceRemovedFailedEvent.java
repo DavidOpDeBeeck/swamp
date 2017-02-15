@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduling.command.containerinstance.event;
 
 import de.daxu.swamp.common.cqrs.EventMetaData;
 import de.daxu.swamp.deploy.container.ContainerId;
+import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
 
@@ -15,11 +16,12 @@ public class ContainerInstanceRemovedFailedEvent
     private final ContainerInstanceRemoveReason reason;
 
     public ContainerInstanceRemovedFailedEvent(ContainerInstanceId containerInstanceId,
+                                               BuildId buildId,
                                                EventMetaData eventMetaData,
                                                ContainerId containerId,
                                                Set<String> errors,
                                                ContainerInstanceRemoveReason reason) {
-        super(containerInstanceId, eventMetaData, containerId);
+        super(containerInstanceId, buildId, eventMetaData, containerId);
         this.errors = errors;
         this.reason = reason;
     }

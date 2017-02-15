@@ -11,11 +11,17 @@ public class ProjectQueryService {
     private final ProjectViewRepository projectViewRepository;
 
     @Autowired
-    public ProjectQueryService( ProjectViewRepository projectViewRepository ) {
+    public ProjectQueryService(ProjectViewRepository projectViewRepository) {
         this.projectViewRepository = projectViewRepository;
     }
 
+    public int getBuildSequence(String name) {
+        ProjectView view = projectViewRepository.getByName(name);
+        if (view == null) return 0;
+        return view.getBuildSequence();
+    }
+
     public List<ProjectView> getAllProjectViews() {
-        return projectViewRepository.findAll( );
+        return projectViewRepository.findAll();
     }
 }

@@ -1,14 +1,14 @@
 package de.daxu.swamp.scheduling.command.serverinstance;
 
+import de.daxu.swamp.common.axon.ProcessManager;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceCommandService;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason.ERRORS_ON_ACTION;
 
-@Component
+@ProcessManager
 @SuppressWarnings("unused")
 public class ServerInstanceProcessManager {
 

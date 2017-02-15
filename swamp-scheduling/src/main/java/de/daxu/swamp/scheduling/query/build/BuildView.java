@@ -5,12 +5,16 @@ import de.daxu.swamp.common.cqrs.EntityView;
 import de.daxu.swamp.common.jackson.LocalDateTimeSerializer;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
+
+import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.REMOVED;
 
 @Entity
 @Table(name = "build_view")
@@ -29,28 +33,27 @@ public class BuildView extends EntityView {
     @Column(name = "initialized_at")
     private LocalDateTime initializedAt;
 
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "{NotNull.BuildView.status}")
-    private BuildStatus status;
-
     @ElementCollection
+    @MapKeyColumn(name = "container_instance_id")
+    @Column(name = "status")
     @CollectionTable(name = "build_container_view", joinColumns = @JoinColumn(name = "build_view_id"))
-    private Set<ContainerInstanceId> containers;
+    private Map<ContainerInstanceId, ContainerInstanceStatus> containers;
 
     private BuildView() {
     }
 
-    public BuildView(BuildId buildId,
+    private BuildView(BuildId buildId,
                      int sequence,
                      LocalDateTime initializedAt,
-                     BuildStatus status,
-                     Set<ContainerInstanceId> containers) {
+                      Map<ContainerInstanceId, ContainerInstanceStatus> containers) {
         this.buildId = buildId;
         this.sequence = sequence;
         this.initializedAt = initializedAt;
-        this.status = status;
         this.containers = containers;
+    }
+
+    public void setContainerInstanceStatus(ContainerInstanceId containerInstanceId, ContainerInstanceStatus status) {
+        containers.put(containerInstanceId, status);
     }
 
     public BuildId getBuildId() {
@@ -67,11 +70,15 @@ public class BuildView extends EntityView {
     }
 
     public BuildStatus getStatus() {
-        return status;
+        boolean hasLiveContainers = containers.values()
+                .stream()
+                .anyMatch(s -> s != REMOVED);
+
+        return hasLiveContainers ? BuildStatus.INPROGRESS : BuildStatus.FINISHED;
     }
 
     public Set<ContainerInstanceId> getContainers() {
-        return containers;
+        return containers.keySet();
     }
 
     public static class Builder {
@@ -79,8 +86,7 @@ public class BuildView extends EntityView {
         private BuildId buildId;
         private int sequence;
         private LocalDateTime initializedAt;
-        private BuildStatus status;
-        private Set<ContainerInstanceId> containers;
+        private Map<ContainerInstanceId, ContainerInstanceStatus> containers;
 
         public static Builder aBuildView() {
             return new Builder();
@@ -101,18 +107,13 @@ public class BuildView extends EntityView {
             return this;
         }
 
-        public Builder withStatus(BuildStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder withContainers(Set<ContainerInstanceId> containers) {
+        public Builder withContainers(Map<ContainerInstanceId, ContainerInstanceStatus> containers) {
             this.containers = containers;
             return this;
         }
 
         public BuildView build() {
-            return new BuildView(buildId, sequence, initializedAt, status, containers);
+            return new BuildView(buildId, sequence, initializedAt, containers);
         }
     }
 }

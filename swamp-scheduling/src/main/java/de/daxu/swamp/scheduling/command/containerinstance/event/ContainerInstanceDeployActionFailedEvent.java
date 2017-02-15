@@ -14,7 +14,7 @@ public class ContainerInstanceDeployActionFailedEvent extends AbstractContainerI
                                                      EventMetaData eventMetaData,
                                                      BuildId buildId,
                                                      Set<String> warnings ) {
-        super( containerInstanceId, eventMetaData);
+        super( containerInstanceId, buildId, eventMetaData);
         this.warnings = warnings;
     }
 

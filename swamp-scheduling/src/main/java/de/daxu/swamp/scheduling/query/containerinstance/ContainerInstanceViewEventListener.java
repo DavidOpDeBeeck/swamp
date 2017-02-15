@@ -1,22 +1,22 @@
 package de.daxu.swamp.scheduling.query.containerinstance;
 
+import de.daxu.swamp.common.axon.EventListener;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 import static de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView.Builder.aContainerInstanceView;
 import static de.daxu.swamp.scheduling.query.containerinstance.ServerView.Builder.aServerView;
 
-@Component
+@EventListener
 @SuppressWarnings("unused")
-public class ContainerInstanceViewEventHandler {
+public class ContainerInstanceViewEventListener {
 
     private final ContainerInstanceViewRepository containerInstanceViewRepository;
 
     @Autowired
-    public ContainerInstanceViewEventHandler(ContainerInstanceViewRepository containerInstanceViewRepository) {
+    public ContainerInstanceViewEventListener(ContainerInstanceViewRepository containerInstanceViewRepository) {
         this.containerInstanceViewRepository = containerInstanceViewRepository;
     }
 

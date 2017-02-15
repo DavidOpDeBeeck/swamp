@@ -34,7 +34,7 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
         apply(new BuildInitializedEvent(
                 command.getBuildId(),
                 eventMetaDataFactory.create(),
-                0,
+                command.getSequence(),
                 project.getName(),
                 project.getDescription(),
                 containers));

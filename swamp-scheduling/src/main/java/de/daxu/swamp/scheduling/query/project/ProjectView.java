@@ -13,11 +13,14 @@ import static com.google.common.collect.Sets.newHashSet;
 @SuppressWarnings( "unused" )
 public class ProjectView extends EntityView {
 
-    @Column( name = "name" )
+    @Column( name = "name", unique = true)
     private String name;
 
     @Column( name = "description" )
     private String description;
+
+    @Column( name = "build_sequence" )
+    private Integer buildSequence;
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
     @JoinColumn( name = "project_view_id", referencedColumnName = "id" )
@@ -26,10 +29,15 @@ public class ProjectView extends EntityView {
     private ProjectView() {
     }
 
-    private ProjectView( String name, String description, Set<BuildView> builds) {
+    private ProjectView( String name, String description, int buildSequence, Set<BuildView> builds) {
         this.name = name;
         this.description = description;
+        this.buildSequence = buildSequence;
         this.builds = builds;
+    }
+
+    public void setBuildSequence(int buildSequence) {
+        this.buildSequence = buildSequence;
     }
 
     void addBuild(BuildView build ) {
@@ -45,6 +53,10 @@ public class ProjectView extends EntityView {
         return description;
     }
 
+    public int getBuildSequence() {
+        return buildSequence;
+    }
+
     public Set<BuildView> getBuilds() {
         return builds;
     }
@@ -53,6 +65,7 @@ public class ProjectView extends EntityView {
 
         private String name;
         private String description;
+        private int buildSequence;
         private Set<BuildView> projectInstances;
 
         public static Builder aProjectView() {
@@ -69,13 +82,18 @@ public class ProjectView extends EntityView {
             return this;
         }
 
+        public Builder withBuildSequence( int buildSequence ) {
+            this.buildSequence = buildSequence;
+            return this;
+        }
+
         public Builder withBuilds(Set<BuildView> projectInstances ) {
             this.projectInstances = projectInstances;
             return this;
         }
 
         public ProjectView build() {
-            return new ProjectView( name, description, projectInstances );
+            return new ProjectView( name, description, buildSequence, projectInstances );
         }
     }
 }

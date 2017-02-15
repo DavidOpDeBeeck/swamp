@@ -14,10 +14,10 @@
             </li>
             <a class="list-group-item"
                ng-repeat="build in project.builds | orderBy: 'initializedAt':-1"
-               ui-sref="builds.build.containerInstances({buildId: build.buildId})"
-               ui-sref-active="active">
+               ui-sref="builds.build.containerInstances({buildId: build.buildId})" ui-sref-active="active"
+               ng-class="{'in-progress': build.status === 'INPROGRESS', 'finished': build.status === 'FINISHED'}">
                 <span class="badge">{{ build.initializedAt | toDate }}</span>
-                {{ build.containers.length }} container(s)
+                #{{ build.sequence }} with {{ build.containers.length }} {{ build.containers.length > 1 ? 'containers' : 'container' }}
             </a>
         </div>
     </div>

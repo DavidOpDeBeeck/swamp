@@ -19,8 +19,8 @@ public class BuildCommandService {
         this.buildCommandFactory = buildCommandFactory;
     }
 
-    public void initialize( Project project ) {
-        commandGateway.send( buildCommandFactory.createInitializeCommand( project ) );
+    public void initialize( Project project, int sequence ) {
+        commandGateway.send( buildCommandFactory.createInitializeCommand( project, sequence ) );
     }
 }
 

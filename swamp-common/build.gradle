@@ -8,6 +8,8 @@ dependencies {
     compile "org.springframework:spring-context"
     compile "org.springframework:spring-web"
 
+    compile "org.axonframework:axon-core"
+
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.core:jackson-annotations"
 }

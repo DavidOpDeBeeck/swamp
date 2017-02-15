@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.config;
+package de.daxu.swamp.common.axon;
 
 import de.daxu.swamp.common.cqrs.ValidationException;
 import org.axonframework.commandhandling.CommandHandlerInterceptor;

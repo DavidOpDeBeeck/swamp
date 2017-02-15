@@ -8,7 +8,6 @@ import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
 public class ContainerInstanceInitializedEvent extends AbstractContainerInstanceEvent {
 
-    private final BuildId buildId;
     private final Server server;
     private final ContainerConfiguration configuration;
 
@@ -17,14 +16,9 @@ public class ContainerInstanceInitializedEvent extends AbstractContainerInstance
                                              BuildId buildId,
                                              Server server,
                                              ContainerConfiguration configuration) {
-        super( containerInstanceId, eventMetaData);
-        this.buildId = buildId;
+        super(containerInstanceId, buildId, eventMetaData);
         this.server = server;
         this.configuration = configuration;
-    }
-
-    public BuildId getBuildId() {
-        return buildId;
     }
 
     public Server getServer() {

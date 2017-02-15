@@ -99,3 +99,19 @@ footer > p > .divider:after {
 .list-group > .list-group-item {
     overflow: auto;
 }
+
+.list-group-item.in-progress {
+    border-left: 4px solid #5cb85c !important;
+}
+
+.list-group-item.finished {
+    border-left: 4px solid #d9534f !important;
+}
+
+.list-group-item.active,
+.list-group-item.active:hover,
+.list-group-item.active:focus,
+.list-group-item:hover {
+    color: #000000;
+    background-color: #eeeeee;
+}

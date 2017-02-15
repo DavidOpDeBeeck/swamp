@@ -6,6 +6,7 @@ import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.result.ContainerResult;
+import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.command.*;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -25,6 +26,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     @AggregateIdentifier
     private ContainerInstanceId containerInstanceId;
 
+    private BuildId buildId;
     private Server server;
     private ContainerId containerId;
     private ContainerConfiguration configuration;
@@ -54,12 +56,14 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         if(result.isSuccess()) {
             apply(new ContainerInstanceCreatedSucceededEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId()
             ));
         } else {
             apply(new ContainerInstanceCreatedFailedEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     result.getWarnings()));
@@ -77,12 +81,14 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         if(result.isSuccess()) {
             apply(new ContainerInstanceStartedSucceededEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId()
             ));
         } else {
             apply(new ContainerInstanceStartedFailedEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     result.getWarnings()));
@@ -100,6 +106,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         if(result.isSuccess()) {
             apply(new ContainerInstanceStoppedSucceededEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     command.getReason()
@@ -107,6 +114,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         } else {
             apply(new ContainerInstanceStoppedFailedEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     result.getWarnings(),
@@ -125,6 +133,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         if(result.isSuccess()) {
             apply(new ContainerInstanceRemovedSucceededEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     command.getReason()
@@ -132,6 +141,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         } else {
             apply(new ContainerInstanceRemovedFailedEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     result.getWarnings(),
@@ -153,12 +163,14 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         if(result.isSuccess()) {
             apply(new ContainerInstanceLoggingStartedSucceededEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId()
             ));
         } else {
             apply(new ContainerInstanceLoggingStartedFailedEvent(
                     containerInstanceId,
+                    buildId,
                     eventMetaDataFactory.create(),
                     result.getContainerId(),
                     result.getWarnings()));
@@ -170,6 +182,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         validateStatus(STARTED);
         apply(new ContainerInstanceLogReceivedEvent(
                 containerInstanceId,
+                buildId,
                 eventMetaDataFactory.create(),
                 containerId,
                 command.getLog()));
@@ -190,6 +203,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     @EventHandler
     void on(ContainerInstanceInitializedEvent event) {
         this.status = INITIALIZED;
+        this.buildId = event.getBuildId();
         this.server = event.getServer();
         this.configuration = event.getConfiguration();
         this.containerInstanceId = event.getContainerInstanceId();

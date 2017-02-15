@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BuildCommandFactory {
 
-    public InitializeBuildCommand createInitializeCommand(Project project ) {
-        return new InitializeBuildCommand( BuildId.random(), project );
+    public InitializeBuildCommand createInitializeCommand(Project project, int sequence) {
+        return new InitializeBuildCommand(BuildId.random(), project, sequence);
     }
 }

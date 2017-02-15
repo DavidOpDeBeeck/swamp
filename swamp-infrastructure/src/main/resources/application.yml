@@ -28,6 +28,8 @@ logging:
       hibernate: ERROR
       springframework:
           web: ERROR
+      axonframework:
+          eventhandling: DEBUG
 ---
 spring:
   profiles: test

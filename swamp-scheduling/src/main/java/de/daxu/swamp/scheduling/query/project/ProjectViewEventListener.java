@@ -1,42 +1,50 @@
 package de.daxu.swamp.scheduling.query.project;
 
+import de.daxu.swamp.common.axon.EventListener;
 import de.daxu.swamp.scheduling.command.build.event.BuildInitializedEvent;
-import de.daxu.swamp.scheduling.query.build.BuildStatus;
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.query.build.BuildView;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static de.daxu.swamp.scheduling.query.build.BuildView.Builder.aBuildView;
 import static de.daxu.swamp.scheduling.query.project.ProjectView.Builder.aProjectView;
 
-@Component
+@EventListener
 @SuppressWarnings("unused")
-public class ProjectViewEventHandler {
+public class ProjectViewEventListener {
 
     private final ProjectViewRepository projectViewRepository;
 
     @Autowired
-    public ProjectViewEventHandler(ProjectViewRepository projectViewRepository) {
+    public ProjectViewEventListener(ProjectViewRepository projectViewRepository) {
         this.projectViewRepository = projectViewRepository;
     }
 
     @EventHandler
     void on(BuildInitializedEvent event) {
-        ProjectView project = projectViewRepository.getByName(event.getProjectName());
-
-        if(project == null)
-            project = createProjectView(event);
+        ProjectView project = getByName(event);
 
         project.addBuild(createBuildView(event));
+        project.setBuildSequence(event.getSequence());
 
         projectViewRepository.save(project);
+    }
+
+    private ProjectView getByName(BuildInitializedEvent event) {
+        ProjectView project = projectViewRepository.getByName(event.getProjectName());
+        return project == null ? createProjectView(event) : project;
     }
 
     private ProjectView createProjectView(BuildInitializedEvent event) {
         ProjectView project = aProjectView()
                 .withName(event.getProjectName())
                 .withDescription(event.getProjectDescription())
+                .withBuildSequence(event.getSequence())
                 .build();
         return projectViewRepository.save(project);
     }
@@ -45,9 +53,14 @@ public class ProjectViewEventHandler {
         return aBuildView()
                 .withBuildId(event.getBuildId())
                 .withSequence(event.getSequence())
-                .withStatus(BuildStatus.INPROGRESS)
                 .withInitializedAt(event.getEventMetaData().getCreatedAt())
-                .withContainers(event.getContainers().keySet())
+                .withContainers(mapContainers(event))
                 .build();
+    }
+
+    private Map<ContainerInstanceId, ContainerInstanceStatus> mapContainers(BuildInitializedEvent event) {
+        return event.getContainers().keySet()
+                .stream()
+                .collect(Collectors.toMap(id -> id, id -> ContainerInstanceStatus.INITIALIZED));
     }
 }
