@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.daxu.swamp.common.cqrs.EntityView;
 import de.daxu.swamp.common.jackson.LocalDateTimeSerializer;
 import de.daxu.swamp.scheduling.command.build.BuildId;
+import de.daxu.swamp.scheduling.command.build.BuildStatus;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 

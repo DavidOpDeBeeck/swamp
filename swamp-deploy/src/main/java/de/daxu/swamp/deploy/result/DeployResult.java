@@ -8,7 +8,7 @@ public abstract class DeployResult {
     private Set<String> warnings;
     private LocalDateTime timestamp;
 
-    DeployResult( Set<String> warnings, LocalDateTime timestamp ) {
+    DeployResult(Set<String> warnings, LocalDateTime timestamp) {
         this.warnings = warnings;
         this.timestamp = timestamp;
     }
@@ -25,20 +25,20 @@ public abstract class DeployResult {
         return warnings.isEmpty();
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public abstract static class Builder<B extends Builder<B>> {
 
         Set<String> warnings;
         LocalDateTime timestamp;
 
-        B withWarnings( Set<String> warnings ) {
+        B withWarnings(Set<String> warnings) {
             this.warnings = warnings;
-            return ( B ) this;
+            return (B) this;
         }
 
-        B withTimestamp( LocalDateTime timestamp ) {
+        B withTimestamp(LocalDateTime timestamp) {
             this.timestamp = timestamp;
-            return ( B ) this;
+            return (B) this;
         }
 
         public abstract DeployResult build();

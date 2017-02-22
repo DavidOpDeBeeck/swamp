@@ -1,13 +1,39 @@
 class ContainerInstanceController {
-    constructor(BuildService, $interval) {
-        this.interval = $interval;
+    constructor(BuildService, NotificationService, $timeout) {
         this.buildService = BuildService;
+        this.notificationService = NotificationService;
         this.update(this.initial);
-        this.setUpInterval();
-    }
-
-    setUpInterval() {
-        this.interval(() => this.getInstance(), 5000);
+        this.notificationService.on({
+            eventTypes : ['ContainerInstanceStoppedSucceededEvent', 'ContainerInstanceStoppedFailedEvent'],
+            containerInstanceId: this.initial.containerInstanceId,
+            callback: event => {
+                $timeout(() => {
+                    this.status = 'STOPPED';
+                    this.stopReason = event.reason;
+                    this.finishedAt = event.eventMetaData.createdAt;
+                    this.warnings = (event.warnings && event.warnings.length > 0) ?
+                        event.warnings.reduce((prev, current) => prev += current) : "";
+                });
+            }
+        });
+        this.notificationService.on({
+            eventTypes : ['ContainerInstanceRemovedSucceededEvent', 'ContainerInstanceRemovedFailedEvent'],
+            containerInstanceId: this.initial.containerInstanceId,
+            callback: event => {
+                $timeout(() => {
+                    this.status = 'REMOVED';
+                    this.removeReason = event.reason;
+                    this.finishedAt = event.eventMetaData.createdAt;
+                    this.warnings = (event.warnings && event.warnings.length > 0) ?
+                        event.warnings.reduce((prev, current) => prev += current) : "";
+                });
+            }
+        });
+        this.notificationService.on({
+            eventTypes : ['ContainerInstanceLogReceivedEvent'],
+            containerInstanceId: this.initial.containerInstanceId,
+            callback: event => $timeout(() => this.log += event.log, 100)
+        });
     }
 
     getInstance() {
@@ -19,11 +45,11 @@ class ContainerInstanceController {
         this.instance = instance;
         this.log = instance.log;
         this.status = instance.status;
+        this.startedAt = instance.startedAt;
         this.stopReason = instance.stopReason;
         this.removeReason = instance.removeReason;
-        this.warnings = (instance.warnings.length > 0) ? instance.warnings.reduce((prev, current) => prev += current) : "";
-        this.startedAt = instance.startedAt;
         this.finishedAt = instance.stoppedAt ? instance.stoppedAt : instance.removedAt;
+        this.warnings = (instance.warnings.length > 0) ? instance.warnings.reduce((prev, current) => prev += current) : "";
     }
 
     start() {
@@ -39,4 +65,4 @@ class ContainerInstanceController {
     }
 }
 
-export default ['BuildService', '$interval', ContainerInstanceController]
+export default ['BuildService', 'NotificationService', '$timeout', ContainerInstanceController]

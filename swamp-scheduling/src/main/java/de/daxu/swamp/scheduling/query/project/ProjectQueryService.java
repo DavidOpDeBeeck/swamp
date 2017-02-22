@@ -15,7 +15,7 @@ public class ProjectQueryService {
         this.projectViewRepository = projectViewRepository;
     }
 
-    public int getBuildSequence(String name) {
+    public int getLastBuildSequence(String name) {
         ProjectView view = projectViewRepository.getByName(name);
         if (view == null) return 0;
         return view.getBuildSequence();

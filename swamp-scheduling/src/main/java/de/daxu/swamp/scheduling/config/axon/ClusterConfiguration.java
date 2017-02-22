@@ -1,9 +1,11 @@
 package de.daxu.swamp.scheduling.config.axon;
 
-import de.daxu.swamp.common.axon.EventListener;
+import de.daxu.swamp.common.axon.EventListenerClusterSelector;
 import de.daxu.swamp.common.axon.LoggingCluster;
-import de.daxu.swamp.common.axon.ProcessManager;
-import org.axonframework.eventhandling.*;
+import org.axonframework.eventhandling.Cluster;
+import org.axonframework.eventhandling.ClusteringEventBus;
+import org.axonframework.eventhandling.CompositeClusterSelector;
+import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.replay.BackloggingIncomingMessageHandler;
 import org.axonframework.eventhandling.replay.ReplayingCluster;
 import org.axonframework.eventstore.jpa.JpaEventStore;
@@ -34,21 +36,21 @@ public class ClusterConfiguration {
     public EventBus eventBus() {
         return new ClusteringEventBus(
                 new CompositeClusterSelector(newArrayList(
-                        new AnnotationClusterSelector(EventListener.class, eventListeners(), true),
-                        new AnnotationClusterSelector(ProcessManager.class, processManagers(), true)
+                        new EventListenerClusterSelector(replayableCluster(), true),
+                        new EventListenerClusterSelector(notReplayableCluster(), false)
                 ))
         );
     }
 
     @Bean
-    public Cluster processManagers() {
-        return new LoggingCluster(new SimpleCluster("ProcessManagers"));
+    public Cluster notReplayableCluster() {
+        return new LoggingCluster("NotReplayableCluster");
     }
 
     @Bean
-    public Cluster eventListeners() {
+    public Cluster replayableCluster() {
         return new ReplayingCluster(
-                new LoggingCluster(new SimpleCluster("EventListeners")),
+                new LoggingCluster("ReplayableCluster"),
                 eventStore,
                 transactionManager,
                 COMMIT_THRESHOLD,

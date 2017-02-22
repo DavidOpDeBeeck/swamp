@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.query.build;
+package de.daxu.swamp.scheduling.command.build;
 
 public enum BuildStatus {
 

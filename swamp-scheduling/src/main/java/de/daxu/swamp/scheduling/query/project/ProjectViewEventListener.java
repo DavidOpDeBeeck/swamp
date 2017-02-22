@@ -59,7 +59,7 @@ public class ProjectViewEventListener {
     }
 
     private Map<ContainerInstanceId, ContainerInstanceStatus> mapContainers(BuildInitializedEvent event) {
-        return event.getContainers().keySet()
+        return event.getContainers()
                 .stream()
                 .collect(Collectors.toMap(id -> id, id -> ContainerInstanceStatus.INITIALIZED));
     }

@@ -6,8 +6,9 @@ import java.lang.annotation.*;
 
 @Inherited
 @Component
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface EventListener {
 
+    boolean replayable() default true;
 }

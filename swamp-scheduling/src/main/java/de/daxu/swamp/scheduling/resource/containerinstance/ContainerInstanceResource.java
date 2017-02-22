@@ -25,17 +25,17 @@ public class ContainerInstanceResource {
 
     final static String CONTAINER_INSTANCE_URL = BUILD_URL + "/{buildId}/containerInstances";
 
-    private final ContainerInstanceCommandService containerInstanceCommandService;
     private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ResponseFactory response;
+    private final ContainerInstanceCommandService containerInstanceCommandService;
 
     @Autowired
-    public ContainerInstanceResource(ContainerInstanceCommandService containerInstanceCommandService,
+    public ContainerInstanceResource(ResponseFactory responseFactory,
                                      ContainerInstanceQueryService containerInstanceQueryService,
-                                     ResponseFactory responseFactory) {
-        this.containerInstanceCommandService = containerInstanceCommandService;
-        this.containerInstanceQueryService = containerInstanceQueryService;
+                                     ContainerInstanceCommandService containerInstanceCommandService) {
         this.response = responseFactory;
+        this.containerInstanceQueryService = containerInstanceQueryService;
+        this.containerInstanceCommandService = containerInstanceCommandService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -56,24 +56,27 @@ public class ContainerInstanceResource {
     }
 
     @RequestMapping(value = "/{containerInstanceId}", params = {"action=start"}, method = RequestMethod.POST)
-    public Response start(@PathVariable("containerInstanceId") ContainerInstanceView view) {
+    public Response start(@PathVariable("containerInstanceId") ContainerInstanceView containerInstanceView) {
 
-        containerInstanceCommandService.start(view.getContainerInstanceId());
-        return response.success();
-    }
+        containerInstanceCommandService.start(containerInstanceView.getContainerInstanceId());
 
-    @RequestMapping(value = "/{containerInstanceId}", params = {"action=restart"}, method = RequestMethod.POST)
-    public Response restart(@PathVariable("containerInstanceId") ContainerInstanceView view) {
-
-        containerInstanceCommandService.stop(view.getContainerInstanceId(), STOPPED_BY_USER);
-        containerInstanceCommandService.start(view.getContainerInstanceId());
         return response.success();
     }
 
     @RequestMapping(value = "/{containerInstanceId}", params = {"action=stop"}, method = RequestMethod.POST)
-    public Response stop(@PathVariable("containerInstanceId") ContainerInstanceView view) {
+    public Response stop(@PathVariable("containerInstanceId") ContainerInstanceView containerInstanceView) {
 
-        containerInstanceCommandService.stop(view.getContainerInstanceId(), STOPPED_BY_USER);
+        containerInstanceCommandService.stop(containerInstanceView.getContainerInstanceId(), STOPPED_BY_USER);
+
+        return response.success();
+    }
+
+    @RequestMapping(value = "/{containerInstanceId}", params = {"action=restart"}, method = RequestMethod.POST)
+    public Response restart(@PathVariable("containerInstanceId") ContainerInstanceView containerInstanceView) {
+
+        stop(containerInstanceView);
+        start(containerInstanceView);
+
         return response.success();
     }
 }

@@ -10,7 +10,6 @@ import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.project.ProjectService;
 import de.daxu.swamp.scheduling.command.build.BuildCommandService;
-import de.daxu.swamp.scheduling.query.project.ProjectQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,21 +31,18 @@ public class ProjectResource {
     private final ProjectConverter projectConverter;
     private final ProjectCreateConverter projectCreateConverter;
     private final BuildCommandService buildCommandService;
-    private final ProjectQueryService projectQueryService;
 
     @Autowired
     public ProjectResource(ResponseFactory responseFactory,
                            ProjectService projectService,
                            ProjectConverter projectConverter,
                            ProjectCreateConverter projectCreateConverter,
-                           BuildCommandService buildCommandService,
-                           ProjectQueryService projectQueryService) {
+                           BuildCommandService buildCommandService) {
         this.response = responseFactory;
         this.projectService = projectService;
         this.projectConverter = projectConverter;
         this.projectCreateConverter = projectCreateConverter;
         this.buildCommandService = buildCommandService;
-        this.projectQueryService = projectQueryService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -101,7 +97,7 @@ public class ProjectResource {
     @RequestMapping(value = "/{projectId}", params = {"action=deploy"}, method = RequestMethod.POST)
     public Response deploy(@PathVariable("projectId") Project project) {
 
-        buildCommandService.initialize(project, projectQueryService.getBuildSequence(project.getName()) + 1);
+        buildCommandService.initialize(project);
         return response.success();
     }
 }

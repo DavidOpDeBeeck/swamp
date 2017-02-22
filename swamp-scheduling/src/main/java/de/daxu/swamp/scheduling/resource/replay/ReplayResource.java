@@ -23,20 +23,20 @@ public class ReplayResource {
     final static String REPLAY_URL = "/replay";
 
     private final ResponseFactory response;
-    private final ReplayingCluster eventListeners;
+    private final ReplayingCluster replayableCluster;
     private final ApplicationContext appContext;
 
     @Autowired
-    public ReplayResource(ResponseFactory response, ReplayingCluster eventListeners, ApplicationContext appContext) {
+    public ReplayResource(ResponseFactory response, ReplayingCluster replayableCluster, ApplicationContext appContext) {
         this.response = response;
-        this.eventListeners = eventListeners;
+        this.replayableCluster = replayableCluster;
         this.appContext = appContext;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Response replayEvents() {
         clearViews();
-        eventListeners.startReplay();
+        replayableCluster.startReplay();
         return response.success();
     }
 

@@ -17,38 +17,40 @@ public class ContainerInstanceCommandService {
     private final ContainerInstanceCommandFactory containerInstanceCommandFactory;
 
     @Autowired
-    public ContainerInstanceCommandService( CommandGateway commandGateway,
-                                            ContainerInstanceCommandFactory containerInstanceCommandFactory ) {
+    public ContainerInstanceCommandService(CommandGateway commandGateway,
+                                           ContainerInstanceCommandFactory containerInstanceCommandFactory) {
         this.commandGateway = commandGateway;
         this.containerInstanceCommandFactory = containerInstanceCommandFactory;
     }
 
-    public void initialize(ContainerInstanceId containerInstanceId, BuildId buildId, ContainerConfiguration configuration, Server server ) {
-        commandGateway.send( containerInstanceCommandFactory.createInitializeCommand( containerInstanceId, buildId, configuration, server ) );
+    public ContainerInstanceId initialize(BuildId buildId, ContainerConfiguration configuration, Server server) {
+        ContainerInstanceId containerInstanceId = ContainerInstanceId.random();
+        commandGateway.send(containerInstanceCommandFactory.createInitializeCommand(containerInstanceId, buildId, configuration, server));
+        return containerInstanceId;
     }
 
-    public void create( ContainerInstanceId containerInstanceId ) {
-        commandGateway.send( containerInstanceCommandFactory.createCreateCommand( containerInstanceId ) );
+    public void create(ContainerInstanceId containerInstanceId) {
+        commandGateway.send(containerInstanceCommandFactory.createCreateCommand(containerInstanceId));
     }
 
-    public void start( ContainerInstanceId containerInstanceId ) {
-        commandGateway.send( containerInstanceCommandFactory.createStartCommand( containerInstanceId ) );
+    public void start(ContainerInstanceId containerInstanceId) {
+        commandGateway.send(containerInstanceCommandFactory.createStartCommand(containerInstanceId));
     }
 
-    public void stop( ContainerInstanceId containerInstanceId, ContainerInstanceStopReason reason ) {
-        commandGateway.send( containerInstanceCommandFactory.createStopCommand( containerInstanceId, reason ) );
+    public void stop(ContainerInstanceId containerInstanceId, ContainerInstanceStopReason reason) {
+        commandGateway.send(containerInstanceCommandFactory.createStopCommand(containerInstanceId, reason));
     }
 
-    public void remove( ContainerInstanceId containerInstanceId, ContainerInstanceRemoveReason reason ) {
-        commandGateway.send( containerInstanceCommandFactory.createRemoveCommand( containerInstanceId, reason ) );
+    public void remove(ContainerInstanceId containerInstanceId, ContainerInstanceRemoveReason reason) {
+        commandGateway.send(containerInstanceCommandFactory.createRemoveCommand(containerInstanceId, reason));
     }
 
-    public void startLogging( ContainerInstanceId containerInstanceId ) {
-        commandGateway.send( containerInstanceCommandFactory.createStartLoggingCommand( containerInstanceId ) );
+    public void startLogging(ContainerInstanceId containerInstanceId) {
+        commandGateway.send(containerInstanceCommandFactory.createStartLoggingCommand(containerInstanceId));
     }
 
-    public void receiveLog( ContainerInstanceId containerInstanceId, String log ) {
-        commandGateway.send( containerInstanceCommandFactory.createReceiveLogCommand( containerInstanceId, log ) );
+    public void receiveLog(ContainerInstanceId containerInstanceId, String log) {
+        commandGateway.send(containerInstanceCommandFactory.createReceiveLogCommand(containerInstanceId, log));
     }
 }
 

@@ -8,6 +8,7 @@ function SetupNotifications($stomp, Notification) {
     function handle(payload) {
         let type = payload.type;
         let event = payload.event;
+        console.log(event);
         switch (type) {
             case "ContainerInstanceStartedSucceededEvent":
                 display("Container started", event.containerInstanceId, "success");
