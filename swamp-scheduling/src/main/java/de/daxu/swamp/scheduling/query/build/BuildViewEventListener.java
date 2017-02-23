@@ -1,8 +1,8 @@
 package de.daxu.swamp.scheduling.query.build;
 
 import de.daxu.swamp.common.axon.EventListener;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceStatusChangedEvent;
 import de.daxu.swamp.scheduling.command.build.event.BuildEvent;
-import de.daxu.swamp.scheduling.command.build.event.ContainerInstanceStatusUpdatedFromBuildEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +18,8 @@ public class BuildViewEventListener {
     }
 
     @EventHandler
-    void on(ContainerInstanceStatusUpdatedFromBuildEvent event) {
-        getBuild(event).setContainerInstanceStatus(event.getContainerInstanceId(), event.getStatus());
+    void on(BuildContainerInstanceStatusChangedEvent event) {
+        getBuild(event).setContainerInstanceStatus(event.getContainerInstanceId(), event.getContainerInstanceStatus());
     }
 
     private BuildView getBuild(BuildEvent event) {

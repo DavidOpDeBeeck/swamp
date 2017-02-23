@@ -52,12 +52,12 @@ public class BuildCommandService {
 
     public void updateContainerInstanceStatus(BuildId buildId, ContainerInstanceId containerInstanceId, ContainerInstanceStatus status) {
         commandGateway.send(
-                buildCommandFactory.createUpdateContainerInstanceStatusFromBuildCommand(buildId, containerInstanceId, status));
+                buildCommandFactory.createUpdateContainerInstanceStatusCommand(buildId, containerInstanceId, status));
     }
 
     private void addContainerInstance(BuildId buildId, ContainerInstanceId containerInstanceId) {
         commandGateway.send(
-                buildCommandFactory.createAddContainerInstanceToBuildCommand(buildId, containerInstanceId));
+                buildCommandFactory.createAddContainerInstanceCommand(buildId, containerInstanceId));
     }
 
     private Set<ContainerInstanceId> initializeContainers(BuildId buildId, Set<Container> containers) {
@@ -86,7 +86,7 @@ public class BuildCommandService {
     }
 
     private int nextSequence(Project project) {
-        return projectQueryService.getLastBuildSequence(project.getName());
+        return projectQueryService.getLastBuildSequence(project.getName()) + 1;
     }
 }
 

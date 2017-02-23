@@ -1,7 +1,7 @@
-package de.daxu.swamp.scheduling.notify.containerinstance;
+package de.daxu.swamp.scheduling.notify.build;
 
 import de.daxu.swamp.common.axon.EventListener;
-import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildEvent;
 import de.daxu.swamp.scheduling.notify.EventNotification;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.slf4j.Logger;
@@ -11,24 +11,24 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 @SuppressWarnings("unused")
 @EventListener(replayable = false)
-public class ContainerInstanceNotifyEventListener {
+public class BuildNotifyEventListener {
 
-    private static final String TOPIC = "/topic/container-updates";
+    private static final String TOPIC = "/topic/build-updates";
 
     private final SimpMessageSendingOperations messagingTemplate;
-    private final Logger logger = LoggerFactory.getLogger(ContainerInstanceNotifyEventListener.class);
+    private final Logger logger = LoggerFactory.getLogger(BuildNotifyEventListener.class);
 
     @Autowired
-    public ContainerInstanceNotifyEventListener(SimpMessageSendingOperations messagingTemplate) {
+    public BuildNotifyEventListener(SimpMessageSendingOperations messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
 
     @EventHandler
-    void on(ContainerInstanceEvent event) {
+    void on(BuildEvent event) {
         publish(event);
     }
 
-    private void publish(ContainerInstanceEvent event) {
+    private void publish(BuildEvent event) {
         logger.info("Sending event : {} over topic: {}", event.getClass().getSimpleName(), TOPIC);
         this.messagingTemplate.convertAndSend(TOPIC, new EventNotification(event));
     }

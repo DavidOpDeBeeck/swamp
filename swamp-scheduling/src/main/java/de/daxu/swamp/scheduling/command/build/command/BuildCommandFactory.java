@@ -18,14 +18,14 @@ public class BuildCommandFactory {
         return new InitializeBuildCommand(buildId, sequence, project.getName(), project.getDescription(), containerInstanceIds);
     }
 
-    public AddContainerInstanceToBuildCommand createAddContainerInstanceToBuildCommand(BuildId buildId,
-                                                                                       ContainerInstanceId containerInstanceId) {
-        return new AddContainerInstanceToBuildCommand(buildId, containerInstanceId);
+    public AddContainerInstanceCommand createAddContainerInstanceCommand(BuildId buildId,
+                                                                         ContainerInstanceId containerInstanceId) {
+        return new AddContainerInstanceCommand(buildId, containerInstanceId);
     }
 
-    public UpdateContainerInstanceStatusFromBuildCommand createUpdateContainerInstanceStatusFromBuildCommand(BuildId buildId,
-                                                                                                             ContainerInstanceId containerInstanceId,
-                                                                                                             ContainerInstanceStatus status) {
-        return new UpdateContainerInstanceStatusFromBuildCommand(buildId, containerInstanceId, status);
+    public UpdateContainerInstanceStatusCommand createUpdateContainerInstanceStatusCommand(BuildId buildId,
+                                                                                           ContainerInstanceId containerInstanceId,
+                                                                                           ContainerInstanceStatus status) {
+        return new UpdateContainerInstanceStatusCommand(buildId, containerInstanceId, status);
     }
 }

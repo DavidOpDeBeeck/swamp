@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CleanupBatch {
 
-    private static final int INDIVIDUAL_TASK_DELAY = 30000;
+    private static final int INDIVIDUAL_TASK_DELAY = 10000;
 
     private final Logger logger = LoggerFactory.getLogger(CleanupBatch.class);
     private final ContainerInstanceBatchService containerInstanceBatchService;

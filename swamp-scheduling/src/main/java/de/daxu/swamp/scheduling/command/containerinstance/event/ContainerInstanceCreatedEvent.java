@@ -1,5 +1,12 @@
 package de.daxu.swamp.scheduling.command.containerinstance.event;
 
-public interface ContainerInstanceCreatedEvent extends ContainerInstanceDeployEvent {
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 
+public interface ContainerInstanceCreatedEvent
+        extends ContainerInstanceDeployEvent, ContainerInstanceStatusChangedEvent {
+
+    @Override
+    default ContainerInstanceStatus getContainerInstanceStatus(){
+        return ContainerInstanceStatus.CREATED;
+    }
 }

@@ -5,8 +5,11 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 
-public class ContainerInstanceInitializedEvent extends AbstractContainerInstanceEvent {
+public class ContainerInstanceInitializedEvent
+        extends AbstractContainerInstanceEvent
+        implements ContainerInstanceStatusChangedEvent {
 
     private final Server server;
     private final ContainerConfiguration configuration;
@@ -29,4 +32,8 @@ public class ContainerInstanceInitializedEvent extends AbstractContainerInstance
         return configuration;
     }
 
+    @Override
+    public ContainerInstanceStatus getContainerInstanceStatus() {
+        return ContainerInstanceStatus.INITIALIZED;
+    }
 }

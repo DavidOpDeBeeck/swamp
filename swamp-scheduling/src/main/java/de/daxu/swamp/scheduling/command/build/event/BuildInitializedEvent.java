@@ -2,11 +2,14 @@ package de.daxu.swamp.scheduling.command.build.event;
 
 import de.daxu.swamp.common.cqrs.EventMetaData;
 import de.daxu.swamp.scheduling.command.build.BuildId;
+import de.daxu.swamp.scheduling.command.build.BuildStatus;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
 import java.util.Set;
 
-public class BuildInitializedEvent extends BuildEvent {
+public class BuildInitializedEvent
+        extends BuildEvent
+        implements BuildStatusChangedEvent {
 
     private final int sequence;
     private final String projectName;
@@ -40,5 +43,10 @@ public class BuildInitializedEvent extends BuildEvent {
 
     public Set<ContainerInstanceId> getContainers() {
         return containers;
+    }
+
+    @Override
+    public BuildStatus getBuildStatus() {
+        return BuildStatus.INPROGRESS;
     }
 }

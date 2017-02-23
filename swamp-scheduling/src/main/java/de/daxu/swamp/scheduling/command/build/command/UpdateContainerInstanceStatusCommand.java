@@ -4,13 +4,13 @@ import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 
-public class UpdateContainerInstanceStatusFromBuildCommand extends ContainerInstanceBuildCommand {
+public class UpdateContainerInstanceStatusCommand extends ContainerInstanceBuildCommand {
 
     private final ContainerInstanceStatus status;
 
-    public UpdateContainerInstanceStatusFromBuildCommand(BuildId buildId,
-                                                         ContainerInstanceId containerInstanceId,
-                                                         ContainerInstanceStatus status) {
+    public UpdateContainerInstanceStatusCommand(BuildId buildId,
+                                                ContainerInstanceId containerInstanceId,
+                                                ContainerInstanceStatus status) {
         super(buildId, containerInstanceId);
         this.status = status;
     }

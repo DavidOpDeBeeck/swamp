@@ -1,12 +1,13 @@
 package de.daxu.swamp.scheduling.command.build;
 
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
-import de.daxu.swamp.scheduling.command.build.command.AddContainerInstanceToBuildCommand;
+import de.daxu.swamp.scheduling.command.build.command.AddContainerInstanceCommand;
 import de.daxu.swamp.scheduling.command.build.command.InitializeBuildCommand;
-import de.daxu.swamp.scheduling.command.build.command.UpdateContainerInstanceStatusFromBuildCommand;
+import de.daxu.swamp.scheduling.command.build.command.UpdateContainerInstanceStatusCommand;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceAddedEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceStatusChangedEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildFinishedEvent;
 import de.daxu.swamp.scheduling.command.build.event.BuildInitializedEvent;
-import de.daxu.swamp.scheduling.command.build.event.ContainerInstanceAddedToBuildEvent;
-import de.daxu.swamp.scheduling.command.build.event.ContainerInstanceStatusUpdatedFromBuildEvent;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -44,25 +45,25 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
     }
 
     @CommandHandler
-    public void AddContainerInstance(AddContainerInstanceToBuildCommand command, EventMetaDataFactory eventMetaDataFactory) {
-        apply(new ContainerInstanceAddedToBuildEvent(
+    public void AddContainerInstance(AddContainerInstanceCommand command, EventMetaDataFactory eventMetaDataFactory) {
+        apply(new BuildContainerInstanceAddedEvent(
                 buildId,
                 eventMetaDataFactory.create(),
                 command.getContainerInstanceId()));
     }
 
     @CommandHandler
-    public void UpdateContainerInstanceStatus(UpdateContainerInstanceStatusFromBuildCommand command, EventMetaDataFactory eventMetaDataFactory) {
+    public void UpdateContainerInstanceStatus(UpdateContainerInstanceStatusCommand command, EventMetaDataFactory eventMetaDataFactory) {
         boolean allContainersRemoved = allContainersRemoved(command.getContainerInstanceStatus());
 
-        apply(new ContainerInstanceStatusUpdatedFromBuildEvent(
+        apply(new BuildContainerInstanceStatusChangedEvent(
                 buildId,
                 eventMetaDataFactory.create(),
                 command.getContainerInstanceId(),
                 command.getContainerInstanceStatus()));
 
-        if (allContainersRemoved) {
-            // TODO: BuildStatusUpdate...
+        if(allContainersRemoved) {
+            apply(new BuildFinishedEvent(buildId, eventMetaDataFactory.create()));
         }
     }
 
@@ -80,12 +81,12 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
     }
 
     @EventHandler
-    void on(ContainerInstanceAddedToBuildEvent event) {
+    void on(BuildContainerInstanceAddedEvent event) {
         this.containerInstanceStatusMap.put(event.getContainerInstanceId(), INITIALIZED);
     }
 
     @EventHandler
-    void on(ContainerInstanceStatusUpdatedFromBuildEvent event) {
-        this.containerInstanceStatusMap.put(event.getContainerInstanceId(), event.getStatus());
+    void on(BuildContainerInstanceStatusChangedEvent event) {
+        this.containerInstanceStatusMap.put(event.getContainerInstanceId(), event.getContainerInstanceStatus());
     }
 }
