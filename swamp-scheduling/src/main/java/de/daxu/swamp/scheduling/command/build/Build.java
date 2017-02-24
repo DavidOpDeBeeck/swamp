@@ -46,6 +46,8 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
 
     @CommandHandler
     public void AddContainerInstance(AddContainerInstanceCommand command, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatus(INPROGRESS);
+
         apply(new BuildContainerInstanceAddedEvent(
                 buildId,
                 eventMetaDataFactory.create(),
@@ -54,6 +56,8 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
 
     @CommandHandler
     public void UpdateContainerInstanceStatus(UpdateContainerInstanceStatusCommand command, EventMetaDataFactory eventMetaDataFactory) {
+        validateStatus(INPROGRESS);
+
         boolean allContainersRemoved = allContainersRemoved(command.getContainerInstanceStatus());
 
         apply(new BuildContainerInstanceStatusChangedEvent(
@@ -72,6 +76,12 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
                 .stream()
                 .filter(s -> s == REMOVED)
                 .count() == containerInstanceStatusMap.size() - 1;
+    }
+
+    private void validateStatus(BuildStatus statusToBe) {
+        if(this.status != statusToBe) {
+            throw new InvalidBuildStatusException(status, statusToBe);
+        }
     }
 
     @EventHandler
