@@ -115,3 +115,7 @@ footer > p > .divider:after {
     color: #000000;
     background-color: #eeeeee;
 }
+
+li:hover {
+    background-color: transparent !important;
+}

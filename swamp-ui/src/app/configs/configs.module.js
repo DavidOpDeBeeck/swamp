@@ -1,10 +1,7 @@
 import Angular from "angular";
 import StateConfig from "./state.config";
-import NotificationConfig from "./notification.config";
 
-const module = Angular.module('swamp.configs', []);
-
-module.run(StateConfig);
-module.run(NotificationConfig);
+const module = Angular.module('swamp.configs', [])
+    .run(StateConfig);
 
 export default module.name;

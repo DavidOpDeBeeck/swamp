@@ -1,22 +1,38 @@
 class BuildsController {
-    constructor(BuildService, NotificationService, $timeout) {
+    constructor(BuildService, NotificationService) {
         this.builds = {};
-        BuildService.getAllProjects()
-            .then((projects) => {
-                this.projects = projects;
-                this.projects.forEach(project => {
-                    project.builds.forEach(build => {
-                        this.builds[build.buildId] = build.status;
-                        NotificationService.on({
-                            eventTypes : ['BuildFinishedEvent'],
-                            buildId: build.buildId,
-                            callback: event => {
-                                $timeout(() => this.builds[event.buildId] = 'FINISHED');
-                            }
-                        });
-                    });
-                });
-            });
+        this.buildService = BuildService;
+        this.notificationService = NotificationService;
+        this.initialize();
+        this.initializeListeners();
+    }
+
+    initialize() {
+        this.buildService.getAllProjects()
+            .then(projects => this.initializeProjects(projects));
+    }
+
+    initializeListeners() {
+        this.notificationService.on({
+            eventTypes: ['BuildInitializedEvent'],
+            callback: event => this.initialize()
+        });
+    }
+
+    initializeProjects(projects) {
+        this.projects = projects;
+        this.projects.forEach(project => {
+            project.builds.forEach(build => this.initializeBuild(build));
+        });
+    }
+
+    initializeBuild(build) {
+        this.builds[build.buildId] = build.status;
+        this.notificationService.on({
+            eventTypes: ['BuildFinishedEvent'],
+            identifier: event => event.buildId === build.buildId,
+            callback: event => this.builds[event.buildId] = 'FINISHED'
+        });
     }
 
     inProgress(build) {
@@ -24,4 +40,4 @@ class BuildsController {
     }
 }
 
-export default ['BuildService', 'NotificationService', '$timeout', BuildsController]
+export default ['BuildService', 'NotificationService', BuildsController]

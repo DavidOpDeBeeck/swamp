@@ -41,8 +41,7 @@ public class ReplayResource {
     }
 
     private void clearViews() {
-        Set<JpaRepository> queryRepositories = getQueryRepositories();
-        queryRepositories.forEach(JpaRepository::deleteAllInBatch);
+        getQueryRepositories().forEach(JpaRepository::deleteAllInBatch);
     }
 
     private Set<JpaRepository> getQueryRepositories() {

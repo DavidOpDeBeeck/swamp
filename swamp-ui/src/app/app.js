@@ -35,4 +35,6 @@ const module = Angular.module('swamp', [
         Builds,
         Version
     ])
+    .constant("API_URL", "http://localhost:8081/")
+    .constant("BROKER_URL", "http://localhost:8081/schedule")
     .config(AppRoute);
