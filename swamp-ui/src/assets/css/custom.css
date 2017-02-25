@@ -1,20 +1,39 @@
-.ui-notification h3 {
-    color: #ffffff;
-}
-
-.ui-notification .message {
-    color: #ffffff;
-}
-
-hr {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
+/*
+ BREADCRUMB
+ */
 
 .breadcrumb > li + li:before {
     padding: 0 5px;
     color: #ccc;
     content: "/\00a0";
+}
+
+/*
+ FORMS
+ */
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+input.ng-invalid,
+textarea.ng-invalid {
+    border: 2px solid #d9534f;
+    box-shadow: 1px 1px 1px #d9534f;
+}
+
+/*
+ INPUT
+ */
+
+textarea {
+    resize: vertical;
 }
 
 .well.textarea {
@@ -53,6 +72,22 @@ hr {
     width: calc(50% - 2.5px) !important;
 }
 
+/*
+ NOTIFICATIONS
+ */
+
+.ui-notification h3 {
+    color: #ffffff;
+}
+
+.ui-notification .message {
+    color: #ffffff;
+}
+
+/*
+ LIST ITEMS
+ */
+
 .list-group-item-text {
     margin: 10px 0;
 }
@@ -61,39 +96,6 @@ hr {
 .list-group-item-footer {
     overflow: auto;
     margin: 0;
-}
-
-textarea {
-    resize: vertical;
-}
-
-footer > p {
-    text-transform: uppercase;
-}
-
-footer > p > a:hover {
-    text-decoration: none;
-}
-
-footer > p > .divider:after {
-    padding: 0 3px;
-    color: #ccc;
-    content: "/\00a0";
-}
-
-.form-group label {
-    font-size: 1rem;
-    text-transform: uppercase;
-    font-weight: 600;
-}
-
-.form-group {
-    margin-bottom: 10px;
-}
-
-.container-instance #container-logs {
-    overflow: auto;
-    max-height: 300px;
 }
 
 .list-group > .list-group-item {
@@ -118,4 +120,36 @@ footer > p > .divider:after {
 
 li:hover {
     background-color: transparent !important;
+}
+
+/*
+ FOOTER
+ */
+
+footer > p {
+    text-transform: uppercase;
+}
+
+footer > p > a:hover {
+    text-decoration: none;
+}
+
+footer > p > .divider:after {
+    color: #cccccc;
+    padding: 0 3px;
+    content: "/\00a0";
+}
+
+/*
+ OTHER
+ */
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.container-instance #container-logs {
+    overflow: auto;
+    max-height: 300px;
 }

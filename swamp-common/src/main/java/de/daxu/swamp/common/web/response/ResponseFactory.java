@@ -25,7 +25,7 @@ public class ResponseFactory {
                 .build();
     }
 
-    public Response badRequest( String error ) {
+    public Response badRequest( String ... error ) {
         return aResponse()
                 .withMeta( metaFactory.badRequest() )
                 .withErrors( error )

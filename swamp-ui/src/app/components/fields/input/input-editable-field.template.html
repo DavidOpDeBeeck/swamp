@@ -1,4 +1,8 @@
 <div class="form-group">
-    <label for="{{ field.id }}"  ng-show="field.label">{{ field.label }}: </label>
-    <input type="text" id="{{ field.id }}" class="form-control" ng-model="field.value"/>
+    <label for="{{ field.id }}" ng-show="field.label">{{ field.label }}: </label>
+    <input type="text"
+           id="{{ field.id }}"
+           class="form-control"
+           ng-model="field.value"
+           ng-required="field.required"/>
 </div>

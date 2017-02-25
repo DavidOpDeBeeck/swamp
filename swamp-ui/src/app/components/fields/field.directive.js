@@ -12,6 +12,7 @@ class FieldDirective {
         this.restrict = 'E';
         this.scope = {
             'label': '@',
+            'required': '@',
             'value': '=',
             'editable': '='
         };
