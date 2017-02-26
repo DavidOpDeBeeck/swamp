@@ -14,12 +14,12 @@ public class ContainerInstanceWriteServiceTest {
 
     @Test
     public void schedule() throws Exception {
-        when( containerInstanceCommandFactory.createInitializeCommand( serverInstanceId, CONTAINER, dateScheduled ) )
+        when( containerInstanceCommandFactory.createProjectCommand( serverInstanceId, CONTAINER, dateScheduled ) )
                 .thenReturn( SCHEDULE_COMMAND );
 
         containerInstanceWriteService.schedule( CONTAINER );
 
-        verify( containerInstanceCommandFactory ).createInitializeCommand( serverInstanceId, CONTAINER, dateScheduled );
+        verify( containerInstanceCommandFactory ).createProjectCommand( serverInstanceId, CONTAINER, dateScheduled );
         verify( commandGateway ).send( SCHEDULE_COMMAND );
     }
 

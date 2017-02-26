@@ -9,7 +9,8 @@ import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.project.Project;
 import de.daxu.swamp.core.project.ProjectService;
-import de.daxu.swamp.scheduling.command.build.BuildCommandService;
+import de.daxu.swamp.scheduling.command.project.ProjectCommandService;
+import de.daxu.swamp.scheduling.command.project.ProjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,19 +31,19 @@ public class ProjectResource {
     private final ProjectService projectService;
     private final ProjectConverter projectConverter;
     private final ProjectCreateConverter projectCreateConverter;
-    private final BuildCommandService buildCommandService;
+    private final ProjectCommandService projectCommandService;
 
     @Autowired
     public ProjectResource(ResponseFactory responseFactory,
                            ProjectService projectService,
                            ProjectConverter projectConverter,
                            ProjectCreateConverter projectCreateConverter,
-                           BuildCommandService buildCommandService) {
+                           ProjectCommandService projectCommandService) {
         this.response = responseFactory;
         this.projectService = projectService;
         this.projectConverter = projectConverter;
         this.projectCreateConverter = projectCreateConverter;
-        this.buildCommandService = buildCommandService;
+        this.projectCommandService = projectCommandService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -61,6 +62,8 @@ public class ProjectResource {
 
         Project project = projectCreateConverter.toDomain(dto);
         project = projectService.createProject(project);
+
+        projectCommandService.createProject(project.getId(), project.getName(), project.getDescription());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -97,7 +100,7 @@ public class ProjectResource {
     @RequestMapping(value = "/{projectId}", params = {"action=deploy"}, method = RequestMethod.POST)
     public Response deploy(@PathVariable("projectId") Project project) {
 
-        buildCommandService.initialize(project);
+        projectCommandService.scheduleBuild(ProjectId.from(project.getId()), project.getContainers());
         return response.success();
     }
 }

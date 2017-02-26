@@ -9,21 +9,21 @@ import javax.persistence.Embeddable;
 import java.util.UUID;
 
 @Embeddable
-@AttributeOverride( name = "value", column = @Column( name = "build_id" ) )
+@AttributeOverride(name = "value", column = @Column(name = "build_id"))
 public class BuildId extends EntityId {
+
+    public static BuildId from(String id) {
+        return new BuildId(UUID.fromString(id));
+    }
+
+    public static BuildId random() {
+        return new BuildId(UUID.randomUUID());
+    }
 
     private BuildId() {
     }
 
-    private BuildId(UUID projectInstanceId ) {
-        super( projectInstanceId );
-    }
-
-    public static BuildId random() {
-        return new BuildId( UUID.randomUUID() );
-    }
-
-    public static BuildId from(String id ) {
-        return new BuildId( UUID.fromString( id ) );
+    private BuildId(UUID buildId) {
+        super(buildId);
     }
 }

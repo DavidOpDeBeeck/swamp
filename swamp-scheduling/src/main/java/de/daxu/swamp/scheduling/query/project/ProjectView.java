@@ -1,9 +1,11 @@
 package de.daxu.swamp.scheduling.query.project;
 
 import de.daxu.swamp.common.cqrs.EntityView;
+import de.daxu.swamp.scheduling.command.project.ProjectId;
 import de.daxu.swamp.scheduling.query.build.BuildView;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -12,6 +14,10 @@ import static com.google.common.collect.Sets.newHashSet;
 @Table( name = "project_view" )
 @SuppressWarnings( "unused" )
 public class ProjectView extends EntityView {
+
+    @Embedded
+    @NotNull(message = "{NotNull.ProjectView.projectId}")
+    private ProjectId projectId;
 
     @Column( name = "name", unique = true)
     private String name;
@@ -29,7 +35,8 @@ public class ProjectView extends EntityView {
     private ProjectView() {
     }
 
-    private ProjectView( String name, String description, int buildSequence, Set<BuildView> builds) {
+    private ProjectView( ProjectId projectId, String name, String description, int buildSequence, Set<BuildView> builds) {
+        this.projectId = projectId;
         this.name = name;
         this.description = description;
         this.buildSequence = buildSequence;
@@ -63,6 +70,7 @@ public class ProjectView extends EntityView {
 
     public static class Builder {
 
+        private ProjectId projectId;
         private String name;
         private String description;
         private int buildSequence;
@@ -70,6 +78,11 @@ public class ProjectView extends EntityView {
 
         public static Builder aProjectView() {
             return new Builder();
+        }
+
+        public Builder withProjectId( ProjectId projectId ) {
+            this.projectId = projectId;
+            return this;
         }
 
         public Builder withName( String name ) {
@@ -93,7 +106,7 @@ public class ProjectView extends EntityView {
         }
 
         public ProjectView build() {
-            return new ProjectView( name, description, buildSequence, projectInstances );
+            return new ProjectView( projectId, name, description, buildSequence, projectInstances );
         }
     }
 }

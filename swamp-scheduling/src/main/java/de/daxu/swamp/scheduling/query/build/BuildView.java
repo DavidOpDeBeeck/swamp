@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Maps.newHashMap;
+import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.INITIALIZED;
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.REMOVED;
 
 @Entity
@@ -53,7 +55,11 @@ public class BuildView extends EntityView {
         this.containers = containers;
     }
 
-    public void setContainerInstanceStatus(ContainerInstanceId containerInstanceId, ContainerInstanceStatus status) {
+    void addContainerInstance(ContainerInstanceId containerInstanceId) {
+        containers.put(containerInstanceId, INITIALIZED);
+    }
+
+    void setContainerInstanceStatus(ContainerInstanceId containerInstanceId, ContainerInstanceStatus status) {
         containers.put(containerInstanceId, status);
     }
 
@@ -87,7 +93,7 @@ public class BuildView extends EntityView {
         private BuildId buildId;
         private int sequence;
         private LocalDateTime initializedAt;
-        private Map<ContainerInstanceId, ContainerInstanceStatus> containers;
+        private Map<ContainerInstanceId, ContainerInstanceStatus> containers = newHashMap();
 
         public static Builder aBuildView() {
             return new Builder();

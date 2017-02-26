@@ -3,6 +3,7 @@ package de.daxu.swamp.scheduling.config.axon;
 import de.daxu.swamp.common.axon.CommandExceptionInterceptor;
 import de.daxu.swamp.scheduling.command.build.Build;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstance;
+import de.daxu.swamp.scheduling.command.project.Project;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
@@ -88,12 +89,13 @@ public class CommandBusConfiguration {
     @Bean
     public Set<AggregateAnnotationCommandHandler> commandHandler() {
         return newHashSet(
-                createAggregateCommandHandler(ContainerInstance.class),
-                createAggregateCommandHandler(Build.class)
+                createCommandHandler(ContainerInstance.class),
+                createCommandHandler(Build.class),
+                createCommandHandler(Project.class)
         );
     }
 
-    private <T extends EventSourcedAggregateRoot> AggregateAnnotationCommandHandler<T> createAggregateCommandHandler(Class<T> aggregateClass) {
+    private <T extends EventSourcedAggregateRoot> AggregateAnnotationCommandHandler<T> createCommandHandler(Class<T> aggregateClass) {
         AggregateAnnotationCommandHandler<T> commandHandler = new AggregateAnnotationCommandHandler<>(
                 aggregateClass,
                 repository(aggregateClass),
@@ -109,5 +111,4 @@ public class CommandBusConfiguration {
         repository.setEventBus(eventBus);
         return repository;
     }
-
 }

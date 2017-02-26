@@ -1,52 +1,54 @@
-<div class="modal-header">
-    <h3 class="modal-title" ng-hide="ServerModalCtrl.update">Create a new Server</h3>
-    <h3 class="modal-title" ng-show="ServerModalCtrl.update">{{ ServerModalCtrl.server.name }}</h3>
-</div>
-<div class="modal-body" ng-form="form" ng-submit="ServerModalCtrl.submit()">
-    <div class="row">
-        <div class="col-md-6">
-            <input-field
-                    label="Server name"
-                    value="ServerModalCtrl.server.name"
-                    editable="true"
-                    required="true">
-            </input-field>
-        </div>
-        <div class="col-md-6">
-            <input-field
-                    label="Server ip"
-                    value="ServerModalCtrl.server.ip"
-                    editable="true"
-                    required="true">
-            </input-field>
-        </div>
-        <div class="col-md-12">
-            <textarea-field
-                    label="Server CA certificate"
-                    value="ServerModalCtrl.server.CACertificate"
-                    editable="true">
-            </textarea-field>
-        </div>
-        <div class="col-md-12">
-            <textarea-field
-                    label="Server certificate"
-                    value="ServerModalCtrl.server.certificate"
-                    editable="true">
-            </textarea-field>
-        </div>
-        <div class="col-md-12">
-            <textarea-field
-                    label="Server key"
-                    value="ServerModalCtrl.server.key"
-                    editable="true">
-            </textarea-field>
+<form ng-submit="ServerModalCtrl.submit()">
+    <div class="modal-header">
+        <h3 class="modal-title" ng-hide="ServerModalCtrl.update">Create a new Server</h3>
+        <h3 class="modal-title" ng-show="ServerModalCtrl.update">{{ ServerModalCtrl.server.name }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <input-field
+                        label="Server name"
+                        value="ServerModalCtrl.server.name"
+                        editable="true"
+                        required="true">
+                </input-field>
+            </div>
+            <div class="col-md-6">
+                <input-field
+                        label="Server ip"
+                        value="ServerModalCtrl.server.ip"
+                        editable="true"
+                        required="true">
+                </input-field>
+            </div>
+            <div class="col-md-12">
+                <textarea-field
+                        label="Server CA certificate"
+                        value="ServerModalCtrl.server.CACertificate"
+                        editable="true">
+                </textarea-field>
+            </div>
+            <div class="col-md-12">
+                <textarea-field
+                        label="Server certificate"
+                        value="ServerModalCtrl.server.certificate"
+                        editable="true">
+                </textarea-field>
+            </div>
+            <div class="col-md-12">
+                <textarea-field
+                        label="Server key"
+                        value="ServerModalCtrl.server.key"
+                        editable="true">
+                </textarea-field>
+            </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="ServerModalCtrl.cancel()">Cancel</button>
-    <button class="btn btn-primary" type="submit">
-        {{ ServerModalCtrl.update ? 'Update' : 'Create' }}
-    </button>
-</div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="ServerModalCtrl.cancel()">Cancel</button>
+        <button class="btn btn-primary" type="submit">
+            {{ ServerModalCtrl.update ? 'Update' : 'Create' }}
+        </button>
+    </div>
+</form>
 

@@ -2,6 +2,7 @@ import Logger from "domain/logger";
 import EventListener from "domain/event-listener";
 
 const BUILD_CHANNEL = '/topic/build-updates';
+const PROJECT_CHANNEL = '/topic/project-updates';
 const CONTAINER_CHANNEL = '/topic/container-updates';
 
 class NotificationService {
@@ -10,7 +11,7 @@ class NotificationService {
         this.$timeout = $timeout;
         this.notification = Notification;
         this.eventListeners = [this.defaultNotificationListener()];
-        $timeout(() => this.connectToSocket(BROKER_URL), 1000);
+        $timeout(() => this.connectToSocket(BROKER_URL), 100);
     }
 
     connectToSocket(brokerUrl) {
@@ -18,6 +19,8 @@ class NotificationService {
             .then((f) => {
                 this.$stomp.subscribe(BUILD_CHANNEL, message => this.handle(message));
                 Logger.info("Successfully connected to " + BUILD_CHANNEL);
+                this.$stomp.subscribe(PROJECT_CHANNEL, message => this.handle(message));
+                Logger.info("Successfully connected to " + PROJECT_CHANNEL);
                 this.$stomp.subscribe(CONTAINER_CHANNEL, message => this.handle(message));
                 Logger.info("Successfully connected to " + CONTAINER_CHANNEL);
             });
@@ -25,6 +28,7 @@ class NotificationService {
 
     handle(message) {
         let type = message.type, event = message.event;
+        Logger.info("Received event: " + type);
         let listeners = this.eventListeners
             .map(listener => listener.on(type, event))
             .filter(callback => callback)

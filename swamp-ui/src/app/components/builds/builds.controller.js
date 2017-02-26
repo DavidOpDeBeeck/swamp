@@ -1,6 +1,7 @@
 class BuildsController {
-    constructor(BuildService, NotificationService) {
+    constructor(BuildService, NotificationService, $timeout) {
         this.builds = {};
+        this.$timeout = $timeout;
         this.buildService = BuildService;
         this.notificationService = NotificationService;
         this.initialize();
@@ -14,8 +15,15 @@ class BuildsController {
 
     initializeListeners() {
         this.notificationService.on({
-            eventTypes: ['BuildInitializedEvent'],
-            callback: event => this.initialize()
+            eventTypes: ['BuildCreatedEvent'],
+            callback: event => {
+                this.$timeout(() => {
+                    this.buildService.getBuild(event.buildId).then(build => {
+                        let index = this.projects.findIndex(p => p.projectId = event.projectId);
+                        this.projects[index].builds.push(build);
+                    });
+                }, 2000);
+            }
         });
     }
 
@@ -28,6 +36,7 @@ class BuildsController {
 
     initializeBuild(build) {
         this.builds[build.buildId] = build.status;
+        // TODO: dont listen of build is finished
         this.notificationService.on({
             eventTypes: ['BuildFinishedEvent'],
             identifier: event => event.buildId === build.buildId,
@@ -40,4 +49,4 @@ class BuildsController {
     }
 }
 
-export default ['BuildService', 'NotificationService', BuildsController]
+export default ['BuildService', 'NotificationService', '$timeout', BuildsController]

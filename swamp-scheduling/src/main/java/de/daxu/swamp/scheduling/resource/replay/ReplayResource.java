@@ -3,7 +3,10 @@ package de.daxu.swamp.scheduling.resource.replay;
 import de.daxu.swamp.common.axon.QueryRepository;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
+import org.apache.commons.lang.time.StopWatch;
 import org.axonframework.eventhandling.replay.ReplayingCluster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +24,7 @@ import static de.daxu.swamp.scheduling.resource.replay.ReplayResource.REPLAY_URL
 public class ReplayResource {
 
     final static String REPLAY_URL = "/replay";
+    private final Logger logger = LoggerFactory.getLogger(ReplayResource.class);
 
     private final ResponseFactory response;
     private final ReplayingCluster replayableCluster;
@@ -36,8 +40,17 @@ public class ReplayResource {
     @RequestMapping(method = RequestMethod.POST)
     public Response replayEvents() {
         clearViews();
-        replayableCluster.startReplay();
+        replay();
         return response.success();
+    }
+
+    private void replay() {
+        StopWatch stopWatch = new StopWatch();
+        logger.info("Starting replay");
+        stopWatch.start();
+        replayableCluster.startReplay();
+        stopWatch.stop();
+        logger.info("Replay took: {}", stopWatch.toString());
     }
 
     private void clearViews() {

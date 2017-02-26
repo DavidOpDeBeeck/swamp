@@ -22,8 +22,8 @@
     text-transform: uppercase;
 }
 
-input.ng-invalid,
-textarea.ng-invalid {
+input.ng-dirty.ng-invalid,
+textarea.ng-dirty.ng-invalid {
     border: 2px solid #d9534f;
     box-shadow: 1px 1px 1px #d9534f;
 }

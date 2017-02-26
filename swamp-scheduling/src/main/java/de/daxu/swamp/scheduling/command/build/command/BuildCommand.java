@@ -6,7 +6,7 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
 public class BuildCommand {
 
     @TargetAggregateIdentifier
-    private BuildId buildId;
+    private final BuildId buildId;
 
     public BuildCommand(BuildId buildId) {
         this.buildId = buildId;

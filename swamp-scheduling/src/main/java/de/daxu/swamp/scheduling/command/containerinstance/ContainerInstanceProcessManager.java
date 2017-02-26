@@ -3,6 +3,7 @@ package de.daxu.swamp.scheduling.command.containerinstance;
 import de.daxu.swamp.common.axon.EventListener;
 import de.daxu.swamp.scheduling.command.build.BuildCommandService;
 import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceAddedEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceScheduledEvent;
 import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceCreatedFailedEvent;
 import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceCreatedSucceededEvent;
 import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceStartedFailedEvent;
@@ -16,13 +17,17 @@ import static de.daxu.swamp.scheduling.command.containerinstance.reason.Containe
 @EventListener(replayable = false)
 public class ContainerInstanceProcessManager {
 
-
     private final ContainerInstanceCommandService containerInstanceCommandService;
 
     @Autowired
     public ContainerInstanceProcessManager(BuildCommandService buildCommandService,
                                            ContainerInstanceCommandService containerInstanceCommandService) {
         this.containerInstanceCommandService = containerInstanceCommandService;
+    }
+
+    @EventHandler
+    public void on(BuildContainerInstanceScheduledEvent event) {
+        containerInstanceCommandService.initialize(event.getBuildId(), event.getConfiguration(), event.getServer());
     }
 
     @EventHandler
