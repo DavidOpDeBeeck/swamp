@@ -7,27 +7,36 @@ import de.daxu.swamp.deploy.group.GroupManager;
 import de.daxu.swamp.deploy.group.GroupManagerImpl;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
+import de.daxu.swamp.filestore.FileStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DockerFacade implements DeployFacade {
 
+    private final FileStore fileStore;
+    private final GroupManager groupManager;
     private final DockerClientFactory dockerClientFactory;
     private final ContainerResultFactory containerResultFactory;
-    private final GroupManager groupManager;
 
     @Autowired
-    public DockerFacade( DockerClientFactory dockerClientFactory,
-                         ContainerResultFactory containerResultFactory ) {
+    public DockerFacade(FileStore fileStore,
+                        DockerClientFactory dockerClientFactory,
+                        ContainerResultFactory containerResultFactory) {
+        this.fileStore = fileStore;
+        this.groupManager = new GroupManagerImpl();
         this.dockerClientFactory = dockerClientFactory;
         this.containerResultFactory = containerResultFactory;
-        this.groupManager = new GroupManagerImpl();
     }
 
     @Override
-    public ContainerClient containerClient( Server server ) {
-        return new DockerContainerClient( dockerClientFactory, containerResultFactory, groupManager, server );
+    public ContainerClient containerClient(Server server) {
+        return new DockerContainerClient(
+                fileStore,
+                groupManager,
+                dockerClientFactory,
+                containerResultFactory,
+                server);
     }
 
     @Override

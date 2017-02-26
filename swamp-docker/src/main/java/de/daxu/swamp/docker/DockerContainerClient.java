@@ -3,7 +3,6 @@ package de.daxu.swamp.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
@@ -16,16 +15,16 @@ import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.client.DeployClient;
 import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
+import de.daxu.swamp.deploy.group.Group;
 import de.daxu.swamp.deploy.group.GroupId;
 import de.daxu.swamp.deploy.group.GroupManager;
 import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
-import de.daxu.swamp.docker.log.LogCallback;
+import de.daxu.swamp.filestore.FileStore;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -34,125 +33,155 @@ import java.util.stream.Collectors;
 
 import static com.github.dockerjava.api.model.ExposedPort.tcp;
 import static com.github.dockerjava.api.model.Ports.Binding.bindPort;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static de.daxu.swamp.docker.command.LogContainerCommandCallback.onLogReceived;
 
 public class DockerContainerClient implements ContainerClient, DeployClient {
 
     private final DockerClientFactory dockerClientFactory;
     private final ContainerResultFactory containerResultFactory;
     private final GroupManager groupManager;
-
     private final Server server;
+    private final FileStore fileStore;
 
-    DockerContainerClient(DockerClientFactory dockerClientFactory,
-                          ContainerResultFactory containerResultFactory,
+    DockerContainerClient(FileStore fileStore,
                           GroupManager groupManager,
+                          DockerClientFactory dockerClientFactory,
+                          ContainerResultFactory containerResultFactory,
                           Server server) {
+        this.fileStore = fileStore;
+        this.groupManager = groupManager;
         this.dockerClientFactory = dockerClientFactory;
         this.containerResultFactory = containerResultFactory;
-        this.groupManager = groupManager;
         this.server = server;
     }
 
     @Override
     public ContainerResult create(ContainerConfiguration config) {
         Set<String> warnings = newHashSet();
-
         GroupId groupId = config.getGroup();
-        warnings.addAll(createNetworkIfGroupIsNew(groupId));
 
-        CreateContainerCmd dockerCommand = config.getRunConfiguration()
-                .configure(configurator());
+        warnings.addAll(createNetwork(groupId));
 
-        dockerCommand
+        CreateContainerResponse response = configure(config)
+                .withHostConfig(createHostConfig(groupId))
                 .withPortBindings(extractPortBindings(config))
-                .withHostConfig(new HostConfig()
-                        .withNetworkMode(groupId.getValue()))
-                .withAliases(new ArrayList<>(config.getAliases()))
-                .withEnv(extractEnvironmentVariables(config));
-
-        CreateContainerResponse response = dockerCommand.exec();
+                .withEnv(extractEnvironmentVariables(config))
+                .withAliases(newArrayList(config.getAliases()))
+                .exec();
 
         ContainerId containerId = ContainerId.of(response.getId());
 
-        warnings.addAll(connectToGroupNetwork(groupId, containerId));
         warnings.addAll(toSet(response.getWarnings()));
+        warnings.addAll(connectNetwork(groupId, containerId));
 
-        groupManager.addContainerToGroup(groupId, containerId);
+        Group group = groupManager.create(groupId);
+        group.addContainer(containerId);
 
         return containerResultFactory.createResponse(containerId, filterNull(warnings));
     }
 
-    private Set<String> createNetworkIfGroupIsNew(GroupId groupId) {
-        return catchWarnings(
-                () -> {
-                    if(!groupManager.exists(groupId)) {
-                        docker().createNetworkCmd()
-                                .withDriver("overlay")
-                                .withName(groupId.getValue()).exec();
-                    }
-                }
-        );
+    private HostConfig createHostConfig(GroupId groupId) {
+        return new HostConfig()
+                .withNetworkMode(groupId.getValue());
     }
 
-    private Set<String> connectToGroupNetwork(GroupId groupId, ContainerId containerId) {
+    private CreateContainerCmd configure(ContainerConfiguration config) {
+        return config.getRunConfiguration().configure(configurator());
+    }
+
+    private Set<String> createNetwork(GroupId groupId) {
+        return catchWarnings(() -> {
+            if(groupManager.exists(groupId))
+                return;
+
+            dockerClient()
+                    .createNetworkCmd()
+                    .withDriver("overlay")
+                    .withName(groupId.value())
+                    .exec();
+        });
+    }
+
+    private Set<String> connectNetwork(GroupId groupId, ContainerId containerId) {
         return catchWarnings(
-                () -> docker().connectToNetworkCmd()
-                        .withContainerId(containerId.getValue())
-                        .withNetworkId(groupId.getValue()).exec()
+                () -> dockerClient()
+                        .connectToNetworkCmd()
+                        .withContainerId(containerId.value())
+                        .withNetworkId(groupId.value()).exec()
         );
     }
 
     @Override
     public ContainerResult start(ContainerId containerId) {
         Set<String> warnings = catchWarnings(
-                () -> docker().startContainerCmd(containerId.getValue()).exec()
+                () -> dockerClient()
+                        .startContainerCmd(containerId.value())
+                        .exec()
         );
-        return containerResultFactory.createResponse(containerId, filterNull(warnings));
+        return containerResultFactory
+                .createResponse(containerId, filterNull(warnings));
     }
 
     @Override
     public ContainerResult stop(ContainerId containerId) {
         Set<String> warnings = catchWarnings(
-                () -> docker().stopContainerCmd(containerId.getValue()).exec()
+                () -> dockerClient()
+                        .stopContainerCmd(containerId.value())
+                        .exec()
         );
-        return containerResultFactory.createResponse(containerId, filterNull(warnings));
+        return containerResultFactory
+                .createResponse(containerId, filterNull(warnings));
     }
 
     @Override
     public ContainerResult remove(ContainerId containerId) {
         Set<String> warnings = catchWarnings(
-                () -> docker().removeContainerCmd(containerId.getValue()).exec()
+                () -> dockerClient()
+                        .removeContainerCmd(containerId.value())
+                        .exec()
         );
-        return containerResultFactory.createResponse(containerId, filterNull(warnings));
+        return containerResultFactory
+                .createResponse(containerId, filterNull(warnings));
     }
 
     @Override
     public ContainerResult log(ContainerId containerId, Consumer<String> logCallback) {
         Set<String> warnings = catchWarnings(
-                () -> docker().logContainerCmd(containerId.getValue())
+                () -> dockerClient()
+                        .logContainerCmd(containerId.value())
                         .withStdErr(true)
                         .withStdOut(true)
                         .withFollowStream(true)
-                        .exec(LogCallback.withConsumer(logCallback))
+                        .exec(onLogReceived(logCallback))
         );
-        return containerResultFactory.createResponse(containerId, filterNull(warnings));
+        return containerResultFactory
+                .createResponse(containerId, filterNull(warnings));
     }
 
     @Override
     public boolean exists(ContainerId containerId) {
         Set<String> warnings = catchWarnings(
-                () -> docker().inspectContainerCmd(containerId.getValue()).exec()
+                () -> dockerClient()
+                        .inspectContainerCmd(containerId.value())
+                        .exec()
         );
-        return warnings.isEmpty(); // TODO: find a better way
+        return warnings.isEmpty();
     }
 
     @Override
     public boolean isRunning(ContainerId containerId) {
-        if(!exists(containerId)) return false;
-        InspectContainerResponse response = docker().inspectContainerCmd(containerId.getValue()).exec();
-        return response.getState().getStatus().equals("created")
-                || response.getState().getStatus().equals("running");
+        if(!exists(containerId))
+            return false;
+
+        String status = dockerClient()
+                .inspectContainerCmd(containerId.value())
+                .exec()
+                .getState()
+                .getStatus();
+
+        return status.equals("created") || status.equals("running");
     }
 
     @Override
@@ -160,12 +189,12 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
         return server;
     }
 
-    private DockerClient docker() {
+    private DockerClient dockerClient() {
         return dockerClientFactory.createClient(server);
     }
 
     private DockerRunConfigurator configurator() {
-        return new DockerRunConfigurator(docker());
+        return new DockerRunConfigurator(dockerClient(), fileStore);
     }
 
     private Set<String> catchWarnings(Runnable runnable) {

@@ -1,12 +1,10 @@
 package de.daxu.swamp.deploy.group;
 
-import de.daxu.swamp.deploy.container.ContainerId;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.UUID;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GroupManagerImplTest {
@@ -19,23 +17,53 @@ public class GroupManagerImplTest {
     }
 
     @Test
-    public void addContainer() throws Exception {
-        GroupId groupId = GroupId.of( UUID.randomUUID().toString() );
-        ContainerId containerId = ContainerId.of( UUID.randomUUID().toString() );
+    public void create() throws Exception {
+        GroupId groupId = GroupId.of(UUID.randomUUID().toString());
 
-        groupManager.addContainerToGroup( groupId, containerId );
+        Group group = groupManager.create(groupId);
 
-        assertThat( groupManager.groups.get( groupId ) )
-                .containsExactly( containerId );
+        assertThat(groupManager.groups)
+                .containsExactly(group);
+    }
+
+    @Test
+    public void get() throws Exception {
+        GroupId groupId = GroupId.of(UUID.randomUUID().toString());
+        Group expected = Group.withGroupId(groupId);
+        groupManager.groups.add(expected);
+
+        Group actual = groupManager.get(groupId);
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
+
+    @Test
+    public void get_null() throws Exception {
+        GroupId groupId = GroupId.of(UUID.randomUUID().toString());
+
+        Group actual = groupManager.get(groupId);
+
+        assertThat(actual).isNull();
     }
 
     @Test
     public void exists() throws Exception {
-        GroupId groupId = GroupId.of( UUID.randomUUID().toString() );
-        groupManager.groups.put( groupId, newHashSet() );
+        GroupId groupId = GroupId.of(UUID.randomUUID().toString());
+        Group expected = Group.withGroupId(groupId);
+        groupManager.groups.add(expected);
 
-        boolean exists = groupManager.exists( groupId );
+        boolean exists = groupManager.exists(groupId);
 
-        assertThat( exists ).isTrue();
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    public void exists_false() throws Exception {
+        GroupId groupId = GroupId.of(UUID.randomUUID().toString());
+
+        boolean exists = groupManager.exists(groupId);
+
+        assertThat(exists).isFalse();
     }
 }

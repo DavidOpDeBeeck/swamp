@@ -19,6 +19,8 @@ server:
   port: 8081
 application:
   version: ${version}
+filestore:
+  path: H:/swamp-temp
 logging:
   level:
     com:
@@ -29,7 +31,7 @@ logging:
       springframework:
           web: ERROR
       axonframework:
-          eventhandling: DEBUG
+          eventhandling: ERROR
 ---
 spring:
   profiles: test

@@ -2,5 +2,6 @@ dependencies {
     compile project(":swamp-common")
     compile project(":swamp-core")
     compile project(":swamp-deploy")
+    compile project(":swamp-filestore")
     compile "com.github.docker-java:docker-java"
 }

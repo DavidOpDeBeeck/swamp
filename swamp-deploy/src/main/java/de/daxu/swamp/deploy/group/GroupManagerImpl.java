@@ -1,25 +1,31 @@
 package de.daxu.swamp.deploy.group;
 
-import de.daxu.swamp.deploy.container.ContainerId;
-
-import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 
 public class GroupManagerImpl implements GroupManager {
 
-    final Map<GroupId, Set<ContainerId>> groups = newHashMap();
+    final Set<Group> groups = newHashSet();
 
     @Override
-    public void addContainerToGroup( GroupId groupId, ContainerId containerId ) {
-        groups.putIfAbsent( groupId, newHashSet() );
-        groups.get( groupId ).add( containerId );
+    public Group create(GroupId groupId) {
+        Group group = Group.withGroupId(groupId);
+        groups.add(group);
+        return group;
     }
 
     @Override
-    public boolean exists( GroupId groupId ) {
-        return groups.get( groupId ) != null;
+    public Group get(GroupId groupId) {
+        return groups.stream()
+                .filter(group -> group.getGroupId().equals(groupId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public boolean exists(GroupId groupId) {
+        return groups.stream()
+                .anyMatch(group -> group.getGroupId().equals(groupId));
     }
 }

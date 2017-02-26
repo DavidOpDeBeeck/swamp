@@ -1,11 +1,11 @@
 package de.daxu.swamp.deploy.group;
 
-import de.daxu.swamp.deploy.container.ContainerId;
-
 public interface GroupManager {
 
-    void addContainerToGroup( GroupId groupId, ContainerId containerId );
+    Group create(GroupId groupId);
 
-    boolean exists( GroupId groupId );
+    Group get(GroupId groupId);
+
+    boolean exists(GroupId groupId);
 
 }

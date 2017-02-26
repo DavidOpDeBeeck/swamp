@@ -29,7 +29,7 @@ public class BuildNotifyEventListener {
     }
 
     private void publish(BuildEvent event) {
-        logger.info("Sending event : {} over topic: {}", event.getClass().getSimpleName(), TOPIC);
+        logger.debug("Sending event : {} over topic: {}", event.getClass().getSimpleName(), TOPIC);
         this.messagingTemplate.convertAndSend(TOPIC, new EventNotification(event));
     }
 }

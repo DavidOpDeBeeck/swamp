@@ -27,7 +27,7 @@ import static de.daxu.swamp.scheduling.command.containerinstance.reason.Containe
 public class ContainerInstanceBatchService {
 
     private static final int DEFAULT_WAIT_TIME = 20;
-    private static final int INIT_FAILED_WAIT_TIME = 20;
+    private static final int INIT_FAILED_WAIT_TIME = 60;
     private static final int STARTED_FAILED_WAIT_TIME = 20;
     private static final int STOPPED_FAILED_WAIT_TIME = 10;
 

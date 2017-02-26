@@ -6,4 +6,8 @@ public interface AggregateId extends Serializable {
 
     String getValue();
 
+    default String value() {
+        return getValue();
+    }
+
 }

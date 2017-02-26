@@ -2,10 +2,10 @@
     <h3 class="modal-title" ng-hide="ContainerEditCtrl.update">Create a new Container</h3>
     <h3 class="modal-title" ng-show="ContainerEditCtrl.update">{{ ContainerEditCtrl.container.id }}</h3>
 </div>
-<div class="modal-body" ng-form="form" ng-submit="ContainerModalCtrl.submit()">
+<div class="modal-body">
     <container container="ContainerModalCtrl.container" editable="true"></container>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" type="button" ng-click="ContainerModalCtrl.cancel()">Cancel</button>
-    <button class="btn btn-primary" type="submit">{{ ContainerModalCtrl.update ? 'Update' : 'Create' }}</button>
+    <button class="btn btn-primary" type="button" ng-click="ContainerModalCtrl.submit()">{{ ContainerModalCtrl.update ? 'Update' : 'Create' }}</button>
 </div>
