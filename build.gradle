@@ -51,6 +51,7 @@ subprojects {
         elVersion = '2.2.4'
         unitilsVersion = '3.4.3'
         slf4jVersion = '1.7.21'
+        gitVersion = '4.6.0.201612231935-r'
     }
 
     ext['bouncycastle.version'] = '1.54'
@@ -93,6 +94,8 @@ subprojects {
 
             dependency "org.axonframework:axon-core:$axonVersion"
             dependency "org.axonframework:axon-test:$axonVersion"
+
+            dependency "org.eclipse.jgit:org.eclipse.jgit:$gitVersion"
         }
     }
 

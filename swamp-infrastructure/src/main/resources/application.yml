@@ -20,7 +20,7 @@ server:
 application:
   version: ${version}
 filestore:
-  path: H:/swamp-temp
+  path: H:\swamp-temp
 logging:
   level:
     com:
