@@ -6,20 +6,8 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 public class CommandCallback<T extends ResultCallback<S>, S>
         extends ResultCallbackTemplate<T, S> {
 
-    private static final OnNextCallback DEFAULT_NEXT_CALLBACK = (o) -> {};
-    private static final OnCompletedCallback DEFAULT_COMPLETED_CALLBACK = () -> {};
-
     private final OnNextCallback<S> onNextDelegate;
     private final OnCompletedCallback onCompletedDelegate;
-
-    CommandCallback(OnNextCallback<S> onNextDelegate) {
-        this(onNextDelegate, DEFAULT_COMPLETED_CALLBACK);
-    }
-
-    @SuppressWarnings("unchecked")
-    CommandCallback(OnCompletedCallback onCompletedDelegate) {
-        this(DEFAULT_NEXT_CALLBACK, onCompletedDelegate);
-    }
 
     private CommandCallback(OnNextCallback<S> onNextDelegate,
                             OnCompletedCallback onCompletedDelegate) {
@@ -29,12 +17,40 @@ public class CommandCallback<T extends ResultCallback<S>, S>
 
     @Override
     public void onNext(S object) {
-        onNextDelegate.onNext(object);
+        if(onNextDelegate != null) {
+            onNextDelegate.onNext(object);
+        }
     }
 
     @Override
     public void onComplete() {
         super.onComplete();
-        onCompletedDelegate.onComplete();
+        if(onCompletedDelegate != null) {
+            onCompletedDelegate.onComplete();
+        }
+    }
+
+    public static class Builder<T extends ResultCallback<S>, S> {
+
+        private OnNextCallback<S> onNextCallback;
+        private OnCompletedCallback onCompletedCallback;
+
+        public static Builder aCommandCallback() {
+            return new Builder();
+        }
+
+        public Builder<T, S> withOnNextCallback(OnNextCallback<S> onNextCallback) {
+            this.onNextCallback = onNextCallback;
+            return this;
+        }
+
+        public Builder<T, S> withOnCompletedCallback(OnCompletedCallback onCompletedCallback) {
+            this.onCompletedCallback = onCompletedCallback;
+            return this;
+        }
+
+        public CommandCallback<T, S> build() {
+            return new CommandCallback<>(onNextCallback, onCompletedCallback);
+        }
     }
 }

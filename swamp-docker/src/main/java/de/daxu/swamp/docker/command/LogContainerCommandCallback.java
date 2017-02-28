@@ -5,19 +5,17 @@ import com.github.dockerjava.core.command.LogContainerResultCallback;
 
 import java.util.function.Consumer;
 
-public class LogContainerCommandCallback extends CommandCallback<LogContainerResultCallback, Frame> {
+public class LogContainerCommandCallback {
 
-    public static LogContainerCommandCallback onLogReceived(Consumer<String> logCallback) {
-        return new LogContainerCommandCallback(frame -> logCallback.accept(decodeFrame(frame)));
+    public static CommandCallback<LogContainerResultCallback, Frame> onLogReceived(Consumer<String> logCallback) {
+        return new CommandCallback.Builder<LogContainerResultCallback, Frame>()
+                .withOnNextCallback(frame -> logCallback.accept(decodeFrame(frame)))
+                .build();
     }
 
     private static String decodeFrame(Frame frame) {
         return frame.toString()
                 .replaceAll("STDOUT: ", "\n")
                 .replaceAll("STDERR: ", "\n");
-    }
-
-    private LogContainerCommandCallback(OnNextCallback<Frame> onNextDelegate) {
-        super(onNextDelegate);
     }
 }

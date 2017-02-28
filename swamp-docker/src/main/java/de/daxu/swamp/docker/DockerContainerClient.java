@@ -22,7 +22,7 @@ import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
-import de.daxu.swamp.filestore.FileStore;
+import de.daxu.swamp.workspace.WorkspaceManager;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collection;
@@ -39,19 +39,19 @@ import static de.daxu.swamp.docker.command.LogContainerCommandCallback.onLogRece
 
 public class DockerContainerClient implements ContainerClient, DeployClient {
 
+    private final GroupManager groupManager;
+    private final WorkspaceManager workspaceManager;
     private final DockerClientFactory dockerClientFactory;
     private final ContainerResultFactory containerResultFactory;
-    private final GroupManager groupManager;
     private final Server server;
-    private final FileStore fileStore;
 
-    DockerContainerClient(FileStore fileStore,
+    DockerContainerClient(WorkspaceManager workspaceManager,
                           GroupManager groupManager,
                           DockerClientFactory dockerClientFactory,
                           ContainerResultFactory containerResultFactory,
                           Server server) {
-        this.fileStore = fileStore;
         this.groupManager = groupManager;
+        this.workspaceManager = workspaceManager;
         this.dockerClientFactory = dockerClientFactory;
         this.containerResultFactory = containerResultFactory;
         this.server = server;
@@ -194,7 +194,7 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
     }
 
     private DockerRunConfigurator configurator() {
-        return new DockerRunConfigurator(dockerClient(), fileStore);
+        return new DockerRunConfigurator(dockerClient(), workspaceManager);
     }
 
     private Set<String> catchWarnings(Runnable runnable) {

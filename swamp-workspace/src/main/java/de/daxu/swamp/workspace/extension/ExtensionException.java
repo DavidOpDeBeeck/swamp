@@ -1,4 +1,4 @@
-package de.daxu.swamp.filestore.extension;
+package de.daxu.swamp.workspace.extension;
 
 class ExtensionException extends RuntimeException {
 

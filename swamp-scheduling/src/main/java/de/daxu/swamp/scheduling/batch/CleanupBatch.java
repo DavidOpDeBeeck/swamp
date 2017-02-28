@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CleanupBatch {
 
-    private static final int INDIVIDUAL_TASK_DELAY = 60000;
+    private static final int INDIVIDUAL_TASK_DELAY = 120000;
 
     private final Logger logger = LoggerFactory.getLogger(CleanupBatch.class);
     private final ContainerInstanceBatchService containerInstanceBatchService;
@@ -22,11 +22,9 @@ public class CleanupBatch {
 
     @Scheduled(fixedDelay = INDIVIDUAL_TASK_DELAY)
     public void run() {
-        logger.info("Starting CleanupBatch");
         this.containerInstanceBatchService.removeExpiredInitializedContainers();
         this.containerInstanceBatchService.removeExpiredCreatedContainers();
         this.containerInstanceBatchService.stopNotRunningStartedContainers();
         this.containerInstanceBatchService.removeExpiredStoppedContainers();
-        logger.info("Stopping CleanupBatch");
     }
 }

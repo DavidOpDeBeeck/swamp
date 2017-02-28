@@ -8,5 +8,5 @@ include 'swamp-docker'
 include 'swamp-deploy'
 include 'swamp-test'
 include 'swamp-infrastructure'
-include 'swamp-filestore'
+include 'swamp-workspace'
 

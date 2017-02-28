@@ -19,10 +19,14 @@ server:
   port: 8081
 application:
   version: ${version}
-filestore:
-  path: H:\swamp-temp
+workspace:
+  default:
+    path: H:\swamp-temp
 logging:
   level:
+    de:
+      daxu:
+        swamp: DEBUG
     com:
       github:
         dockerjava: ERROR

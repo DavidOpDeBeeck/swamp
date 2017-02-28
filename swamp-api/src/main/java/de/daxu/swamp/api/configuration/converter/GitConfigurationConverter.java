@@ -26,7 +26,7 @@ public class GitConfigurationConverter implements DTOConverter<GitConfiguration,
         dto.url = configuration.getUrl();
         dto.branch = configuration.getBranch();
         dto.path = configuration.getPath();
-        dto.credentials = usernamePasswordCredentialsConverter.toDTO( configuration.getCredentials() );
+        //dto.credentials = usernamePasswordCredentialsConverter.toDTO( configuration.getCredentials() );
         dto.type = configuration.getType();
         return dto;
     }
@@ -37,7 +37,7 @@ public class GitConfigurationConverter implements DTOConverter<GitConfiguration,
                 .withUrl( dto.url )
                 .withBranch( dto.branch )
                 .withPath( dto.path )
-                .withCredentials( usernamePasswordCredentialsConverter.toDomain( dto.credentials ) )
+                //.withCredentials( usernamePasswordCredentialsConverter.toDomain( dto.credentials ) )
                 .build();
     }
 }
