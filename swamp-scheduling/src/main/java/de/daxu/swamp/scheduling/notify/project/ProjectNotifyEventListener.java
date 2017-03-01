@@ -29,7 +29,7 @@ public class ProjectNotifyEventListener {
     }
 
     private void publish(ProjectEvent event) {
-        logger.debug("Sending event : {} over topic: {}", event.getClass().getSimpleName(), TOPIC);
+        logger.trace("Sending event : {} over topic: {}", event.getClass().getSimpleName(), TOPIC);
         this.messagingTemplate.convertAndSend(TOPIC, new EventNotification(event));
     }
 }

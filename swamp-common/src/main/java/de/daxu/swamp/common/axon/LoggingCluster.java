@@ -33,7 +33,7 @@ public class LoggingCluster implements Cluster {
     @Override
     public void publish(EventMessage... events) {
         Arrays.stream(events)
-                .forEach(event -> logger.debug("Publishing event: {} on cluster: {}", event.getIdentifier(), getName()));
+                .forEach(event -> logger.trace("Publishing event: {} on cluster: {}", event.getIdentifier(), getName()));
         delegate.publish(events);
     }
 

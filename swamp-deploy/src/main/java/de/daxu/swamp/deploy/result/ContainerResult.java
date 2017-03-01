@@ -9,8 +9,8 @@ public class ContainerResult extends DeployResult {
 
     private ContainerId containerId;
 
-    private ContainerResult( ContainerId containerId, Set<String> warnings, LocalDateTime timestamp ) {
-        super( warnings, timestamp );
+    private ContainerResult(ContainerId containerId, Set<String> warnings, LocalDateTime timestamp) {
+        super(warnings, timestamp);
         this.containerId = containerId;
     }
 
@@ -18,7 +18,7 @@ public class ContainerResult extends DeployResult {
         return containerId;
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public static class Builder extends DeployResult.Builder<ContainerResult.Builder> {
 
         private ContainerId containerId;
@@ -27,14 +27,14 @@ public class ContainerResult extends DeployResult {
             return new Builder();
         }
 
-        Builder withContainerId( ContainerId containerId ) {
+        Builder withContainerId(ContainerId containerId) {
             this.containerId = containerId;
             return this;
         }
 
         @Override
         public ContainerResult build() {
-            return new ContainerResult( containerId, warnings, timestamp );
+            return new ContainerResult(containerId, warnings, timestamp);
         }
     }
 }

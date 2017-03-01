@@ -4,7 +4,7 @@ import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.core.strategy.FirstInLineStrategy;
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
+import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.group.GroupId;
 import de.daxu.swamp.scheduling.command.build.command.AddContainerInstanceCommand;
 import de.daxu.swamp.scheduling.command.build.command.CreateBuildCommand;

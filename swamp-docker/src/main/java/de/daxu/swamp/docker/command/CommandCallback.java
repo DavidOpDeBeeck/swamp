@@ -6,11 +6,11 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 public class CommandCallback<T extends ResultCallback<S>, S>
         extends ResultCallbackTemplate<T, S> {
 
-    private final OnNextCallback<S> onNextDelegate;
-    private final OnCompletedCallback onCompletedDelegate;
+    private final NextCallback<S> onNextDelegate;
+    private final CompletedCallback onCompletedDelegate;
 
-    private CommandCallback(OnNextCallback<S> onNextDelegate,
-                            OnCompletedCallback onCompletedDelegate) {
+    private CommandCallback(NextCallback<S> onNextDelegate,
+                            CompletedCallback onCompletedDelegate) {
         this.onNextDelegate = onNextDelegate;
         this.onCompletedDelegate = onCompletedDelegate;
     }
@@ -32,25 +32,25 @@ public class CommandCallback<T extends ResultCallback<S>, S>
 
     public static class Builder<T extends ResultCallback<S>, S> {
 
-        private OnNextCallback<S> onNextCallback;
-        private OnCompletedCallback onCompletedCallback;
+        private NextCallback<S> nextCallback;
+        private CompletedCallback completedCallback;
 
         public static Builder aCommandCallback() {
             return new Builder();
         }
 
-        public Builder<T, S> withOnNextCallback(OnNextCallback<S> onNextCallback) {
-            this.onNextCallback = onNextCallback;
+        public Builder<T, S> withOnNextCallback(NextCallback<S> nextCallback) {
+            this.nextCallback = nextCallback;
             return this;
         }
 
-        public Builder<T, S> withOnCompletedCallback(OnCompletedCallback onCompletedCallback) {
-            this.onCompletedCallback = onCompletedCallback;
+        public Builder<T, S> withOnCompletedCallback(CompletedCallback completedCallback) {
+            this.completedCallback = completedCallback;
             return this;
         }
 
         public CommandCallback<T, S> build() {
-            return new CommandCallback<>(onNextCallback, onCompletedCallback);
+            return new CommandCallback<>(nextCallback, completedCallback);
         }
     }
 }

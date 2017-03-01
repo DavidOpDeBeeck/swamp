@@ -8,6 +8,7 @@ import de.daxu.swamp.core.configuration.DockerfileConfiguration;
 import de.daxu.swamp.core.configuration.GitConfiguration;
 import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
+import de.daxu.swamp.deploy.callback.ProgressCallback;
 import de.daxu.swamp.docker.command.CommandCallback;
 import de.daxu.swamp.workspace.RemovableWorkspace;
 import de.daxu.swamp.workspace.WorkspaceManager;
@@ -26,10 +27,12 @@ public class DockerRunConfigurator implements RunConfigurator<CreateContainerCmd
 
     private final DockerClient client;
     private final WorkspaceManager workspaceManager;
+    private final ProgressCallback<String> progressCallback;
 
-    public DockerRunConfigurator(DockerClient client, WorkspaceManager workspaceManager) {
+    public DockerRunConfigurator(DockerClient client, WorkspaceManager workspaceManager, ProgressCallback<String> progressCallback) {
         this.client = client;
         this.workspaceManager = workspaceManager;
+        this.progressCallback = progressCallback;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class DockerRunConfigurator implements RunConfigurator<CreateContainerCmd
 
     private CommandCallback<BuildImageResultCallback, BuildResponseItem> onImageBuildCallback(Runnable runnable) {
         return new CommandCallback.Builder<BuildImageResultCallback, BuildResponseItem>()
-                .withOnNextCallback((x) -> System.out.println(x.getStream()))
+                .withOnNextCallback((x) -> progressCallback.onProgress(x.getStream()))
                 .withOnCompletedCallback(runnable::run)
                 .build();
     }

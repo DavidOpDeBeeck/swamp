@@ -6,7 +6,7 @@ import de.daxu.swamp.deploy.group.GroupManager;
 
 public interface DeployFacade {
 
-    ContainerClient containerClient( Server server );
+    ContainerClient containerClient(Server server);
 
     GroupManager groupManager();
 

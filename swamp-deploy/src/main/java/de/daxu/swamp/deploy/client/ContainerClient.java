@@ -1,24 +1,23 @@
 package de.daxu.swamp.deploy.client;
 
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
+import de.daxu.swamp.deploy.callback.ProgressCallback;
+import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.result.ContainerResult;
 
-import java.util.function.Consumer;
-
 public interface ContainerClient extends DeployClient {
 
-    ContainerResult create( ContainerConfiguration config );
+    ContainerResult create(ContainerConfiguration config, ProgressCallback<String> createCallback);
 
-    ContainerResult start( ContainerId containerId );
+    ContainerResult start(ContainerId containerId);
 
-    ContainerResult stop( ContainerId containerId );
+    ContainerResult stop(ContainerId containerId);
 
-    ContainerResult remove( ContainerId containerId );
+    ContainerResult remove(ContainerId containerId);
 
-    ContainerResult log( ContainerId containerId, Consumer<String> logCallback );
+    ContainerResult log(ContainerId containerId, ProgressCallback<String> logCallback);
 
-    boolean exists( ContainerId containerId );
+    boolean exists(ContainerId containerId);
 
-    boolean isRunning( ContainerId containerId );
+    boolean isRunning(ContainerId containerId);
 }

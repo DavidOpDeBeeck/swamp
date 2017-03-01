@@ -1,7 +1,7 @@
 package de.daxu.swamp.docker.command;
 
 @FunctionalInterface
-public interface OnCompletedCallback {
+public interface CompletedCallback {
 
     void onComplete();
 

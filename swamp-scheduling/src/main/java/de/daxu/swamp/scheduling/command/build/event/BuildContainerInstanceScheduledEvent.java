@@ -2,7 +2,7 @@ package de.daxu.swamp.scheduling.command.build.event;
 
 import de.daxu.swamp.common.cqrs.EventMetaData;
 import de.daxu.swamp.core.server.Server;
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
+import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.project.ProjectId;
 

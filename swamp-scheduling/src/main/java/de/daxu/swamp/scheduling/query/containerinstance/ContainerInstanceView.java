@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.apache.commons.lang.StringUtils.EMPTY;
+
 @Entity
 @Table( name = "container_instance_view" )
 @SuppressWarnings( "unused" )
@@ -44,7 +46,7 @@ public class ContainerInstanceView extends EntityView {
 
     @Lob
     @Column( name = "log" )
-    private String log = "";
+    private String log;
 
     @Enumerated( EnumType.STRING )
     @Column( name = "status" )
@@ -129,6 +131,9 @@ public class ContainerInstanceView extends EntityView {
     }
 
     void addLog( String log ) {
+        if (this.log == null) {
+            this.log = EMPTY;
+        }
         this.log += log;
     }
 

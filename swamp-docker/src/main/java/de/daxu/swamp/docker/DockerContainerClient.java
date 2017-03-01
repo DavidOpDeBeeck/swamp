@@ -3,17 +3,16 @@ package de.daxu.swamp.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.google.common.collect.Sets;
 import de.daxu.swamp.core.container.EnvironmentVariable;
 import de.daxu.swamp.core.container.PortMapping;
 import de.daxu.swamp.core.server.Server;
+import de.daxu.swamp.deploy.callback.ProgressCallback;
 import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.client.DeployClient;
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
+import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.group.Group;
 import de.daxu.swamp.deploy.group.GroupId;
@@ -21,6 +20,7 @@ import de.daxu.swamp.deploy.group.GroupManager;
 import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
+import de.daxu.swamp.docker.command.CommandCallback;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
 import de.daxu.swamp.workspace.WorkspaceManager;
 import org.apache.commons.lang.StringUtils;
@@ -28,14 +28,12 @@ import org.apache.commons.lang.StringUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.github.dockerjava.api.model.ExposedPort.tcp;
 import static com.github.dockerjava.api.model.Ports.Binding.bindPort;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static de.daxu.swamp.docker.command.LogContainerCommandCallback.onLogReceived;
 
 public class DockerContainerClient implements ContainerClient, DeployClient {
 
@@ -58,16 +56,16 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
     }
 
     @Override
-    public ContainerResult create(ContainerConfiguration config) {
+    public ContainerResult create(ContainerConfiguration config, ProgressCallback<String> progressCallback) {
         Set<String> warnings = newHashSet();
         GroupId groupId = config.getGroup();
 
         warnings.addAll(createNetwork(groupId));
 
-        CreateContainerResponse response = configure(config)
+        CreateContainerResponse response = configure(config, progressCallback)
                 .withHostConfig(createHostConfig(groupId))
-                .withPortBindings(extractPortBindings(config))
-                .withEnv(extractEnvironmentVariables(config))
+                .withPortBindings(createPortBindings(config))
+                .withEnv(createEnvironmentVariables(config))
                 .withAliases(newArrayList(config.getAliases()))
                 .exec();
 
@@ -87,8 +85,8 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
                 .withNetworkMode(groupId.getValue());
     }
 
-    private CreateContainerCmd configure(ContainerConfiguration config) {
-        return config.getRunConfiguration().configure(configurator());
+    private CreateContainerCmd configure(ContainerConfiguration config, ProgressCallback<String> progressCallback) {
+        return config.getRunConfiguration().configure(configurator(progressCallback));
     }
 
     private Set<String> createNetwork(GroupId groupId) {
@@ -147,14 +145,14 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
     }
 
     @Override
-    public ContainerResult log(ContainerId containerId, Consumer<String> logCallback) {
+    public ContainerResult log(ContainerId containerId, ProgressCallback<String> progressCallback) {
         Set<String> warnings = catchWarnings(
                 () -> dockerClient()
                         .logContainerCmd(containerId.value())
                         .withStdErr(true)
                         .withStdOut(true)
                         .withFollowStream(true)
-                        .exec(onLogReceived(logCallback))
+                        .exec(onLogReceived(progressCallback))
         );
         return containerResultFactory
                 .createResponse(containerId, filterNull(warnings));
@@ -193,8 +191,8 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
         return dockerClientFactory.createClient(server);
     }
 
-    private DockerRunConfigurator configurator() {
-        return new DockerRunConfigurator(dockerClient(), workspaceManager);
+    private DockerRunConfigurator configurator(ProgressCallback<String> progressCallback) {
+        return new DockerRunConfigurator(dockerClient(), workspaceManager, progressCallback);
     }
 
     private Set<String> catchWarnings(Runnable runnable) {
@@ -217,13 +215,13 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
         return strings == null ? Sets.newHashSet() : Sets.newHashSet(strings);
     }
 
-    private List<String> extractEnvironmentVariables(ContainerConfiguration config) {
+    private List<String> createEnvironmentVariables(ContainerConfiguration config) {
         return config.getEnvironmentVariables().stream()
                 .map(EnvironmentVariable::toString)
                 .collect(Collectors.toList());
     }
 
-    private List<PortBinding> extractPortBindings(ContainerConfiguration config) {
+    private List<PortBinding> createPortBindings(ContainerConfiguration config) {
         return config.getPortMappings().stream()
                 .map(this::convertPortMapping)
                 .collect(Collectors.toList());
@@ -237,5 +235,18 @@ public class DockerContainerClient implements ContainerClient, DeployClient {
         ExposedPort internal = tcp(internalPort);
         Ports.Binding external = bindPort(externalPort);
         return new PortBinding(external, internal);
+    }
+
+    private CommandCallback<LogContainerResultCallback, Frame> onLogReceived(ProgressCallback<String> progressCallback) {
+        return new CommandCallback.Builder<LogContainerResultCallback, Frame>()
+                .withOnNextCallback(frame -> progressCallback.onProgress(decodeFrame(frame)))
+                .withOnCompletedCallback(() -> progressCallback.onProgress("Logging finished"))
+                .build();
+    }
+
+    private String decodeFrame(Frame frame) {
+        return frame.toString()
+                .replaceAll("STDOUT: ", "\n")
+                .replaceAll("STDERR: ", "\n");
     }
 }

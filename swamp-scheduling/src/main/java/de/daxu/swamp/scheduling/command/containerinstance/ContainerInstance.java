@@ -3,7 +3,7 @@ package de.daxu.swamp.scheduling.command.containerinstance;
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
-import de.daxu.swamp.deploy.configuration.ContainerConfiguration;
+import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.result.ContainerResult;
 import de.daxu.swamp.scheduling.command.build.BuildId;
@@ -51,7 +51,13 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
 
         ContainerResult result = deployFacade
                 .containerClient(server)
-                .create(configuration);
+                .create(configuration, createlog -> apply(new ContainerInstanceLogReceivedEvent(
+                        containerInstanceId,
+                        buildId,
+                        eventMetaDataFactory.create(),
+                        containerId,
+                        createlog
+                )));
 
         if(result.isSuccess()) {
             apply(new ContainerInstanceCreatedSucceededEvent(
@@ -179,7 +185,6 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
 
     @CommandHandler
     public void receiveLog(ReceiveContainerInstanceLogCommand command, EventMetaDataFactory eventMetaDataFactory) {
-        validateStatus(STARTED);
         apply(new ContainerInstanceLogReceivedEvent(
                 containerInstanceId,
                 buildId,

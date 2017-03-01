@@ -1,4 +1,4 @@
-package de.daxu.swamp.deploy.configuration;
+package de.daxu.swamp.deploy.container;
 
 import de.daxu.swamp.core.configuration.RunConfiguration;
 import de.daxu.swamp.core.container.Container;
@@ -9,7 +9,7 @@ import de.daxu.swamp.deploy.group.GroupId;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static de.daxu.swamp.deploy.configuration.ContainerConfiguration.Builder.aContainerConfiguration;
+import static de.daxu.swamp.deploy.container.ContainerConfiguration.Builder.aContainerConfiguration;
 
 public class ContainerConfiguration {
 
