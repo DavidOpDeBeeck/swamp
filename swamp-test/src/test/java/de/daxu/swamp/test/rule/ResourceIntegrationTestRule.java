@@ -9,12 +9,12 @@ public class ResourceIntegrationTestRule extends IntegrationTestRule {
 
     private final String url;
 
-    public ResourceIntegrationTestRule( SpringRule spring ) {
-        super( spring );
-        this.url = format( "http://%s:%s", "localhost", spring.getProperty( "server.port" ) );
+    public ResourceIntegrationTestRule(SpringRule spring) {
+        super(spring);
+        this.url = format("http://%s:%s", "localhost", spring.getProperty("server.port"));
     }
 
     public WebClient.Resource webClient() {
-        return WebClient.resource( url );
+        return WebClient.resource(url);
     }
 }

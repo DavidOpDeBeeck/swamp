@@ -21,7 +21,7 @@ application:
   version: ${version}
 workspace:
   default:
-    path: H:\swamp-temp
+    path: H:\swamp-workspace\development
 logging:
   level:
     de:
@@ -50,6 +50,9 @@ spring:
       show-sql: true
 flyway:
     enabled: false
+workspace:
+  default:
+    path: H:\swamp-workspace\testing
 logging:
     level:
         org:

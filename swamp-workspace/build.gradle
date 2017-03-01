@@ -1,4 +1,8 @@
 dependencies {
+    compile project(":swamp-infrastructure")
+
     compile "org.springframework:spring-context"
     compile "org.eclipse.jgit:org.eclipse.jgit"
+
+    testCompile project(path: ':swamp-test', configuration: 'tests')
 }
