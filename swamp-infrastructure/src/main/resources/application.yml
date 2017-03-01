@@ -54,11 +54,14 @@ workspace:
   default:
     path: H:\swamp-workspace\testing
 logging:
-    level:
-        org:
-            hibernate: ERROR
-            springframework:
-                web: ERROR
+  level:
+    de:
+      daxu:
+        swamp: TRACE
+    org:
+        hibernate: ERROR
+        springframework:
+            web: ERROR
 server:
   port: 8888
 application:
