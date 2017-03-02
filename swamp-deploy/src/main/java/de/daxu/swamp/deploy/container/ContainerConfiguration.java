@@ -15,33 +15,33 @@ public class ContainerConfiguration {
 
     public static ContainerConfiguration of(GroupId groupId, Container container) {
         return aContainerConfiguration()
-                .withGroup(groupId)
+                .withGroupId(groupId)
                 .withAliases(container.getAliases())
                 .withPortMappings(container.getPortMappings())
                 .withEnvironmentVariables(container.getEnvironmentVariables())
                 .withRunConfiguration(container.getRunConfiguration()).build();
     }
 
-    private final GroupId group;
+    private final GroupId groupId;
     private final Set<String> aliases;
     private final RunConfiguration runConfiguration;
     private final Set<PortMapping> portMappings;
     private final Set<EnvironmentVariable> environmentVariables;
 
-    private ContainerConfiguration(GroupId group,
+    private ContainerConfiguration(GroupId groupId,
                                    Set<String> aliases,
                                    RunConfiguration runConfiguration,
                                    Set<PortMapping> portMappings,
                                    Set<EnvironmentVariable> environmentVariables) {
-        this.group = group;
+        this.groupId = groupId;
         this.aliases = aliases;
         this.runConfiguration = runConfiguration;
         this.portMappings = portMappings;
         this.environmentVariables = environmentVariables;
     }
 
-    public GroupId getGroup() {
-        return group;
+    public GroupId getGroupId() {
+        return groupId;
     }
 
     public Set<String> getAliases() {
@@ -62,7 +62,7 @@ public class ContainerConfiguration {
 
     public static class Builder {
 
-        private GroupId group;
+        private GroupId groupId;
         private Set<String> aliases;
         private RunConfiguration runConfiguration;
         private Set<PortMapping> portMappings = newHashSet();
@@ -72,8 +72,8 @@ public class ContainerConfiguration {
             return new Builder();
         }
 
-        public Builder withGroup(GroupId group) {
-            this.group = group;
+        public Builder withGroupId(GroupId group) {
+            this.groupId = group;
             return this;
         }
 
@@ -98,7 +98,7 @@ public class ContainerConfiguration {
         }
 
         public ContainerConfiguration build() {
-            return new ContainerConfiguration(group, aliases, runConfiguration, portMappings, environmentVariables);
+            return new ContainerConfiguration(groupId, aliases, runConfiguration, portMappings, environmentVariables);
         }
     }
 }

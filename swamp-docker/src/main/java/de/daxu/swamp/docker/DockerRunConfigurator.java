@@ -1,4 +1,4 @@
-package de.daxu.swamp.docker.configurator;
+package de.daxu.swamp.docker;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -9,7 +9,7 @@ import de.daxu.swamp.core.configuration.GitConfiguration;
 import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
 import de.daxu.swamp.deploy.callback.ProgressCallback;
-import de.daxu.swamp.docker.command.CommandCallback;
+import de.daxu.swamp.docker.callback.CommandCallback;
 import de.daxu.swamp.workspace.Workspace;
 import de.daxu.swamp.workspace.extension.GitCloneExtension;
 import de.daxu.swamp.workspace.manager.WorkspaceManager;
@@ -85,8 +85,8 @@ public class DockerRunConfigurator implements RunConfigurator<CreateContainerCmd
 
     private CommandCallback<BuildImageResultCallback, BuildResponseItem> onImageBuildCallback(Runnable runnable) {
         return new CommandCallback.Builder<BuildImageResultCallback, BuildResponseItem>()
-                .withOnNextCallback((x) -> progressCallback.onProgress(x.getStream()))
-                .withOnCompletedCallback(runnable::run)
+                .onNext((x) -> progressCallback.onProgress(x.getStream()))
+                .onCompleted(runnable::run)
                 .build();
     }
 }

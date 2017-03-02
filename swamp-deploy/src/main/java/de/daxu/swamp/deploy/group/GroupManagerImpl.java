@@ -9,23 +9,26 @@ public class GroupManagerImpl implements GroupManager {
     final Set<Group> groups = newHashSet();
 
     @Override
-    public Group create(GroupId groupId) {
-        Group group = Group.withGroupId(groupId);
-        groups.add(group);
-        return group;
-    }
-
-    @Override
-    public Group get(GroupId groupId) {
-        return groups.stream()
-                .filter(group -> group.getGroupId().equals(groupId))
-                .findFirst()
-                .orElse(null);
+    public Group getOrCreate(GroupId groupId) {
+        if(exists(groupId)) {
+            return get(groupId);
+        } else {
+            Group group = Group.withGroupId(groupId);
+            groups.add(group);
+            return group;
+        }
     }
 
     @Override
     public boolean exists(GroupId groupId) {
         return groups.stream()
                 .anyMatch(group -> group.getGroupId().equals(groupId));
+    }
+
+    private Group get(GroupId groupId) {
+        return groups.stream()
+                .filter(group -> group.getGroupId().equals(groupId))
+                .findFirst()
+                .orElse(null);
     }
 }
