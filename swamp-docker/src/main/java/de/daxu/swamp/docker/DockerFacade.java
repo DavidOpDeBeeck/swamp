@@ -7,7 +7,7 @@ import de.daxu.swamp.deploy.group.GroupManager;
 import de.daxu.swamp.deploy.group.GroupManagerImpl;
 import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
-import de.daxu.swamp.workspace.WorkspaceManager;
+import de.daxu.swamp.workspace.manager.WorkspaceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -9,27 +9,30 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static de.daxu.swamp.test.rule.FileSystemRule.inDefaultWorkspace;
+import static de.daxu.swamp.test.rule.FileSystemRule.fromDefaultWorkspace;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleWorkspaceTest {
 
+    private static final String TEST_DIRECTORY = "SimpleWorkspaceTest";
+
     @ClassRule
     public static SpringRule spring = SpringRule.spring();
     @Rule
-    public FileSystemRule fileSystem = inDefaultWorkspace(spring);
+    public FileSystemRule fileSystem = fromDefaultWorkspace(spring);
 
-    private String workspacePath;
+    private Workspace workspace;
+    private File workspaceRoot;
 
     @Before
     public void setUp() throws Exception {
-        workspacePath = spring.getProperty("workspace.default.path");
+        workspaceRoot = fileSystem.createDirectory(TEST_DIRECTORY);
+        workspace = new SimpleWorkspace(workspaceRoot.getAbsolutePath());
     }
 
     @Test
     public void getPath() throws Exception {
-        SimpleWorkspace workspace = new SimpleWorkspace(workspacePath);
-        fileSystem.createDirectory("directory");
+        fileSystem.createDirectory(TEST_DIRECTORY + "/directory");
 
         File directory = workspace.getPath("directory");
 
@@ -39,8 +42,6 @@ public class SimpleWorkspaceTest {
 
     @Test
     public void createDirectory() throws Exception {
-        SimpleWorkspace workspace = new SimpleWorkspace(workspacePath);
-
         File directory = workspace.createDirectory();
 
         assertThat(directory).exists();
@@ -48,8 +49,6 @@ public class SimpleWorkspaceTest {
 
     @Test
     public void createDirectoryWithName() throws Exception {
-        SimpleWorkspace workspace = new SimpleWorkspace(workspacePath);
-
         File directory = workspace.createDirectory("directory");
 
         assertThat(directory).exists();
@@ -58,12 +57,30 @@ public class SimpleWorkspaceTest {
 
     @Test
     public void createFile() throws Exception {
-        SimpleWorkspace workspace = new SimpleWorkspace(workspacePath);
-
         File file = workspace.createFile("file", "content");
 
         assertThat(file).exists();
         assertThat(file).hasName("file");
         assertThat(file).hasContent("content");
+    }
+
+    @Test
+    public void clear() throws Exception {
+        File directory1 = fileSystem.createDirectory(TEST_DIRECTORY + "/directory1");
+        File directory2 = fileSystem.createDirectory(TEST_DIRECTORY + "/directory2");
+
+        workspace.clear();
+
+        assertThat(directory1).doesNotExist();
+        assertThat(directory2).doesNotExist();
+    }
+
+    @Test
+    public void delete() throws Exception {
+        String workspaceRootPath = workspaceRoot.getAbsolutePath();
+
+        workspace.delete();
+
+        assertThat(new File(workspaceRootPath)).doesNotExist();
     }
 }

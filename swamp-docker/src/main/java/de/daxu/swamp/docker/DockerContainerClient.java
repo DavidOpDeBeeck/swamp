@@ -22,7 +22,7 @@ import de.daxu.swamp.deploy.result.ContainerResultFactory;
 import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.command.CommandCallback;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
-import de.daxu.swamp.workspace.WorkspaceManager;
+import de.daxu.swamp.workspace.manager.WorkspaceManager;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collection;

@@ -16,6 +16,10 @@ public interface Workspace {
 
     File rootDirectory();
 
+    void clear();
+
+    void delete();
+
     default void executeExtension(Extension extension) {
         extension.execute(this);
     }

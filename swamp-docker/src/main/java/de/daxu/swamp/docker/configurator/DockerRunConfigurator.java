@@ -10,9 +10,9 @@ import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
 import de.daxu.swamp.deploy.callback.ProgressCallback;
 import de.daxu.swamp.docker.command.CommandCallback;
-import de.daxu.swamp.workspace.RemovableWorkspace;
-import de.daxu.swamp.workspace.WorkspaceManager;
+import de.daxu.swamp.workspace.Workspace;
 import de.daxu.swamp.workspace.extension.GitCloneExtension;
+import de.daxu.swamp.workspace.manager.WorkspaceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class DockerRunConfigurator implements RunConfigurator<CreateContainerCmd
 
     @Override
     public CreateContainerCmd configure(GitConfiguration config) {
-        RemovableWorkspace workspace = workspaceManager.createRemovableWorkspace();
+        Workspace workspace = workspaceManager.createWorkspace();
         String tag = UUID.randomUUID().toString();
 
         workspace.executeExtension(GitCloneExtension.clone(config.getUrl(), config.getBranch()));
@@ -59,7 +59,7 @@ public class DockerRunConfigurator implements RunConfigurator<CreateContainerCmd
 
     @Override
     public CreateContainerCmd configure(DockerfileConfiguration config) {
-        RemovableWorkspace workspace = workspaceManager.createRemovableWorkspace();
+        Workspace workspace = workspaceManager.createWorkspace();
         File file = workspace.createFile("Dockerfile", config.getDockerfile());
         String tag = UUID.randomUUID().toString();
 

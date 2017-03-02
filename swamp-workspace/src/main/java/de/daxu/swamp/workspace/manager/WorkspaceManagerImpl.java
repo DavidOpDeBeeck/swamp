@@ -1,5 +1,7 @@
-package de.daxu.swamp.workspace;
+package de.daxu.swamp.workspace.manager;
 
+import de.daxu.swamp.workspace.SimpleWorkspace;
+import de.daxu.swamp.workspace.Workspace;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +24,5 @@ public class WorkspaceManagerImpl implements WorkspaceManager {
     public Workspace createWorkspace() {
         File directory = defaultWorkspace.createDirectory();
         return new SimpleWorkspace(directory.getAbsolutePath());
-    }
-
-    @Override
-    public RemovableWorkspace createRemovableWorkspace() {
-        File directory = defaultWorkspace.createDirectory();
-        return new SimpleRemovableWorkspace(directory.getAbsolutePath());
     }
 }

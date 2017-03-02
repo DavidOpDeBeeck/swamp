@@ -6,8 +6,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
-import static de.daxu.swamp.workspace.WorkspaceUtils.*;
+import static de.daxu.swamp.workspace.utils.WorkspaceUtils.*;
 
 public class SimpleWorkspace implements Workspace {
 
@@ -15,7 +16,7 @@ public class SimpleWorkspace implements Workspace {
 
     private final File rootDirectory;
 
-    SimpleWorkspace(String path) {
+    public SimpleWorkspace(String path) {
         this.rootDirectory = new File(path);
     }
 
@@ -70,5 +71,19 @@ public class SimpleWorkspace implements Workspace {
     @Override
     public File rootDirectory() {
         return rootDirectory;
+    }
+
+    @Override
+    public void clear() {
+        File[] files = rootDirectory.listFiles();
+        if(files != null) {
+            Arrays.stream(files).forEach(File::delete);
+        }
+    }
+
+    @Override
+    public void delete() {
+        clear();
+        rootDirectory.delete();
     }
 }

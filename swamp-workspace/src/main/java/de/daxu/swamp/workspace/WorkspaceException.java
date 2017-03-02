@@ -1,8 +1,8 @@
 package de.daxu.swamp.workspace;
 
-class WorkspaceException extends RuntimeException {
+public class WorkspaceException extends RuntimeException {
 
-    WorkspaceException(String message) {
+    public WorkspaceException(String message) {
         super(message);
     }
 
@@ -10,7 +10,4 @@ class WorkspaceException extends RuntimeException {
         super(cause);
     }
 
-    WorkspaceException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

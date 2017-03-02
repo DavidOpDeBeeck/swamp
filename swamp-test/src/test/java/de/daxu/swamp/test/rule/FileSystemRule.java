@@ -7,17 +7,17 @@ import java.util.Arrays;
 
 public class FileSystemRule extends ExternalResource {
 
-    public static FileSystemRule inDefaultWorkspace(SpringRule spring) {
-        return new FileSystemRule(spring.getProperty("workspace.default.path"));
+    public static FileSystemRule fromDefaultWorkspace(SpringRule springRule) {
+        return new FileSystemRule(springRule.getProperty("workspace.default.path"));
     }
 
     private static String[] reservedPaths = {"C:", "/"};
 
     private final File rootDirectory;
 
-    private FileSystemRule(String path) {
-        validatePath(path);
-        this.rootDirectory = new File(path);
+    private FileSystemRule(String rootPath) {
+        validatePath(rootPath);
+        this.rootDirectory = new File(rootPath);
     }
 
     public File createDirectory(String name) {
@@ -29,27 +29,27 @@ public class FileSystemRule extends ExternalResource {
         throw new RuntimeException("Failed to create directory: " + name);
     }
 
-    private void validatePath(String path) {
-        boolean reserved = Arrays.stream(reservedPaths).anyMatch(path::startsWith);
-        if(reserved) {
-            throw new RuntimeException(String.format("FileSystem starts with a reserved path: %s", Arrays.toString(reservedPaths)));
-        }
-    }
-
     @Override
     protected void before() {
-        removeAllFilesInFileSystem();
+        removeAllFiles();
     }
 
     @Override
     protected void after() {
-        removeAllFilesInFileSystem();
+        removeAllFiles();
     }
 
-    private void removeAllFilesInFileSystem() {
-        File[] filesInWorkspace = rootDirectory.listFiles();
-        if(filesInWorkspace != null) {
-            Arrays.stream(filesInWorkspace).forEach(File::delete);
+    private void validatePath(String path) {
+        boolean reserved = Arrays.stream(reservedPaths).anyMatch(path::startsWith);
+        if(reserved) {
+            throw new RuntimeException(String.format("Trying to start fileSystem in a reserved path: %s", Arrays.toString(reservedPaths)));
+        }
+    }
+
+    private void removeAllFiles() {
+        File[] files = rootDirectory.listFiles();
+        if(files != null) {
+            Arrays.stream(files).forEach(File::delete);
         }
     }
 }
