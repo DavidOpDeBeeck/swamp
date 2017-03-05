@@ -11,7 +11,6 @@ class NotificationService {
         this.$timeout = $timeout;
         this.notification = Notification;
         this.eventListeners = [this.defaultNotificationListener()];
-        $timeout(() => this.connectToSocket(BROKER_URL), 100);
     }
 
     connectToSocket(brokerUrl) {
@@ -49,6 +48,9 @@ class NotificationService {
                 switch (type) {
                     case "ContainerInstanceStartedSucceededEvent":
                         this.display("Container started", event.containerInstanceId, "success");
+                        break;
+                    case "BuildCreatedEvent":
+                        this.display("Build #" + event.sequence + " started", event.buildId, "success");
                         break;
                     case "ContainerInstanceStoppedSucceededEvent":
                         this.display("Container stopped", event.containerInstanceId, "warning");

@@ -15,44 +15,56 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-show="configurationPicker.configuration.type === 'IMAGE'">
+    <div class="row" ng-if="configurationPicker.configuration.type === 'IMAGE'">
         <div class="col-md-12">
-            <input-field label="Image name" value="configurationPicker.configuration.name"
-                         editable="configurationPicker.editable"></input-field>
+            <input-field label="Image name"
+                         value="configurationPicker.configuration.name"
+                         editable="configurationPicker.editable"
+                         required="true"></input-field>
         </div>
     </div>
-    <div ng-show="configurationPicker.configuration.type === 'GIT'">
+    <div ng-if="configurationPicker.configuration.type === 'GIT'">
         <div class="row">
             <div class="col-md-12">
-                <input-field label="Git url" value="configurationPicker.configuration.url"
-                             editable="configurationPicker.editable"></input-field>
+                <input-field label="Git url"
+                             value="configurationPicker.configuration.url"
+                             editable="configurationPicker.editable"
+                             required="true"></input-field>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <input-field label="Git branch" value="configurationPicker.configuration.branch"
-                             editable="configurationPicker.editable"></input-field>
+                <input-field label="Git branch"
+                             value="configurationPicker.configuration.branch"
+                             editable="configurationPicker.editable"
+                             required="true"></input-field>
             </div>
             <div class="col-md-6">
-                <input-field label="Git path" value="configurationPicker.configuration.path"
-                             editable="configurationPicker.editable"></input-field>
+                <input-field label="Git path"
+                             value="configurationPicker.configuration.path"
+                             editable="configurationPicker.editable"
+                             required="true"></input-field>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <input-field label="Git username" value="configurationPicker.configuration.username"
+                <input-field label="Git username"
+                             value="configurationPicker.configuration.username"
                              editable="configurationPicker.editable"></input-field>
             </div>
             <div class="col-md-6">
-                <input-field label="Git password" value="configurationPicker.configuration.password"
+                <input-field label="Git password"
+                             value="configurationPicker.configuration.password"
                              editable="configurationPicker.editable"></input-field>
             </div>
         </div>
     </div>
-    <div class="row" ng-show="configurationPicker.configuration.type === 'DOCKERFILE'">
+    <div class="row" ng-if="configurationPicker.configuration.type === 'DOCKERFILE'">
         <div class="col-md-12">
-            <textarea-field label="Dockerfile" value="configurationPicker.configuration.dockerfile"
-                            editable="configurationPicker.editable"></textarea-field>
+            <textarea-field label="Dockerfile"
+                            value="configurationPicker.configuration.dockerfile"
+                            editable="configurationPicker.editable"
+                            required="true"></textarea-field>
         </div>
     </div>
 </div>

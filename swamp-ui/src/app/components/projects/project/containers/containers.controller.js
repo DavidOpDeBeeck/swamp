@@ -15,18 +15,12 @@ class ContainersController {
 
     create() {
         let modal = this.createModal({}, false);
-        modal.result.then((container) => {
-            this.projectService.createContainer(this.project.id, container)
-                .then(() => this.getProjectContainers());
-        });
+        modal.result.then(() => this.getProjectContainers());
     }
 
     edit(container) {
         let modal = this.createModal(container, true);
-        modal.result.then((container) => {
-            container.$update()
-                .then(() => this.getProjectContainers());
-        });
+        modal.result.then(() => this.getProjectContainers());
     }
 
     createModal(container, update) {
@@ -37,6 +31,7 @@ class ContainersController {
             templateUrl: "/assets/templates/container-modal.template.html",
             resolve: {
                 container: () => container,
+                project: () => this.project,
                 update: update
             }
         });

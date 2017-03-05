@@ -4,39 +4,30 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.group.GroupManager;
-import de.daxu.swamp.deploy.group.GroupManagerImpl;
-import de.daxu.swamp.deploy.result.ContainerResultFactory;
-import de.daxu.swamp.docker.client.DockerClientFactory;
-import de.daxu.swamp.workspace.manager.WorkspaceManager;
+import de.daxu.swamp.docker.adapter.DockerClientAdapterFactory;
+import de.daxu.swamp.docker.client.DockerClient;
+import de.daxu.swamp.docker.command.DockerCommandExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DockerFacade implements DeployFacade {
 
+
     private final GroupManager groupManager;
-    private final WorkspaceManager workspaceManager;
-    private final DockerClientFactory dockerClientFactory;
-    private final ContainerResultFactory containerResultFactory;
+    private final DockerClientAdapterFactory dockerClientFactory;
 
     @Autowired
-    public DockerFacade(WorkspaceManager workspaceManager,
-                        DockerClientFactory dockerClientFactory,
-                        ContainerResultFactory containerResultFactory) {
-        this.workspaceManager = workspaceManager;
-        this.groupManager = new GroupManagerImpl();
+    public DockerFacade(GroupManager groupManager,
+                        DockerClientAdapterFactory dockerClientFactory) {
+        this.groupManager = groupManager;
         this.dockerClientFactory = dockerClientFactory;
-        this.containerResultFactory = containerResultFactory;
     }
 
     @Override
     public ContainerClient containerClient(Server server) {
-        return new DockerContainerClient(
-                workspaceManager,
-                groupManager,
-                dockerClientFactory,
-                containerResultFactory,
-                server);
+        DockerClient client = dockerClientFactory.createClient(server);
+        return new DockerContainerClient(new DockerCommandExecutor(client), groupManager);
     }
 
     @Override

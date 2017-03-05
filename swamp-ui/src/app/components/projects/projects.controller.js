@@ -19,18 +19,12 @@ class ProjectsController {
 
     create() {
         let modal = this.createModal({}, false);
-        modal.result.then((project) => {
-            this.projectService.createProject(project)
-                .then(() => this.getAllProjects());
-        });
+        modal.result.then(() => this.getAllProjects());
     }
 
     edit(project) {
         let modal = this.createModal(project, true);
-        modal.result.then((project) => {
-            project.$update()
-                .then(() => this.getAllProjects());
-        });
+        modal.result.then(() => this.getAllProjects());
     }
 
     createModal(project, update) {

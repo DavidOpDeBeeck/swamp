@@ -28,12 +28,24 @@ function RequestLogger() {
     };
 }
 
+function RequestError($q) {
+    return {
+        response(response) {
+            if (response.errors)
+                return $q.reject(response.errors);
+            return response;
+        }
+    };
+}
+
 function RequestProvider($httpProvider) {
+    $httpProvider.interceptors.push('RequestError');
     $httpProvider.interceptors.push('RequestLogger');
     $httpProvider.interceptors.push('RequestConverter');
 }
 
 export default Angular.module('swamp.interceptors', [])
+    .factory('RequestError', ["$q", RequestError])
     .factory('RequestLogger', RequestLogger)
     .factory('RequestConverter', RequestConverter)
     .config(['$httpProvider', RequestProvider])

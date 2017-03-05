@@ -1,8 +1,9 @@
 <div class="form-group">
     <label for="{{ field.id }}">{{ field.label }}: </label>
     <textarea rows="5"
-              class="form-control"
               id="{{ field.id }}"
+              class="form-control"
+              placeholder="{{ field.required ? 'required' : '' }}"
               file-drop-zone="field.value"
               ng-model="field.value"
               ng-required="field.required">

@@ -1,5 +1,7 @@
 class ContainerModalController {
-    constructor(container, update, $uibModalInstance) {
+    constructor(ProjectService, container, project, update, $uibModalInstance) {
+        this.projectService = ProjectService;
+        this.project = project;
         this.container = container;
         this.update = update;
         this.$uibModalInstance = $uibModalInstance;
@@ -10,8 +12,18 @@ class ContainerModalController {
     }
 
     submit() {
-        this.$uibModalInstance.close(this.container);
+        this.update ? this.updateContainer() : this.create();
+    }
+
+    create() {
+        this.projectService.createContainer(this.project.id, this.container)
+            .then(() => this.$uibModalInstance.close(), errors => this.errors = errors);
+    }
+
+    updateContainer() {
+        this.container.$update()
+            .then(() => this.$uibModalInstance.close(), errors => this.errors = errors);
     }
 }
 
-export default ['container', 'update', '$uibModalInstance', ContainerModalController]
+export default ['ProjectService', 'container', 'project', 'update', '$uibModalInstance', ContainerModalController]

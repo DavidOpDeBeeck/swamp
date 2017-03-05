@@ -3,6 +3,10 @@
     <h3 class="modal-title" ng-show="ContainerEditCtrl.update">{{ ContainerEditCtrl.container.id }}</h3>
 </div>
 <div class="modal-body">
+    <div class="alert alert-danger" role="alert"
+         ng-show="ContainerModalCtrl.errors">
+        <p ng-repeat="error in ContainerModalCtrl.errors">{{ error }}</p>
+    </div>
     <container container="ContainerModalCtrl.container" editable="true"></container>
 </div>
 <div class="modal-footer">

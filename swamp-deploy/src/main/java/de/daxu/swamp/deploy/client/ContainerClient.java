@@ -1,23 +1,24 @@
 package de.daxu.swamp.deploy.client;
 
-import de.daxu.swamp.deploy.callback.ProgressCallback;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.result.ContainerResult;
+import de.daxu.swamp.deploy.notifier.Notifier;
+import de.daxu.swamp.deploy.notifier.ProgressNotifier;
+import de.daxu.swamp.deploy.result.DeployResult;
 
 public interface ContainerClient extends DeployClient {
 
-    ContainerResult create(ContainerConfiguration config, ProgressCallback<String> createCallback);
+    DeployResult<ContainerId> create(ContainerConfiguration config, Notifier<String> createNotifier);
 
-    ContainerResult start(ContainerId containerId);
+    DeployResult<?> start(ContainerId containerId);
 
-    ContainerResult stop(ContainerId containerId);
+    DeployResult<?> stop(ContainerId containerId);
 
-    ContainerResult remove(ContainerId containerId);
+    DeployResult<?> remove(ContainerId containerId);
 
-    ContainerResult log(ContainerId containerId, ProgressCallback<String> logCallback);
+    DeployResult<?> log(ContainerId containerId, ProgressNotifier<String> logNotifier);
 
-    boolean exists(ContainerId containerId);
+    DeployResult<Boolean> exists(ContainerId containerId);
 
-    boolean isRunning(ContainerId containerId);
+    DeployResult<Boolean> isRunning(ContainerId containerId);
 }

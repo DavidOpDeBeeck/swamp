@@ -22,10 +22,10 @@
     text-transform: uppercase;
 }
 
-input.ng-dirty.ng-invalid,
-textarea.ng-dirty.ng-invalid {
-    border: 2px solid #d9534f;
-    box-shadow: 1px 1px 1px #d9534f;
+input.ng-invalid,
+textarea.ng-invalid {
+    border: 2px solid #127ba3;
+    box-shadow: 1px 1px 1px #158cba;
 }
 
 /*
@@ -92,7 +92,6 @@ textarea {
     margin: 10px 0;
 }
 
-
 .list-group-item-footer {
     overflow: auto;
     margin: 0;
@@ -112,14 +111,83 @@ textarea {
 
 .list-group-item.active,
 .list-group-item.active:hover,
-.list-group-item.active:focus,
-.list-group-item:hover {
+.list-group-item.active:focus {
     color: #000000;
+    background-color: #f5f5f5;
+    border: 1px solid #e2e2e2;
+}
+
+/*
+ LOCATION
+ */
+
+.location > .location-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.location > .location-info > .location-name {
+    flex: 1;
+    text-transform: uppercase;
+}
+
+.location > .location-info > .location-extra {
+    flex: none;
+    padding: 0 5px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
     background-color: #eeeeee;
 }
 
-li:hover {
-    background-color: transparent !important;
+.location > .location-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 5px;
+}
+
+.location > .location-actions > .location-action {
+    flex: none;
+    margin-left: 5px;
+}
+
+/*
+ PROJECT
+ */
+
+.project > .project-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.project > .project-info > .project-name {
+    flex: 1;
+    text-transform: uppercase;
+}
+
+.project > .project-info > .project-extra {
+    flex: none;
+    padding: 0 5px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    background-color: #eeeeee;
+}
+
+.project > .project-description {
+    font-size: 1.2rem;
+    margin: 5px 0;
+}
+
+.project > .project-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 5px;
+}
+
+.project > .project-actions > .project-action {
+    flex: none;
+    margin-left: 5px;
 }
 
 /*

@@ -5,7 +5,8 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.result.ContainerResult;
+import de.daxu.swamp.deploy.notifier.Notifier;
+import de.daxu.swamp.deploy.result.DeployResult;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.command.*;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
@@ -49,110 +50,112 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     public void create(CreateContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(CREATED);
 
-        ContainerResult result = deployFacade
+        DeployResult<ContainerId> result = deployFacade
                 .containerClient(server)
-                .create(configuration, createlog -> apply(new ContainerInstanceLogReceivedEvent(
-                        containerInstanceId,
-                        buildId,
-                        eventMetaDataFactory.create(),
-                        containerId,
-                        createlog
-                )));
+                .create(configuration, createNotifier(eventMetaDataFactory));
 
-        if(result.isSuccess()) {
-            apply(new ContainerInstanceCreatedSucceededEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId()
-            ));
-        } else {
-            apply(new ContainerInstanceCreatedFailedEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    result.getWarnings()));
-        }
+        result.onSuccess(containerId -> apply(new ContainerInstanceCreatedSucceededEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId)));
+
+        result.onFailed(() -> apply(new ContainerInstanceCreatedFailedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                null,
+                result.warnings())));
+    }
+
+    private Notifier<String> createNotifier(EventMetaDataFactory eventMetaDataFactory) {
+        return new Notifier.Builder<String>()
+                .withNextNotifier(payload -> apply(new ContainerInstanceLogReceivedEvent(
+                        containerInstanceId, buildId, eventMetaDataFactory.create(), containerId, payload
+                )))
+                .withCompletionNotifier(() -> apply(new ContainerInstanceLogReceivedEvent(
+                        containerInstanceId, buildId, eventMetaDataFactory.create(), containerId, getCreationCompletedLog()
+                )))
+                .build();
+    }
+
+    private String getCreationCompletedLog() {
+        return String.format("\n%s\n%s\n%s\n",
+                "--------------------------------",
+                "       CREATION COMPLETED       ",
+                "--------------------------------");
     }
 
     @CommandHandler
     public void start(StartContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(STARTED);
 
-        ContainerResult result = deployFacade
+        DeployResult<?> result = deployFacade
                 .containerClient(server)
                 .start(containerId);
 
-        if(result.isSuccess()) {
-            apply(new ContainerInstanceStartedSucceededEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId()
-            ));
-        } else {
-            apply(new ContainerInstanceStartedFailedEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    result.getWarnings()));
-        }
+        result.onSuccess((o) -> apply(new ContainerInstanceStartedSucceededEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId)));
+
+        result.onFailed(() -> apply(new ContainerInstanceStartedFailedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                result.warnings())));
     }
 
     @CommandHandler
     public void stop(StopContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(STOPPED);
 
-        ContainerResult result = deployFacade
+        DeployResult<?> result = deployFacade
                 .containerClient(server)
                 .stop(containerId);
 
-        if(result.isSuccess()) {
-            apply(new ContainerInstanceStoppedSucceededEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    command.getReason()
-            ));
-        } else {
-            apply(new ContainerInstanceStoppedFailedEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    result.getWarnings(),
-                    command.getReason()));
-        }
+
+        result.onSuccess((o) -> apply(new ContainerInstanceStoppedSucceededEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                command.getReason()
+        )));
+
+        result.onFailed(() -> apply(new ContainerInstanceStoppedFailedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                result.warnings(),
+                command.getReason())));
     }
 
     @CommandHandler
     public void remove(RemoveContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(REMOVED);
 
-        ContainerResult result = deployFacade
+        DeployResult<?> result = deployFacade
                 .containerClient(server)
                 .remove(containerId);
 
-        if(result.isSuccess()) {
-            apply(new ContainerInstanceRemovedSucceededEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    command.getReason()
-            ));
-        } else {
-            apply(new ContainerInstanceRemovedFailedEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    result.getWarnings(),
-                    command.getReason()));
-        }
+        result.onSuccess((o) -> apply(new ContainerInstanceRemovedSucceededEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                command.getReason())));
+
+        result.onFailed(() -> apply(new ContainerInstanceRemovedFailedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                result.warnings(),
+                command.getReason())));
     }
 
     @CommandHandler
@@ -162,25 +165,23 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                              EventMetaDataFactory eventMetaDataFactory) {
         validateStatus(STARTED);
 
-        ContainerResult result = deployFacade
+        DeployResult<?> result = deployFacade
                 .containerClient(server)
                 .log(containerId, (log) -> service.receiveLog(containerInstanceId, log));
 
-        if(result.isSuccess()) {
-            apply(new ContainerInstanceLoggingStartedSucceededEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId()
-            ));
-        } else {
-            apply(new ContainerInstanceLoggingStartedFailedEvent(
-                    containerInstanceId,
-                    buildId,
-                    eventMetaDataFactory.create(),
-                    result.getContainerId(),
-                    result.getWarnings()));
-        }
+        result.onSuccess((o) -> apply(new ContainerInstanceLoggingStartedSucceededEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId
+        )));
+
+        result.onFailed(() -> apply(new ContainerInstanceLoggingStartedFailedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                result.warnings())));
     }
 
     @CommandHandler
@@ -194,13 +195,13 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     private void validateStatusChange(ContainerInstanceStatus nextStatus) {
-        if(!isValidPreviousStatus(nextStatus, status)) {
+        if (!isValidPreviousStatus(nextStatus, status)) {
             throw new InvalidContainerStatusChangeException(status, nextStatus);
         }
     }
 
     private void validateStatus(ContainerInstanceStatus statusToBe) {
-        if(this.status != statusToBe) {
+        if (this.status != statusToBe) {
             throw new InvalidContainerStatusException(status, statusToBe);
         }
     }

@@ -72,8 +72,8 @@ public class ContainerConfiguration {
             return new Builder();
         }
 
-        public Builder withGroupId(GroupId group) {
-            this.groupId = group;
+        public Builder withGroupId(GroupId groupId) {
+            this.groupId = groupId;
             return this;
         }
 

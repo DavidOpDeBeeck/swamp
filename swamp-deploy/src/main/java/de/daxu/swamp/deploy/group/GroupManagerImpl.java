@@ -1,9 +1,12 @@
 package de.daxu.swamp.deploy.group;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
+@Component
 public class GroupManagerImpl implements GroupManager {
 
     final Set<Group> groups = newHashSet();

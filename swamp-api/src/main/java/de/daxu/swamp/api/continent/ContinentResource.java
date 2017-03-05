@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 import static de.daxu.swamp.api.continent.ContinentResource.CONTINENTS_URL;
 
 @RestController
-@RequestMapping( CONTINENTS_URL )
+@RequestMapping(CONTINENTS_URL)
 public class ContinentResource {
 
     public static final String CONTINENTS_URL = "/continents";
@@ -31,63 +32,63 @@ public class ContinentResource {
     private final ContinentCreateConverter continentCreateConverter;
 
     @Autowired
-    public ContinentResource( ResponseFactory responseFactory,
-                              LocationService locationService,
-                              ContinentConverter continentConverter,
-                              ContinentCreateConverter continentCreateConverter ) {
+    public ContinentResource(ResponseFactory responseFactory,
+                             LocationService locationService,
+                             ContinentConverter continentConverter,
+                             ContinentCreateConverter continentCreateConverter) {
         this.response = responseFactory;
         this.locationService = locationService;
         this.continentConverter = continentConverter;
         this.continentCreateConverter = continentCreateConverter;
     }
 
-    @RequestMapping( method = RequestMethod.GET )
+    @RequestMapping(method = RequestMethod.GET)
     public Response getAll() {
 
         List<ContinentDTO> continents = locationService
                 .getAllContinents()
                 .stream()
-                .map( continentConverter::toDTO )
-                .collect( Collectors.toList() );
+                .map(continentConverter::toDTO)
+                .collect(Collectors.toList());
 
-        return response.success( continents );
+        return response.success(continents);
     }
 
-    @RequestMapping( method = RequestMethod.POST )
-    public Response post( @RequestBody ContinentCreateDTO dto ) {
+    @RequestMapping(method = RequestMethod.POST)
+    public Response post(@Valid @RequestBody ContinentCreateDTO dto) {
 
-        Continent continent = continentCreateConverter.toDomain( dto );
-        continent = locationService.createContinent( continent );
+        Continent continent = continentCreateConverter.toDomain(dto);
+        continent = locationService.createContinent(continent);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path( "/{id}" )
-                .buildAndExpand( continent.getId() ).toUri();
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(continent.getId()).toUri();
 
-        return response.created( location );
+        return response.created(location);
     }
 
-    @RequestMapping( value = "/{continentId}", method = RequestMethod.GET )
-    public Response get( @PathVariable( "continentId" ) Continent continent ) {
+    @RequestMapping(value = "/{continentId}", method = RequestMethod.GET)
+    public Response get(@PathVariable("continentId") Continent continent) {
 
-        return response.success( continentConverter.toDTO( continent ) );
+        return response.success(continentConverter.toDTO(continent));
     }
 
-    @RequestMapping( value = "/{continentId}", method = RequestMethod.PUT )
-    public Response put( @PathVariable( "continentId" ) Continent continentToUpdate,
-                         @RequestBody ContinentCreateDTO updatedContinentDTO ) {
+    @RequestMapping(value = "/{continentId}", method = RequestMethod.PUT)
+    public Response put(@PathVariable("continentId") Continent continentToUpdate,
+                        @Valid @RequestBody ContinentCreateDTO updatedContinentDTO) {
 
-        Continent updatedContinent = continentCreateConverter.toDomain( updatedContinentDTO );
+        Continent updatedContinent = continentCreateConverter.toDomain(updatedContinentDTO);
 
-        BeanUtils.copyProperties( updatedContinent, continentToUpdate );
-        locationService.updateContinent( continentToUpdate );
+        BeanUtils.copyProperties(updatedContinent, continentToUpdate);
+        locationService.updateContinent(continentToUpdate);
 
-        return response.success( continentConverter.toDTO( continentToUpdate ) );
+        return response.success(continentConverter.toDTO(continentToUpdate));
     }
 
-    @RequestMapping( value = "/{continentId}", method = RequestMethod.DELETE )
-    public Response delete( @PathVariable( "continentId" ) Continent continent ) {
+    @RequestMapping(value = "/{continentId}", method = RequestMethod.DELETE)
+    public Response delete(@PathVariable("continentId") Continent continent) {
 
-        locationService.deleteContinent( continent );
+        locationService.deleteContinent(continent);
         return response.success();
     }
 }

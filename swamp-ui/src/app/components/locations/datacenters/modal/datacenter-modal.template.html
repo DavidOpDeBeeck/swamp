@@ -1,9 +1,13 @@
 <form ng-submit="DatacenterModalCtrl.submit()">
     <div class="modal-header">
-        <h3 class="modal-title" ng-hide="DatacenterModalCtrl.update">Create a new Continent</h3>
+        <h3 class="modal-title" ng-hide="DatacenterModalCtrl.update">Create a new Datacenter</h3>
         <h3 class="modal-title" ng-show="DatacenterModalCtrl.update">{{ DatacenterModalCtrl.datacenter.name }}</h3>
     </div>
     <div class="modal-body">
+        <div class="alert alert-danger" role="alert"
+             ng-show="DatacenterModalCtrl.errors">
+            <p ng-repeat="error in DatacenterModalCtrl.errors">{{ error }}</p>
+        </div>
         <input-field
                 label="Datacenter name"
                 value="DatacenterModalCtrl.datacenter.name"

@@ -16,18 +16,12 @@ class ServersController {
 
     create() {
         let modal = this.createModal({}, false);
-        modal.result.then((server) => {
-            this.locationService.createServer(this.continent.id, this.datacenter.id, server)
-                .then(() => this.getAllServers());
-        });
+        modal.result.then(() => this.getAllServers());
     }
 
     edit(server) {
         let modal = this.createModal(server, true);
-        modal.result.then((server) => {
-            server.$update()
-                .then(() => this.getAllServers());
-        });
+        modal.result.then(() => this.getAllServers());
     }
 
     createModal(server, update) {
@@ -38,6 +32,8 @@ class ServersController {
             templateUrl: "/assets/templates/server-modal.template.html",
             resolve: {
                 server: () => server,
+                datacenter: () => this.datacenter,
+                continent: () => this.continent,
                 update: update
             }
         });

@@ -37,6 +37,7 @@ class DatacentersController {
             templateUrl: "/assets/templates/datacenter-modal.template.html",
             resolve: {
                 datacenter: () => datacenter,
+                continent: () => this.continent,
                 update: update
             }
         });

@@ -12,25 +12,24 @@
                 </button>
             </span>
         </div>
-        <div class="list-group"
-             ng-repeat="continent in ContinentsCtrl.continents | filter: ContinentsCtrl.filter">
-            <li class="list-group-item">
-                <span class="badge">{{ continent.datacenters }} datacenters</span>
-                {{ continent.name }}
-            </li>
-            <li class="list-group-item">
-                <button type="button" class="btn btn-xs btn-danger pull-right"
-                        ng-click="ContinentsCtrl.delete(continent)">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
-                        ng-click="ContinentsCtrl.edit(continent)">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-info pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters({continentId: continent.id})">
-                    <span class="glyphicon glyphicon-eye-open" ui-sref-active="glyphicon-eye-close" aria-hidden="true"></span>
-                </button>
+        <div class="list-group">
+            <li class="list-group-item location" ui-sref-active="active"
+               ng-repeat="continent in ContinentsCtrl.continents | filter: ContinentsCtrl.filter"
+               ui-sref="continents.continent.datacenters({continentId: continent.id})">
+                <section class="location-info">
+                    <span class="location-name" ng-bind="continent.name"></span>
+                    <span class="location-extra">{{ continent.datacenters }} datacenters</span>
+                </section>
+                <section class="location-actions">
+                    <button type="button" class="btn btn-xs btn-default location-action"
+                            ng-click="ContinentsCtrl.delete(continent); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-default location-action"
+                            ng-click="ContinentsCtrl.edit(continent); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
+                </section>
             </li>
         </div>
     </div>

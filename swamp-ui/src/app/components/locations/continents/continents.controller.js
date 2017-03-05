@@ -14,18 +14,12 @@ class ContinentsController {
 
     create() {
         let modal = this.createModal({}, false);
-        modal.result.then((continent) => {
-            this.locationService.createContinent(continent)
-                .then(() => this.getAllContinents());
-        });
+        modal.result.then(() => this.getAllContinents());
     }
 
     edit(continent) {
         let modal = this.createModal(continent, true);
-        modal.result.then((continent) => {
-            continent.$update()
-                .then(() => this.getAllContinents());
-        });
+        modal.result.then(() => this.getAllContinents());
     }
 
     createModal(continent, update) {

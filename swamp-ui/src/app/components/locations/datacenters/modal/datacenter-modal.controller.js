@@ -1,6 +1,8 @@
 class DatacenterModalController {
-    constructor(datacenter, update, $uibModalInstance) {
+    constructor(LocationService, datacenter, continent, update, $uibModalInstance) {
+        this.locationService = LocationService;
         this.datacenter = datacenter;
+        this.continent = continent;
         this.update = update;
         this.$uibModalInstance = $uibModalInstance;
     }
@@ -10,9 +12,19 @@ class DatacenterModalController {
     }
 
     submit() {
-        this.$uibModalInstance.close(this.datacenter);
+        this.update ? this.updateDatacenter() : this.create();
+    }
+
+    create() {
+        this.locationService.createDatacenter(this.continent.id, this.datacenter)
+            .then(() => this.$uibModalInstance.close(), errors => this.errors = errors);
+    }
+
+    updateDatacenter() {
+        this.datacenter.$update()
+            .then(() => this.$uibModalInstance.close(), errors => this.errors = errors);
     }
 }
 
-export default ['datacenter', 'update', '$uibModalInstance', DatacenterModalController]
+export default ['LocationService', 'datacenter', 'continent', 'update', '$uibModalInstance', DatacenterModalController]
 

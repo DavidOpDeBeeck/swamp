@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +59,7 @@ public class ProjectResource {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Response post(@RequestBody ProjectCreateDTO dto) {
+    public Response post(@Valid @RequestBody ProjectCreateDTO dto) {
 
         Project project = projectCreateConverter.toDomain(dto);
         project = projectService.createProject(project);
@@ -80,7 +81,7 @@ public class ProjectResource {
 
     @RequestMapping(value = "/{projectId}", method = RequestMethod.PUT)
     public Response put(@PathVariable("projectId") Project projectToUpdate,
-                        @RequestBody ProjectCreateDTO updatedProjectDTO) {
+                        @Valid @RequestBody ProjectCreateDTO updatedProjectDTO) {
 
         Project updatedProject = projectCreateConverter.toDomain(updatedProjectDTO);
 

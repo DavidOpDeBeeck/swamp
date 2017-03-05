@@ -37,4 +37,5 @@ const module = Angular.module('swamp', [
     ])
     .constant("API_URL", "http://localhost:8081/")
     .constant("BROKER_URL", "http://localhost:8081/schedule")
-    .config(AppRoute);
+    .config(AppRoute)
+    .run(['NotificationService','BROKER_URL', (NotificationService, BROKER_URL) => NotificationService.connectToSocket(BROKER_URL)]);

@@ -1,5 +1,6 @@
 class ContinentModalController {
-    constructor(continent, update, $uibModalInstance) {
+    constructor(LocationService, continent, update, $uibModalInstance) {
+        this.locationService = LocationService;
         this.continent = continent;
         this.update = update;
         this.$uibModalInstance = $uibModalInstance;
@@ -10,8 +11,18 @@ class ContinentModalController {
     }
 
     submit() {
-        this.$uibModalInstance.close(this.continent);
+        this.update ? this.updateContinent() : this.create();
+    }
+
+    create() {
+        this.locationService.createContinent(this.continent)
+            .then(() => this.$uibModalInstance.close(), errors => this.errors = errors);
+    }
+
+    updateContinent() {
+        this.continent.$update()
+            .then(() => this.$uibModalInstance.close(), errors => this.errors = errors);
     }
 }
 
-export default ['continent', 'update', '$uibModalInstance', ContinentModalController]
+export default ['LocationService', 'continent', 'update', '$uibModalInstance', ContinentModalController]

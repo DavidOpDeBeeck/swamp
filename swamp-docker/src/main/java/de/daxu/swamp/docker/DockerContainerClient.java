@@ -1,169 +1,94 @@
 package de.daxu.swamp.docker;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.command.LogContainerResultCallback;
-import com.google.common.collect.Sets;
 import de.daxu.swamp.core.server.Server;
-import de.daxu.swamp.deploy.callback.ProgressCallback;
 import de.daxu.swamp.deploy.client.ContainerClient;
-import de.daxu.swamp.deploy.client.DeployClient;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.group.GroupId;
 import de.daxu.swamp.deploy.group.GroupManager;
-import de.daxu.swamp.deploy.result.ContainerResult;
-import de.daxu.swamp.deploy.result.ContainerResultFactory;
-import de.daxu.swamp.docker.callback.CommandCallback;
-import de.daxu.swamp.docker.client.DockerClientFactory;
-import de.daxu.swamp.docker.container.DockerContainerConfigurationMapper;
-import de.daxu.swamp.workspace.manager.WorkspaceManager;
+import de.daxu.swamp.deploy.notifier.Notifier;
+import de.daxu.swamp.deploy.notifier.ProgressNotifier;
+import de.daxu.swamp.deploy.result.DeployResult;
+import de.daxu.swamp.docker.command.DockerCommandExecutor;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-public class DockerContainerClient implements ContainerClient, DeployClient {
+public class DockerContainerClient
+        implements ContainerClient {
 
-    private final Server server;
+    private final DockerCommandExecutor executor;
     private final GroupManager groupManager;
 
-    private final DockerExecutor executor;
-    private final DockerContainerConfigurationMapper configurationMapper;
-
-    DockerContainerClient(WorkspaceManager workspaceManager,
-                          GroupManager groupManager,
-                          DockerClientFactory dockerClientFactory,
-                          ContainerResultFactory containerResultFactory,
-                          Server server) {
-        this.server = server;
+    DockerContainerClient(DockerCommandExecutor executor, GroupManager groupManager) {
+        this.executor = executor;
         this.groupManager = groupManager;
-        this.executor = new DockerExecutor(server, dockerClientFactory, containerResultFactory);
-        this.configurationMapper = new DockerContainerConfigurationMapper(executor, workspaceManager);
     }
 
     @Override
-    public ContainerResult create(ContainerConfiguration config, ProgressCallback<String> progressCallback) {
-        return executor.exec(warnings -> {
-            GroupId groupId = config.getGroupId();
+    public DeployResult<ContainerId> create(ContainerConfiguration config, Notifier<String> notifier) {
+        GroupId groupId = config.getGroupId();
 
-            warnings.addAll(createNetwork(groupId));
+        DeployResult<Void> createNetwork = executor
+                .execute(client -> client.createNetwork(groupId));
 
-            CreateContainerResponse response = configurationMapper
-                    .map(config, progressCallback)
-                    .exec();
+        DeployResult<ContainerId> createContainer = executor
+                .executeWithResponse(client -> client.createContainer(config, notifier));
 
-            ContainerId containerId = ContainerId.of(response.getId());
+        DeployResult<Void> connectToNetwork = executor
+                .execute(client -> client.connectContainerToNetwork(groupId, createContainer.get()));
 
-            warnings.addAll(toSet(response.getWarnings()));
-            warnings.addAll(connectNetwork(groupId, containerId));
+        createContainer.onSuccess(containerId -> groupManager
+                .getOrCreate(groupId)
+                .addContainer(containerId));
 
-            groupManager.getOrCreate(groupId)
-                    .addContainer(containerId);
+        Set<String> warnings = newHashSet();
+        warnings.addAll(createNetwork.warnings());
+        warnings.addAll(createContainer.warnings());
+        warnings.addAll(connectToNetwork.warnings());
 
-            return containerId;
-        });
+        return DeployResult.result(createContainer.get(), warnings);
     }
 
     @Override
-    public ContainerResult start(ContainerId containerId) {
-        return executor.exec(() ->
-                executor.execDocker(docker ->
-                        docker.startContainerCmd(containerId.value())
-                                .exec()), containerId);
+    public DeployResult<?> start(ContainerId containerId) {
+        return executor
+                .execute(client -> client.startContainer(containerId));
     }
 
     @Override
-    public ContainerResult stop(ContainerId containerId) {
-        return executor.exec(() ->
-                executor.execDocker(docker ->
-                        docker.stopContainerCmd(containerId.value())
-                                .exec()), containerId);
+    public DeployResult<?> stop(ContainerId containerId) {
+        return executor
+                .execute(client -> client.stopContainer(containerId));
     }
 
     @Override
-    public ContainerResult remove(ContainerId containerId) {
-        return executor.exec(() ->
-                executor.execDocker(docker ->
-                        docker.removeContainerCmd(containerId.value())
-                                .exec()), containerId);
+    public DeployResult<?> remove(ContainerId containerId) {
+        return executor
+                .execute(client -> client.removeContainer(containerId));
     }
 
     @Override
-    public ContainerResult log(ContainerId containerId, ProgressCallback<String> progressCallback) {
-        return executor.exec(() ->
-                executor.execDocker(docker ->
-                        docker.logContainerCmd(containerId.value())
-                                .withStdErr(true)
-                                .withStdOut(true)
-                                .withFollowStream(true)
-                                .exec(onLogReceived(progressCallback))), containerId);
+    public DeployResult<?> log(ContainerId containerId, ProgressNotifier<String> notifier) {
+        return executor
+                .execute(client -> client.logContainer(containerId, notifier));
     }
 
     @Override
-    public boolean exists(ContainerId containerId) {
-        return executor.exec(() ->
-                executor.execDocker(docker ->
-                        docker.inspectContainerCmd(containerId.value())
-                                .exec()), containerId)
-                .isSuccess();
+    public DeployResult<Boolean> exists(ContainerId containerId) {
+        return executor
+                .executeWithResponse(client -> client.containerExists(containerId));
     }
 
     @Override
-    public boolean isRunning(ContainerId containerId) {
-        if(!exists(containerId))
-            return false;
-
-        String status = executor
-                .execDockerWithResponse(docker ->
-                        docker.inspectContainerCmd(containerId.value())
-                                .exec()
-                                .getState()
-                                .getStatus());
-
-        return status.equals("created") || status.equals("running");
+    public DeployResult<Boolean> isRunning(ContainerId containerId) {
+        return executor
+                .executeWithResponse(client -> client.isContainerRunning(containerId));
     }
 
     @Override
     public Server server() {
-        return server;
+        return executor.getServer();
     }
-
-    private Set<String> createNetwork(GroupId groupId) {
-        if(groupManager.exists(groupId)) {
-            return newHashSet();
-        }
-        return executor.execDocker(docker ->
-                docker.createNetworkCmd()
-                        .withDriver("overlay")
-                        .withName(groupId.value())
-                        .exec());
-    }
-
-    private Set<String> connectNetwork(GroupId groupId, ContainerId containerId) {
-        return executor.execDocker(docker ->
-                docker.connectToNetworkCmd()
-                        .withContainerId(containerId.value())
-                        .withNetworkId(groupId.value())
-                        .exec()
-        );
-    }
-
-    private Set<String> toSet(String[] strings) {
-        return strings == null ? Sets.newHashSet() : Sets.newHashSet(strings);
-    }
-
-    private CommandCallback<LogContainerResultCallback, Frame> onLogReceived(ProgressCallback<String> progressCallback) {
-        return new CommandCallback.Builder<LogContainerResultCallback, Frame>()
-                .onNext(frame -> progressCallback.onProgress(decodeFrame(frame)))
-                .onCompleted(() -> progressCallback.onProgress("Logging finished"))
-                .build();
-    }
-
-    private String decodeFrame(Frame frame) {
-        return frame.toString()
-                .replaceAll("STDOUT: ", "\n")
-                .replaceAll("STDERR: ", "\n");
-    }
-
 }

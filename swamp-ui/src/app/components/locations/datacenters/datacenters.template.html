@@ -12,25 +12,24 @@
                 </button>
             </span>
         </div>
-        <div class="list-group"
-             ng-repeat="datacenter in DatacentersCtrl.datacenters | filter: DatacentersCtrl.filter">
-            <li class="list-group-item">
-                <span class="badge">{{ datacenter.servers }} servers</span>
-                {{ datacenter.name }}
-            </li>
-            <li class="list-group-item">
-                <button type="button" class="btn btn-xs btn-danger pull-right"
-                        ng-click="DatacentersCtrl.delete(datacenter)">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-warning pull-right margin-xs-right"
-                        ng-click="DatacentersCtrl.edit(datacenter)">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-info pull-right margin-xs-right"
-                        ui-sref="continents.continent.datacenters.datacenter.servers({continentId: datacenter.continentId, datacenterId: datacenter.id})">
-                    <span class="glyphicon glyphicon-eye-open" ui-sref-active="glyphicon-eye-close" aria-hidden="true"></span>
-                </button>
+        <div class="list-group">
+            <li class="list-group-item location" ui-sref-active="active"
+               ng-repeat="datacenter in DatacentersCtrl.datacenters | filter: DatacentersCtrl.filter"
+               ui-sref="continents.continent.datacenters.datacenter.servers({continentId: datacenter.continentId, datacenterId: datacenter.id})">
+                <section class="location-info">
+                    <span class="location-name" ng-bind="datacenter.name"></span>
+                    <span class="location-extra">{{ datacenter.servers }} servers</span>
+                </section>
+                <section class="location-actions">
+                    <button type="button" class="btn btn-xs btn-default location-action"
+                            ng-click="DatacentersCtrl.delete(datacenter); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-default location-action"
+                            ng-click="DatacentersCtrl.edit(datacenter); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
+                </section>
             </li>
         </div>
     </div>

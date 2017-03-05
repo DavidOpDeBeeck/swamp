@@ -5,6 +5,9 @@ import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +39,19 @@ public class ExceptionInterceptor {
     }
 
     @ResponseBody
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Response handle(MethodArgumentNotValidException exception) {
+        BindingResult result = exception.getBindingResult();
+
+        String[] errors = result.getAllErrors()
+                .stream()
+                .map(ObjectError::getDefaultMessage)
+                .toArray(String[]::new);
+
+        return response.badRequest(errors);
+    }
+
+    @ResponseBody
     @ExceptionHandler(TransactionSystemException.class)
     public Response handle(TransactionSystemException exception) {
         Throwable cause = exception.getCause();
@@ -58,7 +74,7 @@ public class ExceptionInterceptor {
     public Response handle(ConstraintViolationException exception) {
         return response.badRequest(exception.getConstraintViolations()
                 .stream()
-                .map(ConstraintViolation::getMessageTemplate)
+                .map(ConstraintViolation::getMessage)
                 .toArray(String[]::new));
     }
 }

@@ -6,6 +6,7 @@ import de.daxu.swamp.common.validator.WaitTimeExpiredValidator;
 import de.daxu.swamp.core.location.LocationService;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
+import de.daxu.swamp.deploy.result.DeployResult;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceCommandService;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
@@ -120,15 +121,19 @@ public class ContainerInstanceBatchService {
     private Validator<ContainerInstanceView> existsOnHostValidator() {
         return new BasicValidator<>(view -> {
             Server server = getServerByName(view.getServer().getName());
-            return deployFacade.containerClient(server).exists(view.getContainerId());
+            return validateResult(deployFacade.containerClient(server).exists(view.getContainerId()));
         });
     }
 
     private Validator<ContainerInstanceView> isRunningOnHostValidator() {
         return new BasicValidator<>(view -> {
             Server server = getServerByName(view.getServer().getName());
-            return deployFacade.containerClient(server).isRunning(view.getContainerId());
+            return validateResult(deployFacade.containerClient(server).isRunning(view.getContainerId()));
         });
+    }
+
+    private boolean validateResult(DeployResult<Boolean> result) {
+        return result.success() && result.get();
     }
 
     private Server getServerByName(String name) {
