@@ -4,8 +4,8 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployFacade;
 import de.daxu.swamp.deploy.client.ContainerClient;
 import de.daxu.swamp.deploy.group.GroupManager;
-import de.daxu.swamp.docker.adapter.DockerClientAdapterFactory;
 import de.daxu.swamp.docker.client.DockerClient;
+import de.daxu.swamp.docker.client.DockerClientFactory;
 import de.daxu.swamp.docker.command.DockerCommandExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ public class DockerFacade implements DeployFacade {
 
 
     private final GroupManager groupManager;
-    private final DockerClientAdapterFactory dockerClientFactory;
+    private final DockerClientFactory dockerClientFactory;
 
     @Autowired
     public DockerFacade(GroupManager groupManager,
-                        DockerClientAdapterFactory dockerClientFactory) {
+                        DockerClientFactory dockerClientFactory) {
         this.groupManager = groupManager;
         this.dockerClientFactory = dockerClientFactory;
     }

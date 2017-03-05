@@ -125,9 +125,16 @@ public class ContainerInstanceViewEventListener {
     }
 
     @EventHandler
-    void on(ContainerInstanceLogReceivedEvent event) {
+    void on(ContainerInstanceCreationLogReceivedEvent event) {
         ContainerInstanceView view = getByContainerInstanceId(event);
-        view.addLog(event.getLog());
+        view.addCreationLog(event.getLog());
+        containerInstanceViewRepository.save(view);
+    }
+
+    @EventHandler
+    void on(ContainerInstanceRunningLogReceivedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
+        view.addRunningLog(event.getLog());
         containerInstanceViewRepository.save(view);
     }
 

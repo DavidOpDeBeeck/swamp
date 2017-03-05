@@ -6,7 +6,6 @@ import "ng-stomp";
 import HttpInterceptor from "./interceptors/http.interceptor.module";
 import Filters from "./filters/filters.module";
 import AppConfigs from "./configs/configs.module";
-import AppRoute from "./app.route";
 import Services from "./services/services.module";
 import Field from "./components/fields/fields.module";
 import Layout from "./components/layout/layout.module";
@@ -37,5 +36,4 @@ const module = Angular.module('swamp', [
     ])
     .constant("API_URL", "http://localhost:8081/")
     .constant("BROKER_URL", "http://localhost:8081/schedule")
-    .config(AppRoute)
-    .run(['NotificationService','BROKER_URL', (NotificationService, BROKER_URL) => NotificationService.connectToSocket(BROKER_URL)]);
+    .config(['$urlRouterProvider', $urlRouterProvider => $urlRouterProvider.otherwise("/")]);

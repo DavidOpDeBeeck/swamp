@@ -6,7 +6,8 @@ class ContainerInstanceController {
     }
 
     initialize() {
-        this.log = this.initial.log;
+        this.creationLog = this.initial.creationLog;
+        this.runningLog = this.initial.runningLog;
         this.status = this.initial.status;
         this.startedAt = this.initial.startedAt;
         this.stopReason = this.initial.stopReason;
@@ -29,9 +30,14 @@ class ContainerInstanceController {
             callback: event => this.onContainerRemoved(event)
         });
         this.notificationService.on({
-            eventTypes: ['ContainerInstanceLogReceivedEvent'],
+            eventTypes: ['ContainerInstanceCreationLogReceivedEvent'],
             identifier: event => event.containerInstanceId === this.initial.containerInstanceId,
-            callback: event => this.log += event.log
+            callback: event => this.creationLog += event.log
+        });
+        this.notificationService.on({
+            eventTypes: ['ContainerInstanceRunningLogReceivedEvent'],
+            identifier: event => event.containerInstanceId === this.initial.containerInstanceId,
+            callback: event => this.runningLog += event.log
         });
     }
 

@@ -14,27 +14,31 @@
         </div>
         <div class="list-group">
             <li class="list-group-item project" ui-sref-active="active"
-               ui-sref="projects.project.containers({projectId: project.id})"
-               ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter">
+                ui-sref="projects.project.containers({projectId: project.id})"
+                ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter">
                 <section class="project-info">
                     <span class="project-name" ng-bind="project.name"></span>
                     <span class="project-extra">{{ project.containers }} containers</span>
                 </section>
                 <section class="project-description" ng-bind="project.description"></section>
                 <section class="project-actions">
-                    <button type="button" class="btn btn-xs btn-default project-action"
-                            ng-click="ProjectCtrl.delete(project); $event.stopPropagation()">
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-xs btn-default project-action"
-                            ng-click="ProjectCtrl.edit(project); $event.stopPropagation()">
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-xs btn-primary project-action"
-                            ng-click="ProjectCtrl.deploy(project); $event.stopPropagation()">
-                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
-                        Deploy
-                    </button>
+                    <section class="project-actions-left">
+                        <button type="button" class="btn btn-xs btn-default project-action"
+                                ng-click="ProjectCtrl.delete(project); $event.stopPropagation()">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-default project-action"
+                                ng-click="ProjectCtrl.edit(project); $event.stopPropagation()">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
+                    </section>
+                    <section class="project-actions-right">
+                        <button type="button" class="btn btn-xs btn-primary project-action"
+                                ng-click="ProjectCtrl.deploy(project); $event.stopPropagation()">
+                            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+                            Deploy
+                        </button>
+                    </section>
                 </section>
             </li>
         </div>

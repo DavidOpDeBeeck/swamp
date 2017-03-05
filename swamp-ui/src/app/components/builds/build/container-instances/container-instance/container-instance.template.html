@@ -32,8 +32,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12" ng-show="ContainerInstanceCtrl.log.length > 0">
-            <textarea-field label="Container logs" value="ContainerInstanceCtrl.log" editable="false"></textarea-field>
+        <div class="col-md-12" ng-show="ContainerInstanceCtrl.creationLog.length > 0">
+            <textarea-field label="Container creation logs" value="ContainerInstanceCtrl.creationLog" editable="false"></textarea-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" ng-show="ContainerInstanceCtrl.runningLog.length > 0">
+            <textarea-field label="Container running logs" value="ContainerInstanceCtrl.runningLog" editable="false"></textarea-field>
         </div>
     </div>
     <div class="row">

@@ -70,20 +70,18 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
 
     private Notifier<String> createNotifier(EventMetaDataFactory eventMetaDataFactory) {
         return new Notifier.Builder<String>()
-                .withNextNotifier(payload -> apply(new ContainerInstanceLogReceivedEvent(
-                        containerInstanceId, buildId, eventMetaDataFactory.create(), containerId, payload
-                )))
-                .withCompletionNotifier(() -> apply(new ContainerInstanceLogReceivedEvent(
-                        containerInstanceId, buildId, eventMetaDataFactory.create(), containerId, getCreationCompletedLog()
-                )))
+                .withNextNotifier(payload -> apply(creationLogEvent(eventMetaDataFactory, payload)))
                 .build();
     }
 
-    private String getCreationCompletedLog() {
-        return String.format("\n%s\n%s\n%s\n",
-                "--------------------------------",
-                "       CREATION COMPLETED       ",
-                "--------------------------------");
+    private ContainerInstanceCreationLogReceivedEvent creationLogEvent(EventMetaDataFactory eventMetaDataFactory,
+                                                                       String payload) {
+        return new ContainerInstanceCreationLogReceivedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                payload);
     }
 
     @CommandHandler
@@ -186,7 +184,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
 
     @CommandHandler
     public void receiveLog(ReceiveContainerInstanceLogCommand command, EventMetaDataFactory eventMetaDataFactory) {
-        apply(new ContainerInstanceLogReceivedEvent(
+        apply(new ContainerInstanceRunningLogReceivedEvent(
                 containerInstanceId,
                 buildId,
                 eventMetaDataFactory.create(),
