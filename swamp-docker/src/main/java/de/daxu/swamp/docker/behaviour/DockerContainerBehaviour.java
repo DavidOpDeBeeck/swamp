@@ -1,15 +1,14 @@
-package de.daxu.swamp.docker.client;
+package de.daxu.swamp.docker.behaviour;
 
+import de.daxu.swamp.deploy.DeployNotifier;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.notifier.Notifier;
-import de.daxu.swamp.deploy.notifier.ProgressNotifier;
 
 import java.io.File;
 
 public interface DockerContainerBehaviour {
 
-    ContainerId createContainer(ContainerConfiguration configuration, Notifier<String> notifier);
+    ContainerId createContainer(ContainerConfiguration configuration, DeployNotifier<String> notifier);
 
     void startContainer(ContainerId containerId);
 
@@ -17,9 +16,9 @@ public interface DockerContainerBehaviour {
 
     void removeContainer(ContainerId containerId);
 
-    void logContainer(ContainerId containerId, ProgressNotifier<String> notifier);
+    void logContainer(ContainerId containerId, DeployNotifier<String> notifier);
 
-    void buildContainer(File directory, String tag, Notifier<String> notifier);
+    void buildContainer(File directory, String tag, DeployNotifier<String> notifier);
 
     boolean containerExists(ContainerId containerId);
 

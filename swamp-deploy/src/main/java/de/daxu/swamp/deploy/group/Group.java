@@ -22,15 +22,15 @@ public class Group {
         this.containers = containers;
     }
 
+    public GroupId id() {
+        return groupId;
+    }
+
     public GroupId getGroupId() {
         return groupId;
     }
 
     public void addContainer(ContainerId containerId) {
-        this.containers.add(containerId);
-    }
-
-    public void removeContainer(ContainerId containerId) {
         this.containers.add(containerId);
     }
 

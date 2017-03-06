@@ -1,8 +1,8 @@
 package de.daxu.swamp.docker.adapter.command;
 
+import de.daxu.swamp.deploy.DeployNotifier;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
-import de.daxu.swamp.deploy.notifier.Notifier;
-import de.daxu.swamp.docker.client.DockerClient;
+import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
 import de.daxu.swamp.docker.configurator.DockerRunConfiguratorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,9 @@ public class DockerCreateContainerCommandAdapterFactory {
         this.runConfiguratorFactory = runConfiguratorFactory;
     }
 
-    public DockerCreateContainerCommandAdapter create(DockerClient client,
+    public DockerCreateContainerCommandAdapter create(DockerBehaviour client,
                                                       ContainerConfiguration config,
-                                                      Notifier<String> createNotifier) {
+                                                      DeployNotifier<String> createNotifier) {
 
         DockerRunConfigurator configurator
                 = runConfiguratorFactory.create(client, createNotifier);

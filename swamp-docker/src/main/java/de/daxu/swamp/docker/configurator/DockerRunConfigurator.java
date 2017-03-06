@@ -4,8 +4,8 @@ import de.daxu.swamp.core.configuration.DockerfileConfiguration;
 import de.daxu.swamp.core.configuration.GitConfiguration;
 import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
-import de.daxu.swamp.deploy.notifier.Notifier;
-import de.daxu.swamp.docker.client.DockerClient;
+import de.daxu.swamp.deploy.DeployNotifier;
+import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 import de.daxu.swamp.workspace.Workspace;
 import de.daxu.swamp.workspace.extension.GitCloneExtension;
 import de.daxu.swamp.workspace.manager.WorkspaceManager;
@@ -17,13 +17,13 @@ import java.util.function.Consumer;
 
 public class DockerRunConfigurator implements RunConfigurator<String> {
 
-    private final DockerClient client;
+    private final DockerBehaviour client;
     private final WorkspaceManager workspaceManager;
-    private final Notifier<String> notifier;
+    private final DeployNotifier<String> notifier;
 
-    DockerRunConfigurator(DockerClient client,
+    DockerRunConfigurator(DockerBehaviour client,
                           WorkspaceManager workspaceManager,
-                          Notifier<String> notifier) {
+                          DeployNotifier<String> notifier) {
         this.client = client;
         this.workspaceManager = workspaceManager;
         this.notifier = notifier;
@@ -62,11 +62,11 @@ public class DockerRunConfigurator implements RunConfigurator<String> {
         return tag;
     }
 
-    private Notifier<String> buildNotifier(CountDownLatch countDownLatch) {
-        return new Notifier.Builder<String>()
-                .withErrorNotifier(notifier::onError)
-                .withNextNotifier(notifier::onProgress)
-                .withCompletionNotifier(notifier::onCompletion)
+    private DeployNotifier<String> buildNotifier(CountDownLatch countDownLatch) {
+        return new DeployNotifier.Builder<String>()
+                .withErrorNotifier(notifier::triggerError)
+                .withProgressNotifier(notifier::triggerProgress)
+                .withCompletionNotifier(notifier::triggerCompletion)
                 .withCompletionNotifier(countDownLatch::countDown)
                 .build();
     }

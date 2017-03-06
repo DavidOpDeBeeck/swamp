@@ -1,4 +1,4 @@
-package de.daxu.swamp.deploy.result;
+package de.daxu.swamp.deploy;
 
 import com.google.common.collect.Sets;
 import de.daxu.swamp.common.time.Dates;
@@ -44,7 +44,7 @@ public class DeployResult<RESULT> {
     private Set<String> warnings;
     private LocalDateTime timestamp;
 
-    DeployResult(RESULT result, Set<String> warnings, LocalDateTime timestamp) {
+    private DeployResult(RESULT result, Set<String> warnings, LocalDateTime timestamp) {
         this.result = result;
         this.warnings = warnings == null ? newHashSet() : warnings;
         this.timestamp = timestamp;
@@ -68,13 +68,13 @@ public class DeployResult<RESULT> {
 
     public void onSuccess(Consumer<RESULT> onSuccess) {
         if (success()) {
-            onSuccess.accept(get());
+            onSuccess.accept(result);
         }
     }
 
-    public void onFailed(Runnable onFailed) {
+    public void onFail(Consumer<Set<String>> onFail) {
         if (!success()) {
-            onFailed.run();
+            onFail.accept(warnings);
         }
     }
 

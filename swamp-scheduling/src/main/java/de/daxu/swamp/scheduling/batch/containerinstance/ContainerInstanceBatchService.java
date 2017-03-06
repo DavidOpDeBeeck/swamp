@@ -5,8 +5,9 @@ import de.daxu.swamp.common.validator.Validator;
 import de.daxu.swamp.common.validator.WaitTimeExpiredValidator;
 import de.daxu.swamp.core.location.LocationService;
 import de.daxu.swamp.core.server.Server;
-import de.daxu.swamp.deploy.DeployFacade;
-import de.daxu.swamp.deploy.result.DeployResult;
+import de.daxu.swamp.deploy.DeployClient;
+import de.daxu.swamp.deploy.DeployClientManager;
+import de.daxu.swamp.deploy.DeployResult;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceCommandService;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
@@ -34,7 +35,7 @@ public class ContainerInstanceBatchService {
 
     private final Logger logger = LoggerFactory.getLogger(ContainerInstanceBatchService.class);
 
-    private final DeployFacade deployFacade;
+    private final DeployClientManager clientManager;
     private final LocationService locationService;
     private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ContainerInstanceCommandService containerInstanceCommandService;
@@ -52,11 +53,11 @@ public class ContainerInstanceBatchService {
             = new WaitTimeExpiredValidator<>(STOPPED_FAILED_WAIT_TIME, ContainerInstanceView::getStoppedAt);
 
     @Autowired
-    public ContainerInstanceBatchService(DeployFacade deployFacade,
-                        LocationService locationService,
-                        ContainerInstanceQueryService containerInstanceQueryService,
-                        ContainerInstanceCommandService containerInstanceCommandService) {
-        this.deployFacade = deployFacade;
+    public ContainerInstanceBatchService(DeployClientManager clientManager,
+                                         LocationService locationService,
+                                         ContainerInstanceQueryService containerInstanceQueryService,
+                                         ContainerInstanceCommandService containerInstanceCommandService) {
+        this.clientManager = clientManager;
         this.locationService = locationService;
         this.containerInstanceQueryService = containerInstanceQueryService;
         this.containerInstanceCommandService = containerInstanceCommandService;
@@ -121,14 +122,16 @@ public class ContainerInstanceBatchService {
     private Validator<ContainerInstanceView> existsOnHostValidator() {
         return new BasicValidator<>(view -> {
             Server server = getServerByName(view.getServer().getName());
-            return validateResult(deployFacade.containerClient(server).exists(view.getContainerId()));
+            DeployClient client = clientManager.createClient(server);
+            return validateResult(client.containerExists(view.getContainerId()));
         });
     }
 
     private Validator<ContainerInstanceView> isRunningOnHostValidator() {
         return new BasicValidator<>(view -> {
             Server server = getServerByName(view.getServer().getName());
-            return validateResult(deployFacade.containerClient(server).isRunning(view.getContainerId()));
+            DeployClient client = clientManager.createClient(server);
+            return validateResult(client.isContainerRunning(view.getContainerId()));
         });
     }
 

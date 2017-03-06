@@ -2,26 +2,26 @@ package de.daxu.swamp.docker.adapter.command;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
-import de.daxu.swamp.deploy.notifier.CompletionNotifier;
-import de.daxu.swamp.deploy.notifier.ErrorNotifier;
-import de.daxu.swamp.deploy.notifier.ProgressNotifier;
+import de.daxu.swamp.deploy.DeployNotifier.CompletionNotifier;
+import de.daxu.swamp.deploy.DeployNotifier.ErrorNotifier;
+import de.daxu.swamp.deploy.DeployNotifier.ProgressNotifier;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-public class CommandCallbackAdapter<T extends ResultCallback<S>, S>
+public class DockerCommandCallback<T extends ResultCallback<S>, S>
         extends ResultCallbackTemplate<T, S> {
 
-    private final Set<ErrorNotifier> errorNotifiers;
     private final Set<ProgressNotifier<S>> progressNotifiers;
+    private final Set<ErrorNotifier> errorNotifiers;
     private final Set<CompletionNotifier> completionNotifiers;
 
-    private CommandCallbackAdapter(Set<ErrorNotifier> errorNotifiers,
-                                   Set<ProgressNotifier<S>> progressNotifiers,
-                                   Set<CompletionNotifier> completionNotifiers) {
-        this.errorNotifiers = errorNotifiers;
+    private DockerCommandCallback(Set<ProgressNotifier<S>> progressNotifiers,
+                                  Set<ErrorNotifier> errorNotifiers,
+                                  Set<CompletionNotifier> completionNotifiers) {
         this.progressNotifiers = progressNotifiers;
+        this.errorNotifiers = errorNotifiers;
         this.completionNotifiers = completionNotifiers;
     }
 
@@ -44,13 +44,9 @@ public class CommandCallbackAdapter<T extends ResultCallback<S>, S>
 
     public static class Builder<T extends ResultCallback<S>, S> {
 
-        private final Set<ErrorNotifier> errorNotifiers = newHashSet();
         private final Set<ProgressNotifier<S>> progressNotifiers = newHashSet();
+        private final Set<ErrorNotifier> errorNotifiers = newHashSet();
         private final Set<CompletionNotifier> completionNotifiers = newHashSet();
-
-        public static Builder aCommandCallback() {
-            return new Builder();
-        }
 
         public Builder<T, S> onNext(ProgressNotifier<S> progressNotifier) {
             this.progressNotifiers.add(progressNotifier);
@@ -62,13 +58,13 @@ public class CommandCallbackAdapter<T extends ResultCallback<S>, S>
             return this;
         }
 
-        public Builder<T, S> onCompletion(CompletionNotifier completionNotifier) {
+        public Builder<T, S> onComplete(CompletionNotifier completionNotifier) {
             this.completionNotifiers.add(completionNotifier);
             return this;
         }
 
-        public CommandCallbackAdapter<T, S> build() {
-            return new CommandCallbackAdapter<>(errorNotifiers, progressNotifiers, completionNotifiers);
+        public DockerCommandCallback<T, S> build() {
+            return new DockerCommandCallback<>(progressNotifiers, errorNotifiers, completionNotifiers);
         }
     }
 }

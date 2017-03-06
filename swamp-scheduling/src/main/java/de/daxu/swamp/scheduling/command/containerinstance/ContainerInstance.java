@@ -2,11 +2,11 @@ package de.daxu.swamp.scheduling.command.containerinstance;
 
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
 import de.daxu.swamp.core.server.Server;
-import de.daxu.swamp.deploy.DeployFacade;
+import de.daxu.swamp.deploy.DeployClientManager;
+import de.daxu.swamp.deploy.DeployNotifier;
+import de.daxu.swamp.deploy.DeployResult;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
-import de.daxu.swamp.deploy.notifier.Notifier;
-import de.daxu.swamp.deploy.result.DeployResult;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.command.*;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
@@ -47,12 +47,12 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     @CommandHandler
-    public void create(CreateContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+    public void create(CreateContainerInstanceCommand command, DeployClientManager clientManager, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(CREATED);
 
-        DeployResult<ContainerId> result = deployFacade
-                .containerClient(server)
-                .create(configuration, createNotifier(eventMetaDataFactory));
+        DeployResult<ContainerId> result = clientManager
+                .createClient(server)
+                .createContainer(configuration, createNotifier(eventMetaDataFactory));
 
         result.onSuccess(containerId -> apply(new ContainerInstanceCreatedSucceededEvent(
                 containerInstanceId,
@@ -60,17 +60,17 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 eventMetaDataFactory.create(),
                 containerId)));
 
-        result.onFailed(() -> apply(new ContainerInstanceCreatedFailedEvent(
+        result.onFail(warnings -> apply(new ContainerInstanceCreatedFailedEvent(
                 containerInstanceId,
                 buildId,
                 eventMetaDataFactory.create(),
                 null,
-                result.warnings())));
+                warnings)));
     }
 
-    private Notifier<String> createNotifier(EventMetaDataFactory eventMetaDataFactory) {
-        return new Notifier.Builder<String>()
-                .withNextNotifier(payload -> apply(creationLogEvent(eventMetaDataFactory, payload)))
+    private DeployNotifier<String> createNotifier(EventMetaDataFactory eventMetaDataFactory) {
+        return new DeployNotifier.Builder<String>()
+                .withProgressNotifier(payload -> apply(creationLogEvent(eventMetaDataFactory, payload)))
                 .build();
     }
 
@@ -85,12 +85,12 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     @CommandHandler
-    public void start(StartContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+    public void start(StartContainerInstanceCommand command, DeployClientManager clientManager, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(STARTED);
 
-        DeployResult<?> result = deployFacade
-                .containerClient(server)
-                .start(containerId);
+        DeployResult<?> result = clientManager
+                .createClient(server)
+                .startContainer(containerId);
 
         result.onSuccess((o) -> apply(new ContainerInstanceStartedSucceededEvent(
                 containerInstanceId,
@@ -98,21 +98,21 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 eventMetaDataFactory.create(),
                 containerId)));
 
-        result.onFailed(() -> apply(new ContainerInstanceStartedFailedEvent(
+        result.onFail(warnings -> apply(new ContainerInstanceStartedFailedEvent(
                 containerInstanceId,
                 buildId,
                 eventMetaDataFactory.create(),
                 containerId,
-                result.warnings())));
+                warnings)));
     }
 
     @CommandHandler
-    public void stop(StopContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+    public void stop(StopContainerInstanceCommand command, DeployClientManager clientManager, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(STOPPED);
 
-        DeployResult<?> result = deployFacade
-                .containerClient(server)
-                .stop(containerId);
+        DeployResult<?> result = clientManager
+                .createClient(server)
+                .stopContainer(containerId);
 
 
         result.onSuccess((o) -> apply(new ContainerInstanceStoppedSucceededEvent(
@@ -123,22 +123,22 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 command.getReason()
         )));
 
-        result.onFailed(() -> apply(new ContainerInstanceStoppedFailedEvent(
+        result.onFail(warnings -> apply(new ContainerInstanceStoppedFailedEvent(
                 containerInstanceId,
                 buildId,
                 eventMetaDataFactory.create(),
                 containerId,
-                result.warnings(),
+                warnings,
                 command.getReason())));
     }
 
     @CommandHandler
-    public void remove(RemoveContainerInstanceCommand command, DeployFacade deployFacade, EventMetaDataFactory eventMetaDataFactory) {
+    public void remove(RemoveContainerInstanceCommand command, DeployClientManager clientManager, EventMetaDataFactory eventMetaDataFactory) {
         validateStatusChange(REMOVED);
 
-        DeployResult<?> result = deployFacade
-                .containerClient(server)
-                .remove(containerId);
+        DeployResult<?> result = clientManager
+                .createClient(server)
+                .removeContainer(containerId);
 
         result.onSuccess((o) -> apply(new ContainerInstanceRemovedSucceededEvent(
                 containerInstanceId,
@@ -147,25 +147,25 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 containerId,
                 command.getReason())));
 
-        result.onFailed(() -> apply(new ContainerInstanceRemovedFailedEvent(
+        result.onFail(warnings -> apply(new ContainerInstanceRemovedFailedEvent(
                 containerInstanceId,
                 buildId,
                 eventMetaDataFactory.create(),
                 containerId,
-                result.warnings(),
+                warnings,
                 command.getReason())));
     }
 
     @CommandHandler
     public void startLogging(StartContainerInstanceLoggingCommand command,
-                             DeployFacade deployFacade,
+                             DeployClientManager clientManager,
                              ContainerInstanceCommandService service,
                              EventMetaDataFactory eventMetaDataFactory) {
         validateStatus(STARTED);
 
-        DeployResult<?> result = deployFacade
-                .containerClient(server)
-                .log(containerId, (log) -> service.receiveLog(containerInstanceId, log));
+        DeployResult<?> result = clientManager
+                .createClient(server)
+                .logContainer(containerId, createLogNotifier(service));
 
         result.onSuccess((o) -> apply(new ContainerInstanceLoggingStartedSucceededEvent(
                 containerInstanceId,
@@ -174,12 +174,18 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 containerId
         )));
 
-        result.onFailed(() -> apply(new ContainerInstanceLoggingStartedFailedEvent(
+        result.onFail(warnings -> apply(new ContainerInstanceLoggingStartedFailedEvent(
                 containerInstanceId,
                 buildId,
                 eventMetaDataFactory.create(),
                 containerId,
-                result.warnings())));
+                warnings)));
+    }
+
+    private DeployNotifier<String> createLogNotifier(ContainerInstanceCommandService service) {
+        return new DeployNotifier.Builder<String>()
+                .withProgressNotifier(log -> service.receiveLog(containerInstanceId, log))
+                .build();
     }
 
     @CommandHandler

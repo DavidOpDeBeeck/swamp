@@ -31,6 +31,7 @@ subprojects {
         testRuntime "javax.el:javax.el-api"
         testRuntime "org.glassfish.web:javax.el"
 
+        testCompile "org.assertj:assertj-core"
         testCompile "org.unitils:unitils-core"
         testCompile "org.springframework:spring-web"
         testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -52,6 +53,7 @@ subprojects {
         unitilsVersion = '3.4.3'
         slf4jVersion = '1.7.21'
         gitVersion = '4.6.0.201612231935-r'
+        assertJVersion = '3.6.2'
     }
 
     ext['bouncycastle.version'] = '1.54'
@@ -96,6 +98,8 @@ subprojects {
             dependency "org.axonframework:axon-test:$axonVersion"
 
             dependency "org.eclipse.jgit:org.eclipse.jgit:$gitVersion"
+
+            dependency "org.assertj:assertj-core:$assertJVersion"
         }
     }
 

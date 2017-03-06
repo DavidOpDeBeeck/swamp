@@ -1,9 +1,9 @@
-package de.daxu.swamp.docker.client;
+package de.daxu.swamp.docker.behaviour;
 
 import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.deploy.group.GroupId;
 
-public interface DockerNetworkClientBehaviour {
+public interface DockerNetworkBehaviour {
 
     void createNetwork(GroupId groupId);
 

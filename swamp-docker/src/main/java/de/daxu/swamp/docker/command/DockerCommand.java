@@ -1,9 +1,9 @@
 package de.daxu.swamp.docker.command;
 
-import de.daxu.swamp.docker.client.DockerClient;
+import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 
 @FunctionalInterface
 public interface DockerCommand {
 
-    void execute(DockerClient client);
+    void execute(DockerBehaviour client);
 }

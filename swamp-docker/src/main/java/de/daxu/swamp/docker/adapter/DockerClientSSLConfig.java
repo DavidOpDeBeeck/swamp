@@ -9,11 +9,11 @@ import org.glassfish.jersey.SslConfigurator;
 import javax.net.ssl.SSLContext;
 import java.security.*;
 
-public class DockerServerSSLConfig implements SSLConfig {
+public class DockerClientSSLConfig implements SSLConfig {
 
     private Server server;
 
-    DockerServerSSLConfig(Server server) {
+    DockerClientSSLConfig(Server server) {
         this.server = server;
     }
 

@@ -1,17 +1,17 @@
 package de.daxu.swamp.docker.command;
 
 import de.daxu.swamp.core.server.Server;
-import de.daxu.swamp.deploy.result.DeployResult;
-import de.daxu.swamp.docker.client.DockerClient;
+import de.daxu.swamp.deploy.DeployResult;
+import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 
 import static com.google.common.collect.Sets.newHashSet;
 
 public class DockerCommandExecutor {
 
-    private final DockerClient client;
+    private final DockerBehaviour behaviour;
 
-    public DockerCommandExecutor(DockerClient client) {
-        this.client = client;
+    public DockerCommandExecutor(DockerBehaviour behaviour) {
+        this.behaviour = behaviour;
     }
 
     public DeployResult<Void> execute(DockerCommand command) {
@@ -35,11 +35,11 @@ public class DockerCommandExecutor {
         }
     }
 
-    private DockerClient client() {
-        return client;
+    private DockerBehaviour client() {
+        return behaviour;
     }
 
     public Server getServer() {
-        return client.getServer();
+        return behaviour.getServer();
     }
 }
