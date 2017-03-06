@@ -6,7 +6,6 @@ import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
 import de.daxu.swamp.deploy.DeployNotifier;
 import de.daxu.swamp.docker.behaviour.DockerBehaviour;
-import de.daxu.swamp.workspace.Workspace;
 import de.daxu.swamp.workspace.extension.GitCloneExtension;
 import de.daxu.swamp.workspace.manager.WorkspaceManager;
 
@@ -16,6 +15,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 public class DockerRunConfigurator implements RunConfigurator<String> {
+
+    private static final String DOCKERFILE = "Dockerfile";
 
     private final DockerBehaviour client;
     private final WorkspaceManager workspaceManager;
@@ -31,16 +32,16 @@ public class DockerRunConfigurator implements RunConfigurator<String> {
 
     @Override
     public String configure(GitConfiguration config) {
-        Workspace workspace = workspaceManager.createWorkspace();
-        String tag = UUID.randomUUID().toString();
+        String tag = randomTagId();
 
-        workspace.executeExtension(GitCloneExtension.clone(config.getUrl(), config.getBranch()));
-        File directory = workspace.getPath(config.getPath());
+        workspaceManager.doInWorkspace(workspace -> {
+            workspace.executeExtension(GitCloneExtension.clone(config.getUrl(), config.getBranch()));
+            File directory = workspace.getPath(config.getPath());
 
-        doWithCountDownLatch(countDownLatch ->
-                client.buildContainer(directory, tag, buildNotifier(countDownLatch)));
+            doWithCountDownLatch(countDownLatch ->
+                    client.buildContainer(directory, tag, buildNotifier(countDownLatch)));
+        });
 
-        workspace.clear();
         return tag;
     }
 
@@ -51,15 +52,21 @@ public class DockerRunConfigurator implements RunConfigurator<String> {
 
     @Override
     public String configure(DockerfileConfiguration config) {
-        String tag = UUID.randomUUID().toString();
-        Workspace workspace = workspaceManager.createWorkspace();
-        File file = workspace.createFile("Dockerfile", config.getDockerfile());
+        String tag = randomTagId();
 
-        doWithCountDownLatch(countDownLatch ->
-                client.buildContainer(file, tag, buildNotifier(countDownLatch)));
+        workspaceManager.doInWorkspace(workspace -> {
+            File file = workspace
+                    .createFile(DOCKERFILE, config.getDockerfile());
 
-        workspace.clear();
+            doWithCountDownLatch(countDownLatch ->
+                    client.buildContainer(file, tag, buildNotifier(countDownLatch)));
+        });
+
         return tag;
+    }
+
+    private String randomTagId() {
+        return UUID.randomUUID().toString();
     }
 
     private DeployNotifier<String> buildNotifier(CountDownLatch countDownLatch) {

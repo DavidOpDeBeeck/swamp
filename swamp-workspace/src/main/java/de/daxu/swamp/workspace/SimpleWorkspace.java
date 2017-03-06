@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
-import static de.daxu.swamp.workspace.utils.WorkspaceUtils.*;
+import static de.daxu.swamp.workspace.utils.WorkspaceUtils.getAbsolutePath;
+import static de.daxu.swamp.workspace.utils.WorkspaceUtils.randomName;
+import static de.daxu.swamp.workspace.utils.WorkspaceValidator.isValidDirectoryName;
+import static de.daxu.swamp.workspace.utils.WorkspaceValidator.isValidFileName;
 
 public class SimpleWorkspace implements Workspace {
 
@@ -75,6 +78,7 @@ public class SimpleWorkspace implements Workspace {
 
     @Override
     public void clear() {
+        logger.debug("Removing all files in directory: {}", rootDirectory.getAbsolutePath());
         File[] files = rootDirectory.listFiles();
         if(files != null) {
             Arrays.stream(files).forEach(File::delete);
@@ -84,6 +88,7 @@ public class SimpleWorkspace implements Workspace {
     @Override
     public void delete() {
         clear();
+        logger.debug("Removing directory: {}", rootDirectory.getAbsolutePath());
         rootDirectory.delete();
     }
 }
