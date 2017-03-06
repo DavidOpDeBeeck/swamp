@@ -1,7 +1,10 @@
 package de.daxu.swamp.deploy.group;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
+@Service
 public class GroupService {
 
     private GroupDAO dao = new GroupDAO();
