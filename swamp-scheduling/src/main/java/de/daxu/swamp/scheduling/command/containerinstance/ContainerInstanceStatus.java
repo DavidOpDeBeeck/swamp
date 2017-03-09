@@ -8,6 +8,7 @@ import static com.google.common.collect.Sets.newHashSet;
 
 public enum ContainerInstanceStatus {
 
+    SCHEDULED,
     INITIALIZED,
     CREATED,
     STARTED,
@@ -16,6 +17,7 @@ public enum ContainerInstanceStatus {
 
     private static final ImmutableMap<ContainerInstanceStatus, Set<ContainerInstanceStatus>> validPreviousStatuses
             = new ImmutableMap.Builder<ContainerInstanceStatus, Set<ContainerInstanceStatus>>()
+            .put( SCHEDULED, newHashSet() )
             .put( INITIALIZED, newHashSet() )
             .put( CREATED, newHashSet( INITIALIZED ) )
             .put( STARTED, newHashSet( CREATED, STOPPED ) )

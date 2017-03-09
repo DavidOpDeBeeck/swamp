@@ -1,6 +1,6 @@
 import FieldDirective from "../field.directive";
 
-class InputFieldDirective extends FieldDirective {
+class AutocompleteFieldDirective extends FieldDirective {
     constructor() {
         super({
             extraScope: {
@@ -11,4 +11,4 @@ class InputFieldDirective extends FieldDirective {
     }
 }
 
-export default () => new InputFieldDirective()
+export default () => new AutocompleteFieldDirective()

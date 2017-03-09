@@ -4,7 +4,7 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('continents.continent.datacenters.datacenter.servers', {
         url: "/servers",
         data: {
-            displayName: "servers",
+            displayName: "{{ datacenter.name }}",
             disabled: false
         },
         templateUrl: '/assets/templates/servers.template.html',

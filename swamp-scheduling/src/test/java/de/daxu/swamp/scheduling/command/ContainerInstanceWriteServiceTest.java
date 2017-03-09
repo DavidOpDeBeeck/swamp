@@ -36,45 +36,45 @@ public class ContainerInstanceWriteServiceTest {
 
     @Test
     public void start() throws Exception {
-        when( containerInstanceCommandFactory.createStartCommand( CONTAINER_INSTANCE_ID ) )
+        when( containerInstanceCommandFactory.startCommand( CONTAINER_INSTANCE_ID ) )
                 .thenReturn( START_COMMAND );
 
         containerInstanceWriteService.start( CONTAINER_INSTANCE_ID );
 
-        verify( containerInstanceCommandFactory ).createStartCommand( CONTAINER_INSTANCE_ID );
+        verify( containerInstanceCommandFactory ).startCommand( CONTAINER_INSTANCE_ID );
         verify( commandGateway ).send( START_COMMAND );
     }
 
     @Test
     public void stop() throws Exception {
-        when( containerInstanceCommandFactory.createStopCommand( CONTAINER_INSTANCE_ID ) )
+        when( containerInstanceCommandFactory.stopCommand( CONTAINER_INSTANCE_ID ) )
                 .thenReturn( STOP_COMMAND );
 
         containerInstanceWriteService.stop( CONTAINER_INSTANCE_ID );
 
-        verify( containerInstanceCommandFactory ).createStopCommand( CONTAINER_INSTANCE_ID );
+        verify( containerInstanceCommandFactory ).stopCommand( CONTAINER_INSTANCE_ID );
         verify( commandGateway ).send( STOP_COMMAND );
     }
 
     @Test
     public void remove() throws Exception {
-        when( containerInstanceCommandFactory.createRemoveCommand( CONTAINER_INSTANCE_ID ) )
+        when( containerInstanceCommandFactory.removeCommand( CONTAINER_INSTANCE_ID ) )
                 .thenReturn( REMOVE_COMMAND );
 
         containerInstanceWriteService.remove( CONTAINER_INSTANCE_ID );
 
-        verify( containerInstanceCommandFactory ).createRemoveCommand( CONTAINER_INSTANCE_ID );
+        verify( containerInstanceCommandFactory ).removeCommand( CONTAINER_INSTANCE_ID );
         verify( commandGateway ).send( REMOVE_COMMAND );
     }
 
     @Test
     public void startLogging() throws Exception {
-        when( containerInstanceCommandFactory.createStartLoggingCommand( CONTAINER_INSTANCE_ID, logCallback ) )
+        when( containerInstanceCommandFactory.startLoggingCommand( CONTAINER_INSTANCE_ID, logCallback ) )
                 .thenReturn( START_LOGGING_COMMAND );
 
         containerInstanceWriteService.startLogging( CONTAINER_INSTANCE_ID, logCallback( instanceId ) );
 
-        verify( containerInstanceCommandFactory ).createStartLoggingCommand( CONTAINER_INSTANCE_ID, logCallback );
+        verify( containerInstanceCommandFactory ).startLoggingCommand( CONTAINER_INSTANCE_ID, logCallback );
         verify( commandGateway ).send( START_LOGGING_COMMAND );
     }
 

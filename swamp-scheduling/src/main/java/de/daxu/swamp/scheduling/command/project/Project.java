@@ -1,11 +1,9 @@
 package de.daxu.swamp.scheduling.command.project;
 
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
-import de.daxu.swamp.scheduling.command.project.command.AddBuildCommand;
 import de.daxu.swamp.scheduling.command.project.command.CreateProjectCommand;
 import de.daxu.swamp.scheduling.command.project.command.ScheduleBuildCommand;
-import de.daxu.swamp.scheduling.command.project.event.ProjectBuildAddedEvent;
-import de.daxu.swamp.scheduling.command.project.event.ProjectBuildScheduledEvent;
+import de.daxu.swamp.scheduling.command.project.event.BuildScheduledEvent;
 import de.daxu.swamp.scheduling.command.project.event.ProjectCreatedEvent;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventhandling.annotation.EventHandler;
@@ -33,19 +31,11 @@ public class Project extends AbstractAnnotatedAggregateRoot<ProjectId> {
 
     @CommandHandler
     public void scheduleBuild(ScheduleBuildCommand command, EventMetaDataFactory eventMetaDataFactory) {
-        apply(new ProjectBuildScheduledEvent(
+        apply(new BuildScheduledEvent(
                 projectId,
                 eventMetaDataFactory.create(),
                 sequence,
                 command.getContainers()));
-    }
-
-    @CommandHandler
-    public void addBuild(AddBuildCommand command, EventMetaDataFactory eventMetaDataFactory) {
-        apply(new ProjectBuildAddedEvent(
-                projectId,
-                eventMetaDataFactory.create(),
-                command.getBuildId()));
     }
 
     @EventHandler
@@ -55,7 +45,7 @@ public class Project extends AbstractAnnotatedAggregateRoot<ProjectId> {
     }
 
     @EventHandler
-    void on(ProjectBuildScheduledEvent event) {
+    void on(BuildScheduledEvent event) {
         this.sequence++;
     }
 }

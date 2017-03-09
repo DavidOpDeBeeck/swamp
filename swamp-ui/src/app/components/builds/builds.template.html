@@ -7,18 +7,27 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="BuildsCtrl.filter"
                    aria-describedby="projects-search-icon"/>
         </div>
-        <div class="list-group" ng-repeat="project in BuildsCtrl.projects | filter: BuildsCtrl.filter">
-            <li class="list-group-item">
-                <span class="badge">{{ project.builds.length }} builds</span>
-                {{ project.name }}
-            </li>
-            <a class="list-group-item"
-               ng-repeat="build in project.builds | orderBy: 'initializedAt':-1"
-               ui-sref="builds.build.containerInstances({buildId: build.buildId})" ui-sref-active="active"
-               ng-class="{'in-progress': BuildsCtrl.inProgress(build), 'finished': !BuildsCtrl.inProgress(build)}">
-                <span class="badge">{{ build.initializedAt | toDate }}</span>
-                #{{ build.sequence }} with {{ build.containers.length }} {{ build.containers.length > 1 ? 'containers' : 'container' }}
-            </a>
+        <div class="panel panel-default"
+             ng-repeat="project in BuildsCtrl.projects | filter: BuildsCtrl.filter">
+            <div class="panel-heading project"
+                 ng-click="project.isCollapsed = !project.isCollapsed">
+                <section class="project-info">
+                    <span class="project-name" ng-bind="project.name"></span>
+                    <span class="project-extra">{{ project.builds.length }} builds</span>
+                </section>
+            </div>
+            <ul class="list-group"
+                uib-collapse="project.isCollapsed">
+                <li class="list-group-item project"
+                    ng-repeat="build in project.builds | orderBy: 'initializedAt':-1"
+                    ui-sref="builds.build.containerInstances({buildId: build.buildId})" ui-sref-active="active"
+                    ng-class="{'in-progress': BuildsCtrl.inProgress(build), 'finished': !BuildsCtrl.inProgress(build)}">
+                    <section class="project-info">
+                        <span class="project-name">#{{ build.sequence }}</span>
+                        <span class="project-extra">{{ build.initializedAt | toDate }}</span>
+                    </section>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="col-md-8">

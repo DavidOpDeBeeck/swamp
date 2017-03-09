@@ -20,7 +20,8 @@
         </location-picker>
         <hr />
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12"
+         ng-show="ContainerCtrl.editable || ContainerCtrl.container.aliases > 0">
         <multiple-input-field
                 label="Aliases"
                 list="ContainerCtrl.container.aliases"
@@ -28,7 +29,8 @@
                 editable="ContainerCtrl.editable">
         </multiple-input-field>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12"
+         ng-show="ContainerCtrl.editable || ContainerCtrl.container.portMappings > 0">
         <multiple-property-field
                 label="Port mappings"
                 list="ContainerCtrl.container.portMappings"
@@ -38,7 +40,8 @@
                 editable="ContainerCtrl.editable">
         </multiple-property-field>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12"
+         ng-show="ContainerCtrl.editable || ContainerCtrl.container.environmentVariables > 0">
         <multiple-property-field
                 label="Environment Variables"
                 list="ContainerCtrl.container.environmentVariables"

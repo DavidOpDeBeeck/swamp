@@ -11,34 +11,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContainerInstanceCommandFactory {
 
-    public InitializeContainerInstanceCommand createInitializeCommand( ContainerInstanceId containerInstanceId,
-                                                                       BuildId buildId,
-                                                                       ContainerConfiguration configuration,
-                                                                       Server server ) {
-        return new InitializeContainerInstanceCommand( containerInstanceId, buildId, configuration, server );
+    public InitializeContainerInstanceCommand initializeCommand(ContainerInstanceId containerInstanceId,
+                                                                BuildId buildId,
+                                                                ContainerConfiguration configuration,
+                                                                Server server) {
+        return new InitializeContainerInstanceCommand(containerInstanceId, buildId, configuration, server);
     }
 
-    public CreateContainerInstanceCommand createCreateCommand( ContainerInstanceId containerInstanceId ) {
-        return new CreateContainerInstanceCommand( containerInstanceId );
+    public CreateContainerInstanceCommand createCommand(ContainerInstanceId containerInstanceId) {
+        return new CreateContainerInstanceCommand(containerInstanceId);
     }
 
-    public StartContainerInstanceCommand createStartCommand( ContainerInstanceId containerInstanceId ) {
-        return new StartContainerInstanceCommand( containerInstanceId );
+    public StartContainerInstanceCommand startCommand(ContainerInstanceId containerInstanceId) {
+        return new StartContainerInstanceCommand(containerInstanceId);
     }
 
-    public StartContainerInstanceLoggingCommand createStartLoggingCommand( ContainerInstanceId containerInstanceId ) {
-        return new StartContainerInstanceLoggingCommand( containerInstanceId );
+    public StartContainerInstanceLoggingCommand startLoggingCommand(ContainerInstanceId containerInstanceId) {
+        return new StartContainerInstanceLoggingCommand(containerInstanceId);
     }
 
-    public StopContainerInstanceCommand createStopCommand( ContainerInstanceId containerInstanceId, ContainerInstanceStopReason reason ) {
-        return new StopContainerInstanceCommand( containerInstanceId, reason );
+    public StopContainerInstanceCommand stopCommand(ContainerInstanceId containerInstanceId, ContainerInstanceStopReason reason) {
+        return new StopContainerInstanceCommand(containerInstanceId, reason);
     }
 
-    public RemoveContainerInstanceCommand createRemoveCommand( ContainerInstanceId containerInstanceId, ContainerInstanceRemoveReason reason ) {
-        return new RemoveContainerInstanceCommand( containerInstanceId, reason );
+    public RemoveContainerInstanceCommand removeCommand(ContainerInstanceId containerInstanceId, ContainerInstanceRemoveReason reason) {
+        return new RemoveContainerInstanceCommand(containerInstanceId, reason);
     }
 
-    public ReceiveContainerInstanceLogCommand createReceiveLogCommand( ContainerInstanceId containerInstanceId, String log ) {
-        return new ReceiveContainerInstanceLogCommand( containerInstanceId, log );
+    public ReceiveContainerInstanceCreationLogCommand receiveCreationLogCommand(ContainerInstanceId containerInstanceId, String log) {
+        return new ReceiveContainerInstanceCreationLogCommand(containerInstanceId, log);
+    }
+
+    public ReceiveContainerInstanceRunningLogCommand receiveRunningLogCommand(ContainerInstanceId containerInstanceId, String log) {
+        return new ReceiveContainerInstanceRunningLogCommand(containerInstanceId, log);
     }
 }

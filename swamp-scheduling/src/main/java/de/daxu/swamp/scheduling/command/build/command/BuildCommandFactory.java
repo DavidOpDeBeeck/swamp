@@ -19,11 +19,6 @@ public class BuildCommandFactory {
         return new CreateBuildCommand(buildId, projectId, sequence, containers);
     }
 
-    public AddContainerInstanceCommand addContainerInstanceCommand(BuildId buildId,
-                                                                   ContainerInstanceId containerInstanceId) {
-        return new AddContainerInstanceCommand(buildId, containerInstanceId);
-    }
-
     public UpdateContainerInstanceStatusCommand updateContainerInstanceStatusCommand(BuildId buildId,
                                                                                      ContainerInstanceId containerInstanceId,
                                                                                      ContainerInstanceStatus status) {

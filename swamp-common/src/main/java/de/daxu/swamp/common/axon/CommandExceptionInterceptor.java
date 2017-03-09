@@ -19,6 +19,7 @@ public class CommandExceptionInterceptor implements CommandHandlerInterceptor {
         } catch(ValidationException exception) {
             logger.info("Command: {}, validation exception: {}", commandMessage.getCommandName(), exception.getMessage());
         } catch(Exception exception) {
+            exception.printStackTrace();
             logger.error("Command: {}, exception: {}", commandMessage.getCommandName(), exception.getMessage());
         }
         return null;

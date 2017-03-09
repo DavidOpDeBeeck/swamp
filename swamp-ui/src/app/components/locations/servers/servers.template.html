@@ -13,24 +13,25 @@
                 </button>
             </span>
         </div>
-        <div class="list-group">
-            <li class="list-group-item location" ui-sref-active="active"
-               ng-repeat="server in ServersCtrl.servers | filter: ServersCtrl.filter">
-                <section class="location-info">
-                    <span class="location-name" ng-bind="server.name"></span>
-                    <span class="location-extra" ng-bind="server.ip"></span>
-                </section>
-                <section class="location-actions">
-                    <button type="button" class="btn btn-xs btn-default location-action"
+        <div class="card"
+             ui-sref-active="active"
+             ng-repeat="server in ServersCtrl.servers | filter: ServersCtrl.filter | orderBy:'name'">
+            <div class="card-info">
+                <span class="card-title" ng-bind="server.name"></span>
+                <span class="card-extra" ng-bind="server.ip"></span>
+            </div>
+            <div class="card-actions">
+                <div class="card-actions-right">
+                    <button type="button" class="btn btn-xs btn-default card-action"
                             ng-click="ServersCtrl.delete(server); $event.stopPropagation()">
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                     </button>
-                    <button type="button" class="btn btn-xs btn-default location-action"
+                    <button type="button" class="btn btn-xs btn-default card-action"
                             ng-click="ServersCtrl.edit(server); $event.stopPropagation()">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                     </button>
-                </section>
-            </li>
+                </div>
+            </div>
         </div>
     </div>
 </div>

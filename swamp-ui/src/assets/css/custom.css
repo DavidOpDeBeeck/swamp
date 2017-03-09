@@ -1,4 +1,74 @@
 /*
+ card
+ */
+
+.card {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border-style: solid;
+    border-color: #ededed;
+    border-width: 0 1px 4px 1px;
+    background-color: #fafafa;
+}
+
+.card.active {
+    background-color: #f1f1f1;
+}
+
+.card > .card-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.card > .card-info > .card-title {
+    flex: 1;
+    text-transform: uppercase;
+}
+
+.card > .card-info > .card-extra {
+    flex: none;
+    padding: 0 5px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    border-bottom-width: 4px;
+    background-color: #eeeeee;
+}
+
+.card > .card-description {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.card > .card-actions {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.card > .card-actions > .card-actions-left {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.card > .card-actions > .card-actions-right {
+    flex: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.card > .card-actions .card-action {
+    flex: none;
+    margin-left: 5px;
+}
+
+.card > .card-actions > .card-actions-left > .card-action:nth-child(1) {
+    margin-left: 0;
+}
+
+/*
  BREADCRUMB
  */
 
@@ -20,12 +90,6 @@
     font-size: 1rem;
     font-weight: 600;
     text-transform: uppercase;
-}
-
-input.ng-invalid,
-textarea.ng-invalid {
-    border: 2px solid #127ba3;
-    box-shadow: 1px 1px 1px #158cba;
 }
 
 /*
@@ -101,6 +165,10 @@ textarea {
     overflow: auto;
 }
 
+.list-group-item.in {
+    padding: 0;
+}
+
 .list-group-item.in-progress {
     border-left: 4px solid #5cb85c !important;
 }
@@ -115,6 +183,26 @@ textarea {
     color: #000000;
     background-color: #f5f5f5;
     border: 1px solid #e2e2e2;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    color: #000000;
+    border-radius: 1px;
+    background-color: #f5f5f5;
+}
+
+li.initialized {
+    border-left: 4px solid #337ab7 !important;
+}
+
+li.running {
+    border-left: 4px solid #5cb85c !important;
+}
+
+li.removed {
+    border-left: 4px solid #d9534f !important;
 }
 
 /*
@@ -236,4 +324,10 @@ hr {
 .container-instance #container-logs {
     overflow: auto;
     max-height: 300px;
+}
+
+.dropdown-menu {
+    top: 45px !important;
+    left: 0 !important;
+    right: 0 !important;
 }

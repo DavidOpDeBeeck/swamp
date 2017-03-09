@@ -5,11 +5,13 @@ import de.daxu.swamp.scheduling.command.build.event.BuildCreatedEvent;
 import de.daxu.swamp.scheduling.command.project.event.ProjectCreatedEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import static de.daxu.swamp.scheduling.query.build.BuildView.Builder.aBuildView;
 import static de.daxu.swamp.scheduling.query.project.ProjectView.Builder.aProjectView;
 
 @EventListener
+@Transactional
 @SuppressWarnings("unused")
 public class ProjectViewEventListener {
 

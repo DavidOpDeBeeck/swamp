@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.command.containerinstance;
 
+import de.daxu.swamp.common.async.AsyncRunner;
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployClientManager;
@@ -47,12 +48,13 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
     }
 
     @CommandHandler
-    public void create(CreateContainerInstanceCommand command, DeployClientManager clientManager, EventMetaDataFactory eventMetaDataFactory) {
+    public void create(CreateContainerInstanceCommand command, DeployClientManager clientManager, EventMetaDataFactory eventMetaDataFactory,
+                       ContainerInstanceCommandService commandService, AsyncRunner asyncRunner) {
         validateStatusChange(CREATED);
 
         DeployResult<ContainerId> result = clientManager
                 .createClient(server)
-                .createContainer(configuration, createNotifier(eventMetaDataFactory));
+                .createContainer(configuration, createNotifier(eventMetaDataFactory, commandService, asyncRunner));
 
         result.onSuccess(containerId -> apply(new ContainerInstanceCreatedSucceededEvent(
                 containerInstanceId,
@@ -68,9 +70,9 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 warnings)));
     }
 
-    private DeployNotifier<String> createNotifier(EventMetaDataFactory eventMetaDataFactory) {
+    private DeployNotifier<String> createNotifier(EventMetaDataFactory eventMetaDataFactory, ContainerInstanceCommandService commandService, AsyncRunner asyncRunner) {
         return new DeployNotifier.Builder<String>()
-                .withProgressNotifier(payload -> apply(creationLogEvent(eventMetaDataFactory, payload)))
+                .withProgressNotifier(payload -> asyncRunner.run(() -> commandService.receiveCreationLog(containerInstanceId, payload)))
                 .build();
     }
 
@@ -184,12 +186,22 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
 
     private DeployNotifier<String> createLogNotifier(ContainerInstanceCommandService service) {
         return new DeployNotifier.Builder<String>()
-                .withProgressNotifier(log -> service.receiveLog(containerInstanceId, log))
+                .withProgressNotifier(log -> service.receiveRunningLog(containerInstanceId, log))
                 .build();
     }
 
     @CommandHandler
-    public void receiveLog(ReceiveContainerInstanceLogCommand command, EventMetaDataFactory eventMetaDataFactory) {
+    public void receiveCreationLog(ReceiveContainerInstanceCreationLogCommand command, EventMetaDataFactory eventMetaDataFactory) {
+        apply(new ContainerInstanceCreationLogReceivedEvent(
+                containerInstanceId,
+                buildId,
+                eventMetaDataFactory.create(),
+                containerId,
+                command.getLog()));
+    }
+
+    @CommandHandler
+    public void receiveRunningLog(ReceiveContainerInstanceRunningLogCommand command, EventMetaDataFactory eventMetaDataFactory) {
         apply(new ContainerInstanceRunningLogReceivedEvent(
                 containerInstanceId,
                 buildId,

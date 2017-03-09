@@ -22,7 +22,7 @@ public class Container extends Identifiable {
     @CollectionTable( name = "container_aliases", joinColumns = @JoinColumn( name = "container_id" ) )
     private Set<String> aliases;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "container_location",
             joinColumns = @JoinColumn( name = "container_id", referencedColumnName = "id" ),

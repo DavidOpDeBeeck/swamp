@@ -4,12 +4,14 @@ import de.daxu.swamp.common.axon.EventListener;
 import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 import static de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView.Builder.aContainerInstanceView;
 import static de.daxu.swamp.scheduling.query.containerinstance.ServerView.Builder.aServerView;
 
 @EventListener
+@Transactional
 @SuppressWarnings("unused")
 public class ContainerInstanceViewEventListener {
 

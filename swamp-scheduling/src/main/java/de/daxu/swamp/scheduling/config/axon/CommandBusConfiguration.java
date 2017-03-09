@@ -4,8 +4,8 @@ import de.daxu.swamp.common.axon.CommandExceptionInterceptor;
 import de.daxu.swamp.scheduling.command.build.Build;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstance;
 import de.daxu.swamp.scheduling.command.project.Project;
+import org.axonframework.commandhandling.AsynchronousCommandBus;
 import org.axonframework.commandhandling.CommandBus;
-import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
 import org.axonframework.commandhandling.annotation.AnnotationCommandHandlerBeanPostProcessor;
 import org.axonframework.commandhandling.annotation.AnnotationCommandTargetResolver;
@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Set;
 
@@ -62,8 +64,17 @@ public class CommandBusConfiguration {
     }
 
     @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setMaxPoolSize(50);
+        executor.setQueueCapacity(50);
+        executor.setCorePoolSize(20);
+        return executor;
+    }
+
+    @Bean
     public CommandBus commandBus() {
-        SimpleCommandBus commandBus = new SimpleCommandBus();
+        AsynchronousCommandBus commandBus = new AsynchronousCommandBus(taskExecutor());
         commandBus.setHandlerInterceptors(newArrayList(new BeanValidationInterceptor(), new CommandExceptionInterceptor()));
         commandBus.setTransactionManager(springTransactionManager);
         return commandBus;

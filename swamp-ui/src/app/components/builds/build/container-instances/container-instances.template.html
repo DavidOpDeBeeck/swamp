@@ -7,11 +7,11 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="ContainerInstancesCtrl.filter"
                    aria-describedby="projects-search-icon"/>
         </div>
-        <uib-accordion close-others="false">
-            <div uib-accordion-group class="panel-default" heading="{{ containerInstance.containerInstanceId }}"
-                 ng-repeat="containerInstance in ContainerInstancesCtrl.containerInstances | filter: ContainerInstancesCtrl.filter" is-open="true">
+        <uib-tabset type="pills">
+            <uib-tab heading="{{ containerInstance.containerInstanceId | limitTo : 16 }}" class="{{containerInstance.status | lowercase}}"
+                     ng-repeat="containerInstance in ContainerInstancesCtrl.containerInstances | filter: ContainerInstancesCtrl.filter">
                 <container-instance project-instance="ContainerInstancesCtrl.projectInstance" initial="containerInstance"></container-instance>
-            </div>
-        </uib-accordion>
+            </uib-tab>
+        </uib-tabset>
     </div>
 </div>

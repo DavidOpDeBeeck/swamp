@@ -15,18 +15,12 @@ class DatacentersController {
 
     create() {
         let modal = this.createModal({}, false);
-        modal.result.then((datacenter) => {
-            this.locationService.createDatacenter(this.continent.id, datacenter)
-                .then(() => this.getAllDatacenters());
-        });
+        modal.result.then(() => this.getAllDatacenters());
     }
 
     edit(datacenter) {
         let modal = this.createModal(datacenter, true);
-        modal.result.then((datacenter) => {
-            datacenter.$update()
-                .then(() => this.getAllDatacenters());
-        });
+        modal.result.then(() => this.getAllDatacenters());
     }
 
     createModal(datacenter, update) {

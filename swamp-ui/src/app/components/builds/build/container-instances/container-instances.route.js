@@ -4,7 +4,7 @@ export default ['$stateProvider', ($stateProvider) => {
     $stateProvider.state('builds.build.containerInstances', {
         url: "/containerInstances",
         data: {
-            displayName: 'container-instances',
+            displayName: '{{ build.sequence }}',
             disabled: false
         },
         templateUrl: '/assets/templates/container-instances.template.html',

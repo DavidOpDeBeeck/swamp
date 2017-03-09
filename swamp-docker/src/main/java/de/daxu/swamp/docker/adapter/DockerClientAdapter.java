@@ -118,7 +118,8 @@ public class DockerClientAdapter
     private String decodeFrame(Frame frame) {
         return frame.toString()
                 .replaceAll("STDOUT: ", "\n")
-                .replaceAll("STDERR: ", "\n");
+                .replaceAll("STDOUT: ", "\n")
+                .replaceAll("null: ", "");
     }
 
     @Override
@@ -139,6 +140,7 @@ public class DockerClientAdapter
                 .exec();
     }
 
+    @Override
     public Server getServer() {
         return server;
     }

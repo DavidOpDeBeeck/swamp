@@ -2,12 +2,8 @@ package de.daxu.swamp.scheduling.command.containerinstance;
 
 import de.daxu.swamp.common.axon.EventListener;
 import de.daxu.swamp.scheduling.command.build.BuildCommandService;
-import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceAddedEvent;
 import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceScheduledEvent;
-import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceCreatedFailedEvent;
-import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceCreatedSucceededEvent;
-import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceStartedFailedEvent;
-import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceStartedSucceededEvent;
+import de.daxu.swamp.scheduling.command.containerinstance.event.*;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,11 +23,15 @@ public class ContainerInstanceProcessManager {
 
     @EventHandler
     public void on(BuildContainerInstanceScheduledEvent event) {
-        containerInstanceCommandService.initialize(event.getBuildId(), event.getConfiguration(), event.getServer());
+        containerInstanceCommandService.initialize(
+                event.getBuildId(),
+                event.getContainerInstanceId(),
+                event.getConfiguration(),
+                event.getServer());
     }
 
     @EventHandler
-    public void on(BuildContainerInstanceAddedEvent event) {
+    public void on(ContainerInstanceInitializedEvent event) {
         containerInstanceCommandService.create(event.getContainerInstanceId());
     }
 

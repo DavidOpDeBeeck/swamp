@@ -4,6 +4,9 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.DeployResult;
 import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import static com.google.common.collect.Sets.newHashSet;
 
 public class DockerCommandExecutor {
@@ -14,20 +17,17 @@ public class DockerCommandExecutor {
         this.behaviour = behaviour;
     }
 
-    public DeployResult<Void> execute(DockerCommand command) {
-        return catchWarnings((client) -> {
-            command.execute(client);
-            return null;
-        });
+    public DeployResult<Void> action(Consumer<DockerBehaviour> command) {
+        return executeAndCatchWarnings(toFunction(command));
     }
 
-    public <T> DeployResult<T> executeWithResponse(DockerResponseCommand<T> command) {
-        return catchWarnings(command);
+    public <T> DeployResult<T> result(Function<DockerBehaviour, T> command) {
+        return executeAndCatchWarnings(command);
     }
 
-    private <T> DeployResult<T> catchWarnings(DockerResponseCommand<T> command) {
+    private <T> DeployResult<T> executeAndCatchWarnings(Function<DockerBehaviour, T> command) {
         try {
-            T result = command.execute(client());
+            T result = command.apply(behaviour());
             return DeployResult.result(result);
         } catch (Exception e) {
             String error = String.format("Exception %s: %s", e.getClass().getSimpleName(), e.getMessage());
@@ -35,8 +35,15 @@ public class DockerCommandExecutor {
         }
     }
 
-    private DockerBehaviour client() {
+    private DockerBehaviour behaviour() {
         return behaviour;
+    }
+
+    private Function<DockerBehaviour, Void> toFunction(Consumer<DockerBehaviour> command) {
+        return client -> {
+            command.accept(client);
+            return null;
+        };
     }
 
     public Server getServer() {

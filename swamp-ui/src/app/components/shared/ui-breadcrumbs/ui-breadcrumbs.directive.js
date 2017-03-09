@@ -40,7 +40,7 @@ class BreadcrumbsDirective {
                     displayName = getDisplayName(workingState);
                     disabled = getDisabled(workingState);
 
-                    if (displayName !== false && !stateAlreadyInBreadcrumbs(workingState, breadcrumbs)) {
+                    if (displayName !== false && !stateAlreadyInBreadcrumbs(workingState, breadcrumbs) && !disabled) {
                         breadcrumbs.push({
                             displayName: displayName,
                             disabled: disabled,
@@ -93,14 +93,14 @@ class BreadcrumbsDirective {
 
             if (!scope.displaynameProperty) {
                 // if the displayname-property attribute was not specified, default to the state's name
-                return currentState.name;
+                return false;
             }
             propertyReference = getObjectValue(scope.displaynameProperty, currentState);
 
             if (propertyReference === false) {
                 return false;
             } else if (typeof propertyReference === 'undefined') {
-                return currentState.name;
+                return false;
             } else {
                 // use the interpolate service to handle any bindings in the propertyReference string.
                 interpolationContext = (typeof currentState.locals !== 'undefined') ? currentState.locals.globals : currentState;

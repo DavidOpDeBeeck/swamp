@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="input-group margin-sm-bottom">
             <span class="input-group-addon" id="projects-search-icon">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -12,38 +12,37 @@
                 </button>
             </span>
         </div>
-        <div class="list-group">
-            <li class="list-group-item project" ui-sref-active="active"
-                ui-sref="projects.project.containers({projectId: project.id})"
-                ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter">
-                <section class="project-info">
-                    <span class="project-name" ng-bind="project.name"></span>
-                    <span class="project-extra">{{ project.containers }} containers</span>
-                </section>
-                <section class="project-description" ng-bind="project.description"></section>
-                <section class="project-actions">
-                    <section class="project-actions-left">
-                        <button type="button" class="btn btn-xs btn-default project-action"
-                                ng-click="ProjectCtrl.delete(project); $event.stopPropagation()">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                        </button>
-                        <button type="button" class="btn btn-xs btn-default project-action"
-                                ng-click="ProjectCtrl.edit(project); $event.stopPropagation()">
-                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        </button>
-                    </section>
-                    <section class="project-actions-right">
-                        <button type="button" class="btn btn-xs btn-primary project-action"
-                                ng-click="ProjectCtrl.deploy(project); $event.stopPropagation()">
-                            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
-                            Deploy
-                        </button>
-                    </section>
-                </section>
-            </li>
+        <div class="card"
+             ui-sref-active="active"
+             ui-sref="projects.project.containers({projectId: project.id})"
+             ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter">
+            <div class="card-info">
+                <span class="card-title" ng-bind="project.name"></span>
+                <span class="card-extra">{{ project.containers }} containers</span>
+            </div>
+            <p class="card-description" ng-bind="project.description"></p>
+            <div class="card-actions">
+                <div class="card-actions-left">
+                    <button type="button" class="btn btn-xs btn-primary card-action"
+                            ng-click="ProjectCtrl.deploy(project); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+                        Deploy
+                    </button>
+                </div>
+                <div class="card-actions-right">
+                    <button type="button" class="btn btn-xs btn-default card-action"
+                            ng-click="ProjectCtrl.delete(project); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-default card-action"
+                            ng-click="ProjectCtrl.edit(project); $event.stopPropagation()">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
         <div ui-view></div>
     </div>
 </div>

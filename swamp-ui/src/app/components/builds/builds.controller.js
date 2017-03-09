@@ -28,7 +28,10 @@ class BuildsController {
     }
 
     initializeProjects(projects) {
-        this.projects = projects;
+        this.projects = projects.map(project => {
+            project.isCollapsed = true;
+            return project;
+        });
         this.projects.forEach(project => {
             project.builds.forEach(build => this.initializeBuild(build));
         });

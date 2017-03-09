@@ -28,10 +28,6 @@ public class BuildCommandService {
         gateway.send(factory.createBuildCommand(BuildId.random(), projectId, sequence, containers));
     }
 
-    void addContainerInstance(BuildId buildId, ContainerInstanceId containerInstanceId) {
-        gateway.send(factory.addContainerInstanceCommand(buildId, containerInstanceId));
-    }
-
     void updateContainerInstanceStatus(BuildId buildId, ContainerInstanceId containerInstanceId, ContainerInstanceStatus status) {
         gateway.send(factory.updateContainerInstanceStatusCommand(buildId, containerInstanceId, status));
     }

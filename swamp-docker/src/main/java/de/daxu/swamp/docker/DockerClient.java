@@ -45,53 +45,53 @@ public class DockerClient implements DeployClient {
 
     private DeployResult<Void> connectContainerToNetwork(Group group, ContainerId containerId) {
         return executor
-                .execute(client -> client
+                .action(client -> client
                         .connectContainerToNetwork(group.id(), containerId));
     }
 
     private DeployResult<ContainerId> createInternalContainer(ContainerConfiguration config, DeployNotifier<String> notifier) {
         return executor
-                .executeWithResponse(client -> client.createContainer(config, notifier));
+                .result(client -> client.createContainer(config, notifier));
     }
 
     private DeployResult<Void> createNetwork(Group group) {
         return executor
-                .execute(client -> client.createNetwork(group.id()));
+                .action(client -> client.createNetwork(group.id()));
     }
 
     @Override
     public DeployResult<?> startContainer(ContainerId containerId) {
         return executor
-                .execute(client -> client.startContainer(containerId));
+                .action(client -> client.startContainer(containerId));
     }
 
     @Override
     public DeployResult<?> stopContainer(ContainerId containerId) {
         return executor
-                .execute(client -> client.stopContainer(containerId));
+                .action(client -> client.stopContainer(containerId));
     }
 
     @Override
     public DeployResult<?> removeContainer(ContainerId containerId) {
         return executor
-                .execute(client -> client.removeContainer(containerId));
+                .action(client -> client.removeContainer(containerId));
     }
 
     @Override
     public DeployResult<?> logContainer(ContainerId containerId, DeployNotifier<String> notifier) {
         return executor
-                .execute(client -> client.logContainer(containerId, notifier));
+                .action(client -> client.logContainer(containerId, notifier));
     }
 
     @Override
     public DeployResult<Boolean> containerExists(ContainerId containerId) {
         return executor
-                .executeWithResponse(client -> client.containerExists(containerId));
+                .result(client -> client.containerExists(containerId));
     }
 
     @Override
     public DeployResult<Boolean> isContainerRunning(ContainerId containerId) {
         return executor
-                .executeWithResponse(client -> client.isContainerRunning(containerId));
+                .result(client -> client.isContainerRunning(containerId));
     }
 }

@@ -1,7 +1,6 @@
 package de.daxu.swamp.scheduling.command.project;
 
 import de.daxu.swamp.core.container.Container;
-import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.project.command.ProjectCommandFactory;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,5 @@ public class ProjectCommandService {
 
     public void scheduleBuild(ProjectId projectId, Set<Container> containers) {
         gateway.send(factory.scheduleBuildCommand(projectId, containers));
-    }
-
-    void addBuild(ProjectId projectId, BuildId buildId) {
-        gateway.send(factory.addBuildCommand(projectId, buildId));
     }
 }

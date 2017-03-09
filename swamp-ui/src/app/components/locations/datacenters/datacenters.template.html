@@ -12,25 +12,26 @@
                 </button>
             </span>
         </div>
-        <div class="list-group">
-            <li class="list-group-item location" ui-sref-active="active"
-               ng-repeat="datacenter in DatacentersCtrl.datacenters | filter: DatacentersCtrl.filter"
-               ui-sref="continents.continent.datacenters.datacenter.servers({continentId: datacenter.continentId, datacenterId: datacenter.id})">
-                <section class="location-info">
-                    <span class="location-name" ng-bind="datacenter.name"></span>
-                    <span class="location-extra">{{ datacenter.servers }} servers</span>
-                </section>
-                <section class="location-actions">
-                    <button type="button" class="btn btn-xs btn-default location-action"
+        <div class="card"
+             ui-sref-active="active"
+             ng-repeat="datacenter in DatacentersCtrl.datacenters | filter: DatacentersCtrl.filter | orderBy:'-servers'"
+             ui-sref="continents.continent.datacenters.datacenter.servers({continentId: datacenter.continentId, datacenterId: datacenter.id})">
+            <div class="card-info">
+                <span class="card-title" ng-bind="datacenter.name"></span>
+                <span class="card-extra">{{ datacenter.servers }} servers</span>
+            </div>
+            <div class="card-actions">
+                <div class="card-actions-right">
+                    <button type="button" class="btn btn-xs btn-default card-action"
                             ng-click="DatacentersCtrl.delete(datacenter); $event.stopPropagation()">
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                     </button>
-                    <button type="button" class="btn btn-xs btn-default location-action"
+                    <button type="button" class="btn btn-xs btn-default card-action"
                             ng-click="DatacentersCtrl.edit(datacenter); $event.stopPropagation()">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                     </button>
-                </section>
-            </li>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-md-6">

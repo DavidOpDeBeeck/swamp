@@ -6,15 +6,15 @@ import de.daxu.swamp.scheduling.command.project.ProjectId;
 
 import java.util.Set;
 
-public class ProjectBuildScheduledEvent extends ProjectEvent {
+public class BuildScheduledEvent extends ProjectEvent {
 
     private final int sequence;
     private final Set<Container> containers;
 
-    public ProjectBuildScheduledEvent(ProjectId projectId,
-                                      EventMetaData eventMetaData,
-                                      int sequence,
-                                      Set<Container> containers) {
+    public BuildScheduledEvent(ProjectId projectId,
+                               EventMetaData eventMetaData,
+                               int sequence,
+                               Set<Container> containers) {
         super(projectId, eventMetaData);
         this.sequence = sequence;
         this.containers = containers;

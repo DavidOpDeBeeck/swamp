@@ -1,13 +1,16 @@
+var ansi_up = new AnsiUp;
+
 class ContainerInstanceController {
-    constructor(NotificationService) {
+    constructor(NotificationService, $sce) {
+        this.$sce = $sce;
         this.notificationService = NotificationService;
         this.initialize();
         this.initializeListeners();
     }
 
     initialize() {
-        this.creationLog = this.initial.creationLog;
-        this.runningLog = this.initial.runningLog;
+        this.creationLog = this.handleLog(this.initial.creationLog);
+        this.runningLog = this.handleLog(this.initial.runningLog);
         this.status = this.initial.status;
         this.startedAt = this.initial.startedAt;
         this.stopReason = this.initial.stopReason;
@@ -16,6 +19,10 @@ class ContainerInstanceController {
             ? this.initial.stoppedAt : this.initial.removedAt;
         this.warnings = (this.initial.warnings.length > 0)
             ? this.initial.warnings.reduce((prev, current) => prev += current) : "";
+    }
+
+    handleLog(log) {
+        return ansi_up.ansi_to_html(log) || "";
     }
 
     initializeListeners() {
@@ -32,12 +39,12 @@ class ContainerInstanceController {
         this.notificationService.on({
             eventTypes: ['ContainerInstanceCreationLogReceivedEvent'],
             identifier: event => event.containerInstanceId === this.initial.containerInstanceId,
-            callback: event => this.creationLog += event.log
+            callback: event => this.creationLog += this.handleLog(event.log)
         });
         this.notificationService.on({
             eventTypes: ['ContainerInstanceRunningLogReceivedEvent'],
             identifier: event => event.containerInstanceId === this.initial.containerInstanceId,
-            callback: event => this.runningLog += event.log
+            callback: event => this.runningLog += this.handleLog(event.log)
         });
     }
 
@@ -70,4 +77,4 @@ class ContainerInstanceController {
     }
 }
 
-export default ['NotificationService', ContainerInstanceController]
+export default ['NotificationService', '$sce', ContainerInstanceController]

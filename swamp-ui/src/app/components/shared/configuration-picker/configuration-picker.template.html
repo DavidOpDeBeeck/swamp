@@ -47,12 +47,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" ng-show="configurationPicker.editable || configurationPicker.configuration.username">
                 <input-field label="Git username"
                              value="configurationPicker.configuration.username"
                              editable="configurationPicker.editable"></input-field>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" ng-show="configurationPicker.editable || configurationPicker.configuration.password">
                 <input-field label="Git password"
                              value="configurationPicker.configuration.password"
                              editable="configurationPicker.editable"></input-field>

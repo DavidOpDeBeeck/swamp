@@ -6,10 +6,12 @@ import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.core.strategy.FirstInLineStrategy;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.group.GroupId;
-import de.daxu.swamp.scheduling.command.build.command.AddContainerInstanceCommand;
 import de.daxu.swamp.scheduling.command.build.command.CreateBuildCommand;
 import de.daxu.swamp.scheduling.command.build.command.UpdateContainerInstanceStatusCommand;
-import de.daxu.swamp.scheduling.command.build.event.*;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceScheduledEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceStatusChangedEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildCreatedEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildFinishedEvent;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.command.project.ProjectId;
@@ -55,8 +57,12 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
         Optional<Server> potentialServer = potentialServer(container);
         potentialServer.ifPresent(server ->
                 apply(new BuildContainerInstanceScheduledEvent(
-                        buildId, projectId, eventMetaDataFactory.create(), containerConfiguration(buildId, container), server))
-        );
+                        buildId,
+                        projectId,
+                        eventMetaDataFactory.create(),
+                        ContainerInstanceId.random(),
+                        containerConfiguration(buildId, container),
+                        server)));
     }
 
     private ContainerConfiguration containerConfiguration(BuildId buildId, Container container) {
@@ -65,17 +71,6 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
 
     private Optional<Server> potentialServer(Container container) {
         return new FirstInLineStrategy().locate(container.getPotentialLocations());
-    }
-
-    @CommandHandler
-    public void addContainerInstance(AddContainerInstanceCommand command, EventMetaDataFactory eventMetaDataFactory) {
-        validateStatus(INPROGRESS);
-
-        apply(new BuildContainerInstanceAddedEvent(
-                buildId,
-                projectId,
-                eventMetaDataFactory.create(),
-                command.getContainerInstanceId()));
     }
 
     @CommandHandler
@@ -91,7 +86,7 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
                 command.getContainerInstanceId(),
                 command.getContainerInstanceStatus()));
 
-        if(allContainersRemoved) {
+        if (allContainersRemoved) {
             apply(new BuildFinishedEvent(buildId, projectId, eventMetaDataFactory.create()));
         }
     }
@@ -104,7 +99,7 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
     }
 
     private void validateStatus(BuildStatus statusToBe) {
-        if(this.status != statusToBe) {
+        if (this.status != statusToBe) {
             throw new InvalidBuildStatusException(status, statusToBe);
         }
     }
@@ -117,7 +112,7 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
     }
 
     @EventHandler
-    void on(BuildContainerInstanceAddedEvent event) {
+    void on(BuildContainerInstanceScheduledEvent event) {
         this.containerInstanceStatusMap.put(event.getContainerInstanceId(), INITIALIZED);
     }
 

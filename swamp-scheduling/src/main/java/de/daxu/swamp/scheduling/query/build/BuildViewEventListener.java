@@ -1,13 +1,15 @@
 package de.daxu.swamp.scheduling.query.build;
 
 import de.daxu.swamp.common.axon.EventListener;
-import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceAddedEvent;
+import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceScheduledEvent;
 import de.daxu.swamp.scheduling.command.build.event.BuildContainerInstanceStatusChangedEvent;
 import de.daxu.swamp.scheduling.command.build.event.BuildEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 @EventListener
+@Transactional
 @SuppressWarnings("unused")
 public class BuildViewEventListener {
 
@@ -19,7 +21,7 @@ public class BuildViewEventListener {
     }
 
     @EventHandler
-    void on(BuildContainerInstanceAddedEvent event) {
+    void on(BuildContainerInstanceScheduledEvent event) {
         getBuild(event).addContainerInstance(event.getContainerInstanceId());
     }
 

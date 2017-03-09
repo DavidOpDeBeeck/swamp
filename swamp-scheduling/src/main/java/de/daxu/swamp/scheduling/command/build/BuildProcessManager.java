@@ -1,9 +1,8 @@
 package de.daxu.swamp.scheduling.command.build;
 
 import de.daxu.swamp.common.axon.EventListener;
-import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceInitializedEvent;
 import de.daxu.swamp.scheduling.command.containerinstance.event.ContainerInstanceStatusChangedEvent;
-import de.daxu.swamp.scheduling.command.project.event.ProjectBuildScheduledEvent;
+import de.daxu.swamp.scheduling.command.project.event.BuildScheduledEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,18 +18,11 @@ public class BuildProcessManager {
     }
 
     @EventHandler
-    public void on(ProjectBuildScheduledEvent event) {
+    public void on(BuildScheduledEvent event) {
         buildCommandService.createBuild(
                 event.getProjectId(),
                 event.getSequence(),
                 event.getContainers());
-    }
-
-    @EventHandler
-    public void on(ContainerInstanceInitializedEvent event) {
-        buildCommandService.addContainerInstance(
-                event.getBuildId(),
-                event.getContainerInstanceId());
     }
 
     @EventHandler
