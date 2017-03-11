@@ -8,8 +8,8 @@ import static com.google.common.collect.Sets.newHashSet;
 
 public enum ContainerInstanceStatus {
 
-    SCHEDULED,
     INITIALIZED,
+    CREATION,
     CREATED,
     STARTED,
     STOPPED,
@@ -17,15 +17,15 @@ public enum ContainerInstanceStatus {
 
     private static final ImmutableMap<ContainerInstanceStatus, Set<ContainerInstanceStatus>> validPreviousStatuses
             = new ImmutableMap.Builder<ContainerInstanceStatus, Set<ContainerInstanceStatus>>()
-            .put( SCHEDULED, newHashSet() )
-            .put( INITIALIZED, newHashSet() )
-            .put( CREATED, newHashSet( INITIALIZED ) )
-            .put( STARTED, newHashSet( CREATED, STOPPED ) )
-            .put( STOPPED, newHashSet( STARTED ) )
-            .put( REMOVED, newHashSet( INITIALIZED, CREATED, STARTED, STOPPED ) )
+            .put(INITIALIZED, newHashSet())
+            .put(CREATION, newHashSet(INITIALIZED))
+            .put(CREATED, newHashSet(CREATION))
+            .put(STARTED, newHashSet(CREATED, STOPPED))
+            .put(STOPPED, newHashSet(STARTED))
+            .put(REMOVED, newHashSet(INITIALIZED, CREATION, CREATED, STARTED, STOPPED))
             .build();
 
-    public static boolean isValidPreviousStatus( ContainerInstanceStatus status, ContainerInstanceStatus previousStatus ) {
-        return validPreviousStatuses.get( status ).contains( previousStatus );
+    public static boolean isValidPreviousStatus(ContainerInstanceStatus status, ContainerInstanceStatus previousStatus) {
+        return validPreviousStatuses.get(status).contains(previousStatus);
     }
 }

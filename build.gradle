@@ -54,6 +54,7 @@ subprojects {
         slf4jVersion = '1.7.21'
         gitVersion = '4.6.0.201612231935-r'
         assertJVersion = '3.6.2'
+        aspectJVersion = '1.8.10'
     }
 
     ext['bouncycastle.version'] = '1.54'
@@ -100,6 +101,7 @@ subprojects {
             dependency "org.eclipse.jgit:org.eclipse.jgit:$gitVersion"
 
             dependency "org.assertj:assertj-core:$assertJVersion"
+            dependency "org.aspectj:aspectjweaver:$aspectJVersion"
         }
     }
 

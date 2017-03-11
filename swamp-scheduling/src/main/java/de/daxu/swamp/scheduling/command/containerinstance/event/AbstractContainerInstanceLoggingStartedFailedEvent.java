@@ -7,17 +7,17 @@ import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 
 import java.util.Set;
 
-public class ContainerInstanceLoggingStartedFailedEvent
+public class AbstractContainerInstanceLoggingStartedFailedEvent
         extends AbstractContainerInstanceDeployEvent
         implements ContainerInstanceLoggingStartedEvent, ContainerInstanceDeployFailedEvent {
 
     private final Set<String> errors;
 
-    public ContainerInstanceLoggingStartedFailedEvent(ContainerInstanceId containerInstanceId,
-                                                      BuildId buildId,
-                                                      EventMetaData eventMetaData,
-                                                      ContainerId containerId,
-                                                      Set<String> errors) {
+    public AbstractContainerInstanceLoggingStartedFailedEvent(ContainerInstanceId containerInstanceId,
+                                                              BuildId buildId,
+                                                              EventMetaData eventMetaData,
+                                                              ContainerId containerId,
+                                                              Set<String> errors) {
         super(containerInstanceId, buildId, eventMetaData, containerId);
         this.errors = errors;
     }

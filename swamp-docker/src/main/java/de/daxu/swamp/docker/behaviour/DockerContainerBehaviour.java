@@ -1,8 +1,8 @@
 package de.daxu.swamp.docker.behaviour;
 
-import de.daxu.swamp.deploy.DeployNotifier;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
+import de.daxu.swamp.deploy.notifier.DeployNotifier;
 
 import java.io.File;
 

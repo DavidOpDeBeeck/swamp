@@ -19,7 +19,7 @@ public class CleanupBatch {
 
     @Scheduled(fixedDelay = INDIVIDUAL_TASK_DELAY)
     public void run() {
-        this.containerInstanceBatchService.removeExpiredInitializedContainers();
+        this.containerInstanceBatchService.removeExpiredInitializedAndCreationContainers();
         this.containerInstanceBatchService.removeExpiredCreatedContainers();
         this.containerInstanceBatchService.stopNotRunningStartedContainers();
         this.containerInstanceBatchService.removeExpiredStoppedContainers();

@@ -4,6 +4,7 @@ dependencies {
     compile project(":swamp-core")
     compile project(":swamp-docker")
 
+    compile "org.springframework:spring-aop"
     compile "org.springframework:spring-messaging"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-websocket"

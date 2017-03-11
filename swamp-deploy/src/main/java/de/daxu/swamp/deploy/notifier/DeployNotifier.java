@@ -1,10 +1,16 @@
-package de.daxu.swamp.deploy;
+package de.daxu.swamp.deploy.notifier;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
 public class DeployNotifier<T> {
+
+    public static <T> DeployNotifier<T> forProgress(ProgressNotifier<T> progressNotifier) {
+        return new DeployNotifier.Builder<T>()
+                .withProgressNotifier(progressNotifier)
+                .build();
+    }
 
     private final Set<ProgressNotifier<T>> progressNotifiers;
     private final Set<ErrorNotifier> errorNotifiers;

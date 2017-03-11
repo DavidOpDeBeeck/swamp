@@ -72,6 +72,12 @@ public class DeployResult<RESULT> {
         }
     }
 
+    public void onSuccess(Runnable onSuccess) {
+        if (success()) {
+            onSuccess.run();
+        }
+    }
+
     public void onFail(Consumer<Set<String>> onFail) {
         if (!success()) {
             onFail.accept(warnings);

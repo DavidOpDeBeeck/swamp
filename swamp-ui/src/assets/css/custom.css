@@ -29,6 +29,7 @@
 .card > .card-info > .card-extra {
     flex: none;
     padding: 0 5px;
+    margin-left: 5px;
     text-transform: uppercase;
     border-radius: 4px;
     border: 1px solid #e2e2e2;
@@ -101,6 +102,8 @@ textarea {
 }
 
 .well.textarea {
+    overflow: auto;
+    max-height: 300px;
     white-space: pre-line
 }
 
@@ -149,33 +152,44 @@ textarea {
 }
 
 /*
- LIST ITEMS
+ BUILD
  */
 
-.list-group-item-text {
-    margin: 10px 0;
+.builds .card {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
-.list-group-item-footer {
-    overflow: auto;
-    margin: 0;
-}
-
-.list-group > .list-group-item {
-    overflow: auto;
-}
-
-.list-group-item.in {
-    padding: 0;
-}
-
-.list-group-item.in-progress {
+.in-progress {
     border-left: 4px solid #5cb85c !important;
 }
 
-.list-group-item.finished {
+.finished {
     border-left: 4px solid #d9534f !important;
 }
+
+/*
+ FOOTER
+ */
+
+footer > p {
+    text-transform: uppercase;
+}
+
+footer > p > a:hover {
+    text-decoration: none;
+}
+
+footer > p > .divider:after {
+    color: #cccccc;
+    padding: 0 3px;
+    content: "/\00a0";
+}
+
+/*
+ OTHER
+ */
 
 .list-group-item.active,
 .list-group-item.active:hover,
@@ -205,125 +219,9 @@ li.removed {
     border-left: 4px solid #d9534f !important;
 }
 
-/*
- LOCATION
- */
-
-.location > .location-info {
-    display: flex;
-    flex-direction: row;
-}
-
-.location > .location-info > .location-name {
-    flex: 1;
-    text-transform: uppercase;
-}
-
-.location > .location-info > .location-extra {
-    flex: none;
-    padding: 0 5px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    border: 1px solid #e2e2e2;
-    background-color: #eeeeee;
-}
-
-.location > .location-actions {
-    display: flex;
-    flex-direction: row-reverse;
-    margin-top: 5px;
-}
-
-.location > .location-actions > .location-action {
-    flex: none;
-    margin-left: 5px;
-}
-
-/*
- PROJECT
- */
-
-.project > .project-info {
-    display: flex;
-    flex-direction: row;
-}
-
-.project > .project-info > .project-name {
-    flex: 1;
-    text-transform: uppercase;
-}
-
-.project > .project-info > .project-extra {
-    flex: none;
-    padding: 0 5px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    border: 1px solid #e2e2e2;
-    background-color: #eeeeee;
-}
-
-.project > .project-description {
-    font-size: 1.2rem;
-    margin: 10px 0;
-}
-
-.project > .project-actions {
-    display: flex;
-    flex-direction: row;
-    margin-top: 5px;
-}
-
-.project > .project-actions > .project-actions-left {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-}
-
-.project > .project-actions > .project-actions-right {
-    flex: 1;
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.project > .project-actions .project-action {
-    flex: none;
-    margin-left: 5px;
-}
-
-.project > .project-actions .project-action:nth-child(1) {
-    margin-left: 0;
-}
-
-/*
- FOOTER
- */
-
-footer > p {
-    text-transform: uppercase;
-}
-
-footer > p > a:hover {
-    text-decoration: none;
-}
-
-footer > p > .divider:after {
-    color: #cccccc;
-    padding: 0 3px;
-    content: "/\00a0";
-}
-
-/*
- OTHER
- */
-
 hr {
     margin-top: 10px;
     margin-bottom: 10px;
-}
-
-.container-instance #container-logs {
-    overflow: auto;
-    max-height: 300px;
 }
 
 .dropdown-menu {

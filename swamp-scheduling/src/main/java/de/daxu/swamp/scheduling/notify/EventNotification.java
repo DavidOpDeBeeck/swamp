@@ -4,8 +4,8 @@ import de.daxu.swamp.common.cqrs.Event;
 
 public class EventNotification {
 
-    private String type;
-    private Event event;
+    private final String type;
+    private final Event event;
 
     public EventNotification(Event event) {
         this.type = event.getClass().getSimpleName();

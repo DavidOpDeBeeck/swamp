@@ -14,7 +14,7 @@ class NotificationService {
     }
 
     connectToSocket(brokerUrl) {
-        this.$stomp.connect(brokerUrl)
+        this.$stomp.connect(brokerUrl, this.errorCallback)
             .then((f) => {
                 this.$stomp.subscribe(BUILD_CHANNEL, message => this.handle(message));
                 Logger.info("Successfully connected to " + BUILD_CHANNEL);
@@ -23,6 +23,10 @@ class NotificationService {
                 this.$stomp.subscribe(CONTAINER_CHANNEL, message => this.handle(message));
                 Logger.info("Successfully connected to " + CONTAINER_CHANNEL);
             });
+    }
+
+    errorCallback() {
+        Logger.warn("Failed to connect to:" + brokerUrl);
     }
 
     handle(message) {

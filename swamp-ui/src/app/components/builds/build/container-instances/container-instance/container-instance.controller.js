@@ -9,8 +9,8 @@ class ContainerInstanceController {
     }
 
     initialize() {
-        this.creationLog = this.handleLog(this.initial.creationLog);
-        this.runningLog = this.handleLog(this.initial.runningLog);
+        this.creationLog = this.initial.creationLog ? this.handleLog(this.initial.creationLog) : "";
+        this.runningLog = this.initial.runningLog ? this.handleLog(this.initial.runningLog) : "";
         this.status = this.initial.status;
         this.startedAt = this.initial.startedAt;
         this.stopReason = this.initial.stopReason;
@@ -22,7 +22,7 @@ class ContainerInstanceController {
     }
 
     handleLog(log) {
-        return ansi_up.ansi_to_html(log) || "";
+        return ansi_up.ansi_to_html(log);
     }
 
     initializeListeners() {

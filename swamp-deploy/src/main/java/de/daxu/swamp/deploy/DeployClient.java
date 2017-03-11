@@ -2,6 +2,7 @@ package de.daxu.swamp.deploy;
 
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
 import de.daxu.swamp.deploy.container.ContainerId;
+import de.daxu.swamp.deploy.notifier.DeployNotifier;
 
 public interface DeployClient {
 

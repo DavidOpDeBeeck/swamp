@@ -12,9 +12,9 @@
                 </button>
             </span>
         </div>
-        <uib-accordion close-others="false">
-            <div uib-accordion-group class="panel-default" heading="{{ container.id }}"
-                 ng-repeat="container in ContainersCtrl.containers | filter: ContainersCtrl.filter" is-open="true">
+        <uib-tabset type="pills">
+            <uib-tab heading="{{ container.id | limitTo : 16 }}"
+                     ng-repeat="container in ContainersCtrl.containers | filter: ContainersCtrl.filter">
                 <container container="container" editable="false"></container>
                 <div class="row">
                     <div class="col-md-12">
@@ -28,7 +28,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
-        </uib-accordion>
+            </uib-tab>
+        </uib-tabset>
     </div>
 </div>

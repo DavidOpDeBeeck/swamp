@@ -37,7 +37,7 @@ public class ContainerInstanceTestConstants {
         public static final InitializeContainerInstanceCommand SCHEDULE_COMMAND = new InitializeContainerInstanceCommand( CONTAINER_INSTANCE_ID, CONTAINER, SERVER, DATE );
         public static final CreateContainerInstanceCommand CREATE_COMMAND = new CreateContainerInstanceCommand( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME, DATE );
         public static final StartContainerInstanceCommand START_COMMAND = new StartContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE );
-        public static final StartContainerInstanceLoggingCommand START_LOGGING_COMMAND = new StartContainerInstanceLoggingCommand( CONTAINER_INSTANCE_ID );
+        public static final StartContainerInstanceRunningLoggingCommand START_LOGGING_COMMAND = new StartContainerInstanceRunningLoggingCommand( CONTAINER_INSTANCE_ID );
         public static final ReceiveContainerInstanceLogCommand RECEIVE_LOG_COMMAND = new ReceiveContainerInstanceLogCommand( CONTAINER_INSTANCE_ID, LOG, DATE );
         public static final StopContainerInstanceCommand STOP_COMMAND = new StopContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE );
         public static final RemoveContainerInstanceCommand REMOVE_COMMAND = new RemoveContainerInstanceCommand( CONTAINER_INSTANCE_ID, DATE );

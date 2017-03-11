@@ -2,9 +2,9 @@ package de.daxu.swamp.docker.adapter.command;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
-import de.daxu.swamp.deploy.DeployNotifier.CompletionNotifier;
-import de.daxu.swamp.deploy.DeployNotifier.ErrorNotifier;
-import de.daxu.swamp.deploy.DeployNotifier.ProgressNotifier;
+import de.daxu.swamp.deploy.notifier.DeployNotifier.CompletionNotifier;
+import de.daxu.swamp.deploy.notifier.DeployNotifier.ErrorNotifier;
+import de.daxu.swamp.deploy.notifier.DeployNotifier.ProgressNotifier;
 
 import java.util.Set;
 

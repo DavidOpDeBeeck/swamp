@@ -1,5 +1,6 @@
 package de.daxu.swamp.scheduling.command.build;
 
+import de.daxu.swamp.common.cqrs.EventMetaData;
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
 import de.daxu.swamp.core.container.Container;
 import de.daxu.swamp.core.server.Server;
@@ -16,9 +17,10 @@ import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
 import de.daxu.swamp.scheduling.command.project.ProjectId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
-import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +39,9 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
     private BuildStatus status;
     private Map<ContainerInstanceId, ContainerInstanceStatus> containerInstanceStatusMap = newHashMap();
 
+    @Autowired
+    private EventMetaDataFactory eventMetaDataFactory;
+
     Build() {
     }
 
@@ -50,31 +55,11 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
 
         command.getContainers()
                 .forEach(container ->
-                        scheduleContainerInstance(command.getBuildId(), container, eventMetaDataFactory));
-    }
-
-    private void scheduleContainerInstance(BuildId buildId, Container container, EventMetaDataFactory eventMetaDataFactory) {
-        Optional<Server> potentialServer = potentialServer(container);
-        potentialServer.ifPresent(server ->
-                apply(new BuildContainerInstanceScheduledEvent(
-                        buildId,
-                        projectId,
-                        eventMetaDataFactory.create(),
-                        ContainerInstanceId.random(),
-                        containerConfiguration(buildId, container),
-                        server)));
-    }
-
-    private ContainerConfiguration containerConfiguration(BuildId buildId, Container container) {
-        return ContainerConfiguration.of(GroupId.of(buildId.value()), container);
-    }
-
-    private Optional<Server> potentialServer(Container container) {
-        return new FirstInLineStrategy().locate(container.getPotentialLocations());
+                        scheduleContainerInstance(command.getBuildId(), container, eventMetaDataFactory.create()));
     }
 
     @CommandHandler
-    public void updateContainerInstanceStatus(UpdateContainerInstanceStatusCommand command, EventMetaDataFactory eventMetaDataFactory) {
+    public void updateContainerInstanceStatus(UpdateContainerInstanceStatusCommand command) {
         validateStatus(INPROGRESS);
 
         boolean allContainersRemoved = allContainersRemoved(command.getContainerInstanceStatus());
@@ -91,6 +76,30 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
         }
     }
 
+    private void scheduleContainerInstance(BuildId buildId, Container container, EventMetaData eventMetaData) {
+        Optional<Server> potentialServer = potentialServer(container);
+        potentialServer.ifPresent(server ->
+                applyScheduledEvent(buildId, container, eventMetaData, server));
+    }
+
+    private void applyScheduledEvent(BuildId buildId, Container container, EventMetaData eventMetaData, Server server) {
+        apply(new BuildContainerInstanceScheduledEvent(
+                buildId,
+                projectId,
+                eventMetaData,
+                ContainerInstanceId.random(),
+                containerConfiguration(buildId, container),
+                server));
+    }
+
+    private ContainerConfiguration containerConfiguration(BuildId buildId, Container container) {
+        return ContainerConfiguration.of(GroupId.of(buildId.value()), container);
+    }
+
+    private Optional<Server> potentialServer(Container container) {
+        return new FirstInLineStrategy().locate(container.getPotentialLocations());
+    }
+
     private boolean allContainersRemoved(ContainerInstanceStatus status) {
         return status == REMOVED && containerInstanceStatusMap.values()
                 .stream()
@@ -104,19 +113,19 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
         }
     }
 
-    @EventHandler
+    @EventSourcingHandler
     void on(BuildCreatedEvent event) {
         this.status = INPROGRESS;
         this.buildId = event.getBuildId();
         this.projectId = event.getProjectId();
     }
 
-    @EventHandler
+    @EventSourcingHandler
     void on(BuildContainerInstanceScheduledEvent event) {
         this.containerInstanceStatusMap.put(event.getContainerInstanceId(), INITIALIZED);
     }
 
-    @EventHandler
+    @EventSourcingHandler
     void on(BuildContainerInstanceStatusChangedEvent event) {
         this.containerInstanceStatusMap.put(event.getContainerInstanceId(), event.getContainerInstanceStatus());
     }

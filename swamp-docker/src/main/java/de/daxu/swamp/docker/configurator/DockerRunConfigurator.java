@@ -4,7 +4,7 @@ import de.daxu.swamp.core.configuration.DockerfileConfiguration;
 import de.daxu.swamp.core.configuration.GitConfiguration;
 import de.daxu.swamp.core.configuration.ImageConfiguration;
 import de.daxu.swamp.core.configuration.RunConfigurator;
-import de.daxu.swamp.deploy.DeployNotifier;
+import de.daxu.swamp.deploy.notifier.DeployNotifier;
 import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 import de.daxu.swamp.workspace.extension.GitCloneExtension;
 import de.daxu.swamp.workspace.manager.WorkspaceManager;

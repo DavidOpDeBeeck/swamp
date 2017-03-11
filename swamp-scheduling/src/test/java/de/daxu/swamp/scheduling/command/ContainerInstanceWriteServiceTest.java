@@ -24,11 +24,11 @@ public class ContainerInstanceWriteServiceTest {
     }
 
     @Test
-    public void create() throws Exception {
+    public void action() throws Exception {
         when( containerInstanceCommandFactory.createCreateCommand( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME ) )
                 .thenReturn( CREATE_COMMAND );
 
-        containerInstanceWriteService.create( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME );
+        containerInstanceWriteService.action( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME );
 
         verify( containerInstanceCommandFactory ).createCreateCommand( CONTAINER_INSTANCE_ID, INTERNAL_CONTAINER_ID, INTERNAL_CONTAINER_NAME );
         verify( commandGateway ).send( CREATE_COMMAND );

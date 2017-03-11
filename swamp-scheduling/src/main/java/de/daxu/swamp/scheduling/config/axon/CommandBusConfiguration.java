@@ -6,6 +6,7 @@ import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstance;
 import de.daxu.swamp.scheduling.command.project.Project;
 import org.axonframework.commandhandling.AsynchronousCommandBus;
 import org.axonframework.commandhandling.CommandBus;
+import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
 import org.axonframework.commandhandling.annotation.AnnotationCommandHandlerBeanPostProcessor;
 import org.axonframework.commandhandling.annotation.AnnotationCommandTargetResolver;
@@ -66,9 +67,10 @@ public class CommandBusConfiguration {
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setMaxPoolSize(50);
-        executor.setQueueCapacity(50);
         executor.setCorePoolSize(20);
+        executor.setMaxPoolSize(Integer.MAX_VALUE);
+        executor.setQueueCapacity(Integer.MAX_VALUE);
+        executor.initialize();
         return executor;
     }
 
@@ -98,28 +100,43 @@ public class CommandBusConfiguration {
     }
 
     @Bean
-    public Set<AggregateAnnotationCommandHandler> commandHandler() {
+    public Set<CommandHandler> commandHandler() {
         return newHashSet(
-                createCommandHandler(ContainerInstance.class),
-                createCommandHandler(Build.class),
-                createCommandHandler(Project.class)
+                createCommandHandler(ContainerInstance.class, containerInstanceAggregateRepository()),
+                createCommandHandler(Build.class, buildAggregateRepository()),
+                createCommandHandler(Project.class, projectAggregateRepository())
         );
     }
 
-    private <T extends EventSourcedAggregateRoot> AggregateAnnotationCommandHandler<T> createCommandHandler(Class<T> aggregateClass) {
-        AggregateAnnotationCommandHandler<T> commandHandler = new AggregateAnnotationCommandHandler<>(
-                aggregateClass,
-                repository(aggregateClass),
-                annotationCommandTargetResolver(),
-                springBeanParameterResolverFactory()
-        );
-        commandHandler.supportedCommands().forEach(command -> commandBus().subscribe(command, commandHandler));
-        return commandHandler;
-    }
-
-    private <T extends EventSourcedAggregateRoot> EventSourcingRepository<T> repository(Class<T> clazz) {
-        EventSourcingRepository<T> repository = new EventSourcingRepository<>(clazz, eventStore);
+    @Bean
+    public EventSourcingRepository<Build> buildAggregateRepository() {
+        EventSourcingRepository<Build> repository = new EventSourcingRepository<>(Build.class, eventStore);
         repository.setEventBus(eventBus);
         return repository;
+    }
+
+    @Bean
+    public EventSourcingRepository<Project> projectAggregateRepository() {
+        EventSourcingRepository<Project> repository = new EventSourcingRepository<>(Project.class, eventStore);
+        repository.setEventBus(eventBus);
+        return repository;
+    }
+
+    @Bean
+    public EventSourcingRepository<ContainerInstance> containerInstanceAggregateRepository() {
+        EventSourcingRepository<ContainerInstance> repository = new EventSourcingRepository<>(ContainerInstance.class, eventStore);
+        repository.setEventBus(eventBus);
+        return repository;
+    }
+
+    private <T extends EventSourcedAggregateRoot> AggregateAnnotationCommandHandler<T> createCommandHandler(Class<T> aggregateClass,
+                                                                                                            EventSourcingRepository<T> repository) {
+        AggregateAnnotationCommandHandler<T> commandHandler = new AggregateAnnotationCommandHandler<>(
+                aggregateClass,
+                repository,
+                annotationCommandTargetResolver(),
+                springBeanParameterResolverFactory());
+        commandHandler.supportedCommands().forEach(command -> commandBus().subscribe(command, commandHandler));
+        return commandHandler;
     }
 }

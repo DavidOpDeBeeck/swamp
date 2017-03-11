@@ -2,6 +2,7 @@ package de.daxu.swamp.scheduling.command.containerinstance;
 
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
+import de.daxu.swamp.deploy.container.ContainerId;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.command.ContainerInstanceCommandFactory;
 import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason;
@@ -9,6 +10,8 @@ import de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstan
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class ContainerInstanceCommandService {
@@ -29,6 +32,14 @@ public class ContainerInstanceCommandService {
 
     public void create(ContainerInstanceId containerInstanceId) {
         gateway.send(factory.createCommand(containerInstanceId));
+    }
+
+    public void creationSuccess(ContainerInstanceId containerInstanceId, ContainerId containerId) {
+        gateway.send(factory.creationSuccessCommand(containerInstanceId, containerId));
+    }
+
+    public void creationFailed(ContainerInstanceId containerInstanceId, Set<String> warnings) {
+        gateway.send(factory.creationFailedCommand(containerInstanceId, warnings));
     }
 
     public void start(ContainerInstanceId containerInstanceId) {

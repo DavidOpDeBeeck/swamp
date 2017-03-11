@@ -9,6 +9,7 @@ dependencies {
     compile "org.springframework:spring-web"
 
     compile "org.axonframework:axon-core"
+    compile "org.aspectj:aspectjweaver"
 
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.core:jackson-annotations"

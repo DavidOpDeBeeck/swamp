@@ -1,7 +1,7 @@
 package de.daxu.swamp.docker.adapter.command;
 
-import de.daxu.swamp.deploy.DeployNotifier;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
+import de.daxu.swamp.deploy.notifier.DeployNotifier;
 import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 import de.daxu.swamp.docker.configurator.DockerRunConfigurator;
 import de.daxu.swamp.docker.configurator.DockerRunConfiguratorFactory;

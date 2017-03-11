@@ -1,6 +1,6 @@
 package de.daxu.swamp.docker.configurator;
 
-import de.daxu.swamp.deploy.DeployNotifier;
+import de.daxu.swamp.deploy.notifier.DeployNotifier;
 import de.daxu.swamp.docker.behaviour.DockerBehaviour;
 import de.daxu.swamp.workspace.manager.WorkspaceManager;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -37,7 +37,17 @@ public class ContainerInstanceViewEventListener {
     }
 
     @EventHandler
-    void on(ContainerInstanceCreatedEvent event) {
+    void on(ContainerInstanceCreationStartedEvent event) {
+        ContainerInstanceView view = getByContainerInstanceId(event);
+
+        view.setCreatedAt(event.getEventMetaData().getCreatedAt());
+        view.setStatus(CREATION);
+
+        containerInstanceViewRepository.save(view);
+    }
+
+    @EventHandler
+    void on(ContainerInstanceCreatedSucceededEvent event) {
         ContainerInstanceView view = getByContainerInstanceId(event);
 
         view.setCreatedAt(event.getEventMetaData().getCreatedAt());
@@ -53,7 +63,6 @@ public class ContainerInstanceViewEventListener {
 
         view.setCreatedAt(event.getEventMetaData().getCreatedAt());
         view.setStatus(CREATED);
-        view.setContainerId(event.getContainerId());
         view.addWarnings(event.getErrors());
 
         containerInstanceViewRepository.save(view);
@@ -114,7 +123,7 @@ public class ContainerInstanceViewEventListener {
         containerInstanceViewRepository.save(view);
     }
 
-    @EventHandler()
+    @EventHandler
     void on(ContainerInstanceRemovedFailedEvent event) {
         ContainerInstanceView view = getByContainerInstanceId(event);
 

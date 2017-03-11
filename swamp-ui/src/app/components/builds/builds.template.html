@@ -7,28 +7,21 @@
             <input type="text" class="form-control" placeholder="Search" ng-model="BuildsCtrl.filter"
                    aria-describedby="projects-search-icon"/>
         </div>
-        <div class="panel panel-default"
-             ng-repeat="project in BuildsCtrl.projects | filter: BuildsCtrl.filter">
-            <div class="panel-heading project"
-                 ng-click="project.isCollapsed = !project.isCollapsed">
-                <section class="project-info">
-                    <span class="project-name" ng-bind="project.name"></span>
-                    <span class="project-extra">{{ project.builds.length }} builds</span>
-                </section>
-            </div>
-            <ul class="list-group"
-                uib-collapse="project.isCollapsed">
-                <li class="list-group-item project"
-                    ng-repeat="build in project.builds | orderBy: 'initializedAt':-1"
-                    ui-sref="builds.build.containerInstances({buildId: build.buildId})" ui-sref-active="active"
-                    ng-class="{'in-progress': BuildsCtrl.inProgress(build), 'finished': !BuildsCtrl.inProgress(build)}">
-                    <section class="project-info">
-                        <span class="project-name">#{{ build.sequence }}</span>
-                        <span class="project-extra">{{ build.initializedAt | toDate }}</span>
-                    </section>
-                </li>
-            </ul>
-        </div>
+        <uib-tabset type="pills" class="builds">
+            <uib-tab heading="{{project.name}}"
+                     ng-repeat="project in BuildsCtrl.projects | filter: BuildsCtrl.filter">
+                <div class="card"
+                     ng-repeat="build in project.builds | orderBy: 'initializedAt':-1"
+                     ui-sref="builds.build.containerInstances({buildId: build.buildId})" ui-sref-active="active"
+                     ng-class="{'in-progress': BuildsCtrl.inProgress(build), 'finished': !BuildsCtrl.inProgress(build)}">
+                    <div class="card-info">
+                        <span class="card-title"># {{ build.sequence }}</span>
+                        <span class="card-extra">{{ build.containers.length }} containers</span>
+                        <span class="card-extra">{{ build.initializedAt | toDate }}</span>
+                    </div>
+                </div>
+            </uib-tab>
+        </uib-tabset>
     </div>
     <div class="col-md-8">
         <div ui-view></div>

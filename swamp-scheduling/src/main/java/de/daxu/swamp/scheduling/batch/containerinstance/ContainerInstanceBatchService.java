@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceRemoveReason.*;
@@ -28,7 +30,7 @@ import static de.daxu.swamp.scheduling.command.containerinstance.reason.Containe
 @Component
 public class ContainerInstanceBatchService {
 
-    private static final int DEFAULT_WAIT_TIME = 60;
+    private static final int CREATED_FAILED_WAIT_TIME = 60;
     private static final int INIT_FAILED_WAIT_TIME = 60 * 5;
     private static final int STARTED_FAILED_WAIT_TIME = 60;
     private static final int STOPPED_FAILED_WAIT_TIME = 30;
@@ -40,16 +42,16 @@ public class ContainerInstanceBatchService {
     private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ContainerInstanceCommandService containerInstanceCommandService;
 
-    private final Validator<ContainerInstanceView> createdTimeValidator
-            = new WaitTimeExpiredValidator<>(DEFAULT_WAIT_TIME, ContainerInstanceView::getCreatedAt);
-
-    private final Validator<ContainerInstanceView> initializedTimeValidator
+    private final Validator<ContainerInstanceView> initTimeExpiredValidator
             = new WaitTimeExpiredValidator<>(INIT_FAILED_WAIT_TIME, ContainerInstanceView::getInitializedAt);
 
-    private final Validator<ContainerInstanceView> startedTimeValidator
+    private final Validator<ContainerInstanceView> createdTimeExpiredValidator
+            = new WaitTimeExpiredValidator<>(CREATED_FAILED_WAIT_TIME, ContainerInstanceView::getCreatedAt);
+
+    private final Validator<ContainerInstanceView> startedTimeExpiredValidator
             = new WaitTimeExpiredValidator<>(STARTED_FAILED_WAIT_TIME, ContainerInstanceView::getStartedAt);
 
-    private final Validator<ContainerInstanceView> stoppedTimeValidator
+    private final Validator<ContainerInstanceView> stoppedTimeExpiredValidator
             = new WaitTimeExpiredValidator<>(STOPPED_FAILED_WAIT_TIME, ContainerInstanceView::getStoppedAt);
 
     @Autowired
@@ -63,11 +65,11 @@ public class ContainerInstanceBatchService {
         this.containerInstanceCommandService = containerInstanceCommandService;
     }
 
-    public void removeExpiredInitializedContainers() {
-        List<ContainerInstanceView> initializedContainers = getByStatus(INITIALIZED);
+    public void removeExpiredInitializedAndCreationContainers() {
+        List<ContainerInstanceView> initializedContainers = getByStatus(INITIALIZED, CREATION);
 
         initializedContainers.stream()
-                .filter(initializedTimeValidator::validate)
+                .filter(initTimeExpiredValidator::validate)
                 .forEach(view -> removeContainerInstance(view, INITIALIZATION_FAILED));
     }
 
@@ -75,7 +77,7 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> createdContainers = getByStatus(CREATED);
 
         createdContainers.stream()
-                .filter(createdTimeValidator::validate)
+                .filter(createdTimeExpiredValidator::validate)
                 .filter(this::doesNotExistsOnHost)
                 .forEach(view -> removeContainerInstance(view, NOT_AVAILABLE_ON_HOST));
     }
@@ -84,7 +86,7 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> startedContainers = getByStatus(STARTED);
 
         startedContainers.stream()
-                .filter(startedTimeValidator::validate)
+                .filter(startedTimeExpiredValidator::validate)
                 .filter(this::isNotRunningOnHost)
                 .forEach(view -> stopContainerInstance(view, NOT_RUNNING_ON_HOST));
     }
@@ -93,22 +95,25 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> stoppedContainers = getByStatus(STOPPED);
 
         stoppedContainers.stream()
-                .filter(stoppedTimeValidator::validate)
+                .filter(stoppedTimeExpiredValidator::validate)
                 .forEach(view -> removeContainerInstance(view, STOPPED_WAIT_TIME_EXCEEDED));
     }
 
     private void removeContainerInstance(ContainerInstanceView view, ContainerInstanceRemoveReason reason) {
-        logger.info("Stopping: {} with reason: {}", view.getContainerInstanceId(), reason);
+        logger.info("Removing: {} with reason: {}", view.getContainerInstanceId(), reason);
         containerInstanceCommandService.remove(view.getContainerInstanceId(), reason);
     }
 
     private void stopContainerInstance(ContainerInstanceView view, ContainerInstanceStopReason reason) {
-        logger.info("Removing: {} with reason: {}", view.getContainerInstanceId(), reason);
+        logger.info("Stopping: {} with reason: {}", view.getContainerInstanceId(), reason);
         containerInstanceCommandService.stop(view.getContainerInstanceId(), reason);
     }
 
-    private List<ContainerInstanceView> getByStatus(ContainerInstanceStatus status) {
-        return containerInstanceQueryService.getContainerInstanceViewsByStatus(status);
+    private List<ContainerInstanceView> getByStatus(ContainerInstanceStatus ... statuses) {
+        return Arrays.stream(statuses)
+                .map(containerInstanceQueryService::getContainerInstanceViewsByStatus)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
     private boolean doesNotExistsOnHost(ContainerInstanceView view) {
