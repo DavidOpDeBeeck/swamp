@@ -3,9 +3,12 @@ package de.daxu.swamp.scheduling.resource.containerinstance;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceCommandService;
+import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.query.build.BuildView;
 import de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceQueryService;
 import de.daxu.swamp.scheduling.query.containerinstance.ContainerInstanceView;
+import de.daxu.swamp.scheduling.query.log.LogQueryService;
+import de.daxu.swamp.scheduling.query.log.LogView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +28,18 @@ public class ContainerInstanceResource {
 
     final static String CONTAINER_INSTANCE_URL = BUILD_URL + "/{buildId}/containerInstances";
 
-    private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ResponseFactory response;
+    private final LogQueryService logQueryService;
+    private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ContainerInstanceCommandService containerInstanceCommandService;
 
     @Autowired
     public ContainerInstanceResource(ResponseFactory responseFactory,
+                                     LogQueryService logQueryService,
                                      ContainerInstanceQueryService containerInstanceQueryService,
                                      ContainerInstanceCommandService containerInstanceCommandService) {
         this.response = responseFactory;
+        this.logQueryService = logQueryService;
         this.containerInstanceQueryService = containerInstanceQueryService;
         this.containerInstanceCommandService = containerInstanceCommandService;
     }
@@ -53,6 +59,13 @@ public class ContainerInstanceResource {
     public Response get(@PathVariable("containerInstanceId") ContainerInstanceView view) {
 
         return response.success(view);
+    }
+
+    @RequestMapping(value = "/{containerInstanceId}/logs", method = RequestMethod.GET)
+    public Response getLogs(@PathVariable("containerInstanceId") ContainerInstanceId containerInstanceId) {
+
+        LogView logs = logQueryService.getLogViewById(containerInstanceId);
+        return response.success(logs);
     }
 
     @RequestMapping(value = "/{containerInstanceId}", params = {"action=start"}, method = RequestMethod.POST)

@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.apache.commons.lang.StringUtils.EMPTY;
-
 @Entity
 @Table(name = "container_instance_view")
 @SuppressWarnings("unused")
@@ -43,14 +41,6 @@ public class ContainerInstanceView extends EntityView {
 
     @Column(name = "removed_at")
     private LocalDateTime removedAt;
-
-    @Lob
-    @Column(name = "running_log")
-    private String runningLog;
-
-    @Lob
-    @Column(name = "creation_log")
-    private String creationLog;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -87,8 +77,6 @@ public class ContainerInstanceView extends EntityView {
                                   LocalDateTime startedAt,
                                   LocalDateTime stoppedAt,
                                   LocalDateTime removedAt,
-                                  String creationLog,
-                                  String runningLog,
                                   ContainerInstanceStatus status,
                                   ServerView server,
                                   RunConfigurationView runConfiguration,
@@ -102,8 +90,6 @@ public class ContainerInstanceView extends EntityView {
         this.startedAt = startedAt;
         this.stoppedAt = stoppedAt;
         this.removedAt = removedAt;
-        this.creationLog = creationLog;
-        this.runningLog = runningLog;
         this.status = status;
         this.server = server;
         this.stopReason = stopReason;
@@ -134,20 +120,6 @@ public class ContainerInstanceView extends EntityView {
 
     void setRemovedAt(LocalDateTime removedAt) {
         this.removedAt = removedAt;
-    }
-
-    void addRunningLog(String log) {
-        if (this.runningLog == null) {
-            this.runningLog = EMPTY;
-        }
-        this.runningLog += log;
-    }
-
-    void addCreationLog(String log) {
-        if (this.creationLog == null) {
-            this.creationLog = EMPTY;
-        }
-        this.creationLog += log;
     }
 
     void addWarnings(Set<String> warnings) {
@@ -201,14 +173,6 @@ public class ContainerInstanceView extends EntityView {
         return removedAt;
     }
 
-    public String getCreationLog() {
-        return creationLog;
-    }
-
-    public String getRunningLog() {
-        return runningLog;
-    }
-
     public ContainerInstanceStatus getStatus() {
         return status;
     }
@@ -242,8 +206,6 @@ public class ContainerInstanceView extends EntityView {
         private LocalDateTime startedAt;
         private LocalDateTime stoppedAt;
         private LocalDateTime removedAt;
-        private String runningLog;
-        private String creationLog;
         private ContainerInstanceStatus status;
         private ServerView server;
         private RunConfigurationView runConfiguration;
@@ -290,16 +252,6 @@ public class ContainerInstanceView extends EntityView {
             return this;
         }
 
-        public Builder withRunningLog(String runningLog) {
-            this.runningLog = runningLog;
-            return this;
-        }
-
-        public Builder withCreationLog(String creationLog) {
-            this.creationLog = creationLog;
-            return this;
-        }
-
         public Builder withStatus(ContainerInstanceStatus status) {
             this.status = status;
             return this;
@@ -334,8 +286,6 @@ public class ContainerInstanceView extends EntityView {
                     startedAt,
                     stoppedAt,
                     removedAt,
-                    creationLog,
-                    runningLog,
                     status,
                     server,
                     runConfiguration,

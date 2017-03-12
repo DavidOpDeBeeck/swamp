@@ -1,6 +1,7 @@
 package de.daxu.swamp.scheduling.resource.replay;
 
 import de.daxu.swamp.common.axon.QueryRepository;
+import de.daxu.swamp.common.util.SpringUtils;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import org.apache.commons.lang.time.StopWatch;
@@ -44,15 +45,6 @@ public class ReplayResource {
         return response.success();
     }
 
-    private void replay() {
-        StopWatch stopWatch = new StopWatch();
-        logger.info("Starting replay");
-        stopWatch.start();
-        replayableCluster.startReplay();
-        stopWatch.stop();
-        logger.info("Replay took: {}", stopWatch.toString());
-    }
-
     private void clearViews() {
         getQueryRepositories().forEach(JpaRepository::deleteAllInBatch);
     }
@@ -61,5 +53,21 @@ public class ReplayResource {
         return appContext.getBeansWithAnnotation(QueryRepository.class).values()
                 .stream()
                 .map(o -> (JpaRepository) o).collect(Collectors.toSet());
+    }
+
+    private void replay() {
+        StopWatch stopWatch = new StopWatch();
+        logger.info("Starting replay");
+        logRegisteredEventListeners();
+        stopWatch.start();
+        replayableCluster.startReplay();
+        stopWatch.stop();
+        logger.info("Replay took: {}", stopWatch.toString());
+    }
+
+    private void logRegisteredEventListeners() {
+        replayableCluster.getMembers()
+                .forEach(eventListener ->
+                        logger.info("Registering {} for replay", SpringUtils.getTargetClassName(eventListener)));
     }
 }

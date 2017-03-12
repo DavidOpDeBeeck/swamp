@@ -1,6 +1,6 @@
 class BuildService {
     constructor($resource) {
-        this.buildResource = $resource('/api/builds/:buildId', { buildId: '@buildId' });
+        this.buildResource = $resource('/api/builds/:buildId', {buildId: '@buildId'});
         this.containerInstanceResource = $resource('/api/builds/:buildId/containerInstances/:containerInstanceId', {
             buildId: '@buildId',
             containerInstanceId: '@containerInstanceId'
@@ -18,6 +18,10 @@ class BuildService {
                 params: {'action': 'restart'}
             }
         });
+        this.containerInstanceLogResource = $resource('/api/builds/:buildId/containerInstances/:containerInstanceId/logs', {
+            buildId: '@buildId',
+            containerInstanceId: '@containerInstanceId'
+        });
     }
 
     getBuild(id) {
@@ -32,6 +36,11 @@ class BuildService {
             })
             .$promise
             .then((container) => this.mapInstance(buildId, container));
+    }
+
+    getContainerInstanceLogs(buildId, containerInstanceId) {
+        return this.containerInstanceLogResource
+            .get({buildId: buildId, containerInstanceId: containerInstanceId}).$promise;
     }
 
     getBuildContainerInstances(buildId) {

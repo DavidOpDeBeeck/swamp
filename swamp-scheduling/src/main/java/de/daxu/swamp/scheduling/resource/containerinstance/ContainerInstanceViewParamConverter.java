@@ -11,20 +11,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContainerInstanceViewParamConverter implements Converter<String, ContainerInstanceView> {
 
+    private final ContainerInstanceIdParamConverter idParamConverter;
     private final ContainerInstanceQueryService containerInstanceQueryService;
 
     @Autowired
-    public ContainerInstanceViewParamConverter( ContainerInstanceQueryService containerInstanceQueryService ) {
+    public ContainerInstanceViewParamConverter(ContainerInstanceIdParamConverter idParamConverter,
+                                               ContainerInstanceQueryService containerInstanceQueryService) {
+        this.idParamConverter = idParamConverter;
         this.containerInstanceQueryService = containerInstanceQueryService;
     }
 
     @Override
-    public ContainerInstanceView convert( String source ) {
-        ContainerInstanceId id = ContainerInstanceId.from( source );
-        ContainerInstanceView view = containerInstanceQueryService.getContainerInstanceViewById( id );
+    public ContainerInstanceView convert(String source) {
+        ContainerInstanceId id = idParamConverter.convert(source);
+        ContainerInstanceView view = containerInstanceQueryService.getContainerInstanceViewById(id);
 
-        if( view == null )
-            throw new NotFoundException( "Container instance was not found!" );
+        if (view == null)
+            throw new NotFoundException("Container instance was not found!");
 
         return view;
     }

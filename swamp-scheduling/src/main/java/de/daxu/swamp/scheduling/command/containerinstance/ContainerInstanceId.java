@@ -9,21 +9,21 @@ import javax.persistence.Embeddable;
 import java.util.UUID;
 
 @Embeddable
-@AttributeOverride( name = "value", column = @Column( name = "container_instance_id" ) )
+@AttributeOverride(name = "value", column = @Column(name = "container_instance_id"))
 public class ContainerInstanceId extends EntityId {
 
     private ContainerInstanceId() {
     }
 
-    private ContainerInstanceId( UUID containerInstanceId ) {
-        super( containerInstanceId );
+    private ContainerInstanceId(UUID containerInstanceId) {
+        super(containerInstanceId);
     }
 
     public static ContainerInstanceId random() {
-        return new ContainerInstanceId( UUID.randomUUID() );
+        return new ContainerInstanceId(UUID.randomUUID());
     }
 
-    public static ContainerInstanceId from( String id ) {
-        return new ContainerInstanceId( UUID.fromString( id ) );
+    public static ContainerInstanceId from(String id) {
+        return new ContainerInstanceId(UUID.fromString(id));
     }
 }

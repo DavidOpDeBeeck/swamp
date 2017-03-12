@@ -1,16 +1,14 @@
 var ansi_up = new AnsiUp;
 
 class ContainerInstanceController {
-    constructor(NotificationService, $sce) {
-        this.$sce = $sce;
+    constructor(NotificationService, BuildService) {
+        this.buildService = BuildService;
         this.notificationService = NotificationService;
         this.initialize();
         this.initializeListeners();
     }
 
     initialize() {
-        this.creationLog = this.initial.creationLog ? this.handleLog(this.initial.creationLog) : "";
-        this.runningLog = this.initial.runningLog ? this.handleLog(this.initial.runningLog) : "";
         this.status = this.initial.status;
         this.startedAt = this.initial.startedAt;
         this.stopReason = this.initial.stopReason;
@@ -19,7 +17,14 @@ class ContainerInstanceController {
             ? this.initial.stoppedAt : this.initial.removedAt;
         this.warnings = (this.initial.warnings.length > 0)
             ? this.initial.warnings.reduce((prev, current) => prev += current) : "";
+
+        this.buildService.getContainerInstanceLogs(this.initial.buildId, this.initial.containerInstanceId)
+            .then(logs => {
+                this.creationLog = logs.creationLog ? this.handleLog(logs.creationLog) : "";
+                this.runningLog = logs.runningLog ? this.handleLog(logs.runningLog) : "";
+            });
     }
+
 
     handleLog(log) {
         return ansi_up.ansi_to_html(log);
@@ -77,4 +82,4 @@ class ContainerInstanceController {
     }
 }
 
-export default ['NotificationService', '$sce', ContainerInstanceController]
+export default ['NotificationService', 'BuildService', ContainerInstanceController]
