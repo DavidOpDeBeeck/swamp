@@ -81,7 +81,7 @@ public class ContainerResource {
 
         Container updatedContainer = containerCreateConverter.toDomain(updatedContainerDTO);
 
-        BeanUtils.copyProperties(updatedContainer, containerToUpdate);
+        BeanUtils.copyPropertiesIgnoreNulls(updatedContainer, containerToUpdate);
         containerService.updateContainer(containerToUpdate);
 
         return response.success(containerConverter.toDTO(containerToUpdate));

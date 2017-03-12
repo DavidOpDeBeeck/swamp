@@ -9,20 +9,20 @@ import java.util.stream.Stream;
 
 public class BeanUtils {
 
-    private static String[] getIgnoredProperties( Object source ) {
-        final BeanWrapper wrappedSource = new BeanWrapperImpl( source );
-        return Stream.of( wrappedSource.getPropertyDescriptors() )
-                .map( FeatureDescriptor::getName )
-                .filter( getNotWritableOrNullProperties( wrappedSource ) )
-                .toArray( String[]::new );
+    private static String[] getNotWritableOrNullProperties(Object source) {
+        final BeanWrapper wrappedSource = new BeanWrapperImpl(source);
+        return Stream.of(wrappedSource.getPropertyDescriptors())
+                .map(FeatureDescriptor::getName)
+                .filter(isPropertyNotWritableOrNull(wrappedSource))
+                .toArray(String[]::new);
     }
 
-    private static Predicate<String> getNotWritableOrNullProperties( BeanWrapper bean ) {
-        return propertyName -> !bean.isWritableProperty( propertyName )
-                || bean.getPropertyValue( propertyName ) == null;
+    private static Predicate<String> isPropertyNotWritableOrNull(BeanWrapper bean) {
+        return propertyName -> !bean.isWritableProperty(propertyName)
+                || bean.getPropertyValue(propertyName) == null;
     }
 
-    public static void copyProperties( Object src, Object target ) {
-        org.springframework.beans.BeanUtils.copyProperties( src, target, getIgnoredProperties( src ) );
+    public static void copyPropertiesIgnoreNulls(Object src, Object target) {
+        org.springframework.beans.BeanUtils.copyProperties(src, target, getNotWritableOrNullProperties(src));
     }
 }

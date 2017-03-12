@@ -17,8 +17,8 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
-    public void serialize( LocalDateTime dateTime, JsonGenerator gen, SerializerProvider serializers ) throws IOException, JsonProcessingException {
-        ZonedDateTime zonedDateTime = dateTime.atZone( ZONE_ID );
-        gen.writeString( zonedDateTime.format( ofPattern( Dates.DATE_TIME_FORMAT ) ) );
+    public void serialize(LocalDateTime dateTime, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+        ZonedDateTime zonedDateTime = dateTime.atZone(ZONE_ID);
+        gen.writeString(zonedDateTime.format(ofPattern(Dates.DATE_TIME_FORMAT)));
     }
 }

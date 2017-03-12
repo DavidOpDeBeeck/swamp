@@ -11,12 +11,12 @@ import static org.springframework.beans.factory.config.AutowireCapableBeanFactor
 
 @Aspect
 @Component
-public class AggregateAspect {
+public class AutowireAggregateDependenciesAspect {
 
     private final AutowireCapableBeanFactory beanFactory;
 
     @Autowired
-    public AggregateAspect(AutowireCapableBeanFactory beanFactory) {
+    public AutowireAggregateDependenciesAspect(AutowireCapableBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 

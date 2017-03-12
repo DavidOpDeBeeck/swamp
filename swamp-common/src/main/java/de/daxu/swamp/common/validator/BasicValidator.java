@@ -9,7 +9,7 @@ public class BasicValidator<T> implements Validator<T> {
     }
 
     @Override
-    public boolean validate(T object) {
-        return function.validate(object);
+    public boolean isValid(T object) {
+        return function.isValid(object);
     }
 }

@@ -13,22 +13,22 @@ public abstract class EntityId implements AggregateId {
     protected EntityId() {
     }
 
-    protected EntityId( UUID value ) {
+    protected EntityId(UUID value) {
         this.value = value.toString();
     }
 
-    protected EntityId( String value ) {
+    protected EntityId(String value) {
         this.value = value;
     }
 
     @Override
-    public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        EntityId that = ( EntityId ) o;
+        EntityId that = (EntityId) o;
 
-        return value != null ? value.equals( that.value ) : that.value == null;
+        return value != null ? value.equals(that.value) : that.value == null;
     }
 
     @Override

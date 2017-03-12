@@ -82,7 +82,7 @@ public class DatacenterResource {
 
         Datacenter updatedDatacenter = datacenterCreateConverter.toDomain(updatedDatacenterDTO);
 
-        BeanUtils.copyProperties(updatedDatacenter, datacenterToUpdate);
+        BeanUtils.copyPropertiesIgnoreNulls(updatedDatacenter, datacenterToUpdate);
         locationService.updateDatacenter(datacenterToUpdate);
 
         return response.success(datacenterConverter.toDTO(datacenterToUpdate));

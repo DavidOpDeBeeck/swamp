@@ -1,5 +1,6 @@
-package de.daxu.swamp.common.async;
+package de.daxu.swamp.deploy.async;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class AsyncRunner {
 
     private final Executor executor;
 
+    @Autowired
     public AsyncRunner(@Qualifier("taskExecutor") Executor executor) {
         this.executor = executor;
     }

@@ -1,4 +1,4 @@
-package de.daxu.swamp.common.cqrs;
+package de.daxu.swamp.common.validator;
 
 public class ValidationException extends RuntimeException {
 

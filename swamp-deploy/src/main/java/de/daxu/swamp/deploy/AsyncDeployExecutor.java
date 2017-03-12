@@ -1,6 +1,6 @@
 package de.daxu.swamp.deploy;
 
-import de.daxu.swamp.common.async.AsyncRunner;
+import de.daxu.swamp.deploy.async.AsyncRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

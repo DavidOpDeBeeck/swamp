@@ -15,9 +15,9 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
     @Override
-    public LocalDateTime deserialize( JsonParser parser, DeserializationContext context ) throws IOException {
-        JsonNode dateNode = parser.getCodec().readTree( parser );
+    public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+        JsonNode dateNode = parser.getCodec().readTree(parser);
         return LocalDateTime
-                .parse( dateNode.asText(), ofPattern( Dates.DATE_TIME_FORMAT ) );
+                .parse(dateNode.asText(), ofPattern(Dates.DATE_TIME_FORMAT));
     }
 }

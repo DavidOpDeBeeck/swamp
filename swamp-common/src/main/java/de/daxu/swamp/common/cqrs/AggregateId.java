@@ -9,5 +9,4 @@ public interface AggregateId extends Serializable {
     default String value() {
         return getValue();
     }
-
 }

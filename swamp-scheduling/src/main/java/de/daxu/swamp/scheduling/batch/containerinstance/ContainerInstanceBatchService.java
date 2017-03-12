@@ -69,7 +69,7 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> initializedContainers = getByStatus(INITIALIZED, CREATION);
 
         initializedContainers.stream()
-                .filter(initTimeExpiredValidator::validate)
+                .filter(initTimeExpiredValidator::isValid)
                 .forEach(view -> removeContainerInstance(view, INITIALIZATION_FAILED));
     }
 
@@ -77,7 +77,7 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> createdContainers = getByStatus(CREATED);
 
         createdContainers.stream()
-                .filter(createdTimeExpiredValidator::validate)
+                .filter(createdTimeExpiredValidator::isValid)
                 .filter(this::doesNotExistsOnHost)
                 .forEach(view -> removeContainerInstance(view, NOT_AVAILABLE_ON_HOST));
     }
@@ -86,7 +86,7 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> startedContainers = getByStatus(STARTED);
 
         startedContainers.stream()
-                .filter(startedTimeExpiredValidator::validate)
+                .filter(startedTimeExpiredValidator::isValid)
                 .filter(this::isNotRunningOnHost)
                 .forEach(view -> stopContainerInstance(view, NOT_RUNNING_ON_HOST));
     }
@@ -95,7 +95,7 @@ public class ContainerInstanceBatchService {
         List<ContainerInstanceView> stoppedContainers = getByStatus(STOPPED);
 
         stoppedContainers.stream()
-                .filter(stoppedTimeExpiredValidator::validate)
+                .filter(stoppedTimeExpiredValidator::isValid)
                 .forEach(view -> removeContainerInstance(view, STOPPED_WAIT_TIME_EXCEEDED));
     }
 
@@ -109,7 +109,7 @@ public class ContainerInstanceBatchService {
         containerInstanceCommandService.stop(view.getContainerInstanceId(), reason);
     }
 
-    private List<ContainerInstanceView> getByStatus(ContainerInstanceStatus ... statuses) {
+    private List<ContainerInstanceView> getByStatus(ContainerInstanceStatus... statuses) {
         return Arrays.stream(statuses)
                 .map(containerInstanceQueryService::getContainerInstanceViewsByStatus)
                 .flatMap(List::stream)
@@ -117,11 +117,11 @@ public class ContainerInstanceBatchService {
     }
 
     private boolean doesNotExistsOnHost(ContainerInstanceView view) {
-        return existsOnHostValidator().invalidate(view);
+        return !existsOnHostValidator().isValid(view);
     }
 
     private boolean isNotRunningOnHost(ContainerInstanceView view) {
-        return isRunningOnHostValidator().invalidate(view);
+        return !isRunningOnHostValidator().isValid(view);
     }
 
     private Validator<ContainerInstanceView> existsOnHostValidator() {

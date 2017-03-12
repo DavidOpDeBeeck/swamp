@@ -1,6 +1,6 @@
 package de.daxu.swamp.common.axon;
 
-import de.daxu.swamp.common.cqrs.ValidationException;
+import de.daxu.swamp.common.validator.ValidationException;
 import org.axonframework.commandhandling.CommandHandlerInterceptor;
 import org.axonframework.commandhandling.CommandMessage;
 import org.axonframework.commandhandling.InterceptorChain;
@@ -17,7 +17,7 @@ public class CommandExceptionInterceptor implements CommandHandlerInterceptor {
         try {
             return interceptorChain.proceed(commandMessage);
         } catch(ValidationException exception) {
-            logger.info("Command: {}, validation exception: {}", commandMessage.getCommandName(), exception.getMessage());
+            logger.error("Command: {}, validation exception: {}", commandMessage.getCommandName(), exception.getMessage());
         } catch(Exception exception) {
             exception.printStackTrace();
             logger.error("Command: {}, exception: {}", commandMessage.getCommandName(), exception.getMessage());

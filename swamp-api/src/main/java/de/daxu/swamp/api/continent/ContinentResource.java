@@ -79,7 +79,7 @@ public class ContinentResource {
 
         Continent updatedContinent = continentCreateConverter.toDomain(updatedContinentDTO);
 
-        BeanUtils.copyProperties(updatedContinent, continentToUpdate);
+        BeanUtils.copyPropertiesIgnoreNulls(updatedContinent, continentToUpdate);
         locationService.updateContinent(continentToUpdate);
 
         return response.success(continentConverter.toDTO(continentToUpdate));

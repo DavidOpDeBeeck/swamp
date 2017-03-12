@@ -1,9 +1,10 @@
 plugins {
     id 'org.springframework.boot' version '1.4.2.RELEASE'
+    id 'application'
 }
 
 springBoot {
-    mainClass = "de.swamp.SwampApplication"
+    mainClass = "de.daxu.swamp.SwampApplication"
 }
 
 dependencies {

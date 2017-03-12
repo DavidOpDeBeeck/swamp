@@ -16,22 +16,22 @@ public class SwampObjectMapper extends ObjectMapper {
         registerModules();
     }
 
-    public String toJSON( Object payload ) {
+    public String toJSON(Object payload) {
         try {
-            return writerWithDefaultPrettyPrinter().writeValueAsString( payload );
-        } catch( JsonProcessingException e ) {
-            return format( "Failed to convert %s to JSON", payload );
+            return writerWithDefaultPrettyPrinter().writeValueAsString(payload);
+        } catch (JsonProcessingException e) {
+            return format("Failed to convert %s to JSON", payload);
         }
     }
 
     private void configuration() {
-        configure( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false );
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private void registerModules() {
         SimpleModule module = new SimpleModule();
-        module.addSerializer( LocalDateTime.class, new LocalDateTimeSerializer() );
-        module.addDeserializer( LocalDateTime.class, new LocalDateTimeDeserializer() );
-        registerModule( module );
+        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+        registerModule(module);
     }
 }

@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.command.containerinstance;
 
-import de.daxu.swamp.common.cqrs.ValidationException;
+import de.daxu.swamp.common.validator.ValidationException;
 
 import static java.lang.String.format;
 

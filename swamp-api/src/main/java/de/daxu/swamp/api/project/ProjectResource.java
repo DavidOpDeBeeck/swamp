@@ -85,7 +85,7 @@ public class ProjectResource {
 
         Project updatedProject = projectCreateConverter.toDomain(updatedProjectDTO);
 
-        BeanUtils.copyProperties(updatedProject, projectToUpdate);
+        BeanUtils.copyPropertiesIgnoreNulls(updatedProject, projectToUpdate);
         projectService.updateProject(projectToUpdate);
 
         return response.success(projectConverter.toDTO(projectToUpdate));

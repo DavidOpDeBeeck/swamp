@@ -81,7 +81,7 @@ public class ServerResource {
 
         Server updatedServer = serverCreateConverter.toDomain(updatedServerDTO);
 
-        BeanUtils.copyProperties(updatedServer, serverToUpdate);
+        BeanUtils.copyPropertiesIgnoreNulls(updatedServer, serverToUpdate);
         locationService.updateServer(serverToUpdate);
 
         return responseFactory.success(serverConverter.toDTO(serverToUpdate));

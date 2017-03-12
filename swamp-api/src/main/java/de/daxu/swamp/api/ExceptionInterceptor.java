@@ -1,5 +1,6 @@
 package de.daxu.swamp.api;
 
+import de.daxu.swamp.common.web.exception.BadRequestException;
 import de.daxu.swamp.common.web.exception.NotFoundException;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
@@ -36,6 +37,12 @@ public class ExceptionInterceptor {
     @ExceptionHandler(NotFoundException.class)
     public Response handle(NotFoundException exception) {
         return response.notFound(exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NotFoundException.class)
+    public Response handle(BadRequestException exception) {
+        return response.badRequest(exception.getMessage());
     }
 
     @ResponseBody
