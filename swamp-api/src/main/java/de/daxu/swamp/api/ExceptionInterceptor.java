@@ -40,7 +40,7 @@ public class ExceptionInterceptor {
     }
 
     @ResponseBody
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(BadRequestException.class)
     public Response handle(BadRequestException exception) {
         return response.badRequest(exception.getMessage());
     }
