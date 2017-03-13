@@ -1,15 +1,26 @@
 package de.daxu.swamp.api.server.dto;
 
+import static de.daxu.swamp.core.LocationTestConstants.Servers.*;
+
 public class ServerCreateDTOTestBuilder {
 
-    private String name = "a server name";
-    private String ip = "a server ip";
-    private String CACertificate = "a server CACertificate";
-    private String certificate = "a server certificate";
-    private String key = "a server key";
+    private String name = SERVER_NAME;
+    private String ip = SERVER_IP;
+    private String CACertificate = SERVER_CA_CERTIFICATE;
+    private String certificate = SERVER_CERTIFICATE;
+    private String key = SERVER_KEY;
 
     public static ServerCreateDTOTestBuilder aServerCreateDTO() {
         return new ServerCreateDTOTestBuilder();
+    }
+
+    public static ServerCreateDTOTestBuilder anotherServerCreateDTO() {
+        return new ServerCreateDTOTestBuilder()
+                .withName(ANOTHER_SERVER_NAME)
+                .withIp(ANOTHER_SERVER_IP)
+                .withKey(ANOTHER_SERVER_KEY)
+                .withCertificate(ANOTHER_SERVER_CERTIFICATE)
+                .withCACertificate(ANOTHER_SERVER_CA_CERTIFICATE);
     }
 
     public ServerCreateDTOTestBuilder withName( String name ) {

@@ -2,14 +2,17 @@ package de.daxu.swamp.api.configuration.dto;
 
 import de.daxu.swamp.core.configuration.RunConfigurationType;
 
+import static de.daxu.swamp.core.ProjectTestConstants.Containers.RunConfigurations.IMAGE_NAME;
+
 public class ImageConfigurationDTOTestBuilder {
-    private String name = "an image name";
+
+    private String name = IMAGE_NAME;
 
     public static ImageConfigurationDTOTestBuilder anImageConfigurationDTO() {
         return new ImageConfigurationDTOTestBuilder();
     }
 
-    public ImageConfigurationDTOTestBuilder withName( String name ) {
+    public ImageConfigurationDTOTestBuilder withName(String name) {
         this.name = name;
         return this;
     }

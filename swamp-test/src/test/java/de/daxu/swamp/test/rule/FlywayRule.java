@@ -9,15 +9,15 @@ public class FlywayRule extends ExternalResource {
 
     private final Flyway flyway;
 
-    FlywayRule( DataSource dataSource ) {
-        flyway = setup( dataSource );
+    FlywayRule(DataSource dataSource) {
+        flyway = setup(dataSource);
     }
 
-    private Flyway setup( DataSource dataSource ) {
+    private Flyway setup(DataSource dataSource) {
         Flyway flyway = new Flyway();
-        flyway.setDataSource( dataSource );
-        flyway.setLocations( "classpath:migration" );
-        flyway.setBaselineOnMigrate( true );
+        flyway.setDataSource(dataSource);
+        flyway.setLocations("classpath:migration");
+        flyway.setBaselineOnMigrate(false);
         return flyway;
     }
 

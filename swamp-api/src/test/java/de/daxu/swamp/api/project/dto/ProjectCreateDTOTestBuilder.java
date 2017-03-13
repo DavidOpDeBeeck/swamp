@@ -1,12 +1,20 @@
 package de.daxu.swamp.api.project.dto;
 
+import static de.daxu.swamp.core.ProjectTestConstants.Project.*;
+
 public class ProjectCreateDTOTestBuilder {
 
-    private String name = "a project name";
-    private String description = "a project description";
+    private String name = PROJECT_NAME;
+    private String description = PROJECT_DESCRIPTION;
 
     public static ProjectCreateDTOTestBuilder aProjectCreateDTO() {
         return new ProjectCreateDTOTestBuilder();
+    }
+
+    public static ProjectCreateDTOTestBuilder anotherProjectCreateDTO() {
+        return new ProjectCreateDTOTestBuilder()
+                .withName(ANOTHER_PROJECT_NAME)
+                .withDescription(ANOTHER_PROJECT_DESCRIPTION);
     }
 
     public ProjectCreateDTOTestBuilder withName( String name ) {

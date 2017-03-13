@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static de.daxu.swamp.api.location.LocationResource.LOCATIONS_URL;
 
 @RestController
-@RequestMapping( LOCATIONS_URL )
+@RequestMapping(LOCATIONS_URL)
 public class LocationResource {
 
     static final String LOCATIONS_URL = "/locations";
@@ -26,22 +26,22 @@ public class LocationResource {
     private final LocationConverter locationConverter;
 
     @Autowired
-    public LocationResource( ResponseFactory responseFactory,
-                             LocationService locationService,
-                             LocationConverter locationConverter ) {
+    public LocationResource(ResponseFactory responseFactory,
+                            LocationService locationService,
+                            LocationConverter locationConverter) {
         this.responseFactory = responseFactory;
         this.locationService = locationService;
         this.locationConverter = locationConverter;
     }
 
-    @RequestMapping( method = RequestMethod.GET )
+    @RequestMapping(method = RequestMethod.GET)
     public Response getAll() {
 
-        List<LocationDTO> servers = locationService.getAllLocation()
+        List<LocationDTO> locations = locationService.getAllLocation()
                 .stream()
-                .map( locationConverter::toDTO )
-                .collect( Collectors.toList() );
+                .map(locationConverter::toDTO)
+                .collect(Collectors.toList());
 
-        return responseFactory.success( servers );
+        return responseFactory.success(locations);
     }
 }

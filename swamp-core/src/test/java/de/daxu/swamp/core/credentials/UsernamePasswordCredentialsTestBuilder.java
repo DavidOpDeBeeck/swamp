@@ -11,6 +11,10 @@ public class UsernamePasswordCredentialsTestBuilder {
         return new UsernamePasswordCredentialsTestBuilder();
     }
 
+    public static UsernamePasswordCredentialsTestBuilder anotherUsernamePasswordCredentials() {
+        return new UsernamePasswordCredentialsTestBuilder();
+    }
+
     public UsernamePasswordCredentialsTestBuilder withUsername( String username ) {
         this.username = username;
         return this;

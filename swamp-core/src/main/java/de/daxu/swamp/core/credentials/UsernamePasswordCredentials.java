@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table( name = "username_password_credentials" )
-@SuppressWarnings( "unused" )
+@Table(name = "username_password_credentials")
+@SuppressWarnings("unused")
 public class UsernamePasswordCredentials extends Credentials {
 
     private String username;
@@ -14,7 +14,7 @@ public class UsernamePasswordCredentials extends Credentials {
     private UsernamePasswordCredentials() {
     }
 
-    private UsernamePasswordCredentials( String username, String password ) {
+    private UsernamePasswordCredentials(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -41,18 +41,18 @@ public class UsernamePasswordCredentials extends Credentials {
             return new Builder();
         }
 
-        public Builder withUsername( String username ) {
+        public Builder withUsername(String username) {
             this.username = username;
             return this;
         }
 
-        public Builder withPassword( String password ) {
+        public Builder withPassword(String password) {
             this.password = password;
             return this;
         }
 
         public UsernamePasswordCredentials build() {
-            return new UsernamePasswordCredentials( username, password );
+            return new UsernamePasswordCredentials(username, password);
         }
     }
 }

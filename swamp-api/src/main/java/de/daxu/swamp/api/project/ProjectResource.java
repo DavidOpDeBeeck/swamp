@@ -101,7 +101,8 @@ public class ProjectResource {
     @RequestMapping(value = "/{projectId}", params = {"action=deploy"}, method = RequestMethod.POST)
     public Response deploy(@PathVariable("projectId") Project project) {
 
-        projectCommandService.scheduleBuild(ProjectId.from(project.getId()), project.getContainers());
+        ProjectId projectId = ProjectId.from(project.getId());
+        projectCommandService.scheduleBuild(projectId, project.getContainers());
         return response.success();
     }
 }

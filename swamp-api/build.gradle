@@ -12,6 +12,7 @@ dependencies {
     compile project(":swamp-scheduling")
     compile project(":swamp-infrastructure")
 
+    compile "commons-lang:commons-lang"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
 

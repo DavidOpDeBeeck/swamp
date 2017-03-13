@@ -9,24 +9,24 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table( name = "location" )
-@Inheritance( strategy = InheritanceType.JOINED )
-@DiscriminatorColumn( name = "type" )
+@Table(name = "location")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type")
 public abstract class Location extends Identifiable {
 
-    @NotBlank( message = "{NotBlank.Location.name}" )
-    @Column( name = "name", unique = true )
+    @NotBlank(message = "{NotBlank.Location.name}")
+    @Column(name = "name", unique = true)
     private String name;
 
     protected Location() {
     }
 
-    protected Location( String id, String name ) {
-        super( id );
+    protected Location(String id, String name) {
+        super(id);
         this.name = name;
     }
 
-    public void setName( String name ) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -39,20 +39,20 @@ public abstract class Location extends Identifiable {
     @JsonIgnore
     public abstract Set<Server> getServers();
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public static abstract class Builder<B extends Builder<B>> {
 
         protected String id;
         protected String name;
 
-        public B withId( String id ) {
+        public B withId(String id) {
             this.id = id;
-            return ( B ) this;
+            return (B) this;
         }
 
-        public B withName( String name ) {
+        public B withName(String name) {
             this.name = name;
-            return ( B ) this;
+            return (B) this;
         }
 
         public abstract Location build();

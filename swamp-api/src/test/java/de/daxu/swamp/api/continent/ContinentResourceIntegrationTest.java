@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTO;
+import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.anotherContinentCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinent;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
@@ -29,32 +29,31 @@ public class ContinentResourceIntegrationTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
+    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
 
     private ContinentConverter continentConverter;
 
     @Before
     public void setUp() throws Exception {
-        continentConverter = spring.getInstance( ContinentConverter.class );
+        continentConverter = spring.getInstance(ContinentConverter.class);
     }
 
     @Test
     public void getAll() throws Exception {
-        Continent continent1 = aContinent().build();
-        Continent continent2 = anotherContinent().build();
-        saveContinent( continent1, continent2 );
+        Continent aContinent = aContinent().build();
+        Continent anotherContinent = anotherContinent().build();
+        saveContinent(aContinent, anotherContinent);
 
         List<ContinentDTO> continents = resource.webClient()
-                .path( "continents" )
-                .type( list( ContinentDTO.class ) )
+                .path("continents")
+                .type(list(ContinentDTO.class))
                 .get();
 
-        assertThat( continents ).isNotEmpty();
-        assertThat( continents )
+        assertThat(continents)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(
-                        continentConverter.toDTO( continent1 ),
-                        continentConverter.toDTO( continent2 ) );
+                        continentConverter.toDTO(aContinent),
+                        continentConverter.toDTO(anotherContinent));
     }
 
     @Test
@@ -62,89 +61,79 @@ public class ContinentResourceIntegrationTest {
         ContinentCreateDTO dto = aContinentCreateDTO().build();
 
         String id = resource.webClient()
-                .path( "continents" )
-                .post( dto );
+                .path("continents")
+                .post(dto);
 
-        Continent actual = resource.find( id, Continent.class );
+        Continent actual = resource.find(id, Continent.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        dto, "name" );
+        assertThat(actual)
+                .isEqualToIgnoringGivenFields(aContinent().build(), "id");
     }
 
     @Test
     public void get() throws Exception {
-        Continent expected = aContinent().build();
-        saveContinent( expected );
+        Continent continent = aContinent().build();
+        saveContinent(continent);
 
         ContinentDTO actual = resource.webClient()
-                .path( "continents" )
-                .path( expected.getId() )
-                .type( type( ContinentDTO.class ) )
+                .path("continents")
+                .path(continent.getId())
+                .type(ContinentDTO.class)
                 .get();
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
+        assertThat(actual)
                 .isEqualToComparingFieldByField(
-                        continentConverter.toDTO( expected ) );
+                        continentConverter.toDTO(continent));
     }
 
     @Test
     public void put() throws Exception {
-        Continent continent = aContinent()
-                .withName( "oldName" )
-                .build();
+        Continent continent = aContinent().build();
+        saveContinent(continent);
 
-        saveContinent( continent );
-
-        ContinentCreateDTO expected = aContinentCreateDTO()
-                .withName( "updatedName" )
-                .build();
+        ContinentCreateDTO updated = anotherContinentCreateDTO().build();
 
         resource.webClient()
-                .path( "continents" )
-                .path( continent.getId() )
-                .put( expected );
+                .path("continents")
+                .path(continent.getId())
+                .put(updated);
 
-        Continent actual = resource.find( continent.getId(), Continent.class );
+        Continent actual = resource.find(continent.getId(), Continent.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        expected, "name" );
+        assertThat(actual)
+                .isEqualToIgnoringGivenFields(anotherContinent().build(), "id");
     }
 
     @Test
     public void delete() throws Exception {
         Continent expected = aContinent().build();
-        saveContinent( expected );
+        saveContinent(expected);
 
         resource.webClient()
-                .path( "continents" )
-                .path( expected.getId() )
+                .path("continents")
+                .path(expected.getId())
                 .delete();
 
-        Continent actual = resource.find( expected.getId(), Continent.class );
+        Continent actual = resource.find(expected.getId(), Continent.class);
 
-        assertThat( actual ).isNull();
+        assertThat(actual).isNull();
     }
 
-    private void saveContinent( Continent... continents ) {
-        Arrays.stream( continents )
-                .map( Continent::getDatacenters )
-                .flatMap( Set::stream )
-                .forEach( this::saveDatacenter );
-        Arrays.stream( continents )
-                .forEach( resource::save );
+    private void saveContinent(Continent... continents) {
+        Arrays.stream(continents)
+                .map(Continent::getDatacenters)
+                .flatMap(Set::stream)
+                .forEach(this::saveDatacenter);
+        Arrays.stream(continents)
+                .forEach(resource::save);
     }
 
-    private void saveDatacenter( Datacenter... datacenters ) {
-        Arrays.stream( datacenters )
-                .map( Datacenter::getServers )
-                .flatMap( Set::stream )
-                .forEach( resource::save );
-        Arrays.stream( datacenters )
-                .forEach( resource::save );
+    private void saveDatacenter(Datacenter... datacenters) {
+        Arrays.stream(datacenters)
+                .map(Datacenter::getServers)
+                .flatMap(Set::stream)
+                .forEach(resource::save);
+        Arrays.stream(datacenters)
+                .forEach(resource::save);
     }
 }

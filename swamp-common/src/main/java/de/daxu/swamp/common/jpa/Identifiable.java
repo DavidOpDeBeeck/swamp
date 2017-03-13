@@ -12,9 +12,9 @@ import java.io.Serializable;
 public abstract class Identifiable implements Serializable {
 
     @Id
-    @GeneratedValue( generator = "uuid" )
-    @GenericGenerator( name = "uuid", strategy = "uuid2" )
-    @Column( name = "id" )
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "id")
     private String id;
 
     protected Identifiable() {
@@ -29,13 +29,13 @@ public abstract class Identifiable implements Serializable {
     }
 
     @Override
-    public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        Identifiable that = ( Identifiable ) o;
+        Identifiable that = (Identifiable) o;
 
-        return id != null ? id.equals( that.id ) : that.id == null;
+        return id != null ? id.equals(that.id) : that.id == null;
     }
 
     @Override

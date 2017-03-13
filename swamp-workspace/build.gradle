@@ -1,4 +1,5 @@
 dependencies {
+    compile project(":swamp-common")
     compile project(":swamp-infrastructure")
 
     compile "org.springframework:spring-context"

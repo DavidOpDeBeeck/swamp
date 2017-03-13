@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 import static de.daxu.swamp.api.version.VersionResource.VERSION_URL;
 
 @RestController
-@RequestMapping( VERSION_URL )
+@RequestMapping(VERSION_URL)
 public class VersionResource {
 
     static final String VERSION_URL = "/version";
 
-    @Value( "${application.version}" )
+    @Value("${application.version}")
     private String version;
 
     private final ResponseFactory responseFactory;
     private final VersionConverter versionConverter;
 
     @Autowired
-    public VersionResource( ResponseFactory responseFactory,
-                            VersionConverter versionConverter ) {
+    public VersionResource(ResponseFactory responseFactory,
+                           VersionConverter versionConverter) {
         this.responseFactory = responseFactory;
         this.versionConverter = versionConverter;
     }
 
-    @RequestMapping( method = RequestMethod.GET )
+    @RequestMapping(method = RequestMethod.GET)
     public Response get() {
 
-        return responseFactory.success( versionConverter.toDTO( version ) );
+        return responseFactory.success(versionConverter.toDTO(version));
     }
 }

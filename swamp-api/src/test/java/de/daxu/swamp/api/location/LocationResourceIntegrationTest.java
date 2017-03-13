@@ -21,24 +21,23 @@ public class LocationResourceIntegrationTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
+    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
 
-    private LocationConverter locationConverter = spring.getInstance( LocationConverter.class );
+    private LocationConverter locationConverter = spring.getInstance(LocationConverter.class);
 
     @Test
     public void getAll() throws Exception {
         Continent continent = aContinent().build();
-        resource.save( continent );
+        resource.save(continent);
 
         List<LocationDTO> locations = resource.webClient()
-                .path( "locations" )
-                .type( list( LocationDTO.class ) )
+                .path("locations")
+                .type(list(LocationDTO.class))
                 .get();
 
-        assertThat( locations ).isNotEmpty();
-        assertThat( locations )
+        assertThat(locations)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(
-                        locationConverter.toDTO( continent ) );
+                        locationConverter.toDTO(continent));
     }
 }

@@ -11,7 +11,7 @@ public class HibernateRule extends ExternalResource {
     private EntityManager entityManager;
     private final EntityManagerFactory factory;
 
-    HibernateRule( EntityManagerFactory entityManagerFactory ) {
+    HibernateRule(EntityManagerFactory entityManagerFactory) {
         this.factory = entityManagerFactory;
     }
 
@@ -22,18 +22,19 @@ public class HibernateRule extends ExternalResource {
 
     @Override
     protected void after() {
+        entityManager.clear();
         entityManager.close();
     }
 
-    void save( Object... o ) {
+    void save(Object... o) {
         entityManager.getTransaction().begin();
-        Arrays.stream( o )
-                .forEach( entityManager::persist );
+        Arrays.stream(o)
+                .forEach(entityManager::persist);
         entityManager.getTransaction().commit();
     }
 
-    <T> T find( String id, Class<T> returnType ) {
+    <T> T find(String id, Class<T> returnType) {
         entityManager.clear();
-        return entityManager.find( returnType, id );
+        return entityManager.find(returnType, id);
     }
 }

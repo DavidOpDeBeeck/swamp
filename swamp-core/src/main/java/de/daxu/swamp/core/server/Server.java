@@ -10,54 +10,54 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
-@Table( name = "server" )
-@DiscriminatorValue( "server" )
-@SuppressWarnings( "unused" )
+@Table(name = "server")
+@DiscriminatorValue("server")
+@SuppressWarnings("unused")
 public class Server extends Location {
 
-    @NotBlank( message = "{NotBlank.Server.ip}" )
-    @Column( name = "ip", unique = true )
+    @NotBlank(message = "{NotBlank.Server.ip}")
+    @Column(name = "ip", unique = true)
     private String ip;
 
-    @NotBlank( message = "{NotBlank.Server.CACertificate}" )
+    @NotBlank(message = "{NotBlank.Server.CACertificate}")
     @Lob
-    @Column( name = "ca_certificate" )
+    @Column(name = "ca_certificate")
     private String CACertificate;
 
-    @NotBlank( message = "{NotBlank.Server.certificate}" )
+    @NotBlank(message = "{NotBlank.Server.certificate}")
     @Lob
-    @Column( name = "certificate" )
+    @Column(name = "certificate")
     private String certificate;
 
-    @NotBlank( message = "{NotBlank.Server.key}" )
+    @NotBlank(message = "{NotBlank.Server.key}")
     @Lob
-    @Column( name = "`key`" )
+    @Column(name = "`key`")
     private String key;
 
     private Server() {
     }
 
-    private Server( String id, String name, String ip, String CACertificate, String certificate, String key ) {
-        super( id, name );
+    private Server(String id, String name, String ip, String CACertificate, String certificate, String key) {
+        super(id, name);
         this.ip = ip;
         this.CACertificate = CACertificate;
         this.certificate = certificate;
         this.key = key;
     }
 
-    public void setIp( String ip ) {
+    public void setIp(String ip) {
         this.ip = ip;
     }
 
-    public void setCACertificate( String CACertificate ) {
+    public void setCACertificate(String CACertificate) {
         this.CACertificate = CACertificate;
     }
 
-    public void setCertificate( String certificate ) {
+    public void setCertificate(String certificate) {
         this.certificate = certificate;
     }
 
-    public void setKey( String key ) {
+    public void setKey(String key) {
         this.key = key;
     }
 
@@ -84,7 +84,7 @@ public class Server extends Location {
 
     @Override
     public Set<Server> getServers() {
-        return newHashSet( this );
+        return newHashSet(this);
     }
 
     public static class Builder extends Location.Builder<Builder> {
@@ -98,28 +98,28 @@ public class Server extends Location {
             return new Builder();
         }
 
-        public Builder withIp( String ip ) {
+        public Builder withIp(String ip) {
             this.ip = ip;
             return this;
         }
 
-        public Builder withCACertificate( String CACertificate ) {
+        public Builder withCACertificate(String CACertificate) {
             this.CACertificate = CACertificate;
             return this;
         }
 
-        public Builder withCertificate( String certificate ) {
+        public Builder withCertificate(String certificate) {
             this.certificate = certificate;
             return this;
         }
 
-        public Builder withKey( String key ) {
+        public Builder withKey(String key) {
             this.key = key;
             return this;
         }
 
         public Server build() {
-            return new Server( id, name, ip, CACertificate, certificate, key );
+            return new Server(id, name, ip, CACertificate, certificate, key);
         }
     }
 }

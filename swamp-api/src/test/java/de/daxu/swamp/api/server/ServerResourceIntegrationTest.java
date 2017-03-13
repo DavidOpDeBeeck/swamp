@@ -16,8 +16,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.server.dto.ServerCreateDTOTestBuilder.aServerCreateDTO;
+import static de.daxu.swamp.api.server.dto.ServerCreateDTOTestBuilder.anotherServerCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
 import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenter;
 import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.aServer;
@@ -31,46 +31,44 @@ public class ServerResourceIntegrationTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
+    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
+
+    private ServerConverter serverConverter = spring.getInstance(ServerConverter.class);
 
     private Continent continent;
     private Datacenter datacenter;
-    private ServerConverter serverConverter = spring.getInstance( ServerConverter.class );
 
     @Before
     public void setUp() throws Exception {
         continent = aContinent().build();
         datacenter = aDatacenter().build();
-        resource.save( continent );
-        resource.save( datacenter );
-        continent.addDatacenter( datacenter );
-        resource.save( continent );
+        resource.save(continent, datacenter);
+        continent.addDatacenter(datacenter);
+        resource.save(continent);
     }
 
     private String datacenterPath() {
-        return format( "%s/%s/%s/%s", "continents", continent.getId(), "datacenters", datacenter.getId() );
+        return format("%s/%s/%s/%s", "continents", continent.getId(), "datacenters", datacenter.getId());
     }
 
     @Test
     public void getAll() throws Exception {
-        Server server1 = aServer().build();
-        Server server2 = anotherServer().build();
-
-        addServer( server1 );
-        addServer( server2 );
+        Server aServer = aServer().build();
+        Server anotherServer = anotherServer().build();
+        saveServer(aServer);
+        saveServer(anotherServer);
 
         List<ServerDTO> servers = resource.webClient()
-                .path( datacenterPath() )
-                .path( "servers" )
-                .type( list( ServerDTO.class ) )
+                .path(datacenterPath())
+                .path("servers")
+                .type(list(ServerDTO.class))
                 .get();
 
-        assertThat( servers ).isNotEmpty();
-        assertThat( servers )
+        assertThat(servers)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(
-                        serverConverter.toDTO( server1 ),
-                        serverConverter.toDTO( server2 ) );
+                        serverConverter.toDTO(aServer),
+                        serverConverter.toDTO(anotherServer));
     }
 
     @Test
@@ -78,81 +76,71 @@ public class ServerResourceIntegrationTest {
         ServerCreateDTO dto = aServerCreateDTO().build();
 
         String id = resource.webClient()
-                .path( datacenterPath() )
-                .path( "servers" )
-                .post( dto );
+                .path(datacenterPath())
+                .path("servers")
+                .post(dto);
 
-        Server actual = resource.find( id, Server.class );
+        Server server = resource.find(id, Server.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        dto, "name" );
+        assertThat(server)
+                .isEqualToIgnoringGivenFields(aServer().build(), "id");
     }
 
     @Test
     public void get() throws Exception {
-        Server expected = aServer().build();
-        addServer( expected );
+        Server server = aServer().build();
+        saveServer(server);
 
         ServerDTO actual = resource.webClient()
-                .path( datacenterPath() )
-                .path( "servers" )
-                .path( expected.getId() )
-                .type( type( ServerDTO.class ) )
+                .path(datacenterPath())
+                .path("servers")
+                .path(server.getId())
+                .type(ServerDTO.class)
                 .get();
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
+        assertThat(actual)
                 .isEqualToComparingFieldByField(
-                        serverConverter.toDTO( expected ) );
+                        serverConverter.toDTO(server));
     }
 
     @Test
     public void put() throws Exception {
-        Server server = aServer()
-                .withName( "oldName" )
-                .build();
+        Server server = aServer().build();
+        saveServer(server);
 
-        addServer( server );
-
-        ServerCreateDTO expected = aServerCreateDTO()
-                .withName( "updatedName" )
-                .build();
+        ServerCreateDTO updated = anotherServerCreateDTO().build();
 
         resource.webClient()
-                .path( datacenterPath() )
-                .path( "servers" )
-                .path( server.getId() )
-                .put( expected );
+                .path(datacenterPath())
+                .path("servers")
+                .path(server.getId())
+                .put(updated);
 
-        Server actual = resource.find( server.getId(), Server.class );
+        Server actual = resource.find(server.getId(), Server.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        expected, "name" );
+        assertThat(actual)
+                .isEqualToIgnoringGivenFields(anotherServer().build(), "id");
     }
 
     @Test
     public void delete() throws Exception {
-        Server expected = aServer().build();
-        addServer( expected );
+        Server server = aServer().build();
+        saveServer(server);
 
         resource.webClient()
-                .path( datacenterPath() )
-                .path( "servers" )
-                .path( expected.getId() )
+                .path(datacenterPath())
+                .path("servers")
+                .path(server.getId())
                 .delete();
 
-        Server actual = resource.find( expected.getId(), Server.class );
+        Server actual = resource.find(server.getId(), Server.class);
 
-        assertThat( actual ).isNull();
+        assertThat(actual).isNull();
     }
 
-    private void addServer( Server server ) {
-        resource.save( server );
-        datacenter.addServer( server );
-        resource.save( datacenter );
+    private void saveServer(Server server) {
+        resource.save(server);
+        datacenter.addServer(server);
+        resource.save(datacenter);
     }
 }

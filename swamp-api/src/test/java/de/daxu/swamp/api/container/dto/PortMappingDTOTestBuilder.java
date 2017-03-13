@@ -1,8 +1,11 @@
 package de.daxu.swamp.api.container.dto;
 
+import static de.daxu.swamp.core.ProjectTestConstants.Containers.PortMappings.EXTERNAL_PORT;
+import static de.daxu.swamp.core.ProjectTestConstants.Containers.PortMappings.INTERNAL_PORT;
+
 public class PortMappingDTOTestBuilder {
-    private Integer internal = 8080;
-    private Integer external = 8888;
+    private Integer internal = INTERNAL_PORT;
+    private Integer external = EXTERNAL_PORT;
 
     public static PortMappingDTOTestBuilder aPortMappingDTO() {
         return new PortMappingDTOTestBuilder();

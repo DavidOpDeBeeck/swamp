@@ -12,7 +12,7 @@ import static de.daxu.swamp.core.server.Server.Builder.aServer;
 public class ServerConverter implements DTOConverter<Server, ServerDTO>, DomainConverter<ServerDTO, Server> {
 
     @Override
-    public ServerDTO toDTO( Server server ) {
+    public ServerDTO toDTO(Server server) {
         ServerDTO dto = new ServerDTO();
         dto.id = server.getId();
         dto.ip = server.getIp();
@@ -22,11 +22,11 @@ public class ServerConverter implements DTOConverter<Server, ServerDTO>, DomainC
     }
 
     @Override
-    public Server toDomain( ServerDTO dto ) {
+    public Server toDomain(ServerDTO dto) {
         return aServer()
-                .withId( dto.id )
-                .withName( dto.name )
-                .withIp( dto.ip )
+                .withId(dto.id)
+                .withName(dto.name)
+                .withIp(dto.ip)
                 .build();
     }
 }

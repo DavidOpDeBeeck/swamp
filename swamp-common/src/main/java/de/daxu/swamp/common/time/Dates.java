@@ -12,11 +12,12 @@ public class Dates {
     private static Clock clock = Clock.systemDefaultZone();
 
     public static LocalDateTime now() {
-        return LocalDateTime.now( getClock() );
+        System.out.println(LocalDateTime.now(getClock()));
+        return LocalDateTime.now(getClock());
     }
 
-    public static void useFixedClockAt( LocalDateTime date ) {
-        clock = Clock.fixed( date.atZone( ZONE_ID ).toInstant(), ZONE_ID );
+    public static void useFixedClockAt(LocalDateTime date) {
+        clock = Clock.fixed(date.atZone(ZONE_ID).toInstant(), ZONE_ID);
     }
 
     public static void useSystemDefaultZoneClock() {

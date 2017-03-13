@@ -1,9 +1,12 @@
 package de.daxu.swamp.api.container.dto;
 
+import static de.daxu.swamp.core.ProjectTestConstants.Containers.EnvironmentVariables.ENVIRONMENT_VARIABLE_NAME;
+import static de.daxu.swamp.core.ProjectTestConstants.Containers.EnvironmentVariables.ENVIRONMENT_VARIABLE_VALUE;
+
 public class EnvironmentVariableDTOTestBuilder {
 
-    private String name = "an environment variable name";
-    private String value = "an environment variable value";
+    private String name = ENVIRONMENT_VARIABLE_NAME;
+    private String value = ENVIRONMENT_VARIABLE_VALUE;
 
     public static EnvironmentVariableDTOTestBuilder anEnvironmentVariableDTO() {
         return new EnvironmentVariableDTOTestBuilder();

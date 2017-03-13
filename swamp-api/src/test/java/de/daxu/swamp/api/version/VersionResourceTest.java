@@ -1,7 +1,6 @@
 package de.daxu.swamp.api.version;
 
 import de.daxu.swamp.api.version.dto.VersionDTO;
-import de.daxu.swamp.common.web.WebClient;
 import de.daxu.swamp.test.rule.ResourceIntegrationTestRule;
 import de.daxu.swamp.test.rule.SpringRule;
 import org.junit.Before;
@@ -18,25 +17,25 @@ public class VersionResourceTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
+    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
 
     private String version;
 
     @Before
     public void setUp() throws Exception {
-        version = spring.getProperty( "application.version" );
+        version = spring.getProperty("application.version");
     }
 
     @Test
     public void get() throws Exception {
-        VersionDTO expected = aVersionDTO().withVersion( version ).build();
+        VersionDTO expected = aVersionDTO().withVersion(version).build();
 
         VersionDTO actual = resource.webClient()
-                .path( "version" )
-                .type( WebClient.type( VersionDTO.class ) )
+                .path("version")
+                .type(VersionDTO.class)
                 .get();
 
-        assertThat( actual ).isEqualToComparingFieldByField( expected );
+        assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
 }

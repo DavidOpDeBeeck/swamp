@@ -13,24 +13,24 @@ public class IntegrationTestRule implements TestRule {
     private final FlywayRule flyway;
     private final HibernateRule database;
 
-    public IntegrationTestRule( SpringRule spring ) {
-        flyway = new FlywayRule( spring.getInstance( DataSource.class ) );
-        database = new HibernateRule( spring.getInstance( EntityManagerFactory.class ) );
+    public IntegrationTestRule(SpringRule spring) {
+        flyway = new FlywayRule(spring.getInstance(DataSource.class));
+        database = new HibernateRule(spring.getInstance(EntityManagerFactory.class));
     }
 
     @Override
-    public Statement apply( Statement base, Description description ) {
+    public Statement apply(Statement base, Description description) {
         return RuleChain
-                .outerRule( database )
-                .around( flyway )
-                .apply( base, description );
+                .outerRule(flyway)
+                .around(database)
+                .apply(base, description);
     }
 
-    public void save( Object... o ) {
-        database.save( o );
+    public void save(Object... o) {
+        database.save(o);
     }
 
-    public <T> T find( String id, Class<T> returnType ) {
-        return database.find( id, returnType );
+    public <T> T find(String id, Class<T> returnType) {
+        return database.find(id, returnType);
     }
 }

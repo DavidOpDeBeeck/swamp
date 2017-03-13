@@ -15,8 +15,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.datacenter.dto.DatacenterCreateDTOTestBuilder.aDatacenterCreateDTO;
+import static de.daxu.swamp.api.datacenter.dto.DatacenterCreateDTOTestBuilder.anotherDatacenterCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
 import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenter;
 import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.anotherDatacenter;
@@ -29,41 +29,41 @@ public class DatacenterResourceIntegrationTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
+    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
+
+    private DatacenterConverter datacenterConverter = spring.getInstance(DatacenterConverter.class);
 
     private Continent continent;
-    private DatacenterConverter datacenterConverter = spring.getInstance( DatacenterConverter.class );
 
     @Before
     public void setUp() throws Exception {
         continent = aContinent().build();
-        resource.save( continent );
+        resource.save(continent);
     }
 
     private String continentPath() {
-        return format( "%s/%s", "continents", continent.getId() );
+        return format("%s/%s", "continents", continent.getId());
     }
 
     @Test
     public void getAll() throws Exception {
-        Datacenter datacenter1 = aDatacenter().build();
-        Datacenter datacenter2 = anotherDatacenter().build();
+        Datacenter aDatacenter = aDatacenter().build();
+        Datacenter anotherDatacenter = anotherDatacenter().build();
 
-        addDatacenter( datacenter1 );
-        addDatacenter( datacenter2 );
+        addDatacenter(aDatacenter);
+        addDatacenter(anotherDatacenter);
 
         List<DatacenterDTO> datacenters = resource.webClient()
-                .path( continentPath() )
-                .path( "datacenters" )
-                .type( list( DatacenterDTO.class ) )
+                .path(continentPath())
+                .path("datacenters")
+                .type(list(DatacenterDTO.class))
                 .get();
 
-        assertThat( datacenters ).isNotEmpty();
-        assertThat( datacenters )
+        assertThat(datacenters)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(
-                        datacenterConverter.toDTO( datacenter1 ),
-                        datacenterConverter.toDTO( datacenter2 ) );
+                        datacenterConverter.toDTO(aDatacenter),
+                        datacenterConverter.toDTO(anotherDatacenter));
     }
 
     @Test
@@ -71,81 +71,71 @@ public class DatacenterResourceIntegrationTest {
         DatacenterCreateDTO dto = aDatacenterCreateDTO().build();
 
         String id = resource.webClient()
-                .path( continentPath() )
-                .path( "datacenters" )
-                .post( dto );
+                .path(continentPath())
+                .path("datacenters")
+                .post(dto);
 
-        Datacenter actual = resource.find( id, Datacenter.class );
+        Datacenter actual = resource.find(id, Datacenter.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        dto, "name" );
+        assertThat(actual)
+                .isEqualToIgnoringGivenFields(aDatacenter().build(), "id");
     }
 
     @Test
     public void get() throws Exception {
         Datacenter expected = aDatacenter().build();
-        addDatacenter( expected );
+        addDatacenter(expected);
 
         DatacenterDTO actual = resource.webClient()
-                .path( continentPath() )
-                .path( "datacenters" )
-                .path( expected.getId() )
-                .type( type( DatacenterDTO.class ) )
+                .path(continentPath())
+                .path("datacenters")
+                .path(expected.getId())
+                .type(DatacenterDTO.class)
                 .get();
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
+        assertThat(actual)
                 .isEqualToComparingFieldByField(
-                        datacenterConverter.toDTO( expected ) );
+                        datacenterConverter.toDTO(expected));
     }
 
     @Test
     public void put() throws Exception {
-        Datacenter datacenter = aDatacenter()
-                .withName( "oldName" )
-                .build();
+        Datacenter datacenter = aDatacenter().build();
+        addDatacenter(datacenter);
 
-        addDatacenter( datacenter );
-
-        DatacenterCreateDTO expected = aDatacenterCreateDTO()
-                .withName( "updatedName" )
-                .build();
+        DatacenterCreateDTO updated = anotherDatacenterCreateDTO().build();
 
         resource.webClient()
-                .path( continentPath() )
-                .path( "datacenters" )
-                .path( datacenter.getId() )
-                .put( expected );
+                .path(continentPath())
+                .path("datacenters")
+                .path(datacenter.getId())
+                .put(updated);
 
-        Datacenter actual = resource.find( datacenter.getId(), Datacenter.class );
+        Datacenter actual = resource.find(datacenter.getId(), Datacenter.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        expected, "name" );
+        assertThat(actual)
+                .isEqualToIgnoringGivenFields(anotherDatacenter().build(), "id");
     }
 
     @Test
     public void delete() throws Exception {
         Datacenter expected = aDatacenter().build();
-        addDatacenter( expected );
+        addDatacenter(expected);
 
         resource.webClient()
-                .path( continentPath() )
-                .path( "datacenters" )
-                .path( expected.getId() )
+                .path(continentPath())
+                .path("datacenters")
+                .path(expected.getId())
                 .delete();
 
-        Datacenter actual = resource.find( expected.getId(), Datacenter.class );
+        Datacenter actual = resource.find(expected.getId(), Datacenter.class);
 
-        assertThat( actual ).isNull();
+        assertThat(actual).isNull();
     }
 
-    private void addDatacenter( Datacenter datacenter ) {
-        resource.save( datacenter );
-        continent.addDatacenter( datacenter );
-        resource.save( continent );
+    private void addDatacenter(Datacenter datacenter) {
+        resource.save(datacenter);
+        continent.addDatacenter(datacenter);
+        resource.save(continent);
     }
 }

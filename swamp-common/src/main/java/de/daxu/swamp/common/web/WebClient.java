@@ -19,6 +19,7 @@ public class WebClient {
         return new Resource(resource);
     }
 
+    @Deprecated
     public static JavaType type(Class returnType) {
         return OBJECT_MAPPER.getTypeFactory()
                 .constructType(returnType);
@@ -52,6 +53,12 @@ public class WebClient {
 
         public Resource type(JavaType returnType) {
             this.returnType = returnType;
+            return this;
+        }
+
+        public Resource type(Class returnType) {
+            this.returnType = OBJECT_MAPPER.getTypeFactory()
+                    .constructType(returnType);
             return this;
         }
 

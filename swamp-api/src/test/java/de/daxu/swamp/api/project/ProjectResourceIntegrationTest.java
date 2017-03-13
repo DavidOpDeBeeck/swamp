@@ -14,9 +14,10 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.aProjectCreateDTO;
+import static de.daxu.swamp.api.project.dto.ProjectCreateDTOTestBuilder.anotherProjectCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.common.web.WebClient.type;
 import static de.daxu.swamp.core.project.ProjectTestBuilder.aProject;
+import static de.daxu.swamp.core.project.ProjectTestBuilder.anotherProject;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,32 +26,31 @@ public class ProjectResourceIntegrationTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule( spring );
+    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
 
     private ProjectConverter projectConverter;
 
     @Before
     public void setUp() throws Exception {
-        projectConverter = spring.getInstance( ProjectConverter.class );
+        projectConverter = spring.getInstance(ProjectConverter.class);
     }
 
     @Test
     public void getAll() throws Exception {
-        Project project1 = aProject().build();
-        Project project2 = aProject().build();
-        resource.save( project1, project2 );
+        Project aProject = aProject().build();
+        Project anotherProject = anotherProject().build();
+        resource.save(aProject, anotherProject);
 
         List<ProjectDTO> projects = resource.webClient()
-                .path( "projects" )
-                .type( list( ProjectDTO.class ) )
+                .path("projects")
+                .type(list(ProjectDTO.class))
                 .get();
 
-        assertThat( projects ).isNotEmpty();
-        assertThat( projects )
+        assertThat(projects)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(
-                        projectConverter.toDTO( project1 ),
-                        projectConverter.toDTO( project2 ) );
+                        projectConverter.toDTO(aProject),
+                        projectConverter.toDTO(anotherProject));
     }
 
     @Test
@@ -58,73 +58,61 @@ public class ProjectResourceIntegrationTest {
         ProjectCreateDTO dto = aProjectCreateDTO().build();
 
         String id = resource.webClient()
-                .path( "projects" )
-                .post( dto );
+                .path("projects")
+                .post(dto);
 
-        Project actual = resource.find( id, Project.class );
+        Project project = resource.find(id, Project.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        dto, "name", "description" );
+        assertThat(project)
+                .isEqualToIgnoringGivenFields(aProject().build(), "id");
     }
 
     @Test
     public void get() throws Exception {
         Project expected = aProject().build();
-        resource.save( expected );
+        resource.save(expected);
 
         ProjectDTO actual = resource.webClient()
-                .path( "projects" )
-                .path( expected.getId() )
-                .type( type( ProjectDTO.class ) )
+                .path("projects")
+                .path(expected.getId())
+                .type(ProjectDTO.class)
                 .get();
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
+        assertThat(actual)
                 .isEqualToComparingFieldByField(
-                        projectConverter.toDTO( expected ) );
+                        projectConverter.toDTO(expected));
     }
 
     @Test
     public void put() throws Exception {
-        Project project = aProject()
-                .withName( "oldName" )
-                .withDescription( "oldDescription" )
-                .build();
+        Project project = aProject().build();
+        resource.save(project);
 
-        resource.save( project );
-
-        ProjectCreateDTO expected = aProjectCreateDTO()
-                .withName( "updatedName" )
-                .withDescription( "updatedDescription" )
-                .build();
+        ProjectCreateDTO updated = anotherProjectCreateDTO().build();
 
         resource.webClient()
-                .path( "projects" )
-                .path( project.getId() )
-                .put( expected );
+                .path("projects")
+                .path(project.getId())
+                .put(updated);
 
-        Project actual = resource.find( project.getId(), Project.class );
+        Project actual = resource.find(project.getId(), Project.class);
 
-        assertThat( actual ).isNotNull();
-        assertThat( actual )
-                .isEqualToComparingOnlyGivenFields(
-                        expected, "name", "description" );
+        assertThat(actual)
+                .isEqualToIgnoringGivenFields(anotherProject().build(), "id");
     }
 
     @Test
     public void delete() throws Exception {
-        Project expected = aProject().build();
-        resource.save( expected );
+        Project project = aProject().build();
+        resource.save(project);
 
         resource.webClient()
-                .path( "projects" )
-                .path( expected.getId() )
+                .path("projects")
+                .path(project.getId())
                 .delete();
 
-        Project actual = resource.find( expected.getId(), Project.class );
+        Project actual = resource.find(project.getId(), Project.class);
 
-        assertThat( actual ).isNull();
+        assertThat(actual).isNull();
     }
 }
