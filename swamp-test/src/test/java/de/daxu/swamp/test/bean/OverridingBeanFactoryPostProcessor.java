@@ -11,31 +11,31 @@ public class OverridingBeanFactoryPostProcessor implements BeanFactoryPostProces
 
     private final Map<String, Object> beanOverrides;
 
-    public OverridingBeanFactoryPostProcessor( Map<String, Object> beanOverrides ) {
+    public OverridingBeanFactoryPostProcessor(Map<String, Object> beanOverrides) {
         this.beanOverrides = beanOverrides;
     }
 
     @Override
-    public void postProcessBeanFactory( ConfigurableListableBeanFactory beanFactory ) throws BeansException {
-        beanFactory.addBeanPostProcessor( new OverridingBeanPostProcessor( beanOverrides ) );
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        beanFactory.addBeanPostProcessor(new OverridingBeanPostProcessor(beanOverrides));
     }
 
     private static class OverridingBeanPostProcessor implements BeanPostProcessor {
 
         private final Map<String, Object> beanOverrides;
 
-        private OverridingBeanPostProcessor( Map<String, Object> beanOverrides ) {
+        private OverridingBeanPostProcessor(Map<String, Object> beanOverrides) {
             this.beanOverrides = beanOverrides;
         }
 
         @Override
-        public Object postProcessBeforeInitialization( Object bean, String beanName ) throws BeansException {
+        public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
             return bean;
         }
 
         @Override
-        public Object postProcessAfterInitialization( Object bean, String beanName ) throws BeansException {
-            return beanOverrides.getOrDefault( beanName, bean );
+        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+            return beanOverrides.getOrDefault(beanName, bean);
         }
     }
 }

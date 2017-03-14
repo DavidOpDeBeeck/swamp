@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 @NoRepositoryBean
 public interface LocationBaseRepository<T extends Location> extends JpaRepository<T, String> {
 
-    T findByName( @Param( "name" ) String name );
+    T findByName(@Param("name") String name);
 
 }

@@ -12,7 +12,6 @@ public class Dates {
     private static Clock clock = Clock.systemDefaultZone();
 
     public static LocalDateTime now() {
-        System.out.println(LocalDateTime.now(getClock()));
         return LocalDateTime.now(getClock());
     }
 

@@ -26,7 +26,7 @@ public class ProjectResourceIntegrationTest {
     @ClassRule
     public static SpringRule spring = spring();
     @Rule
-    public ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
+    public final ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
 
     private ProjectConverter projectConverter;
 

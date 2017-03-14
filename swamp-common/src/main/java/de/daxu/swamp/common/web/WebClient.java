@@ -19,12 +19,6 @@ public class WebClient {
         return new Resource(resource);
     }
 
-    @Deprecated
-    public static JavaType type(Class returnType) {
-        return OBJECT_MAPPER.getTypeFactory()
-                .constructType(returnType);
-    }
-
     public static JavaType list(Class returnType) {
         return OBJECT_MAPPER.getTypeFactory()
                 .constructCollectionType(List.class, returnType);
@@ -35,14 +29,14 @@ public class WebClient {
 
     public static class Resource {
 
-        private final StringBuffer url;
+        private final StringBuilder url;
         private final RestTemplate restTemplate;
         private final Logger logger = LoggerFactory.getLogger(Resource.class);
 
         private JavaType returnType;
 
         private Resource(String baseUrl) {
-            this.url = new StringBuffer(baseUrl);
+            this.url = new StringBuilder(baseUrl);
             this.restTemplate = new RestTemplate();
         }
 
@@ -64,39 +58,64 @@ public class WebClient {
 
         public <T> T get() {
             String url = this.url.toString();
-            logger.debug("[GET] {}", url);
+            logRequest(url);
+
             Object object = restTemplate.getForObject(url, Object.class);
             Response response = OBJECT_MAPPER.convertValue(object, Response.class);
-            logger.debug("[RESPONSE] {}", OBJECT_MAPPER.toJSON(response));
+            logResponse(response);
+
             return convertResponseData(response);
         }
 
         public String post(Object payload) {
             String url = this.url.toString();
-            logger.debug("[POST] {}", url);
-            logger.debug("[PAYLOAD] {}", OBJECT_MAPPER.toJSON(payload));
+            logRequest(url, payload);
+
             Object object = restTemplate.postForObject(url, payload, Object.class);
             Response response = OBJECT_MAPPER.convertValue(object, Response.class);
-            logger.debug("[RESPONSE] {}", OBJECT_MAPPER.toJSON(response));
+            logResponse(response);
+
             String location = response.getMeta().getLocation();
-            return location.substring(location.lastIndexOf("/") + 1, location.length());
+            return extractIdFromLocation(location);
         }
 
         public void put(Object payload) {
             String url = this.url.toString();
-            logger.debug("[PUT] {}", url);
-            logger.debug("[PAYLOAD] {}", OBJECT_MAPPER.toJSON(payload));
+            logRequest(url, payload);
             restTemplate.put(url, payload, Response.class);
         }
 
         public void delete() {
             String url = this.url.toString();
-            logger.debug("[DELETE] {}", url);
+            logRequest(url);
             restTemplate.delete(url, Response.class);
+        }
+
+        private String extractIdFromLocation(String location) {
+            return location.substring(location.lastIndexOf("/") + 1, location.length());
         }
 
         private <S> S convertResponseData(Response response) {
             return OBJECT_MAPPER.convertValue(response.getData(), returnType);
+        }
+
+        private void logRequest(String url) {
+            logger.debug("\n---------------------------------\n" +
+                    "[URL] {}" +
+                    "\n---------------------------------", url);
+        }
+
+        private void logRequest(String url, Object payload) {
+            logger.debug("\n---------------------------------\n" +
+                    "[URL] {} \n" +
+                    "[PAYLOAD] \n{}" +
+                    "\n---------------------------------", url, OBJECT_MAPPER.toJSON(payload));
+        }
+
+        private void logResponse(Response response) {
+            logger.debug("\n---------------------------------\n" +
+                    "[RESPONSE] \n{}" +
+                    "\n---------------------------------", OBJECT_MAPPER.toJSON(response));
         }
     }
 }

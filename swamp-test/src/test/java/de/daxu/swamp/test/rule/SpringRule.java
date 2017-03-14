@@ -31,7 +31,7 @@ public class SpringRule extends ExternalResource {
 
     private SpringApplication application;
     private ConfigurableApplicationContext context;
-    private DateRule dateRule = DateRule.now();
+    private final DateRule dateRule = DateRule.now();
 
     private SpringRule(Map<String, Object> beanOverrides,
                        Map<String, Object> propertyOverrides,

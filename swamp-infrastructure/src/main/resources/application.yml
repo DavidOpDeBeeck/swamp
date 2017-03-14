@@ -59,7 +59,7 @@ logging:
       daxu:
         swamp: TRACE
     org:
-        hibernate: DEBUG
+        hibernate: ERROR
         springframework:
             web: ERROR
 server:
