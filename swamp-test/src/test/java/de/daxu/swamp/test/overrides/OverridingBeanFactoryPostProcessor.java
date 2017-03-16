@@ -1,17 +1,17 @@
-package de.daxu.swamp.test.bean;
+package de.daxu.swamp.test.overrides;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import java.util.Map;
-
 public class OverridingBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
-    private final Map<String, Object> beanOverrides;
+    private final BeanOverrides beanOverrides;
 
-    public OverridingBeanFactoryPostProcessor(Map<String, Object> beanOverrides) {
+    public OverridingBeanFactoryPostProcessor(BeanOverrides beanOverrides) {
         this.beanOverrides = beanOverrides;
     }
 
@@ -22,9 +22,10 @@ public class OverridingBeanFactoryPostProcessor implements BeanFactoryPostProces
 
     private static class OverridingBeanPostProcessor implements BeanPostProcessor {
 
-        private final Map<String, Object> beanOverrides;
+        private final Logger logger = LoggerFactory.getLogger(OverridingBeanPostProcessor.class);
+        private final BeanOverrides beanOverrides;
 
-        private OverridingBeanPostProcessor(Map<String, Object> beanOverrides) {
+        private OverridingBeanPostProcessor(BeanOverrides beanOverrides) {
             this.beanOverrides = beanOverrides;
         }
 
@@ -35,6 +36,9 @@ public class OverridingBeanFactoryPostProcessor implements BeanFactoryPostProces
 
         @Override
         public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+            if (beanOverrides.containsBean(beanName)) {
+                logger.debug("Overriding bean {} with class {}", beanName, bean.getClass().getCanonicalName());
+            }
             return beanOverrides.getOrDefault(beanName, bean);
         }
     }

@@ -4,6 +4,8 @@ import de.daxu.swamp.api.project.converter.ProjectConverter;
 import de.daxu.swamp.api.project.dto.ProjectCreateDTO;
 import de.daxu.swamp.api.project.dto.ProjectDTO;
 import de.daxu.swamp.core.project.Project;
+import de.daxu.swamp.scheduling.command.project.ProjectCommandService;
+import de.daxu.swamp.test.overrides.BeanOverrides;
 import de.daxu.swamp.test.rule.ResourceIntegrationTestRule;
 import de.daxu.swamp.test.rule.SpringRule;
 import org.junit.Before;
@@ -24,7 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProjectResourceIntegrationTest {
 
     @ClassRule
-    public static SpringRule spring = spring();
+    public static SpringRule spring = spring(
+            new BeanOverrides.Builder()
+                    .withOverride("projectCommandService", new ProjectCommandServiceStub())
+                    .build());
     @Rule
     public final ResourceIntegrationTestRule resource = new ResourceIntegrationTestRule(spring);
 
@@ -114,5 +119,15 @@ public class ProjectResourceIntegrationTest {
         Project actual = resource.find(project.getId(), Project.class);
 
         assertThat(actual).isNull();
+    }
+
+    public static class ProjectCommandServiceStub extends ProjectCommandService {
+
+        ProjectCommandServiceStub() {
+            super(null, null);
+        }
+
+        @Override
+        public void createProject(String id, String name, String description) {}
     }
 }

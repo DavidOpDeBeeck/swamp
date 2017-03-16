@@ -1,52 +1,68 @@
 package de.daxu.swamp.test.rule;
 
 import de.daxu.swamp.test.SwampTestApplication;
-import de.daxu.swamp.test.bean.OverridingBeanFactoryPostProcessor;
+import de.daxu.swamp.test.overrides.BeanOverrides;
+import de.daxu.swamp.test.overrides.OverridingBeanFactoryPostProcessor;
+import de.daxu.swamp.test.overrides.PropertyOverrides;
 import org.junit.rules.ExternalResource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class SpringRule extends ExternalResource {
 
-    private static Class SPRING_APPLICATION_CLASS = SwampTestApplication.class;
+    private static Class APPLICATION_CLASS = SwampTestApplication.class;
+    private static BeanOverrides DEFAULT_BEAN_OVERRIDES = BeanOverrides.empty();
+    private static PropertyOverrides DEFAULT_PROPERTY_OVERRIDES = PropertyOverrides.empty();
+    private static String[] DEFAULT_PROFILES = {"test"};
 
     public static SpringRule spring() {
-        return new SpringRule.Builder().build();
-    }
-
-    public static SpringRule spring(Map<String, Object> beanOverrides) {
         return new SpringRule.Builder()
-                .withBeanOverrides(beanOverrides).build();
+                .withBeanOverrides(DEFAULT_BEAN_OVERRIDES)
+                .withPropertyOverrides(DEFAULT_PROPERTY_OVERRIDES)
+                .withProfiles(DEFAULT_PROFILES)
+                .build();
     }
 
-    public static SpringRule spring(Map<String, Object> beanOverrides,
-                                    Map<String, Object> propertyOverrides) {
+    public static SpringRule spring(BeanOverrides beanOverrides) {
         return new SpringRule.Builder()
                 .withBeanOverrides(beanOverrides)
-                .withPropertyOverrides(propertyOverrides).build();
+                .withPropertyOverrides(DEFAULT_PROPERTY_OVERRIDES)
+                .withProfiles(DEFAULT_PROFILES)
+                .build();
     }
+
+    public static SpringRule spring(BeanOverrides beanOverrides, PropertyOverrides propertyOverrides) {
+        return new SpringRule.Builder()
+                .withBeanOverrides(beanOverrides)
+                .withPropertyOverrides(propertyOverrides)
+                .withProfiles(DEFAULT_PROFILES)
+                .build();
+    }
+
+    private final DateRule dateRule = DateRule.now();
 
     private SpringApplication application;
     private ConfigurableApplicationContext context;
-    private final DateRule dateRule = DateRule.now();
 
-    private SpringRule(Map<String, Object> beanOverrides,
-                       Map<String, Object> propertyOverrides,
+    private SpringRule(BeanOverrides beanOverrides,
+                       PropertyOverrides propertyOverrides,
                        String[] profiles) {
         this.application = configure(beanOverrides, propertyOverrides, profiles);
     }
 
-    private SpringApplication configure(Map<String, Object> beanOverrides,
-                                        Map<String, Object> propertyOverrides,
+    private SpringApplication configure(BeanOverrides beanOverrides,
+                                        PropertyOverrides propertyOverrides,
                                         String[] profiles) {
-        SpringApplication application = new SpringApplication(SPRING_APPLICATION_CLASS);
+        SpringApplication application = new SpringApplication(APPLICATION_CLASS);
         application.setAdditionalProfiles(profiles);
-        application.setDefaultProperties(propertyOverrides);
-        application.addInitializers(context -> context.addBeanFactoryPostProcessor(new OverridingBeanFactoryPostProcessor(beanOverrides)));
+        application.setDefaultProperties(propertyOverrides.getPropertyOverrides());
+        application.addInitializers(context -> addBeanFactoryPostProcessor(beanOverrides, context));
         return application;
+    }
+
+    private void addBeanFactoryPostProcessor(BeanOverrides beanOverrides, ConfigurableApplicationContext context) {
+        context.addBeanFactoryPostProcessor(new OverridingBeanFactoryPostProcessor(beanOverrides));
     }
 
     @Override
@@ -71,25 +87,21 @@ public class SpringRule extends ExternalResource {
 
     public static class Builder {
 
-        private Map<String, Object> beanOverrides = new HashMap<>();
-        private Map<String, Object> propertyOverrides = new HashMap<>();
+        private BeanOverrides beanOverrides = BeanOverrides.empty();
+        private PropertyOverrides propertyOverrides = PropertyOverrides.empty();
         private String[] profiles = {"test"};
 
-        public static SpringRule.Builder springRule() {
-            return new SpringRule.Builder();
-        }
-
-        public Builder withBeanOverrides(Map<String, Object> beanOverrides) {
+        Builder withBeanOverrides(BeanOverrides beanOverrides) {
             this.beanOverrides = beanOverrides;
             return this;
         }
 
-        public Builder withPropertyOverrides(Map<String, Object> propertyOverrides) {
+        Builder withPropertyOverrides(PropertyOverrides propertyOverrides) {
             this.propertyOverrides = propertyOverrides;
             return this;
         }
 
-        public Builder withProfiles(String[] profiles) {
+        Builder withProfiles(String[] profiles) {
             this.profiles = profiles;
             return this;
         }
