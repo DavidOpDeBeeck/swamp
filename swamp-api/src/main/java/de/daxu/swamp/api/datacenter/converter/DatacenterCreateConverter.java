@@ -11,9 +11,9 @@ import static de.daxu.swamp.core.datacenter.Datacenter.Builder.aDatacenter;
 public class DatacenterCreateConverter implements DomainConverter<DatacenterCreateDTO, Datacenter> {
 
     @Override
-    public Datacenter toDomain( DatacenterCreateDTO dto ) {
+    public Datacenter toDomain(DatacenterCreateDTO dto) {
         return aDatacenter()
-                .withName( dto.name )
+                .withName(dto.getName())
                 .build();
     }
 }

@@ -39,7 +39,7 @@ public class Project extends AbstractAnnotatedAggregateRoot<ProjectId> {
                 projectId,
                 eventMetaDataFactory.create(),
                 sequence,
-                command.getContainers()));
+                command.getContainerTemplates()));
     }
 
     @EventSourcingHandler

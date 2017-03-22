@@ -13,20 +13,19 @@ public class ServerConverter implements DTOConverter<Server, ServerDTO>, DomainC
 
     @Override
     public ServerDTO toDTO(Server server) {
-        ServerDTO dto = new ServerDTO();
-        dto.id = server.getId();
-        dto.ip = server.getIp();
-        dto.name = server.getName();
-        dto.type = server.getType();
-        return dto;
+        return new ServerDTO.Builder()
+                .withId(server.getId())
+                .withName(server.getName())
+                .withIp(server.getIp())
+                .build();
     }
 
     @Override
     public Server toDomain(ServerDTO dto) {
         return aServer()
-                .withId(dto.id)
-                .withName(dto.name)
-                .withIp(dto.ip)
+                .withId(dto.getId())
+                .withName(dto.getName())
+                .withIp(dto.getIp())
                 .build();
     }
 }

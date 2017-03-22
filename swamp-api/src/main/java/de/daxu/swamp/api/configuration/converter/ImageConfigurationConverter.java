@@ -12,17 +12,16 @@ import static de.daxu.swamp.core.configuration.ImageConfiguration.Builder.anImag
 public class ImageConfigurationConverter implements DTOConverter<ImageConfiguration, ImageConfigurationDTO>, DomainConverter<ImageConfigurationDTO, ImageConfiguration> {
 
     @Override
-    public ImageConfigurationDTO toDTO( ImageConfiguration configuration ) {
-        ImageConfigurationDTO dto = new ImageConfigurationDTO();
-        dto.name = configuration.getName();
-        dto.type = configuration.getType();
-        return dto;
+    public ImageConfigurationDTO toDTO(ImageConfiguration configuration) {
+        return new ImageConfigurationDTO.Builder()
+                .withName(configuration.getName())
+                .build();
     }
 
     @Override
-    public ImageConfiguration toDomain( ImageConfigurationDTO imageConfigurationDTO ) {
+    public ImageConfiguration toDomain(ImageConfigurationDTO imageConfigurationDTO) {
         return anImageConfiguration()
-                .withName( imageConfigurationDTO.name )
+                .withName(imageConfigurationDTO.getName())
                 .build();
     }
 }

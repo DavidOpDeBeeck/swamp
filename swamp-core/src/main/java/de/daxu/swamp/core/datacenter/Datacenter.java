@@ -10,35 +10,35 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
-@Table( name = "datacenter" )
-@DiscriminatorValue( "datacenter" )
-@SuppressWarnings( "unused" )
+@Table(name = "datacenter")
+@DiscriminatorValue("datacenter")
+@SuppressWarnings("unused")
 public class Datacenter extends Location {
 
-    @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "datacenter_id", referencedColumnName = "id" )
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "datacenter_id", referencedColumnName = "id")
     private Set<Server> servers;
 
     private Datacenter() {
     }
 
-    private Datacenter( String id, String name, Set<Server> servers ) {
-        super( id, name );
+    private Datacenter(String id, String name, Set<Server> servers) {
+        super(id, name);
         this.servers = servers;
     }
 
-    public boolean addServer( Server server ) {
-        if ( this.servers == null ) this.servers = newHashSet();
-        return this.servers.add( server );
+    public boolean addServer(Server server) {
+        if (this.servers == null) this.servers = newHashSet();
+        return this.servers.add(server);
     }
 
-    public boolean removeServer( Server server ) {
-        return this.servers.remove( server );
+    public boolean removeServer(Server server) {
+        return this.servers.remove(server);
     }
 
     @Override
     public Set<Server> getServers() {
-        return newHashSet( servers );
+        return newHashSet(servers);
     }
 
     @Override
@@ -54,13 +54,13 @@ public class Datacenter extends Location {
             return new Builder();
         }
 
-        public Builder withServers( Set<Server> servers ) {
+        public Builder withServers(Set<Server> servers) {
             this.servers = servers;
             return this;
         }
 
         public Datacenter build() {
-            return new Datacenter( id, name, servers );
+            return new Datacenter(id, name, servers);
         }
     }
 }

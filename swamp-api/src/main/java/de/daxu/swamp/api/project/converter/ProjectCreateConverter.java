@@ -14,8 +14,8 @@ public class ProjectCreateConverter implements DomainConverter<ProjectCreateDTO,
     @Override
     public Project toDomain(ProjectCreateDTO dto) {
         return aProject()
-                .withName(dto.name)
-                .withDescription(dto.description)
+                .withName(dto.getName())
+                .withDescription(dto.getDescription())
                 .withCreatedAt(Dates.now())
                 .build();
     }

@@ -12,17 +12,16 @@ import static de.daxu.swamp.core.configuration.DockerfileConfiguration.Builder.a
 public class DockerfileConfigurationConverter implements DTOConverter<DockerfileConfiguration, DockerfileConfigurationDTO>, DomainConverter<DockerfileConfigurationDTO, DockerfileConfiguration> {
 
     @Override
-    public DockerfileConfigurationDTO toDTO( DockerfileConfiguration configuration ) {
-        DockerfileConfigurationDTO dto = new DockerfileConfigurationDTO();
-        dto.dockerfile = configuration.getDockerfile();
-        dto.type = configuration.getType();
-        return dto;
+    public DockerfileConfigurationDTO toDTO(DockerfileConfiguration configuration) {
+        return new DockerfileConfigurationDTO.Builder()
+                .withDockerfile(configuration.getDockerfile())
+                .build();
     }
 
     @Override
-    public DockerfileConfiguration toDomain( DockerfileConfigurationDTO dto ) {
+    public DockerfileConfiguration toDomain(DockerfileConfigurationDTO dto) {
         return aDockerfileConfiguration()
-                .withDockerfile( dto.dockerfile )
+                .withDockerfile(dto.getDockerfile())
                 .build();
     }
 }

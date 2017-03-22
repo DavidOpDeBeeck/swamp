@@ -12,30 +12,30 @@ import java.util.stream.Collectors;
 import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
-@Table( name = "continent" )
-@DiscriminatorValue( "continent" )
-@SuppressWarnings( "unused" )
+@Table(name = "continent")
+@DiscriminatorValue("continent")
+@SuppressWarnings("unused")
 public class Continent extends Location {
 
-    @OneToMany( fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "continent_id", referencedColumnName = "id" )
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "continent_id", referencedColumnName = "id")
     private Set<Datacenter> datacenters;
 
     private Continent() {
     }
 
-    private Continent( String id, String name, Set<Datacenter> datacenters ) {
-        super( id, name );
+    private Continent(String id, String name, Set<Datacenter> datacenters) {
+        super(id, name);
         this.datacenters = datacenters;
     }
 
-    public boolean addDatacenter( Datacenter datacenter ) {
-        if ( this.datacenters == null ) this.datacenters = newHashSet();
-        return this.datacenters.add( datacenter );
+    public boolean addDatacenter(Datacenter datacenter) {
+        if (this.datacenters == null) this.datacenters = newHashSet();
+        return this.datacenters.add(datacenter);
     }
 
-    public boolean removeDatacenter( Datacenter datacenter ) {
-        return this.datacenters.remove( datacenter );
+    public boolean removeDatacenter(Datacenter datacenter) {
+        return this.datacenters.remove(datacenter);
     }
 
     @Override
@@ -46,9 +46,9 @@ public class Continent extends Location {
     @Override
     public Set<Server> getServers() {
         return datacenters.stream()
-                .map( Datacenter::getServers )
-                .flatMap( Set::stream )
-                .collect( Collectors.toSet() );
+                .map(Datacenter::getServers)
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
     }
 
     public Set<Datacenter> getDatacenters() {
@@ -63,13 +63,13 @@ public class Continent extends Location {
             return new Builder();
         }
 
-        public Builder withDatacenters( Set<Datacenter> datacenters ) {
+        public Builder withDatacenters(Set<Datacenter> datacenters) {
             this.datacenters = datacenters;
             return this;
         }
 
         public Continent build() {
-            return new Continent( id, name, datacenters );
+            return new Continent(id, name, datacenters);
         }
     }
 }

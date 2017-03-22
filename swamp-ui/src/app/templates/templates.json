@@ -1,7 +1,7 @@
 [
   {
     "name": "jenkins",
-    "container": {
+    "containerTemplate": {
       "name": "jenkins",
       "runConfiguration": {
         "type": "IMAGE",

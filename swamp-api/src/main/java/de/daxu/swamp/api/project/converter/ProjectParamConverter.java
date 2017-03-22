@@ -13,16 +13,16 @@ public class ProjectParamConverter implements Converter<String, Project> {
     private final ProjectService projectService;
 
     @Autowired
-    public ProjectParamConverter( ProjectService projectService ) {
+    public ProjectParamConverter(ProjectService projectService) {
         this.projectService = projectService;
     }
 
     @Override
-    public Project convert( String source ) {
-        Project project = projectService.getProject( source );
+    public Project convert(String source) {
+        Project project = projectService.getProject(source);
 
-        if( project == null )
-            throw new NotFoundException( "Project was not found!" );
+        if (project == null)
+            throw new NotFoundException("Project was not found!");
 
         return project;
     }

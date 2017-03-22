@@ -22,7 +22,7 @@ public class BeanUtils {
                 || bean.getPropertyValue(propertyName) == null;
     }
 
-    public static void copyPropertiesIgnoreNulls(Object src, Object target) {
+    public static void copyPropertiesIgnoreNull(Object src, Object target) {
         org.springframework.beans.BeanUtils.copyProperties(src, target, getNotWritableOrNullProperties(src));
     }
 }

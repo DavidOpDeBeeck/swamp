@@ -21,35 +21,35 @@ public class RunConfigurationConverter implements DTOConverter<RunConfiguration,
     private final DockerfileConfigurationConverter dockerfileConfigurationConverter;
 
     @Autowired
-    public RunConfigurationConverter( ImageConfigurationConverter imageConfigurationConverter, GitConfigurationConverter gitConfigurationConverter, DockerfileConfigurationConverter dockerfileConfigurationConverter ) {
+    public RunConfigurationConverter(ImageConfigurationConverter imageConfigurationConverter, GitConfigurationConverter gitConfigurationConverter, DockerfileConfigurationConverter dockerfileConfigurationConverter) {
         this.imageConfigurationConverter = imageConfigurationConverter;
         this.gitConfigurationConverter = gitConfigurationConverter;
         this.dockerfileConfigurationConverter = dockerfileConfigurationConverter;
     }
 
     @Override
-    public RunConfigurationDTO toDTO( RunConfiguration configuration ) {
-        switch ( configuration.getType() ) {
+    public RunConfigurationDTO toDTO(RunConfiguration configuration) {
+        switch (configuration.getType()) {
             case IMAGE:
-                return imageConfigurationConverter.toDTO( ( ImageConfiguration ) configuration );
+                return imageConfigurationConverter.toDTO((ImageConfiguration) configuration);
             case GIT:
-                return gitConfigurationConverter.toDTO( ( GitConfiguration ) configuration );
+                return gitConfigurationConverter.toDTO((GitConfiguration) configuration);
             case DOCKERFILE:
-                return dockerfileConfigurationConverter.toDTO( ( DockerfileConfiguration ) configuration );
+                return dockerfileConfigurationConverter.toDTO((DockerfileConfiguration) configuration);
             default:
                 return null;
         }
     }
 
     @Override
-    public RunConfiguration toDomain( RunConfigurationDTO configuration ) {
-        switch ( configuration.type ) {
+    public RunConfiguration toDomain(RunConfigurationDTO configuration) {
+        switch (configuration.getType()) {
             case IMAGE:
-                return imageConfigurationConverter.toDomain( ( ImageConfigurationDTO ) configuration );
+                return imageConfigurationConverter.toDomain((ImageConfigurationDTO) configuration);
             case GIT:
-                return gitConfigurationConverter.toDomain( ( GitConfigurationDTO ) configuration );
+                return gitConfigurationConverter.toDomain((GitConfigurationDTO) configuration);
             case DOCKERFILE:
-                return dockerfileConfigurationConverter.toDomain( ( DockerfileConfigurationDTO ) configuration );
+                return dockerfileConfigurationConverter.toDomain((DockerfileConfigurationDTO) configuration);
             default:
                 return null;
         }

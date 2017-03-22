@@ -22,7 +22,7 @@ public class BuildProcessManager {
         buildCommandService.createBuild(
                 event.getProjectId(),
                 event.getSequence(),
-                event.getContainers());
+                event.getContainerTemplates());
     }
 
     @EventHandler

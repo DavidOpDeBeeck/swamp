@@ -11,9 +11,9 @@ import static de.daxu.swamp.core.continent.Continent.Builder.aContinent;
 public class ContinentCreateConverter implements DomainConverter<ContinentCreateDTO, Continent> {
 
     @Override
-    public Continent toDomain( ContinentCreateDTO dto ) {
+    public Continent toDomain(ContinentCreateDTO dto) {
         return aContinent()
-                .withName( dto.name )
+                .withName(dto.getName())
                 .build();
     }
 }

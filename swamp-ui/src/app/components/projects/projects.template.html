@@ -14,7 +14,7 @@
         </div>
         <div class="card"
              ui-sref-active="active"
-             ui-sref="projects.project.containers({projectId: project.id})"
+             ui-sref="projects.project.container-templates({projectId: project.id})"
              ng-repeat="project in ProjectCtrl.projects | filter: ProjectCtrl.filter">
             <div class="card-info">
                 <span class="card-title" ng-bind="project.name"></span>

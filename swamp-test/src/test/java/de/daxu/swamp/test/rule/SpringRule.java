@@ -32,9 +32,9 @@ public class SpringRule extends ExternalResource {
                 .build();
     }
 
-    public static SpringRule spring(BeanOverrides beanOverrides, PropertyOverrides propertyOverrides) {
+    public static SpringRule spring(PropertyOverrides propertyOverrides) {
         return new SpringRule.Builder()
-                .withBeanOverrides(beanOverrides)
+                .withBeanOverrides(DEFAULT_BEAN_OVERRIDES)
                 .withPropertyOverrides(propertyOverrides)
                 .withProfiles(DEFAULT_PROFILES)
                 .build();

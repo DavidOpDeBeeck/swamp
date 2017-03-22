@@ -1,6 +1,20 @@
 package de.daxu.swamp.api.version.dto;
 
-public class VersionDTO {
+import de.daxu.swamp.common.ValueObject;
 
-    public String version;
+public class VersionDTO extends ValueObject {
+
+    private String version;
+
+    @SuppressWarnings("unused")
+    private VersionDTO() {
+    }
+
+    public VersionDTO(String version) {
+        this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
+    }
 }

@@ -22,9 +22,7 @@ public class DateRule extends ExternalResource {
 
     @Override
     protected void before() throws Exception {
-        logger.debug("\n---------------------------------\n" +
-                     " Time is fixed at {} " +
-                     "\n---------------------------------", date);
+        logger.info("Time is fixed at {} ", date);
         Dates.useFixedClockAt(date);
     }
 }

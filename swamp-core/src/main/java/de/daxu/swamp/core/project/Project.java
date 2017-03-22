@@ -1,7 +1,7 @@
 package de.daxu.swamp.core.project;
 
-import de.daxu.swamp.common.jpa.Identifiable;
-import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.common.Identifiable;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -29,9 +29,9 @@ public class Project extends Identifiable {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
-    private Set<Container> containers;
+    private Set<ContainerTemplate> containerTemplates;
 
     public void setName(String name) {
         this.name = name;
@@ -44,11 +44,11 @@ public class Project extends Identifiable {
     private Project() {
     }
 
-    private Project(String name, String description, LocalDateTime createdAt, Set<Container> containers) {
+    private Project(String name, String description, LocalDateTime createdAt, Set<ContainerTemplate> containerTemplates) {
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;
-        this.containers = containers;
+        this.containerTemplates = containerTemplates;
     }
 
     public String getName() {
@@ -63,17 +63,17 @@ public class Project extends Identifiable {
         return createdAt;
     }
 
-    public Set<Container> getContainers() {
-        return containers;
+    public Set<ContainerTemplate> getContainerTemplates() {
+        return containerTemplates;
     }
 
-    public boolean addContainer(Container container) {
-        if (this.containers == null) this.containers = newHashSet();
-        return this.containers.add(container);
+    public boolean addContainerTemplate(ContainerTemplate containerTemplate) {
+        if (this.containerTemplates == null) this.containerTemplates = newHashSet();
+        return this.containerTemplates.add(containerTemplate);
     }
 
-    public boolean removeContainer(Container container) {
-        return this.containers.remove(container);
+    public boolean removeContainerTemplate(ContainerTemplate containerTemplate) {
+        return this.containerTemplates.remove(containerTemplate);
     }
 
     public static class Builder {
@@ -81,7 +81,7 @@ public class Project extends Identifiable {
         private String name;
         private String description;
         private LocalDateTime createdAt;
-        private Set<Container> containers;
+        private Set<ContainerTemplate> containerTemplates;
 
         public static Builder aProject() {
             return new Builder();
@@ -102,13 +102,13 @@ public class Project extends Identifiable {
             return this;
         }
 
-        public Builder withContainers(Set<Container> containers) {
-            this.containers = containers;
+        public Builder withContainers(Set<ContainerTemplate> containerTemplates) {
+            this.containerTemplates = containerTemplates;
             return this;
         }
 
         public Project build() {
-            return new Project(name, description, createdAt, containers);
+            return new Project(name, description, createdAt, containerTemplates);
         }
     }
 }

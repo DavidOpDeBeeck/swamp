@@ -107,6 +107,12 @@ subprojects {
         }
     }
 
+    test {
+        testLogging {
+            events "passed", "skipped", "failed", "standardError"
+        }
+    }
+
     task testJar(type: Jar, dependsOn: testClasses) {
         baseName = "test-${project.archivesBaseName}"
         from sourceSets.test.output

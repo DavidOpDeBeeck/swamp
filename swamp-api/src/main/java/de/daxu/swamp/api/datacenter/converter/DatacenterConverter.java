@@ -12,20 +12,19 @@ import static de.daxu.swamp.core.datacenter.Datacenter.Builder.aDatacenter;
 public class DatacenterConverter implements DTOConverter<Datacenter, DatacenterDTO>, DomainConverter<DatacenterDTO, Datacenter> {
 
     @Override
-    public DatacenterDTO toDTO( Datacenter datacenter ) {
-        DatacenterDTO dto = new DatacenterDTO();
-        dto.id = datacenter.getId();
-        dto.name = datacenter.getName();
-        dto.servers = datacenter.getServers() != null ? datacenter.getServers().size() : 0;
-        dto.type = datacenter.getType();
-        return dto;
+    public DatacenterDTO toDTO(Datacenter datacenter) {
+        return new DatacenterDTO.Builder()
+                .withId(datacenter.getId())
+                .withName(datacenter.getName())
+                .withDatacenters(datacenter.getServers() != null ? datacenter.getServers().size() : 0)
+                .build();
     }
 
     @Override
-    public Datacenter toDomain( DatacenterDTO dto ) {
+    public Datacenter toDomain(DatacenterDTO dto) {
         return aDatacenter()
-                .withId( dto.id )
-                .withName( dto.name )
+                .withId(dto.getId())
+                .withName(dto.getName())
                 .build();
     }
 }

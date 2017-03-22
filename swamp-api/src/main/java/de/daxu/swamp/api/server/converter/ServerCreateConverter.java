@@ -11,13 +11,13 @@ import static de.daxu.swamp.core.server.Server.Builder.aServer;
 public class ServerCreateConverter implements DomainConverter<ServerCreateDTO, Server> {
 
     @Override
-    public Server toDomain( ServerCreateDTO dto ) {
+    public Server toDomain(ServerCreateDTO dto) {
         return aServer()
-                .withName( dto.name )
-                .withIp( dto.ip )
-                .withCACertificate( dto.CACertificate )
-                .withCertificate( dto.certificate )
-                .withKey( dto.key )
+                .withName(dto.getName())
+                .withIp(dto.getIp())
+                .withCaCertificate(dto.getCaCertificate())
+                .withCertificate(dto.getCertificate())
+                .withKey(dto.getKey())
                 .build();
     }
 }

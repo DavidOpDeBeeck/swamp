@@ -6,9 +6,7 @@ class TemplateController {
 
     getTemplates() {
         this.templateService.getTemplates()
-            .then((templates) => {
-                this.templates = templates;
-            });
+            .then(templates => this.templates = templates);
     }
 }
 

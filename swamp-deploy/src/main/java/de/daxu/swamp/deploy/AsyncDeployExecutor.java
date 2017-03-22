@@ -33,9 +33,9 @@ public class AsyncDeployExecutor {
 
         private Consumer<T> onSuccess;
         private Consumer<Set<String>> onFail;
+        private Consumer<Throwable> onError;
 
-        private Execution(AsyncRunner asyncRunner,
-                          Supplier<DeployResult<T>> action) {
+        private Execution(AsyncRunner asyncRunner, Supplier<DeployResult<T>> action) {
             this.asyncRunner = asyncRunner;
             this.action = action;
         }
@@ -50,13 +50,21 @@ public class AsyncDeployExecutor {
             return this;
         }
 
+        public Execution<T> onError(Consumer<Throwable> onError) {
+            this.onError = onError;
+            return this;
+        }
+
         public void execute() {
             ListenableFuture<DeployResult<T>> future = asyncRunner.forCallable(action::get);
 
             future.addCallback(result -> {
                 result.onSuccess(onSuccess);
                 result.onFail(onFail);
-            }, throwable -> logger.error("Execution encountered exception: {}", throwable.getMessage()));
+            }, throwable -> {
+                logger.error("Execution encountered exception: {}", throwable.getMessage());
+                onError.accept(throwable);
+            });
         }
     }
 }

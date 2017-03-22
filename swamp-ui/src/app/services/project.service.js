@@ -1,27 +1,16 @@
 class ProjectService {
     constructor($resource) {
         this.projectResource = $resource('/api/projects/:id', {id: '@id'}, {
-            create: {
-                method: 'POST'
-            },
-            update: {
-                method: 'PUT'
-            },
-            deploy: {
-                method: 'POST',
-                params: {action: 'deploy'}
-            }
+            create: {method: 'POST'},
+            update: {method: 'PUT'},
+            deploy: {method: 'POST', params: {action: 'deploy'}}
         });
-        this.containerResource = $resource('/api/projects/:projectId/containers/:containerId', {
+        this.containerTemplateResource = $resource('/api/projects/:projectId/container-templates/:containerTemplateId', {
             projectId: '@projectId',
-            containerId: '@containerId'
+            containerTemplateId: '@containerTemplateId'
         }, {
-            create: {
-                method: 'POST'
-            },
-            update: {
-                method: 'PUT'
-            }
+            create: {method: 'POST'},
+            update: {method: 'PUT'}
         });
     }
 
@@ -33,30 +22,39 @@ class ProjectService {
         return this.projectResource.get({id: id}).$promise;
     }
 
-    createContainer(projectId, container) {
-        return this.containerResource.create({projectId: projectId}, container).$promise;
-    }
-
-    getContainer(projectId, containerId) {
-        return this.containerResource.get({projectId: projectId, containerId: containerId})
+    getProjectContainerTemplates(projectId) {
+        return this.containerTemplateResource.query({projectId: projectId})
             .$promise
-            .then((container) => this.mapContainer(projectId, container));
-    }
-
-    getProjectContainers(projectId) {
-        return this.containerResource.query({projectId: projectId})
-            .$promise
-            .then((containers) => containers.map((container) => this.mapContainer(projectId, container)));
+            .then(this.mapContainerTemplates(projectId));
     }
 
     getAllProjects() {
         return this.projectResource.query().$promise;
     }
-    
-    mapContainer(projectId, container) {
-        container['projectId'] = projectId;
-        container['containerId'] = container.id;
-        return container;
+
+    createContainerTemplate(projectId, containerTemplate) {
+        return this.containerTemplateResource
+            .create({projectId: projectId}, containerTemplate)
+            .$promise;
+    }
+
+    getContainerTemplate(projectId, containerId) {
+        return this.containerTemplateResource
+            .get({projectId: projectId, containerId: containerId})
+            .$promise
+            .then(this.mapContainerTemplate(projectId));
+    }
+
+    mapContainerTemplates(projectId) {
+        return templates => templates.map(this.mapContainerTemplate(projectId));
+    }
+
+    mapContainerTemplate(projectId) {
+        return template => {
+            template['projectId'] = projectId;
+            template['containerTemplateId'] = template.id;
+            return template;
+        }
     }
 }
 

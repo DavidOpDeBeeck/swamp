@@ -5,8 +5,8 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
-import de.daxu.swamp.core.container.EnvironmentVariable;
-import de.daxu.swamp.core.container.PortMapping;
+import de.daxu.swamp.core.containertemplate.EnvironmentVariable;
+import de.daxu.swamp.core.containertemplate.PortMapping;
 import de.daxu.swamp.deploy.group.GroupId;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class DockerCreateContainerCommandAdapter {
 
     public DockerCreateContainerCommandAdapter withEnvironmentVariables(Set<EnvironmentVariable> environmentVariables) {
         this.environmentVariables = environmentVariables.stream()
-                .map(EnvironmentVariable::toString)
+                .map(EnvironmentVariable::asString)
                 .collect(Collectors.toList());
         return this;
     }

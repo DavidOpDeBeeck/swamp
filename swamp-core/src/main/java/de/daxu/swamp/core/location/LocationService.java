@@ -1,6 +1,5 @@
 package de.daxu.swamp.core.location;
 
-import de.daxu.swamp.core.continent.Continent;
 import de.daxu.swamp.core.continent.ContinentRepository;
 import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.datacenter.DatacenterRepository;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -23,91 +21,42 @@ public class LocationService {
     private final ServerRepository serverRepository;
 
     @Autowired
-    public LocationService( LocationRepository locationRepository,
-                            ContinentRepository continentRepository,
-                            DatacenterRepository datacenterRepository,
-                            ServerRepository serverRepository ) {
+    public LocationService(LocationRepository locationRepository,
+                           ContinentRepository continentRepository,
+                           DatacenterRepository datacenterRepository,
+                           ServerRepository serverRepository) {
         this.locationRepository = locationRepository;
         this.continentRepository = continentRepository;
         this.datacenterRepository = datacenterRepository;
         this.serverRepository = serverRepository;
     }
 
-    public Continent createContinent( Continent continent ) {
-        return continentRepository.save( continent );
-    }
-
-    public void deleteContinent( Continent continent ) {
-        continentRepository.delete( continent );
-    }
-
-    public Datacenter addDatacenterToContinent( Continent continent, Datacenter datacenter ) {
-        datacenterRepository.save( datacenter );
-        continent.addDatacenter( datacenter );
-        continentRepository.save( continent );
-        return datacenterRepository.findByName( datacenter.getName() );
-    }
-
-    public void removeDatacenterFromContinent( Continent continent, Datacenter datacenter ) {
-        datacenterRepository.delete( datacenter );
-        continent.removeDatacenter( datacenter );
-        continentRepository.save( continent );
-    }
-
-    public Server addServerToDatacenter( Datacenter datacenter, Server server ) {
-        serverRepository.save( server );
-        datacenter.addServer( server );
-        datacenterRepository.save( datacenter );
+    public Server addServerToDatacenter(Datacenter datacenter, Server server) {
+        serverRepository.save(server);
+        datacenter.addServer(server);
+        datacenterRepository.save(datacenter);
         return server;
     }
 
-    public void removeServerFromDatacenter( Datacenter datacenter, Server server ) {
-        serverRepository.delete( server );
-        datacenter.removeServer( server );
-        datacenterRepository.save( datacenter );
+    public void removeServerFromDatacenter(Datacenter datacenter, Server server) {
+        serverRepository.delete(server);
+        datacenter.removeServer(server);
+        datacenterRepository.save(datacenter);
     }
 
-    public Location getLocation( String id ) {
-        return locationRepository.findOne( id );
+    public Location getLocation(String id) {
+        return locationRepository.findOne(id);
     }
 
     public List<Location> getAllLocation() {
         return locationRepository.findAll();
     }
 
-    public List<Server> getAllServers() {
-        return serverRepository.findAll();
+    public Datacenter updateDatacenter(Datacenter datacenter) {
+        return datacenterRepository.save(datacenter);
     }
 
-    public Continent updateContinent( Continent continent ) {
-        return continentRepository.save( continent );
-    }
-
-    public Datacenter updateDatacenter( Datacenter datacenter ) {
-        return datacenterRepository.save( datacenter );
-    }
-
-    public Server updateServer( Server server ) {
-        return serverRepository.save( server );
-    }
-
-    public Continent getContinent( String id ) {
-        return continentRepository.findOne( id );
-    }
-
-    public Datacenter getDatacenter( String id ) {
-        return datacenterRepository.findOne( id );
-    }
-
-    public Server getServer( String id ) {
-        return serverRepository.findOne( id );
-    }
-
-    public Server getServerByName( String name ) {
-        return serverRepository.findByName( name );
-    }
-
-    public Collection<Continent> getAllContinents() {
-        return continentRepository.findAll();
+    public Datacenter getDatacenter(String id) {
+        return datacenterRepository.findOne(id);
     }
 }

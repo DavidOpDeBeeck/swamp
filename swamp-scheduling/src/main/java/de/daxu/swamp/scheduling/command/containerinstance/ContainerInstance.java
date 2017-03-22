@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static de.daxu.swamp.deploy.notifier.BufferedProgressNotifier.Builder.aBufferedProgressNotifier;
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.*;
 
@@ -74,6 +75,7 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
                 .action(this::createContainer)
                 .onSuccess(this::creationSuccess)
                 .onFail(this::creationFailed)
+                .onError(this::creationError)
                 .execute();
 
         apply(new ContainerInstanceCreationStartedEvent(containerInstanceId, buildId, eventMetaDataFactory.create()));
@@ -228,6 +230,11 @@ public class ContainerInstance extends AbstractAnnotatedAggregateRoot<ContainerI
         return clientManager
                 .createClient(server)
                 .createContainer(configuration, creationNotifier());
+    }
+
+    private void creationError(Throwable throwable) {
+        asyncRunner.forRunnable(() ->
+                service.creationFailed(containerInstanceId, newHashSet(throwable.getMessage())));
     }
 
     private void creationFailed(Set<String> warnings) {

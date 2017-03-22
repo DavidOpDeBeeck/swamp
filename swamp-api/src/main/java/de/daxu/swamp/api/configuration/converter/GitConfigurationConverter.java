@@ -16,27 +16,25 @@ public class GitConfigurationConverter implements DTOConverter<GitConfiguration,
     private final UsernamePasswordCredentialsConverter usernamePasswordCredentialsConverter;
 
     @Autowired
-    public GitConfigurationConverter( UsernamePasswordCredentialsConverter usernamePasswordCredentialsConverter ) {
+    public GitConfigurationConverter(UsernamePasswordCredentialsConverter usernamePasswordCredentialsConverter) {
         this.usernamePasswordCredentialsConverter = usernamePasswordCredentialsConverter;
     }
 
     @Override
-    public GitConfigurationDTO toDTO( GitConfiguration configuration ) {
-        GitConfigurationDTO dto = new GitConfigurationDTO();
-        dto.url = configuration.getUrl();
-        dto.branch = configuration.getBranch();
-        dto.path = configuration.getPath();
-        //dto.credentials = usernamePasswordCredentialsConverter.toDTO( configuration.getCredentials() );
-        dto.type = configuration.getType();
-        return dto;
+    public GitConfigurationDTO toDTO(GitConfiguration configuration) {
+        return new GitConfigurationDTO.Builder()
+                .withUrl(configuration.getUrl())
+                .withBranch(configuration.getBranch())
+                .withPath(configuration.getPath())
+                .build();
     }
 
     @Override
-    public GitConfiguration toDomain( GitConfigurationDTO dto ) {
+    public GitConfiguration toDomain(GitConfigurationDTO dto) {
         return aGitConfiguration()
-                .withUrl( dto.url )
-                .withBranch( dto.branch )
-                .withPath( dto.path )
+                .withUrl(dto.getUrl())
+                .withBranch(dto.getBranch())
+                .withPath(dto.getPath())
                 //.withCredentials( usernamePasswordCredentialsConverter.toDomain( dto.credentials ) )
                 .build();
     }

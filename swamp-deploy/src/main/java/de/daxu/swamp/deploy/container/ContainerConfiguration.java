@@ -1,9 +1,9 @@
 package de.daxu.swamp.deploy.container;
 
 import de.daxu.swamp.core.configuration.RunConfiguration;
-import de.daxu.swamp.core.container.Container;
-import de.daxu.swamp.core.container.EnvironmentVariable;
-import de.daxu.swamp.core.container.PortMapping;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
+import de.daxu.swamp.core.containertemplate.EnvironmentVariable;
+import de.daxu.swamp.core.containertemplate.PortMapping;
 import de.daxu.swamp.deploy.group.GroupId;
 
 import java.util.Set;
@@ -13,13 +13,13 @@ import static de.daxu.swamp.deploy.container.ContainerConfiguration.Builder.aCon
 
 public class ContainerConfiguration {
 
-    public static ContainerConfiguration of(GroupId groupId, Container container) {
+    public static ContainerConfiguration of(GroupId groupId, ContainerTemplate containerTemplate) {
         return aContainerConfiguration()
                 .withGroupId(groupId)
-                .withAliases(container.getAliases())
-                .withPortMappings(container.getPortMappings())
-                .withEnvironmentVariables(container.getEnvironmentVariables())
-                .withRunConfiguration(container.getRunConfiguration()).build();
+                .withAliases(containerTemplate.getAliases())
+                .withPortMappings(containerTemplate.getPortMappings())
+                .withEnvironmentVariables(containerTemplate.getEnvironmentVariables())
+                .withRunConfiguration(containerTemplate.getRunConfiguration()).build();
     }
 
     private final GroupId groupId;

@@ -85,7 +85,7 @@ public class ProjectResource {
 
         Project updatedProject = projectCreateConverter.toDomain(updatedProjectDTO);
 
-        BeanUtils.copyPropertiesIgnoreNulls(updatedProject, projectToUpdate);
+        BeanUtils.copyPropertiesIgnoreNull(updatedProject, projectToUpdate);
         projectService.updateProject(projectToUpdate);
 
         return response.success(projectConverter.toDTO(projectToUpdate));
@@ -102,7 +102,7 @@ public class ProjectResource {
     public Response deploy(@PathVariable("projectId") Project project) {
 
         ProjectId projectId = ProjectId.from(project.getId());
-        projectCommandService.scheduleBuild(projectId, project.getContainers());
+        projectCommandService.scheduleBuild(projectId, project.getContainerTemplates());
         return response.success();
     }
 }

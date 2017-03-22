@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.command.build.command;
 
-import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.project.ProjectId;
 
@@ -10,16 +10,16 @@ public class CreateBuildCommand extends BuildCommand {
 
     private final ProjectId projectId;
     private final int sequence;
-    private final Set<Container> containers;
+    private final Set<ContainerTemplate> containerTemplates;
 
     public CreateBuildCommand(BuildId buildId,
                               ProjectId projectId,
                               int sequence,
-                              Set<Container> containers) {
+                              Set<ContainerTemplate> containerTemplates) {
         super(buildId);
         this.projectId = projectId;
         this.sequence = sequence;
-        this.containers = containers;
+        this.containerTemplates = containerTemplates;
     }
 
     public ProjectId getProjectId() {
@@ -30,7 +30,7 @@ public class CreateBuildCommand extends BuildCommand {
         return sequence;
     }
 
-    public Set<Container> getContainers() {
-        return containers;
+    public Set<ContainerTemplate> getContainerTemplates() {
+        return containerTemplates;
     }
 }

@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.command.build.command;
 
-import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
 import de.daxu.swamp.scheduling.command.build.BuildId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus;
@@ -15,8 +15,8 @@ public class BuildCommandFactory {
     public CreateBuildCommand createBuildCommand(BuildId buildId,
                                                  ProjectId projectId,
                                                  int sequence,
-                                                 Set<Container> containers) {
-        return new CreateBuildCommand(buildId, projectId, sequence, containers);
+                                                 Set<ContainerTemplate> containerTemplates) {
+        return new CreateBuildCommand(buildId, projectId, sequence, containerTemplates);
     }
 
     public UpdateContainerInstanceStatusCommand updateContainerInstanceStatusCommand(BuildId buildId,

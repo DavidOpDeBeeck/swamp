@@ -8,6 +8,7 @@ import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.continent.Continent;
+import de.daxu.swamp.core.continent.ContinentService;
 import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.location.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,19 @@ public class DatacenterResource {
 
     private final ResponseFactory response;
     private final LocationService locationService;
+    private final ContinentService continentService;
     private final DatacenterConverter datacenterConverter;
     private final DatacenterCreateConverter datacenterCreateConverter;
 
     @Autowired
     public DatacenterResource(ResponseFactory responseFactory,
                               LocationService locationService,
+                              ContinentService continentService,
                               DatacenterConverter datacenterConverter,
                               DatacenterCreateConverter datacenterCreateConverter) {
         this.response = responseFactory;
         this.locationService = locationService;
+        this.continentService = continentService;
         this.datacenterConverter = datacenterConverter;
         this.datacenterCreateConverter = datacenterCreateConverter;
     }
@@ -60,7 +64,7 @@ public class DatacenterResource {
                          @Valid @RequestBody DatacenterCreateDTO dto) {
 
         Datacenter datacenter = datacenterCreateConverter.toDomain(dto);
-        datacenter = locationService.addDatacenterToContinent(continent, datacenter);
+        continentService.addDatacenterToContinent(continent.getId(), datacenter);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -82,7 +86,7 @@ public class DatacenterResource {
 
         Datacenter updatedDatacenter = datacenterCreateConverter.toDomain(updatedDatacenterDTO);
 
-        BeanUtils.copyPropertiesIgnoreNulls(updatedDatacenter, datacenterToUpdate);
+        BeanUtils.copyPropertiesIgnoreNull(updatedDatacenter, datacenterToUpdate);
         locationService.updateDatacenter(datacenterToUpdate);
 
         return response.success(datacenterConverter.toDTO(datacenterToUpdate));
@@ -92,7 +96,7 @@ public class DatacenterResource {
     public Response delete(@PathVariable("continentId") Continent continent,
                            @PathVariable("datacenterId") Datacenter datacenter) {
 
-        locationService.removeDatacenterFromContinent(continent, datacenter);
+        continentService.removeDatacenterFromContinent(continent.getId(), datacenter);
         return response.success();
     }
 }

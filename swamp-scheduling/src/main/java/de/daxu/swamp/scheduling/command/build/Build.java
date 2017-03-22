@@ -2,7 +2,7 @@ package de.daxu.swamp.scheduling.command.build;
 
 import de.daxu.swamp.common.cqrs.EventMetaData;
 import de.daxu.swamp.common.cqrs.EventMetaDataFactory;
-import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.core.strategy.FirstInLineStrategy;
 import de.daxu.swamp.deploy.container.ContainerConfiguration;
@@ -53,7 +53,7 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
                 eventMetaDataFactory.create(),
                 command.getSequence()));
 
-        command.getContainers()
+        command.getContainerTemplates()
                 .forEach(container ->
                         scheduleContainerInstance(command.getBuildId(), container, eventMetaDataFactory.create()));
     }
@@ -76,28 +76,28 @@ public class Build extends AbstractAnnotatedAggregateRoot<BuildId> {
         }
     }
 
-    private void scheduleContainerInstance(BuildId buildId, Container container, EventMetaData eventMetaData) {
-        Optional<Server> potentialServer = potentialServer(container);
+    private void scheduleContainerInstance(BuildId buildId, ContainerTemplate containerTemplate, EventMetaData eventMetaData) {
+        Optional<Server> potentialServer = potentialServer(containerTemplate);
         potentialServer.ifPresent(server ->
-                applyScheduledEvent(buildId, container, eventMetaData, server));
+                applyScheduledEvent(buildId, containerTemplate, eventMetaData, server));
     }
 
-    private void applyScheduledEvent(BuildId buildId, Container container, EventMetaData eventMetaData, Server server) {
+    private void applyScheduledEvent(BuildId buildId, ContainerTemplate containerTemplate, EventMetaData eventMetaData, Server server) {
         apply(new BuildContainerInstanceScheduledEvent(
                 buildId,
                 projectId,
                 eventMetaData,
                 ContainerInstanceId.random(),
-                containerConfiguration(buildId, container),
+                containerConfiguration(buildId, containerTemplate),
                 server));
     }
 
-    private ContainerConfiguration containerConfiguration(BuildId buildId, Container container) {
-        return ContainerConfiguration.of(GroupId.of(buildId.value()), container);
+    private ContainerConfiguration containerConfiguration(BuildId buildId, ContainerTemplate containerTemplate) {
+        return ContainerConfiguration.of(GroupId.of(buildId.value()), containerTemplate);
     }
 
-    private Optional<Server> potentialServer(Container container) {
-        return new FirstInLineStrategy().locate(container.getPotentialLocations());
+    private Optional<Server> potentialServer(ContainerTemplate containerTemplate) {
+        return new FirstInLineStrategy().locate(containerTemplate.getPotentialLocations());
     }
 
     private boolean allContainersRemoved(ContainerInstanceStatus status) {

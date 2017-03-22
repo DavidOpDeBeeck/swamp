@@ -31,7 +31,7 @@ public class DockerClientSSLConfig implements SSLConfig {
 
             String keyPem = server.getKey();
             String certPem = server.getCertificate();
-            String caPem = server.getCACertificate();
+            String caPem = server.getCaCertificate();
 
             sslConfig.keyStore(CertificateUtils.createKeyStore(keyPem, certPem));
             sslConfig.keyStorePassword("docker");

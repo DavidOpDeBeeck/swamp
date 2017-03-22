@@ -1,6 +1,6 @@
 package de.daxu.swamp.core.credentials;
 
-import de.daxu.swamp.common.jpa.Identifiable;
+import de.daxu.swamp.common.Identifiable;
 
 import javax.persistence.*;
 

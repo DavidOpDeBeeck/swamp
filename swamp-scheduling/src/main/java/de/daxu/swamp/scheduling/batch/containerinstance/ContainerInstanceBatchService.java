@@ -3,8 +3,8 @@ package de.daxu.swamp.scheduling.batch.containerinstance;
 import de.daxu.swamp.common.validator.BasicValidator;
 import de.daxu.swamp.common.validator.Validator;
 import de.daxu.swamp.common.validator.WaitTimeExpiredValidator;
-import de.daxu.swamp.core.location.LocationService;
 import de.daxu.swamp.core.server.Server;
+import de.daxu.swamp.core.server.ServerService;
 import de.daxu.swamp.deploy.DeployClient;
 import de.daxu.swamp.deploy.DeployClientManager;
 import de.daxu.swamp.deploy.DeployResult;
@@ -38,7 +38,7 @@ public class ContainerInstanceBatchService {
     private final Logger logger = LoggerFactory.getLogger(ContainerInstanceBatchService.class);
 
     private final DeployClientManager clientManager;
-    private final LocationService locationService;
+    private final ServerService serverService;
     private final ContainerInstanceQueryService containerInstanceQueryService;
     private final ContainerInstanceCommandService containerInstanceCommandService;
 
@@ -56,11 +56,11 @@ public class ContainerInstanceBatchService {
 
     @Autowired
     public ContainerInstanceBatchService(DeployClientManager clientManager,
-                                         LocationService locationService,
+                                         ServerService serverService,
                                          ContainerInstanceQueryService containerInstanceQueryService,
                                          ContainerInstanceCommandService containerInstanceCommandService) {
         this.clientManager = clientManager;
-        this.locationService = locationService;
+        this.serverService = serverService;
         this.containerInstanceQueryService = containerInstanceQueryService;
         this.containerInstanceCommandService = containerInstanceCommandService;
     }
@@ -145,6 +145,6 @@ public class ContainerInstanceBatchService {
     }
 
     private Server getServerByName(String name) {
-        return locationService.getServerByName(name);
+        return serverService.getServerByName(name);
     }
 }

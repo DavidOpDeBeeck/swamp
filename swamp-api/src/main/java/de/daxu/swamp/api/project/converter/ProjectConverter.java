@@ -2,20 +2,25 @@ package de.daxu.swamp.api.project.converter;
 
 import de.daxu.swamp.api.project.dto.ProjectDTO;
 import de.daxu.swamp.common.dto.DTOConverter;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
 import de.daxu.swamp.core.project.Project;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 public class ProjectConverter implements DTOConverter<Project, ProjectDTO> {
 
     @Override
-    public ProjectDTO toDTO( Project project ) {
-        ProjectDTO dto = new ProjectDTO();
-        dto.id = project.getId();
-        dto.name = project.getName();
-        dto.description = project.getDescription();
-        dto.createdAt = project.getCreatedAt();
-        dto.containers = project.getContainers().size();
-        return dto;
+    public ProjectDTO toDTO(Project project) {
+        Set<ContainerTemplate> containerTemplates = project.getContainerTemplates();
+
+        return new ProjectDTO.Builder()
+                .withId(project.getId())
+                .withName(project.getName())
+                .withDescription(project.getDescription())
+                .withCreatedAt(project.getCreatedAt())
+                .withContainers(containerTemplates == null ? 0 : containerTemplates.size())
+                .build();
     }
 }

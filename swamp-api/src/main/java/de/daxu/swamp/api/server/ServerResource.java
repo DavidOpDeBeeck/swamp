@@ -8,8 +8,9 @@ import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.datacenter.Datacenter;
-import de.daxu.swamp.core.location.LocationService;
+import de.daxu.swamp.core.datacenter.DatacenterService;
 import de.daxu.swamp.core.server.Server;
+import de.daxu.swamp.core.server.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,17 +30,20 @@ public class ServerResource {
     static final String SERVERS_URL = DATACENTERS_URL + "/{datacenterId}/servers";
 
     private final ResponseFactory responseFactory;
-    private final LocationService locationService;
+    private final ServerService serverService;
+    private final DatacenterService datacenterService;
     private final ServerConverter serverConverter;
     private final ServerCreateConverter serverCreateConverter;
 
     @Autowired
     public ServerResource(ResponseFactory responseFactory,
-                          LocationService locationService,
+                          ServerService serverService,
+                          DatacenterService datacenterService,
                           ServerConverter serverConverter,
                           ServerCreateConverter serverCreateConverter) {
         this.responseFactory = responseFactory;
-        this.locationService = locationService;
+        this.serverService = serverService;
+        this.datacenterService = datacenterService;
         this.serverConverter = serverConverter;
         this.serverCreateConverter = serverCreateConverter;
     }
@@ -60,7 +64,7 @@ public class ServerResource {
                          @Valid @RequestBody ServerCreateDTO dto) {
 
         Server server = serverCreateConverter.toDomain(dto);
-        server = locationService.addServerToDatacenter(datacenter, server);
+        datacenterService.addServerToDatacenter(datacenter.getId(), server);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -81,8 +85,8 @@ public class ServerResource {
 
         Server updatedServer = serverCreateConverter.toDomain(updatedServerDTO);
 
-        BeanUtils.copyPropertiesIgnoreNulls(updatedServer, serverToUpdate);
-        locationService.updateServer(serverToUpdate);
+        BeanUtils.copyPropertiesIgnoreNull(updatedServer, serverToUpdate);
+        serverService.updateServer(serverToUpdate);
 
         return responseFactory.success(serverConverter.toDTO(serverToUpdate));
     }
@@ -91,7 +95,7 @@ public class ServerResource {
     public Response delete(@PathVariable("datacenterId") Datacenter datacenter,
                            @PathVariable("serverId") Server server) {
 
-        locationService.removeServerFromDatacenter(datacenter, server);
+        datacenterService.removeServerFromDatacenter(datacenter.getId(), server);
         return responseFactory.success();
     }
 }

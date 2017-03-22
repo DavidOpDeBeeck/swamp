@@ -12,21 +12,20 @@ import static de.daxu.swamp.core.continent.Continent.Builder.aContinent;
 public class ContinentConverter implements DTOConverter<Continent, ContinentDTO>, DomainConverter<ContinentDTO, Continent> {
 
     @Override
-    public ContinentDTO toDTO( Continent continent ) {
-        ContinentDTO dto = new ContinentDTO();
-        dto.id = continent.getId();
-        dto.name = continent.getName();
-        dto.datacenters = continent.getDatacenters() != null ? continent.getDatacenters().size() : 0;
-        dto.type = continent.getType();
-        return dto;
+    public ContinentDTO toDTO(Continent continent) {
+        return new ContinentDTO.Builder()
+                .withId(continent.getId())
+                .withName(continent.getName())
+                .withDatacenters(continent.getDatacenters() != null ? continent.getDatacenters().size() : 0)
+                .build();
     }
 
 
     @Override
-    public Continent toDomain( ContinentDTO dto ) {
+    public Continent toDomain(ContinentDTO dto) {
         return aContinent()
-                .withId( dto.id )
-                .withName( dto.name )
+                .withId(dto.getId())
+                .withName(dto.getName())
                 .build();
     }
 }

@@ -22,7 +22,7 @@ public class Server extends Location {
     @NotBlank(message = "{NotBlank.Server.CACertificate}")
     @Lob
     @Column(name = "ca_certificate")
-    private String CACertificate;
+    private String CaCertificate;
 
     @NotBlank(message = "{NotBlank.Server.certificate}")
     @Lob
@@ -37,10 +37,10 @@ public class Server extends Location {
     private Server() {
     }
 
-    private Server(String id, String name, String ip, String CACertificate, String certificate, String key) {
+    private Server(String id, String name, String ip, String CaCertificate, String certificate, String key) {
         super(id, name);
         this.ip = ip;
-        this.CACertificate = CACertificate;
+        this.CaCertificate = CaCertificate;
         this.certificate = certificate;
         this.key = key;
     }
@@ -49,8 +49,8 @@ public class Server extends Location {
         this.ip = ip;
     }
 
-    public void setCACertificate(String CACertificate) {
-        this.CACertificate = CACertificate;
+    public void setCaCertificate(String caCertificate) {
+        this.CaCertificate = caCertificate;
     }
 
     public void setCertificate(String certificate) {
@@ -65,8 +65,8 @@ public class Server extends Location {
         return ip;
     }
 
-    public String getCACertificate() {
-        return CACertificate;
+    public String getCaCertificate() {
+        return CaCertificate;
     }
 
     public String getCertificate() {
@@ -90,7 +90,7 @@ public class Server extends Location {
     public static class Builder extends Location.Builder<Builder> {
 
         private String ip;
-        private String CACertificate;
+        private String CaCertificate;
         private String certificate;
         private String key;
 
@@ -103,8 +103,8 @@ public class Server extends Location {
             return this;
         }
 
-        public Builder withCACertificate(String CACertificate) {
-            this.CACertificate = CACertificate;
+        public Builder withCaCertificate(String CACertificate) {
+            this.CaCertificate = CACertificate;
             return this;
         }
 
@@ -119,7 +119,7 @@ public class Server extends Location {
         }
 
         public Server build() {
-            return new Server(id, name, ip, CACertificate, certificate, key);
+            return new Server(id, name, ip, CaCertificate, certificate, key);
         }
     }
 }

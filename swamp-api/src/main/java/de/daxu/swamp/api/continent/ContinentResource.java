@@ -8,7 +8,7 @@ import de.daxu.swamp.common.util.BeanUtils;
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
 import de.daxu.swamp.core.continent.Continent;
-import de.daxu.swamp.core.location.LocationService;
+import de.daxu.swamp.core.continent.ContinentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,17 +27,17 @@ public class ContinentResource {
     public static final String CONTINENTS_URL = "/continents";
 
     private final ResponseFactory response;
-    private final LocationService locationService;
+    private final ContinentService continentService;
     private final ContinentConverter continentConverter;
     private final ContinentCreateConverter continentCreateConverter;
 
     @Autowired
     public ContinentResource(ResponseFactory responseFactory,
-                             LocationService locationService,
+                             ContinentService continentService,
                              ContinentConverter continentConverter,
                              ContinentCreateConverter continentCreateConverter) {
         this.response = responseFactory;
-        this.locationService = locationService;
+        this.continentService = continentService;
         this.continentConverter = continentConverter;
         this.continentCreateConverter = continentCreateConverter;
     }
@@ -45,7 +45,7 @@ public class ContinentResource {
     @RequestMapping(method = RequestMethod.GET)
     public Response getAll() {
 
-        List<ContinentDTO> continents = locationService
+        List<ContinentDTO> continents = continentService
                 .getAllContinents()
                 .stream()
                 .map(continentConverter::toDTO)
@@ -58,7 +58,7 @@ public class ContinentResource {
     public Response post(@Valid @RequestBody ContinentCreateDTO dto) {
 
         Continent continent = continentCreateConverter.toDomain(dto);
-        continent = locationService.createContinent(continent);
+        continent = continentService.createContinent(continent);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -79,8 +79,8 @@ public class ContinentResource {
 
         Continent updatedContinent = continentCreateConverter.toDomain(updatedContinentDTO);
 
-        BeanUtils.copyPropertiesIgnoreNulls(updatedContinent, continentToUpdate);
-        locationService.updateContinent(continentToUpdate);
+        BeanUtils.copyPropertiesIgnoreNull(updatedContinent, continentToUpdate);
+        continentService.updateContinent(continentToUpdate);
 
         return response.success(continentConverter.toDTO(continentToUpdate));
     }
@@ -88,7 +88,7 @@ public class ContinentResource {
     @RequestMapping(value = "/{continentId}", method = RequestMethod.DELETE)
     public Response delete(@PathVariable("continentId") Continent continent) {
 
-        locationService.deleteContinent(continent);
+        continentService.deleteContinent(continent);
         return response.success();
     }
 }

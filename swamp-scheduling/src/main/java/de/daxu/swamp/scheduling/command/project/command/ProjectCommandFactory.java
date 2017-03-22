@@ -1,6 +1,6 @@
 package de.daxu.swamp.scheduling.command.project.command;
 
-import de.daxu.swamp.core.container.Container;
+import de.daxu.swamp.core.containertemplate.ContainerTemplate;
 import de.daxu.swamp.scheduling.command.project.ProjectId;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ public class ProjectCommandFactory {
         return new CreateProjectCommand(projectId, name, description);
     }
 
-    public ScheduleBuildCommand scheduleBuildCommand(ProjectId projectId, Set<Container> containers) {
-        return new ScheduleBuildCommand(projectId, containers);
+    public ScheduleBuildCommand scheduleBuildCommand(ProjectId projectId, Set<ContainerTemplate> containerTemplates) {
+        return new ScheduleBuildCommand(projectId, containerTemplates);
     }
 }

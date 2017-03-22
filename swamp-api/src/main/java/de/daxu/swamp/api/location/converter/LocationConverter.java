@@ -24,39 +24,39 @@ public class LocationConverter implements DTOConverter<Location, LocationDTO>, D
     private final ServerConverter serverConverter;
 
     @Autowired
-    public LocationConverter( ContinentConverter continentConverter,
-                              DatacenterConverter datacenterConverter,
-                              ServerConverter serverConverter ) {
+    public LocationConverter(ContinentConverter continentConverter,
+                             DatacenterConverter datacenterConverter,
+                             ServerConverter serverConverter) {
         this.continentConverter = continentConverter;
         this.datacenterConverter = datacenterConverter;
         this.serverConverter = serverConverter;
     }
 
     @Override
-    public LocationDTO toDTO( Location location ) {
-        if ( location == null || location.getType() == null ) return null;
-        switch ( location.getType() ) {
+    public LocationDTO toDTO(Location location) {
+        if (location == null || location.getType() == null) return null;
+        switch (location.getType()) {
             case CONTINENT:
-                return continentConverter.toDTO( ( Continent ) location );
+                return continentConverter.toDTO((Continent) location);
             case DATACENTER:
-                return datacenterConverter.toDTO( ( Datacenter ) location );
+                return datacenterConverter.toDTO((Datacenter) location);
             case SERVER:
-                return serverConverter.toDTO( ( Server ) location );
+                return serverConverter.toDTO((Server) location);
             default:
                 return null;
         }
     }
 
     @Override
-    public Location toDomain( LocationDTO dto ) {
-        if ( dto == null || dto.type == null ) return null;
-        switch ( dto.type ) {
+    public Location toDomain(LocationDTO dto) {
+        if (dto == null || dto.getType() == null) return null;
+        switch (dto.getType()) {
             case CONTINENT:
-                return continentConverter.toDomain( ( ContinentDTO ) dto );
+                return continentConverter.toDomain((ContinentDTO) dto);
             case DATACENTER:
-                return datacenterConverter.toDomain( ( DatacenterDTO ) dto );
+                return datacenterConverter.toDomain((DatacenterDTO) dto);
             case SERVER:
-                return serverConverter.toDomain( ( ServerDTO ) dto );
+                return serverConverter.toDomain((ServerDTO) dto);
             default:
                 return null;
         }

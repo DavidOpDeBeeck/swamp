@@ -16,11 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.aContinentCreateDTO;
-import static de.daxu.swamp.api.continent.dto.ContinentCreateDTOTestBuilder.anotherContinentCreateDTO;
+import static de.daxu.swamp.api.LocationDTOTestConstants.ContinentDTOs.aContinentCreateDTO;
+import static de.daxu.swamp.api.LocationDTOTestConstants.ContinentDTOs.anotherContinentCreateDTO;
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.anotherContinent;
+import static de.daxu.swamp.core.LocationTestConstants.Continents.aContinent;
+import static de.daxu.swamp.core.LocationTestConstants.Continents.anotherContinent;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +40,8 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Continent aContinent = aContinent().build();
-        Continent anotherContinent = anotherContinent().build();
+        Continent aContinent = aContinent();
+        Continent anotherContinent = anotherContinent();
         saveContinent(aContinent, anotherContinent);
 
         List<ContinentDTO> continents = resource.webClient()
@@ -58,7 +58,7 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
-        ContinentCreateDTO dto = aContinentCreateDTO().build();
+        ContinentCreateDTO dto = aContinentCreateDTO();
 
         String id = resource.webClient()
                 .path("continents")
@@ -67,12 +67,12 @@ public class ContinentResourceIntegrationTest {
         Continent actual = resource.find(id, Continent.class);
 
         assertThat(actual)
-                .isEqualToIgnoringGivenFields(aContinent().build(), "id");
+                .isEqualToIgnoringGivenFields(aContinent(), "id");
     }
 
     @Test
     public void get() throws Exception {
-        Continent continent = aContinent().build();
+        Continent continent = aContinent();
         saveContinent(continent);
 
         ContinentDTO actual = resource.webClient()
@@ -88,10 +88,10 @@ public class ContinentResourceIntegrationTest {
 
     @Test
     public void put() throws Exception {
-        Continent continent = aContinent().build();
+        Continent continent = aContinent();
         saveContinent(continent);
 
-        ContinentCreateDTO updated = anotherContinentCreateDTO().build();
+        ContinentCreateDTO updated = anotherContinentCreateDTO();
 
         resource.webClient()
                 .path("continents")
@@ -101,12 +101,12 @@ public class ContinentResourceIntegrationTest {
         Continent actual = resource.find(continent.getId(), Continent.class);
 
         assertThat(actual)
-                .isEqualToIgnoringGivenFields(anotherContinent().build(), "id");
+                .isEqualToIgnoringGivenFields(anotherContinent(), "id");
     }
 
     @Test
     public void delete() throws Exception {
-        Continent expected = aContinent().build();
+        Continent expected = aContinent();
         saveContinent(expected);
 
         resource.webClient()

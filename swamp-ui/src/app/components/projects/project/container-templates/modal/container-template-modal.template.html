@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3 class="modal-title" ng-hide="ContainerEditCtrl.update">Create a new Container</h3>
+    <h3 class="modal-title" ng-show="ContainerEditCtrl.update">{{ ContainerEditCtrl.container.id }}</h3>
+</div>
+<div class="modal-body">
+    <div class="alert alert-danger" role="alert"
+         ng-show="ContainerModalCtrl.errors">
+        <p ng-repeat="error in ContainerModalCtrl.errors">{{ error }}</p>
+    </div>
+    <container-template container-template="ContainerModalCtrl.containerTemplate" editable="true"></container-template>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="ContainerModalCtrl.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ContainerModalCtrl.submit()">{{ ContainerModalCtrl.update ? 'Update' : 'Create' }}</button>
+</div>

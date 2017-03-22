@@ -15,13 +15,14 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static de.daxu.swamp.api.server.dto.ServerCreateDTOTestBuilder.aServerCreateDTO;
-import static de.daxu.swamp.api.server.dto.ServerCreateDTOTestBuilder.anotherServerCreateDTO;
+import static de.daxu.swamp.api.LocationDTOTestConstants.ServerDTOs.aServerCreateDTO;
+import static de.daxu.swamp.api.LocationDTOTestConstants.ServerDTOs.anotherServerCreateDTO;
+import static de.daxu.swamp.common.comparator.ReflectionComparator.byReflection;
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
-import static de.daxu.swamp.core.datacenter.DatacenterTestBuilder.aDatacenter;
-import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.aServer;
-import static de.daxu.swamp.core.server.ServerBuilderTestBuilder.anotherServer;
+import static de.daxu.swamp.core.LocationTestConstants.Continents.aContinent;
+import static de.daxu.swamp.core.LocationTestConstants.Datacenters.aDatacenter;
+import static de.daxu.swamp.core.LocationTestConstants.Servers.aServer;
+import static de.daxu.swamp.core.LocationTestConstants.Servers.anotherServer;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,8 +41,8 @@ public class ServerResourceIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        continent = aContinent().build();
-        datacenter = aDatacenter().build();
+        continent = aContinent();
+        datacenter = aDatacenter();
         resource.save(continent, datacenter);
         continent.addDatacenter(datacenter);
         resource.save(continent);
@@ -53,8 +54,8 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Server aServer = aServer().build();
-        Server anotherServer = anotherServer().build();
+        Server aServer = aServer();
+        Server anotherServer = anotherServer();
         saveServer(aServer);
         saveServer(anotherServer);
 
@@ -65,15 +66,15 @@ public class ServerResourceIntegrationTest {
                 .get();
 
         assertThat(servers)
-                .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrder(
+                .usingElementComparator(byReflection())
+                .contains(
                         serverConverter.toDTO(aServer),
                         serverConverter.toDTO(anotherServer));
     }
 
     @Test
     public void post() throws Exception {
-        ServerCreateDTO dto = aServerCreateDTO().build();
+        ServerCreateDTO dto = aServerCreateDTO();
 
         String id = resource.webClient()
                 .path(datacenterPath())
@@ -83,12 +84,13 @@ public class ServerResourceIntegrationTest {
         Server server = resource.find(id, Server.class);
 
         assertThat(server)
-                .isEqualToIgnoringGivenFields(aServer().build(), "id");
+                .usingComparator(byReflection())
+                .isEqualTo(aServer());
     }
 
     @Test
     public void get() throws Exception {
-        Server server = aServer().build();
+        Server server = aServer();
         saveServer(server);
 
         ServerDTO actual = resource.webClient()
@@ -99,16 +101,16 @@ public class ServerResourceIntegrationTest {
                 .get();
 
         assertThat(actual)
-                .isEqualToComparingFieldByField(
-                        serverConverter.toDTO(server));
+                .usingComparator(byReflection())
+                .isEqualTo(serverConverter.toDTO(server));
     }
 
     @Test
     public void put() throws Exception {
-        Server server = aServer().build();
+        Server server = aServer();
         saveServer(server);
 
-        ServerCreateDTO updated = anotherServerCreateDTO().build();
+        ServerCreateDTO updated = anotherServerCreateDTO();
 
         resource.webClient()
                 .path(datacenterPath())
@@ -119,12 +121,13 @@ public class ServerResourceIntegrationTest {
         Server actual = resource.find(server.getId(), Server.class);
 
         assertThat(actual)
-                .isEqualToIgnoringGivenFields(anotherServer().build(), "id");
+                .usingComparator(byReflection())
+                .isEqualTo(anotherServer());
     }
 
     @Test
     public void delete() throws Exception {
-        Server server = aServer().build();
+        Server server = aServer();
         saveServer(server);
 
         resource.webClient()

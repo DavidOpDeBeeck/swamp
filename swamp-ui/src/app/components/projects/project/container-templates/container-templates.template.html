@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group margin-sm-bottom">
+            <span class="input-group-addon" id="containers-search-icon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="ContainerTemplatesCtrl.filter"
+                   aria-describedby="containers-search-icon"/>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="ContainerTemplatesCtrl.create()">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+        <uib-tabset type="pills">
+            <uib-tab heading="{{ containerTemplate.id | limitTo : 16 }}"
+                     ng-repeat="containerTemplate in ContainerTemplatesCtrl.containerTemplates | filter: ContainerTemplatesCtrl.filter">
+                <container-template container-template="containerTemplate" editable="false"></container-template>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-xs btn-default pull-right"
+                                ng-click="ContainerTemplatesCtrl.delete(containerTemplate)">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-default pull-right margin-xs-right"
+                                ng-click="ContainerTemplatesCtrl.edit(containerTemplate)">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+</div>

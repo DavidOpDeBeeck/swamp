@@ -4,7 +4,7 @@ class LocationPickerDirective {
     constructor() {
         this.restrict = 'E';
         this.scope = {
-            'container': '=',
+            'containerTemplate': '=',
             'editable': '='
         };
         this.bindToController = true;

@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static de.daxu.swamp.common.web.WebClient.list;
-import static de.daxu.swamp.core.continent.ContinentTestBuilder.aContinent;
+import static de.daxu.swamp.core.LocationTestConstants.Continents.aContinent;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,7 +27,7 @@ public class LocationResourceIntegrationTest {
 
     @Test
     public void getAll() throws Exception {
-        Continent continent = aContinent().build();
+        Continent continent = aContinent();
         resource.save(continent);
 
         List<LocationDTO> locations = resource.webClient()

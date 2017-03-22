@@ -9,8 +9,6 @@ public class VersionConverter implements DTOConverter<String, VersionDTO> {
 
     @Override
     public VersionDTO toDTO( String version ) {
-        VersionDTO dto = new VersionDTO();
-        dto.version = version;
-        return dto;
+        return new VersionDTO(version);
     }
 }
