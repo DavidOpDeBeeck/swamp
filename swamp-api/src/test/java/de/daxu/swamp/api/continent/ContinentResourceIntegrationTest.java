@@ -4,7 +4,6 @@ import de.daxu.swamp.api.continent.converter.ContinentConverter;
 import de.daxu.swamp.api.continent.dto.ContinentCreateDTO;
 import de.daxu.swamp.api.continent.dto.ContinentDTO;
 import de.daxu.swamp.core.continent.Continent;
-import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.test.rule.ResourceIntegrationTestRule;
 import de.daxu.swamp.test.rule.SpringRule;
 import org.junit.Before;
@@ -12,12 +11,11 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static de.daxu.swamp.api.LocationDTOTestConstants.ContinentDTOs.aContinentCreateDTO;
 import static de.daxu.swamp.api.LocationDTOTestConstants.ContinentDTOs.anotherContinentCreateDTO;
+import static de.daxu.swamp.common.comparator.ReflectionComparator.byReflection;
 import static de.daxu.swamp.common.web.WebClient.list;
 import static de.daxu.swamp.core.LocationTestConstants.Continents.aContinent;
 import static de.daxu.swamp.core.LocationTestConstants.Continents.anotherContinent;
@@ -42,7 +40,7 @@ public class ContinentResourceIntegrationTest {
     public void getAll() throws Exception {
         Continent aContinent = aContinent();
         Continent anotherContinent = anotherContinent();
-        saveContinent(aContinent, anotherContinent);
+        resource.save(aContinent, anotherContinent);
 
         List<ContinentDTO> continents = resource.webClient()
                 .path("continents")
@@ -50,10 +48,8 @@ public class ContinentResourceIntegrationTest {
                 .get();
 
         assertThat(continents)
-                .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrder(
-                        continentConverter.toDTO(aContinent),
-                        continentConverter.toDTO(anotherContinent));
+                .usingElementComparator(byReflection())
+                .contains(continentConverter.toDTO(aContinent), continentConverter.toDTO(anotherContinent));
     }
 
     @Test
@@ -67,13 +63,14 @@ public class ContinentResourceIntegrationTest {
         Continent actual = resource.find(id, Continent.class);
 
         assertThat(actual)
-                .isEqualToIgnoringGivenFields(aContinent(), "id");
+                .usingComparator(byReflection())
+                .isEqualTo(aContinent());
     }
 
     @Test
     public void get() throws Exception {
         Continent continent = aContinent();
-        saveContinent(continent);
+        resource.save(continent);
 
         ContinentDTO actual = resource.webClient()
                 .path("continents")
@@ -82,14 +79,14 @@ public class ContinentResourceIntegrationTest {
                 .get();
 
         assertThat(actual)
-                .isEqualToComparingFieldByField(
-                        continentConverter.toDTO(continent));
+                .usingComparator(byReflection())
+                .isEqualTo(continentConverter.toDTO(continent));
     }
 
     @Test
     public void put() throws Exception {
         Continent continent = aContinent();
-        saveContinent(continent);
+        resource.save(continent);
 
         ContinentCreateDTO updated = anotherContinentCreateDTO();
 
@@ -101,13 +98,14 @@ public class ContinentResourceIntegrationTest {
         Continent actual = resource.find(continent.getId(), Continent.class);
 
         assertThat(actual)
-                .isEqualToIgnoringGivenFields(anotherContinent(), "id");
+                .usingComparator(byReflection())
+                .isEqualTo(anotherContinent());
     }
 
     @Test
     public void delete() throws Exception {
         Continent expected = aContinent();
-        saveContinent(expected);
+        resource.save(expected);
 
         resource.webClient()
                 .path("continents")
@@ -117,23 +115,5 @@ public class ContinentResourceIntegrationTest {
         Continent actual = resource.find(expected.getId(), Continent.class);
 
         assertThat(actual).isNull();
-    }
-
-    private void saveContinent(Continent... continents) {
-        Arrays.stream(continents)
-                .map(Continent::getDatacenters)
-                .flatMap(Set::stream)
-                .forEach(this::saveDatacenter);
-        Arrays.stream(continents)
-                .forEach(resource::save);
-    }
-
-    private void saveDatacenter(Datacenter... datacenters) {
-        Arrays.stream(datacenters)
-                .map(Datacenter::getServers)
-                .flatMap(Set::stream)
-                .forEach(resource::save);
-        Arrays.stream(datacenters)
-                .forEach(resource::save);
     }
 }

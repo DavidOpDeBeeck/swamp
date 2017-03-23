@@ -4,8 +4,6 @@ import de.daxu.swamp.core.continent.Continent;
 import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.server.Server;
 
-import java.util.Set;
-
 import static com.google.common.collect.Sets.newHashSet;
 
 public class LocationTestConstants {
@@ -20,7 +18,7 @@ public class LocationTestConstants {
                     .build();
         }
 
-        public static Continent aContinent(Datacenter datacenter) {
+        public static Continent aContinent(Datacenter... datacenter) {
             return aContinentBuilder()
                     .withDatacenters(newHashSet(datacenter))
                     .build();
@@ -44,15 +42,13 @@ public class LocationTestConstants {
 
         public final static String A_DATACENTER_NAME = "datacenterName";
         public final static String ANOTHER_DATACENTER_NAME = "anotherDatacenterName";
-        public final static Set<Server> DATACENTER_SERVERS = newHashSet();
-        public final static Set<Server> ANOTHER_DATACENTER_SERVERS = newHashSet();
 
         public static Datacenter aDatacenter() {
             return aDatacenterBuilder()
                     .build();
         }
 
-        public static Datacenter aDatacenter(Server server) {
+        public static Datacenter aDatacenter(Server... server) {
             return aDatacenterBuilder()
                     .withServers(newHashSet(server))
                     .build();

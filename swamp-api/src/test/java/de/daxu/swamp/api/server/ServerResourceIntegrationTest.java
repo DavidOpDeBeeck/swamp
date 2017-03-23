@@ -8,7 +8,6 @@ import de.daxu.swamp.core.datacenter.Datacenter;
 import de.daxu.swamp.core.server.Server;
 import de.daxu.swamp.test.rule.ResourceIntegrationTestRule;
 import de.daxu.swamp.test.rule.SpringRule;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,7 +23,6 @@ import static de.daxu.swamp.core.LocationTestConstants.Datacenters.aDatacenter;
 import static de.daxu.swamp.core.LocationTestConstants.Servers.aServer;
 import static de.daxu.swamp.core.LocationTestConstants.Servers.anotherServer;
 import static de.daxu.swamp.test.rule.SpringRule.spring;
-import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServerResourceIntegrationTest {
@@ -36,31 +34,19 @@ public class ServerResourceIntegrationTest {
 
     private ServerConverter serverConverter = spring.getInstance(ServerConverter.class);
 
-    private Continent continent;
-    private Datacenter datacenter;
-
-    @Before
-    public void setUp() throws Exception {
-        continent = aContinent();
-        datacenter = aDatacenter();
-        resource.save(continent, datacenter);
-        continent.addDatacenter(datacenter);
-        resource.save(continent);
-    }
-
-    private String datacenterPath() {
-        return format("%s/%s/%s/%s", "continents", continent.getId(), "datacenters", datacenter.getId());
-    }
-
     @Test
     public void getAll() throws Exception {
         Server aServer = aServer();
         Server anotherServer = anotherServer();
-        saveServer(aServer);
-        saveServer(anotherServer);
+        Datacenter datacenter = aDatacenter(aServer, anotherServer);
+        Continent continent = aContinent(datacenter);
+        resource.save(continent);
 
         List<ServerDTO> servers = resource.webClient()
-                .path(datacenterPath())
+                .path("continents")
+                .path(continent.getId())
+                .path("datacenters")
+                .path(datacenter.getId())
                 .path("servers")
                 .type(list(ServerDTO.class))
                 .get();
@@ -74,10 +60,16 @@ public class ServerResourceIntegrationTest {
 
     @Test
     public void post() throws Exception {
+        Datacenter datacenter = aDatacenter();
+        Continent continent = aContinent(datacenter);
+        resource.save(continent);
         ServerCreateDTO dto = aServerCreateDTO();
 
         String id = resource.webClient()
-                .path(datacenterPath())
+                .path("continents")
+                .path(continent.getId())
+                .path("datacenters")
+                .path(datacenter.getId())
                 .path("servers")
                 .post(dto);
 
@@ -91,10 +83,15 @@ public class ServerResourceIntegrationTest {
     @Test
     public void get() throws Exception {
         Server server = aServer();
-        saveServer(server);
+        Datacenter datacenter = aDatacenter(server);
+        Continent continent = aContinent(datacenter);
+        resource.save(continent);
 
         ServerDTO actual = resource.webClient()
-                .path(datacenterPath())
+                .path("continents")
+                .path(continent.getId())
+                .path("datacenters")
+                .path(datacenter.getId())
                 .path("servers")
                 .path(server.getId())
                 .type(ServerDTO.class)
@@ -108,12 +105,17 @@ public class ServerResourceIntegrationTest {
     @Test
     public void put() throws Exception {
         Server server = aServer();
-        saveServer(server);
+        Datacenter datacenter = aDatacenter(server);
+        Continent continent = aContinent(datacenter);
+        resource.save(continent);
 
         ServerCreateDTO updated = anotherServerCreateDTO();
 
         resource.webClient()
-                .path(datacenterPath())
+                .path("continents")
+                .path(continent.getId())
+                .path("datacenters")
+                .path(datacenter.getId())
                 .path("servers")
                 .path(server.getId())
                 .put(updated);
@@ -128,10 +130,15 @@ public class ServerResourceIntegrationTest {
     @Test
     public void delete() throws Exception {
         Server server = aServer();
-        saveServer(server);
+        Datacenter datacenter = aDatacenter(server);
+        Continent continent = aContinent(datacenter);
+        resource.save(continent);
 
         resource.webClient()
-                .path(datacenterPath())
+                .path("continents")
+                .path(continent.getId())
+                .path("datacenters")
+                .path(datacenter.getId())
                 .path("servers")
                 .path(server.getId())
                 .delete();
@@ -139,11 +146,5 @@ public class ServerResourceIntegrationTest {
         Server actual = resource.find(server.getId(), Server.class);
 
         assertThat(actual).isNull();
-    }
-
-    private void saveServer(Server server) {
-        resource.save(server);
-        datacenter.addServer(server);
-        resource.save(datacenter);
     }
 }
