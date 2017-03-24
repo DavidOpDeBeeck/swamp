@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.resource.build;
+package de.daxu.swamp.api.build;
 
 import de.daxu.swamp.common.web.exception.NotFoundException;
 import de.daxu.swamp.scheduling.command.build.BuildId;

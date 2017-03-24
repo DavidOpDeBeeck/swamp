@@ -18,4 +18,6 @@ dependencies {
 
     testCompile project(path: ':swamp-test', configuration: 'tests')
     testCompile project(path: ':swamp-core', configuration: 'tests')
+    testCompile project(path: ':swamp-deploy', configuration: 'tests')
+    testCompile project(path: ':swamp-scheduling', configuration: 'tests')
 }

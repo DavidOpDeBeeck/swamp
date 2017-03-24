@@ -11,8 +11,12 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
 
     compile "org.axonframework:axon-core"
-    testCompile "org.axonframework:axon-test"
 
     compile "org.hibernate:hibernate-core"
     compile "org.hibernate:hibernate-validator"
+
+    testCompile project(path: ':swamp-test', configuration: 'tests')
+    testCompile project(path: ':swamp-core', configuration: 'tests')
+    testCompile project(path: ':swamp-deploy', configuration: 'tests')
+    testCompile "org.axonframework:axon-test"
 }

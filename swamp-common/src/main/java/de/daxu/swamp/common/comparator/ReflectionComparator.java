@@ -46,6 +46,8 @@ public class ReflectionComparator implements Comparator<Object> {
     private Stream<Object> fieldValuesOf(Object obj) {
         if (obj instanceof Collection)
             return valuesOfCollection(obj);
+        if (obj instanceof Map)
+            return valuesOfMap(obj);
         if (isValidClass(obj))
             return valuesOfObject(obj);
         return Stream.of(obj);
@@ -66,6 +68,16 @@ public class ReflectionComparator implements Comparator<Object> {
 
         return collection.stream()
                 .map(this::fieldValuesOf)
+                .flatMap(Function.identity());
+    }
+
+    private Stream<Object> valuesOfMap(Object obj) {
+        Map<?, ?> map = (Map<?, ?>) obj;
+
+        return map.entrySet()
+                .stream()
+                .map(entry -> Stream.of(this.fieldValuesOf(entry.getKey()), this.fieldValuesOf(entry.getValue())))
+                .flatMap(Function.identity())
                 .flatMap(Function.identity());
     }
 

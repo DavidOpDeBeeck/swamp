@@ -13,7 +13,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceStatus.INITIALIZED;
@@ -84,8 +83,8 @@ public class BuildView extends EntityView {
         return hasLiveContainers ? BuildStatus.INPROGRESS : BuildStatus.FINISHED;
     }
 
-    public Set<ContainerInstanceId> getContainers() {
-        return containers.keySet();
+    public Map<ContainerInstanceId, ContainerInstanceStatus> getContainers() {
+        return containers;
     }
 
     public static class Builder {

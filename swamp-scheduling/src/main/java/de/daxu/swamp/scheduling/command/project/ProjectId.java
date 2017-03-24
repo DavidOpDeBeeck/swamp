@@ -19,7 +19,13 @@ public class ProjectId extends EntityId {
         return new ProjectId(UUID.randomUUID());
     }
 
+    @SuppressWarnings("unused")
     private ProjectId() {
+    }
+
+    @SuppressWarnings("unused")
+    private ProjectId(String projectId) {
+        super(projectId);
     }
 
     private ProjectId(UUID projectId) {

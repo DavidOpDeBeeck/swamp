@@ -12,18 +12,24 @@ import java.util.UUID;
 @AttributeOverride(name = "value", column = @Column(name = "container_instance_id"))
 public class ContainerInstanceId extends EntityId {
 
-    private ContainerInstanceId() {
-    }
-
-    private ContainerInstanceId(UUID containerInstanceId) {
-        super(containerInstanceId);
+    public static ContainerInstanceId from(String id) {
+        return new ContainerInstanceId(UUID.fromString(id));
     }
 
     public static ContainerInstanceId random() {
         return new ContainerInstanceId(UUID.randomUUID());
     }
 
-    public static ContainerInstanceId from(String id) {
-        return new ContainerInstanceId(UUID.fromString(id));
+    @SuppressWarnings("unused")
+    private ContainerInstanceId() {
+    }
+
+    @SuppressWarnings("unused")
+    private ContainerInstanceId(String containerInstanceId) {
+        super(containerInstanceId);
+    }
+
+    private ContainerInstanceId(UUID containerInstanceId) {
+        super(containerInstanceId);
     }
 }

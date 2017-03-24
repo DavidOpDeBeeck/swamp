@@ -20,7 +20,13 @@ public class BuildId extends EntityId {
         return new BuildId(UUID.randomUUID());
     }
 
+    @SuppressWarnings("unused")
     private BuildId() {
+    }
+
+    @SuppressWarnings("unused")
+    private BuildId(String buildId) {
+        super(buildId);
     }
 
     private BuildId(UUID buildId) {

@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.resource.containerinstance;
+package de.daxu.swamp.api.containerinstance;
 
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static de.daxu.swamp.api.build.BuildResource.BUILD_URL;
+import static de.daxu.swamp.api.containerinstance.ContainerInstanceResource.CONTAINER_INSTANCE_URL;
 import static de.daxu.swamp.scheduling.command.containerinstance.reason.ContainerInstanceStopReason.STOPPED_BY_USER;
-import static de.daxu.swamp.scheduling.resource.build.BuildResource.BUILD_URL;
-import static de.daxu.swamp.scheduling.resource.containerinstance.ContainerInstanceResource.CONTAINER_INSTANCE_URL;
 
 @RestController
 @RequestMapping(CONTAINER_INSTANCE_URL)
 public class ContainerInstanceResource {
 
-    final static String CONTAINER_INSTANCE_URL = BUILD_URL + "/{buildId}/containerInstances";
+    final static String CONTAINER_INSTANCE_URL = BUILD_URL + "/{buildId}/container-instances";
 
     private final ResponseFactory response;
     private final LogQueryService logQueryService;
@@ -48,6 +48,7 @@ public class ContainerInstanceResource {
     public Response getAll(@PathVariable("buildId") BuildView view) {
 
         Set<ContainerInstanceView> containers = view.getContainers()
+                .keySet()
                 .stream()
                 .map(containerInstanceQueryService::getContainerInstanceViewById)
                 .collect(Collectors.toSet());

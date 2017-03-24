@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.resource.build;
+package de.daxu.swamp.api.build;
 
 import de.daxu.swamp.common.web.response.Response;
 import de.daxu.swamp.common.web.response.ResponseFactory;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static de.daxu.swamp.scheduling.resource.build.BuildResource.BUILD_URL;
+import static de.daxu.swamp.api.build.BuildResource.BUILD_URL;
 
 @RestController
 @RequestMapping(BUILD_URL)

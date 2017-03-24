@@ -6,7 +6,7 @@ import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
 @MappedSuperclass
-public abstract class EntityId implements AggregateId {
+public abstract class EntityId implements Comparable<EntityId>, AggregateId {
 
     protected String value;
 
@@ -29,6 +29,11 @@ public abstract class EntityId implements AggregateId {
         EntityId that = (EntityId) o;
 
         return value != null ? value.equals(that.value) : that.value == null;
+    }
+
+    @Override
+    public int compareTo(EntityId entity) {
+        return entity.value.compareTo(value);
     }
 
     @Override

@@ -1,7 +1,7 @@
 class BuildService {
     constructor($resource) {
         this.buildResource = $resource('/api/builds/:buildId', {buildId: '@buildId'});
-        this.containerInstanceResource = $resource('/api/builds/:buildId/containerInstances/:containerInstanceId', {
+        this.containerInstanceResource = $resource('/api/builds/:buildId/container-instances/:containerInstanceId', {
             buildId: '@buildId',
             containerInstanceId: '@containerInstanceId'
         }, {
@@ -18,7 +18,7 @@ class BuildService {
                 params: {'action': 'restart'}
             }
         });
-        this.containerInstanceLogResource = $resource('/api/builds/:buildId/containerInstances/:containerInstanceId/logs', {
+        this.containerInstanceLogResource = $resource('/api/builds/:buildId/container-instances/:containerInstanceId/logs', {
             buildId: '@buildId',
             containerInstanceId: '@containerInstanceId'
         });

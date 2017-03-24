@@ -7,18 +7,18 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@AttributeOverride( name = "value", column = @Column( name = "container_id" ) )
+@AttributeOverride(name = "value", column = @Column(name = "container_id"))
 public class ContainerId extends EntityId {
 
-    public static ContainerId of( String id ) {
-        return new ContainerId( id );
+    public static ContainerId of(String id) {
+        return new ContainerId(id);
     }
 
-    @SuppressWarnings( "unused" )
+    @SuppressWarnings("unused")
     private ContainerId() {
     }
 
-    private ContainerId( String containerId ) {
-        super( containerId );
+    private ContainerId(String containerId) {
+        super(containerId);
     }
 }

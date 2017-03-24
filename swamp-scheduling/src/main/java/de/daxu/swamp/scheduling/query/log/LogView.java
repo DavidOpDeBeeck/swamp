@@ -52,6 +52,10 @@ public class LogView extends EntityView {
         this.creationLog += log;
     }
 
+    public ContainerInstanceId getContainerInstanceId() {
+        return containerInstanceId;
+    }
+
     public String getCreationLog() {
         return creationLog;
     }

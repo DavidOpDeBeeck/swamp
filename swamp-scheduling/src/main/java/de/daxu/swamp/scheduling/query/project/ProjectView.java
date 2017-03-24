@@ -11,31 +11,31 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
-@Table( name = "project_view" )
-@SuppressWarnings( "unused" )
+@Table(name = "project_view")
+@SuppressWarnings("unused")
 public class ProjectView extends EntityView {
 
     @Embedded
     @NotNull(message = "{NotNull.ProjectView.projectId}")
     private ProjectId projectId;
 
-    @Column( name = "name", unique = true)
+    @Column(name = "name", unique = true)
     private String name;
 
-    @Column( name = "description" )
+    @Column(name = "description")
     private String description;
 
-    @Column( name = "build_sequence" )
+    @Column(name = "build_sequence")
     private Integer buildSequence;
 
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
-    @JoinColumn( name = "project_view_id", referencedColumnName = "id" )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "project_view_id", referencedColumnName = "id")
     private Set<BuildView> builds;
 
     private ProjectView() {
     }
 
-    private ProjectView( ProjectId projectId, String name, String description, int buildSequence, Set<BuildView> builds) {
+    private ProjectView(ProjectId projectId, String name, String description, int buildSequence, Set<BuildView> builds) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -43,13 +43,17 @@ public class ProjectView extends EntityView {
         this.builds = builds;
     }
 
-    public void setBuildSequence(int buildSequence) {
+    void setBuildSequence(int buildSequence) {
         this.buildSequence = buildSequence;
     }
 
-    void addBuild(BuildView build ) {
-        if ( this.builds == null ) this.builds = newHashSet();
-        this.builds.add( build );
+    void addBuild(BuildView build) {
+        if (this.builds == null) this.builds = newHashSet();
+        this.builds.add(build);
+    }
+
+    public ProjectId getProjectId() {
+        return projectId;
     }
 
     public String getName() {
@@ -80,33 +84,33 @@ public class ProjectView extends EntityView {
             return new Builder();
         }
 
-        public Builder withProjectId( ProjectId projectId ) {
+        public Builder withProjectId(ProjectId projectId) {
             this.projectId = projectId;
             return this;
         }
 
-        public Builder withName( String name ) {
+        public Builder withName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withDescription( String description ) {
+        public Builder withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public Builder withBuildSequence( int buildSequence ) {
+        public Builder withBuildSequence(int buildSequence) {
             this.buildSequence = buildSequence;
             return this;
         }
 
-        public Builder withBuilds(Set<BuildView> projectInstances ) {
+        public Builder withBuilds(Set<BuildView> projectInstances) {
             this.projectInstances = projectInstances;
             return this;
         }
 
         public ProjectView build() {
-            return new ProjectView( projectId, name, description, buildSequence, projectInstances );
+            return new ProjectView(projectId, name, description, buildSequence, projectInstances);
         }
     }
 }

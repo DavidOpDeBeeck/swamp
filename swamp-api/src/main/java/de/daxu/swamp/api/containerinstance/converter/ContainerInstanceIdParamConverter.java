@@ -1,4 +1,4 @@
-package de.daxu.swamp.scheduling.resource.containerinstance;
+package de.daxu.swamp.api.containerinstance.converter;
 
 import de.daxu.swamp.common.web.exception.BadRequestException;
 import de.daxu.swamp.scheduling.command.containerinstance.ContainerInstanceId;

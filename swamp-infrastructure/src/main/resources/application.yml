@@ -61,7 +61,7 @@ logging:
     org:
         hibernate: ERROR
         springframework:
-            web: TRACE
+            web: ERROR
 server:
   port: 8888
 application:
