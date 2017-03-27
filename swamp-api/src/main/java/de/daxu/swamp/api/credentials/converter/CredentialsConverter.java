@@ -10,30 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CredentialsConverter implements DomainConverter<CredentialsDTO, Credentials>, DTOConverter<Credentials,CredentialsDTO> {
+public class CredentialsConverter implements DomainConverter<CredentialsDTO, Credentials>, DTOConverter<Credentials, CredentialsDTO> {
 
     private final UsernamePasswordCredentialsConverter usernamePasswordCredentialsConverter;
 
     @Autowired
-    public CredentialsConverter( UsernamePasswordCredentialsConverter usernamePasswordCredentialsConverter ) {
+    public CredentialsConverter(UsernamePasswordCredentialsConverter usernamePasswordCredentialsConverter) {
         this.usernamePasswordCredentialsConverter = usernamePasswordCredentialsConverter;
     }
 
     @Override
-    public CredentialsDTO toDTO( Credentials credentials ) {
-        switch( credentials.getType() ){
+    public CredentialsDTO toDTO(Credentials credentials) {
+        switch (credentials.getType()) {
             case USERNAME_PASSWORD:
-                return usernamePasswordCredentialsConverter.toDTO( ( UsernamePasswordCredentials ) credentials );
+                return usernamePasswordCredentialsConverter.toDTO((UsernamePasswordCredentials) credentials);
             default:
                 return null;
         }
     }
 
     @Override
-    public Credentials toDomain( CredentialsDTO dto ) {
-        switch( dto.type ){
+    public Credentials toDomain(CredentialsDTO dto) {
+        switch (dto.getType()) {
             case USERNAME_PASSWORD:
-                return usernamePasswordCredentialsConverter.toDomain( ( UsernamePasswordCredentialsDTO ) dto );
+                return usernamePasswordCredentialsConverter.toDomain((UsernamePasswordCredentialsDTO) dto);
             default:
                 return null;
         }

@@ -22,6 +22,8 @@ application:
 workspace:
   default:
     path: H:\swamp-workspace\development
+aes:
+  key: u24EgkbdHT9UU2nk
 logging:
   level:
     de:
@@ -53,6 +55,8 @@ flyway:
 workspace:
   default:
     path: H:\swamp-workspace\testing
+aes:
+  key: testKey
 logging:
   level:
     de:

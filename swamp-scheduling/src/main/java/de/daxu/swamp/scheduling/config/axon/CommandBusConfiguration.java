@@ -70,7 +70,6 @@ public class CommandBusConfiguration {
         executor.setCorePoolSize(20);
         executor.setMaxPoolSize(Integer.MAX_VALUE);
         executor.setQueueCapacity(Integer.MAX_VALUE);
-        executor.initialize();
         return executor;
     }
 
